@@ -1,0 +1,92 @@
+.logo-carousel {
+  position: relative;
+  width: 100%;
+  padding: 80px 0;
+  overflow: hidden;
+  z-index: 2;
+  /* So it sits above the background but below main content */
+  margin-top: 40px;
+}
+
+.logo-carousel__header {
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 510;
+  color: var(--muted);
+  margin-bottom: 40px;
+  letter-spacing: 0.01em;
+}
+
+.logo-carousel__marquee-container {
+  display: flex;
+  overflow: hidden;
+  /* Add feather mask on left and right for seamless fading */
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.logo-carousel__marquee {
+  display: flex;
+  align-items: center;
+  gap: 80px;
+  padding: 0 40px;
+  animation: scrollMarquee 40s linear infinite;
+  min-width: 100%;
+  flex-shrink: 0;
+}
+
+.logo-carousel__item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  opacity: 0.5;
+  color: var(--foreground);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+}
+
+.logo-carousel__item svg {
+  fill: currentColor;
+}
+
+.logo-carousel__item:hover {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+/* Custom styles for text-based logos */
+.logo-text {
+  font-size: 24px;
+  line-height: 1;
+  color: currentColor;
+  letter-spacing: -0.02em;
+  font-weight: 500;
+}
+
+.logo-text--serif {
+  font-family: Georgia, serif;
+  font-weight: bold;
+  font-size: 28px;
+}
+
+.logo-text--bold {
+  font-weight: 700;
+}
+
+.logo-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+@keyframes scrollMarquee {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    /* Translate by exactly 50% to cycle through the duplicated items */
+    transform: translateX(-50%);
+  }
+}

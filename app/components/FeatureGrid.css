@@ -1,0 +1,121 @@
+.feature-section {
+  padding: 80px 24px;
+  background-color: var(--background);
+  color: var(--foreground);
+  display: flex;
+  justify-content: center;
+}
+
+.feature-container {
+  max-width: 1200px;
+  width: 100%;
+}
+
+.feature-header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.feature-title-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 16px;
+}
+
+.feature-line {
+  height: 1px;
+  background-color: var(--card-border, #eaeaea);
+  flex-grow: 1;
+  max-width: 300px;
+}
+
+.feature-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin: 0;
+  white-space: nowrap;
+  color: var(--foreground);
+}
+
+.feature-subtitle {
+  font-size: 1.125rem;
+  color: var(--muted);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 768px) {
+  .feature-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .feature-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.feature-card {
+  background-color: var(--surface-strong, #ffffff);
+  border-radius: 16px;
+  padding: 40px 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--card-border, #eaeaea);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  color: var(--foreground);
+}
+
+.feature-card:hover {
+  background-color: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(37, 99, 235, 0.2);
+}
+
+.feature-icon {
+  font-size: 32px;
+  margin-bottom: 24px;
+  color: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.8;
+}
+
+.feature-card:hover .feature-icon {
+  opacity: 1;
+}
+
+.feature-card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: inherit;
+}
+
+.feature-card-desc {
+  font-size: 0.9375rem;
+  color: var(--muted);
+  line-height: 1.6;
+  transition: color 0.3s ease;
+}
+
+.feature-card:hover .feature-card-desc {
+  color: rgba(255, 255, 255, 0.9);
+}

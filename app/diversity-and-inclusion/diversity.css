@@ -1,0 +1,238 @@
+/* Diversity and Inclusion Page Styles */
+
+.diversity-hero {
+  position: relative;
+  height: 460px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background-color: #08090a;
+}
+
+.diversity-hero__bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/images/Inclusivity/1.jpg');
+  background-size: cover;
+  background-position: center;
+  z-index: 1;
+}
+
+.diversity-hero__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 2;
+}
+
+.diversity-hero__content {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.diversity-hero__title {
+  font-family: 'Inter Variable', sans-serif;
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 510;
+  color: #f7f8f8;
+  line-height: 1.1;
+  letter-spacing: -1.056px;
+  max-width: 600px;
+  font-feature-settings: 'cv01', 'ss03';
+}
+
+/* Module 2: Intro */
+.diversity-intro {
+  padding: 60px 0;
+  background-color: var(--background);
+  text-align: center;
+}
+
+.diversity-intro__title {
+  font-size: 32px;
+  font-weight: 510;
+  color: var(--foreground);
+  margin-bottom: 24px;
+  letter-spacing: -0.704px;
+  font-feature-settings: 'cv01', 'ss03';
+}
+
+.diversity-intro__text {
+  max-width: 900px;
+  margin: 0 auto;
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+/* Module 3: Pillars */
+.diversity-pillars {
+  padding: 40px 0;
+  background-color: var(--background);
+}
+
+.diversity-pillars__title {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 510;
+  color: var(--foreground);
+  margin-bottom: 48px;
+  letter-spacing: -0.704px;
+  font-feature-settings: 'cv01', 'ss03';
+}
+
+.diversity-pillars__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+.pillar-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.pillar-card__image-wrapper {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.pillar-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.pillar-card:hover .pillar-card__image {
+  transform: scale(1.05);
+}
+
+.pillar-card__subtitle {
+  font-size: 20px;
+  font-weight: 510;
+  color: var(--foreground);
+  margin-bottom: 12px;
+  letter-spacing: -0.24px;
+  font-feature-settings: 'cv01', 'ss03';
+}
+
+.pillar-card__description {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+.pillar-card__quote-box {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.pillar-card__quote {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--foreground);
+  font-style: italic;
+  margin-bottom: 8px;
+}
+
+.pillar-card__attribution {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 510;
+}
+
+/* Module 4: Featured Quote */
+.diversity-featured {
+  position: relative;
+  padding: 40px 0;
+  background-color: var(--surface);
+  background-image: url('/images/Inclusivity/5.jpg');
+  background-size: cover;
+  background-position: 20% center;
+  background-repeat: no-repeat;
+  min-height: 380px;
+  display: flex;
+  align-items: center;
+}
+
+.diversity-featured__content {
+  width: min(1200px, calc(100vw - 40px));
+  margin: 0 auto;
+  padding: 0 40px;
+  position: relative;
+  z-index: 2;
+}
+
+.featured-quote {
+  max-width: 540px;
+}
+
+.featured-quote__text {
+  font-size: 22px;
+  line-height: 1.5;
+  color: #101113;
+  font-weight: 400;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.featured-quote__text::before {
+  content: '“';
+  position: absolute;
+  left: -24px;
+  top: 0px;
+  font-size: 32px;
+  color: #62666d;
+}
+
+.featured-quote__attribution {
+  font-size: 15px;
+  color: #62666d;
+  font-weight: 510;
+}
+
+@media (max-width: 1024px) {
+  .diversity-pillars__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .diversity-hero {
+    height: 60vh;
+  }
+
+  .diversity-hero__overlay {
+    background: linear-gradient(0deg, rgba(8, 9, 10, 0.8) 0%, rgba(8, 9, 10, 0.4) 100%);
+  }
+
+  .diversity-hero__content {
+    padding: 0 20px;
+  }
+
+  .diversity-pillars__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .diversity-featured__overlay {
+    background: rgba(15, 16, 17, 0.8);
+  }
+}

@@ -1,0 +1,281 @@
+/* Hero Banner */
+.sustainability-hero {
+  position: relative;
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+  text-align: left;
+  padding-left: clamp(20px, 10vw, 160px);
+}
+
+.sustainability-hero__bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background-image: url("/images/amazon-rainforest.webp");
+  background-size: cover;
+  background-position: center;
+}
+
+.sustainability-hero__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1;
+}
+
+:root[data-theme="light"] .sustainability-hero__overlay {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.sustainability-hero__content {
+  position: relative;
+  z-index: 2;
+  max-width: 580px;
+  padding: 0 20px;
+  color: var(--foreground);
+}
+
+.sustainability-hero__title {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 510;
+  letter-spacing: -0.045em;
+  margin-bottom: 24px;
+}
+
+.sustainability-hero__text {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+/* Module 2: Stats Grid */
+.sustainability-stats {
+  padding: 100px 0;
+  background: var(--background);
+}
+
+.sustainability-stats__title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 510;
+  letter-spacing: -0.03em;
+  margin-bottom: 60px;
+}
+
+.sustainability-stats__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  text-align: center;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-item__value {
+  font-size: 3.5rem;
+  font-weight: 590;
+  letter-spacing: -0.05em;
+  margin-bottom: 12px;
+}
+
+.stat-item__subtitle {
+  font-size: 1.25rem;
+  font-weight: 510;
+  margin-bottom: 16px;
+}
+
+.stat-item__description {
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  max-width: 320px;
+}
+
+/* Module 3: Target Section */
+.sustainability-target {
+  padding: 100px 0;
+  background: var(--surface-strong);
+  border-top: 1px solid var(--line);
+}
+
+.sustainability-target__layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.sustainability-target__content {
+  max-width: 500px;
+}
+
+.sustainability-target__title {
+  font-size: 2.5rem;
+  font-weight: 590;
+  letter-spacing: -0.03em;
+  margin-bottom: 24px;
+}
+
+.sustainability-target__text {
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.sustainability-target__image-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.sustainability-target__image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Dark Mode handling for transparent SVG with black text */
+:root[data-theme="dark"] .sustainability-target__image-container {
+  background: #f7f8f8;
+  /* Light background so black text is visible */
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 768px) {
+  .sustainability-stats__grid {
+    grid-template-columns: 1fr;
+    gap: 60px;
+  }
+
+  .sustainability-target__layout {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
+/* Module 4: Social Impact */
+.sustainability-social {
+  padding: 100px 0;
+  background: var(--background);
+}
+
+.sustainability-social__title {
+  text-align: center;
+  font-size: 2.25rem;
+  font-weight: 590;
+  letter-spacing: -0.03em;
+  margin-bottom: 50px;
+}
+
+.sustainability-social__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.social-card {
+  background: var(--surface-strong);
+  border: 1px solid var(--card-border);
+  border-radius: 4px;
+  padding: 48px;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.social-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-soft);
+}
+
+.social-card__title {
+  font-size: 1.5rem;
+  font-weight: 590;
+  margin-bottom: 16px;
+  color: var(--foreground);
+}
+
+.social-card__link {
+  color: var(--accent);
+  font-size: 1rem;
+  font-weight: 510;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.social-card__link:hover {
+  text-decoration: underline;
+}
+
+/* Module 5: Careers */
+.sustainability-careers {
+  padding: 100px 0;
+  background: var(--surface-strong);
+  border-top: 1px solid var(--line);
+}
+
+.sustainability-careers__layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.sustainability-careers__content {
+  max-width: 520px;
+}
+
+.sustainability-careers__title {
+  font-size: 2.3rem;
+  font-weight: 590;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 24px;
+}
+
+.sustainability-careers__text {
+  color: var(--muted);
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.sustainability-careers__image-container {
+  display: flex;
+  justify-content: center;
+}
+
+.sustainability-careers__image {
+  max-width: 100%;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .sustainability-social__grid,
+  .sustainability-careers__layout {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  
+  .social-card {
+    padding: 32px;
+  }
+}

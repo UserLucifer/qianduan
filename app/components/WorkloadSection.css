@@ -1,0 +1,154 @@
+.workload-section {
+  padding: 80px 24px;
+  background-color: var(--background, #f9fafb);
+  color: var(--foreground);
+}
+
+.workload-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.workload-header {
+  text-align: center;
+  margin-bottom: 60px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.workload-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 16px;
+  color: var(--foreground);
+  letter-spacing: -0.02em;
+}
+
+.workload-subtitle {
+  font-size: 1.125rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.workload-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+
+@media (min-width: 768px) {
+  .workload-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.workload-card {
+  position: relative;
+  background-color: var(--surface-strong, #ffffff);
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  display: flex;
+  cursor: pointer;
+}
+
+.workload-card-front {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 40px 32px;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+  background-color: var(--surface-strong, #ffffff);
+}
+
+.workload-card:hover .workload-card-front {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.workload-front-top {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  text-align: center;
+  padding-bottom: 32px;
+}
+
+.workload-front-top h3 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--foreground);
+  line-height: 1.3;
+  white-space: pre-line;
+}
+
+.workload-divider {
+  height: 1px;
+  background-color: var(--foreground);
+  opacity: 0.3;
+  width: 100%;
+}
+
+.workload-front-bottom {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 32px;
+}
+
+.workload-number {
+  font-size: 4.5rem;
+  font-weight: 800;
+  color: #2563eb;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.workload-subtext {
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: #2563eb;
+}
+
+/* Hover State */
+.workload-card-hover {
+  position: absolute;
+  inset: 0;
+  background-color: #2563eb;
+  color: #ffffff;
+  padding: 48px 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 2;
+}
+
+.workload-card:hover .workload-card-hover {
+  opacity: 1;
+}
+
+.workload-card-hover ul {
+  list-style-type: disc;
+  padding-left: 20px;
+  margin: 0;
+}
+
+.workload-card-hover li {
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  margin-bottom: 24px;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.workload-card-hover li:last-child {
+  margin-bottom: 0;
+}
