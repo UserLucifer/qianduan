@@ -33,12 +33,12 @@ export default function Header() {
                   <div className="nav-dropdown__title">{"//内部"}</div>
                   <Link href="/about" className="nav-dropdown__link">关于我们</Link>
                   <Link href="/sustainability" className="nav-dropdown__link">可持续发展</Link>
-                  <Link href="#" className="nav-dropdown__link">企业解决方案</Link>
+                  <Link href="/enterprise" className="nav-dropdown__link">企业解决方案</Link>
                 </div>
                 <div className="nav-dropdown__divider"></div>
                 <div className="nav-dropdown__column">
                   <div className="nav-dropdown__title">{"//资源"}</div>
-                  <Link href="#" className="nav-dropdown__link">产品用例</Link>
+                  <Link href="/use-cases" className="nav-dropdown__link">产品用例</Link>
                 </div>
               </div>
             </div>

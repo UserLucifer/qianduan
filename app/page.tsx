@@ -6,6 +6,7 @@ import FeatureGrid from './components/FeatureGrid';
 import WorkloadSection from './components/WorkloadSection';
 import TestimonialSection from './components/TestimonialSection';
 import FAQSection from './components/FAQSection';
+import Footer from './components/Footer';
 
 export default function Home() {
   return (
@@ -49,6 +50,8 @@ export default function Home() {
         <TestimonialSection />
         <FAQSection />
       </main>
+
+      <Footer />
     </>
   );
 }

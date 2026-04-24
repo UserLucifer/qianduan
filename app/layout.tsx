@@ -44,6 +44,10 @@ export default function RootLayout({
           {themeScript}
         </Script>
         {children}
+        <Script
+          src="https://plugin-code.salesmartly.com/js/project_692700_714414_1777010586.js"
+          strategy="lazyOnload"
+        />
       </body>
     </html>
   );

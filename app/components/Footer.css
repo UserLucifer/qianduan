@@ -1,0 +1,121 @@
+.site-footer {
+  width: 100%;
+  padding: 80px 0 40px;
+  border-top: 1px solid var(--line);
+  background: var(--background);
+}
+
+.site-footer__inner {
+  width: min(1200px, calc(100vw - 40px));
+  margin: 0 auto;
+}
+
+.site-footer__grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  gap: 40px;
+  margin-bottom: 64px;
+}
+
+.site-footer__brand-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.site-footer__brand {
+  font-size: 1.2rem;
+  font-weight: 590;
+  letter-spacing: -0.02em;
+  color: var(--foreground);
+}
+
+.site-footer__tagline {
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  max-width: 240px;
+}
+
+.site-footer__col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.site-footer__title {
+  color: var(--foreground);
+  font-size: 0.875rem;
+  font-weight: 590;
+  letter-spacing: 0.02em;
+}
+
+.site-footer__links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.site-footer__link {
+  color: var(--muted);
+  font-size: 0.875rem;
+  font-weight: 510;
+  transition: color 160ms ease;
+}
+
+.site-footer__link:hover {
+  color: var(--foreground);
+}
+
+.site-footer__bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 32px;
+  border-top: 1px solid var(--line);
+}
+
+.site-footer__copyright {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.site-footer__status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #27a644; /* Success green from DESIGN.md */
+  box-shadow: 0 0 8px rgba(39, 166, 68, 0.4);
+}
+
+@media (max-width: 920px) {
+  .site-footer__grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+  }
+}
+
+@media (max-width: 600px) {
+  .site-footer {
+    padding: 64px 0 32px;
+  }
+  
+  .site-footer__grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  
+  .site-footer__bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+}

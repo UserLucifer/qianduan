@@ -1,6 +1,7 @@
 "use client";
 
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 import './sustainability.css';
 
 export default function SustainabilityPage() {
@@ -79,11 +80,11 @@ export default function SustainabilityPage() {
           <div className="sustainability-social__grid">
             <div className="social-card">
               <h3 className="social-card__title">向所有人开放机会</h3>
-              <a href="#" className="social-card__link">在 NVIDIA 探索包容性 &gt;</a>
+              <a href="/diversity-and-inclusion" className="social-card__link">在 NVIDIA 探索包容性 &gt;</a>
             </div>
             <div className="social-card">
               <h3 className="social-card__title">回馈社区</h3>
-              <a href="#" className="social-card__link">了解我们的基金会 &gt;</a>
+              <a href="/foundation" className="social-card__link">了解我们的基金会 &gt;</a>
             </div>
           </div>
         </div>
@@ -110,6 +111,7 @@ export default function SustainabilityPage() {
           </div>
         </div>
       </section>
+      <Footer />
     </>
   );
 }

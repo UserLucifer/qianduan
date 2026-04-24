@@ -209,6 +209,109 @@
   font-weight: 510;
 }
 
+/* Module 5: Support */
+.diversity-support {
+  padding: 100px 0;
+  background-color: #ffffff; /* Pure white for premium look in light mode */
+}
+
+.diversity-support__title {
+  text-align: center;
+  font-size: 36px;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-bottom: 60px;
+  letter-spacing: -0.02em;
+}
+
+.diversity-support__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: flex-start;
+}
+
+.support-item {
+  margin-bottom: 48px;
+}
+
+.support-item:last-child {
+  margin-bottom: 0;
+}
+
+.support-item__title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-bottom: 16px;
+}
+
+.support-item__text {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--muted);
+  max-width: 480px;
+}
+
+.diversity-support__right {
+  background-color: #f7f8f8; /* Light gray box in light mode */
+  padding: 60px;
+  border-radius: 4px;
+  position: relative;
+  border: 1px solid var(--line);
+}
+
+.support-quote__text {
+  font-size: 22px;
+  line-height: 1.5;
+  color: var(--foreground);
+  margin-bottom: 32px;
+  font-weight: 400;
+}
+
+.support-quote__attribution {
+  display: block;
+  font-size: 14px;
+  color: var(--muted);
+  text-align: right;
+  font-weight: 500;
+}
+
+/* Dark mode overrides */
+:root[data-theme="dark"] .diversity-support {
+  background-color: var(--background);
+}
+
+:root[data-theme="dark"] .diversity-support__right {
+  background-color: var(--surface-strong);
+  border-color: var(--line);
+}
+
+@media (max-width: 1024px) {
+  .diversity-support__grid {
+    gap: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .diversity-support__grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .diversity-support__title {
+    font-size: 28px;
+    margin-bottom: 40px;
+  }
+  
+  .diversity-support__right {
+    padding: 40px 30px;
+  }
+  
+  .support-quote__text {
+    font-size: 18px;
+  }
+}
+
 @media (max-width: 1024px) {
   .diversity-pillars__grid {
     grid-template-columns: repeat(2, 1fr);
@@ -234,5 +337,165 @@
 
   .diversity-featured__overlay {
     background: rgba(15, 16, 17, 0.8);
+  }
+}
+
+/* Module 6: Opportunities */
+.diversity-opportunities {
+  padding: 100px 0;
+  background-color: var(--background);
+}
+
+.diversity-opportunities__title {
+  text-align: center;
+  font-size: 36px;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-bottom: 80px;
+  letter-spacing: -0.02em;
+}
+
+.diversity-opportunities__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: flex-start;
+}
+
+.opp-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.opp-card__icon {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 24px;
+  color: var(--foreground);
+  opacity: 0.8;
+  align-self: center;
+}
+
+.opp-card__title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-bottom: 20px;
+  align-self: center;
+  text-align: center;
+}
+
+.opp-card__text {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--muted);
+  margin-bottom: 32px;
+}
+
+.opp-card__list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 24px;
+  margin-bottom: 40px;
+  list-style: none;
+  padding: 0;
+}
+
+.opp-card__list-item {
+  font-size: 14px;
+  color: var(--foreground);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.opp-card__list-item::before {
+  content: '>';
+  font-size: 12px;
+  color: var(--accent);
+  font-weight: bold;
+}
+
+.opp-card__quote {
+  margin-top: 20px;
+  padding: 24px;
+  border-left: 2px solid var(--line);
+  background-color: var(--surface);
+}
+
+.opp-card__quote-text {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--foreground);
+  font-style: italic;
+  margin-bottom: 12px;
+}
+
+.opp-card__attribution {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+@media (max-width: 1024px) {
+  .diversity-opportunities__grid {
+    gap: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .diversity-opportunities__grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .opp-card__list {
+    grid-template-columns: 1fr;
+  }
+
+  .diversity-opportunities {
+    padding: 60px 0;
+  }
+  
+  .diversity-opportunities__title {
+    font-size: 28px;
+    margin-bottom: 40px;
+  }
+}
+
+/* Module 7: Commitment */
+.diversity-commitment {
+  padding: 60px 0;
+  background-color: var(--surface-strong);
+  text-align: center;
+}
+
+.diversity-commitment__title {
+  font-size: 36px;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-bottom: 32px;
+  letter-spacing: -0.02em;
+}
+
+.diversity-commitment__text {
+  max-width: 860px;
+  margin: 0 auto;
+  font-size: 18px;
+  line-height: 1.8;
+  color: var(--foreground);
+}
+
+@media (max-width: 768px) {
+  .diversity-commitment {
+    padding: 60px 0;
+  }
+  
+  .diversity-commitment__title {
+    font-size: 28px;
+  }
+  
+  .diversity-commitment__text {
+    font-size: 16px;
   }
 }

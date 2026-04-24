@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Header from '../components/Header';
 import Aurora from '../components/Aurora';
 import LogoCarousel from "../components/LogoCarousel";
+import Footer from '../components/Footer';
 import Image from 'next/image';
 import {
   FiChevronDown,
@@ -42,7 +43,7 @@ const values = [
     title: '客户至上，追求卓越',
     subtitle: 'Customer Obsession',
     description:
-      '有人可能会说我们对客户近乎&quot;痴迷&quot;。我们竭尽全力理解客户需求，力求在每一个环节都超越预期。我们对卓越的承诺确保了我们能够建立持久的合作伙伴关系，并为卓越服务树立行业标杆。',
+      '有人可能会说我们对客户近乎"痴迷"。我们竭尽全力理解客户需求，力求在每一个环节都超越预期。我们对卓越的承诺确保了我们能够建立持久的合作伙伴关系，并为卓越服务树立行业标杆。',
   },
   {
     icon: FiUsers,
@@ -122,7 +123,7 @@ export default function AboutPage() {
           <p className="about-hero__text">
             我们是一个专为规模化、支持和加速 GenAI 而构建的
             <span className="about-hero__highlight">云计算平台</span>
-            。我们是一个综合性平台和战略合作伙伴，旨在应对当下和未来在规模化部署 AI 时面临的挑战。我们管理 AI 增长的复杂性，使超级计算触手可及，并不断突破可能性的边界。我们的团队打造现代化解决方案来支持现代化技术。选择我们，获得处理 GenAI 工作负载的首选平台。
+            。我们是一个综合性平台和战略合作伙伴，旨在应对当下和未来在规模化部署 AI 时面临的挑战。我们管理 AI 增长的复杂性，使超级计算触手及，并不断突破可能性的边界。我们的团队打造现代化解决方案来支持现代化技术。选择我们，获得处理 GenAI 工作负载的首选平台。
           </p>
         </div>
       </section>
@@ -220,7 +221,7 @@ export default function AboutPage() {
       <div className="about-logos">
         <LogoCarousel
           title="我们的客户与合作伙伴"
-          subtitle="这些客户信任CoreWeave来处理其业务关键的AI工作负载。"
+          subtitle="这些客户信任我们来处理其业务关键的 AI 工作负载。"
         />
       </div>
 
@@ -242,7 +243,7 @@ export default function AboutPage() {
               智能基础设施
             </h2>
             <p className="about-cta__text">
-              对AI最友好的GPU集群
+              对AI最友好的 GPU 集群
             </p>
           </div>
         </div>
@@ -253,18 +254,19 @@ export default function AboutPage() {
         <div className="about-vision__container">
           <div className="about-vision__content">
             <h2 className="about-vision__title">
-              我们的愿景：<br />一人一台GPU
+              我们的愿景：<br />一人一台 GPU
             </h2>
             <p className="about-vision__text">
               我们最初作为机器学习工程师创立公司，是为了解决我们自身面临的扩展性问题，并构建我们梦寐以求的工具。这种业余时间的辛勤工作逐渐发展成为追求千兆瓦级人工智能工厂的事业，为那些不断开拓前沿的团队提供服务。
             </p>
             <p className="about-vision__text">
-              我们的使命是让计算能力像电力一样普及，让每个人都能拥有超级智能。从单个GPU到数十万个GPU，我们构建的基础设施为数亿人使用的AI服务提供动力。
+              我们的使命是让计算能力像电力一样普及，让每个人都能拥有超级智能。从单个 GPU 到数十万个 GPU，我们构建的基础设施为数亿人使用的 AI 服务提供动力。
             </p>
           </div>
         </div>
       </section>
 
+      <Footer />
     </>
   );
 }
