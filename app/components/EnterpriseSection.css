@@ -1,0 +1,116 @@
+.enterprise-section {
+  padding: 120px 0;
+  background-color: #010102;
+  color: var(--foreground);
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  overflow: hidden;
+}
+
+.enterprise-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  text-align: center;
+}
+
+.enterprise-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--line);
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 510;
+  color: var(--muted);
+  margin-bottom: 32px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.enterprise-title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 510;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 24px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  color: #f7f8f8;
+}
+
+.enterprise-description {
+  font-size: 18px;
+  color: #d0d6e0;
+  max-width: 600px;
+  margin: 0 auto 48px;
+  line-height: 1.6;
+}
+
+.enterprise-actions {
+  margin-bottom: 80px;
+}
+
+.enterprise-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+.enterprise-card {
+  padding: 40px 24px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, transparent 100%);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+.enterprise-card:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, transparent 100%);
+}
+
+.enterprise-card__image-box {
+  width: 100%;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+
+.enterprise-card__image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  opacity: 0.8;
+}
+
+.enterprise-card__title {
+  font-size: 20px;
+  font-weight: 590;
+  margin-bottom: 16px;
+  color: #f7f8f8;
+}
+
+.enterprise-card__desc {
+  font-size: 15px;
+  color: #d0d6e0;
+  line-height: 1.6;
+}
+
+@media (max-width: 920px) {
+  .enterprise-grid {
+    grid-template-columns: 1fr;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  
+  .enterprise-actions {
+    margin-bottom: 60px;
+  }
+}

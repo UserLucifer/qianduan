@@ -3,9 +3,13 @@ import ProductList from "./components/product-list";
 import Aurora from "./components/Aurora";
 import LogoCarousel from "./components/LogoCarousel";
 import FeatureGrid from './components/FeatureGrid';
+import UseCaseSection from './components/UseCaseSection';
 import WorkloadSection from './components/WorkloadSection';
 import TestimonialSection from './components/TestimonialSection';
 import FAQSection from './components/FAQSection';
+import HubSection from './components/HubSection';
+import EnterpriseSection from './components/EnterpriseSection';
+import AccordionSection from './components/AccordionSection';
 import Footer from './components/Footer';
 
 export default function Home() {
@@ -46,9 +50,13 @@ export default function Home() {
         </section>
 
         <FeatureGrid />
+        <UseCaseSection />
+        <AccordionSection />
         <WorkloadSection />
         <TestimonialSection />
+        <EnterpriseSection />
         <FAQSection />
+        <HubSection />
       </main>
 
       <Footer />

@@ -1,0 +1,127 @@
+.hub-section {
+  padding: 100px 0;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.hub-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.hub-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.hub-title-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.hub-title {
+  font-size: 32px;
+  font-weight: 590;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.hub-badge {
+  font-size: 14px;
+  color: var(--muted);
+  background: var(--surface);
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--line);
+}
+
+.hub-subtitle {
+  font-size: 18px;
+  color: var(--muted);
+  max-width: 600px;
+  line-height: 1.6;
+  margin: 0 auto;
+}
+
+.hub-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.hub-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--surface-strong);
+  border: 1px solid var(--card-border);
+  transition: transform 0.3s ease, border-color 0.3s ease;
+  box-shadow: var(--shadow-soft);
+}
+
+.hub-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent);
+}
+
+.hub-card__content {
+  padding: 32px 24px 20px;
+}
+
+.hub-card__title {
+  font-size: 20px;
+  font-weight: 590;
+  margin: 0 0 12px;
+  color: var(--foreground);
+  letter-spacing: -0.02em;
+}
+
+.hub-card__description {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.hub-card__image-container {
+  margin-top: auto;
+  padding: 0 12px 12px;
+}
+
+.hub-card__image {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  display: block;
+  background: var(--background);
+}
+
+@media (max-width: 1024px) {
+  .hub-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .hub-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+  }
+
+  .hub-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .hub-title {
+    font-size: 28px;
+  }
+}

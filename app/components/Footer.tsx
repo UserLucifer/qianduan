@@ -29,7 +29,7 @@ export default function Footer() {
           <div className="site-footer__col">
             <h3 className="site-footer__title">资源</h3>
             <div className="site-footer__links">
-              <Link href="#" className="site-footer__link">产品用例</Link>
+              <Link href="/use-cases" className="site-footer__link">产品用例</Link>
             </div>
           </div>
 
