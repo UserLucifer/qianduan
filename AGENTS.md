@@ -1,5 +1,8 @@
 # AGENTS.md
 
+## Technology Stack
+- Frontend:Next.js  
+
 ## Mission
 Make the smallest correct change that solves the user's request.
 

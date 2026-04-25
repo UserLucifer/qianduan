@@ -17,6 +17,7 @@ import {
   FiDollarSign,
   FiLayers,
 } from 'react-icons/fi';
+import MagicRings from '../components/MagicRings';
 import './use-cases.css';
 
 import type { Metadata } from 'next';
@@ -29,67 +30,67 @@ export const metadata: Metadata = {
 
 const useCases = [
   {
+    slug: 'ai-text-generation',
     icon: FiType,
     title: 'AI 文本生成',
     desc: '部署大型语言模型进行文本生成、对话 AI、内容创作和代码辅助。利用高性能 GPU 实现低延迟推理。',
     video: '/videos/use/vid-useCase-textGeneration.mp4',
-    color: 'violet',
   },
   {
+    slug: 'ai-image-video-generation',
     icon: FiImage,
     title: 'AI 图像与视频生成',
     desc: '运行 Stable Diffusion、Midjourney 替代方案或视频生成模型。从文本到像素，释放创意工作流的全部潜力。',
     video: '/videos/use/vid-useCase-imageVideoGeneration.mp4',
-    color: 'blue',
   },
   {
+    slug: 'ai-agents',
     icon: FiUsers,
     title: 'AI 智能体',
     desc: '构建和运行自主 AI 智能体，用于任务自动化、决策支持和复杂工作流编排。',
     video: '/videos/use/vid-useCase-aiAgent.mp4',
-    color: 'green',
   },
   {
+    slug: 'batch-data-processing',
     icon: FiDatabase,
     title: '批量数据处理',
     desc: '大规模数据管道、ETL 任务和批量推理作业。利用 GPU 加速处理 TB 级数据集。',
     video: '/videos/use/vid-useCase-batchDataProcessing.mp4',
-    color: 'amber',
   },
   {
+    slug: 'audio-to-text-transcription',
     icon: FiMic,
     title: '语音转文本',
     desc: '使用 Whisper 等模型进行高精度语音识别和转录。支持多语言、实时流和批量转录。',
     video: '/videos/use/vid-useCase-audio2text.mp4',
-    color: 'red',
   },
   {
+    slug: 'ai-fine-tuning',
     icon: FiSliders,
     title: 'AI 模型微调',
     desc: '在您的私有数据上微调基础模型。支持 LoRA、QLoRA 等高效微调方法，以最低成本获得定制模型。',
     video: '/videos/use/vid-useCase-fineTuning.mp4',
-    color: 'cyan',
   },
   {
+    slug: 'virtual-computing',
     icon: FiMonitor,
     title: '虚拟计算',
     desc: '按需启动高性能虚拟桌面和远程工作站。适用于 AI 研发、数据科学和专业工作流。',
     video: '/videos/use/vid-useCase-virtualComputing.mp4',
-    color: 'violet',
   },
   {
+    slug: 'gpu-programming',
     icon: FiCode,
     title: 'GPU 编程',
     desc: '直接访问 CUDA、OpenCL 和 GPU 计算资源。为科学计算、数值模拟和自定义内核开发提供裸金属级性能。',
     video: '/videos/use/vid-useCase-gpuProgramming.mp4',
-    color: 'blue',
   },
   {
+    slug: '3d-rendering',
     icon: FiFilm,
     title: '图形渲染',
     desc: '利用 GPU 加速 3D 渲染、动画制作和视觉特效。支持 Blender、Unreal Engine 等主流渲染引擎。',
     video: '/videos/use/vid-useCase-graphicsRendering.mp4',
-    color: 'green',
   },
 ];
 
@@ -151,7 +152,7 @@ export default function UseCasesPage() {
             {useCases.map((uc) => {
               const Icon = uc.icon;
               return (
-                <div key={uc.title} className="uc-card">
+                <Link key={uc.title} href={`/use-cases/${uc.slug}`} className="uc-card">
                   <div className="uc-card__video-wrap">
                     <video
                       src={uc.video}
@@ -164,13 +165,13 @@ export default function UseCasesPage() {
                     <div className="uc-card__video-overlay" />
                   </div>
                   <div className="uc-card__body">
-                    <div className={`uc-card__icon uc-card__icon--${uc.color}`}>
+                    <div className="uc-card__icon">
                       <Icon />
                     </div>
                     <h3 className="uc-card__title">{uc.title}</h3>
                     <p className="uc-card__desc">{uc.desc}</p>
                   </div>
-                </div>
+                </Link>
               );
             })}
           </div>
@@ -208,6 +209,24 @@ export default function UseCasesPage() {
 
       {/* ── Bottom CTA ── */}
       <section className="uc-cta">
+        <div className="uc-cta__background">
+          <MagicRings
+            color="#A855F7"
+            colorTwo="#6366F1"
+            ringCount={12}
+            speed={0.5}
+            attenuation={3}
+            lineThickness={2}
+            baseRadius={0.6}
+            radiusStep={0.4}
+            scaleRate={0.2}
+            opacity={0.35}
+            noiseAmount={0.03}
+            followMouse={true}
+            mouseInfluence={0.1}
+            hoverScale={1.1}
+          />
+        </div>
         <div className="uc-cta__inner">
           <h2 className="uc-cta__title">
             加入数千名开发者和企业的行列，

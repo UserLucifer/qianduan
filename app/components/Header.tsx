@@ -8,6 +8,18 @@ const navigationItems = [
   { name: "行业", href: "#" },
 ];
 
+const useCaseItems = [
+  { name: "AI文本生成", href: "/use-cases/ai-text-generation" },
+  { name: "AI图像+视频生成", href: "/use-cases/ai-image-video-generation" },
+  { name: "人工智能代理", href: "/use-cases/ai-agents" },
+  { name: "批量数据处理", href: "/use-cases/batch-data-processing" },
+  { name: "音频转文本转录", href: "/use-cases/audio-to-text-transcription" },
+  { name: "AI微调", href: "/use-cases/ai-fine-tuning" },
+  { name: "虚拟计算", href: "/use-cases/virtual-computing" },
+  { name: "GPU编程", href: "/use-cases/gpu-programming" },
+  { name: "图形渲染", href: "/use-cases/3d-rendering" },
+];
+
 export default function Header() {
   return (
     <header className="site-header">
@@ -22,6 +34,33 @@ export default function Header() {
               {item.name}
             </Link>
           ))}
+
+          <div className="nav-dropdown-wrapper">
+            <Link href="/use-cases" className="site-nav__link nav-dropdown-trigger">
+              用例
+            </Link>
+            <div className="nav-dropdown nav-dropdown--wide">
+              <div className="nav-dropdown__inner nav-dropdown__inner--grid">
+                <div className="nav-dropdown__column">
+                  <div className="nav-dropdown__title">{"//用例"}</div>
+                  {useCaseItems.slice(0, 5).map((item) => (
+                    <Link key={item.href} href={item.href} className="nav-dropdown__link">
+                      {item.name}
+                    </Link>
+                  ))}
+                </div>
+                <div className="nav-dropdown__divider"></div>
+                <div className="nav-dropdown__column">
+                  <div className="nav-dropdown__title">{"//场景"}</div>
+                  {useCaseItems.slice(5).map((item) => (
+                    <Link key={item.href} href={item.href} className="nav-dropdown__link">
+                      {item.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
           
           <div className="nav-dropdown-wrapper">
             <span className="site-nav__link nav-dropdown-trigger">

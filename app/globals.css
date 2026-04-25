@@ -171,6 +171,10 @@ button {
   min-width: 340px;
 }
 
+.nav-dropdown__inner--grid {
+  min-width: 430px;
+}
+
 .nav-dropdown__column {
   flex: 1;
   display: flex;

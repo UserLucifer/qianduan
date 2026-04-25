@@ -192,22 +192,15 @@
 }
 
 .uc-card__icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.25rem;
-  margin-bottom: 20px;
+  font-size: 1.5rem;
+  margin-bottom: 24px;
+  color: var(--foreground);
 }
-
-.uc-card__icon--violet { background: rgba(139, 92, 246, 0.12); color: #8b5cf6; }
-.uc-card__icon--blue   { background: rgba(59, 130, 246, 0.12); color: #3b82f6; }
-.uc-card__icon--green  { background: rgba(16, 185, 129, 0.12); color: #10b981; }
-.uc-card__icon--amber  { background: rgba(245, 158, 11, 0.12); color: #f59e0b; }
-.uc-card__icon--red    { background: rgba(239, 68, 68, 0.12); color: #ef4444; }
-.uc-card__icon--cyan   { background: rgba(6, 182, 212, 0.12); color: #06b6d4; }
 
 .uc-card__title {
   font-size: 1.25rem;
@@ -296,14 +289,12 @@
 .uc-highlight__icon {
   width: 44px;
   height: 44px;
-  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   margin-bottom: 24px;
-  background: linear-gradient(135deg, rgba(94, 106, 210, 0.12), rgba(113, 112, 255, 0.08));
-  color: #7170ff;
+  color: var(--foreground);
 }
 
 .uc-highlight__title {
@@ -325,26 +316,36 @@
    Use Cases — Bottom CTA
    ============================ */
 .uc-cta {
-  width: 100%;
+  position: relative;
+  width: 100vw;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
   padding: 120px 0;
   border-top: 1px solid var(--line);
-  background: linear-gradient(
-    to bottom,
-    var(--background),
-    rgba(94, 106, 210, 0.04)
-  );
+  background-color: var(--background);
   text-align: center;
+  overflow: hidden;
 }
 
 :root[data-theme="dark"] .uc-cta {
-  background: linear-gradient(
-    to bottom,
-    var(--background),
-    rgba(94, 106, 210, 0.06)
-  );
+  background-color: var(--background);
+}
+
+.uc-cta__background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
 }
 
 .uc-cta__inner {
+  position: relative;
+  z-index: 2;
   width: min(1200px, calc(100vw - 40px));
   margin: 0 auto;
 }
