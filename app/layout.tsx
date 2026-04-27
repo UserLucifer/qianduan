@@ -27,6 +27,8 @@ const themeScript = `
   })();
 `;
 
+import { CustomerService } from "@/components/CustomerService";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -39,15 +41,16 @@ export default function RootLayout({
       suppressHydrationWarning
       className={inter.variable}
     >
-      <body>
-        <Script id="theme-script" strategy="beforeInteractive">
-          {themeScript}
-        </Script>
-        {children}
+      <head>
         <Script
-          src="https://plugin-code.salesmartly.com/js/project_692700_714414_1777010586.js"
-          strategy="lazyOnload"
+          id="theme-script"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: themeScript }}
         />
+      </head>
+      <body>
+        {children}
+        <CustomerService />
       </body>
     </html>
   );

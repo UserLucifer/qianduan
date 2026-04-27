@@ -87,6 +87,10 @@ export default function Header() {
             </AnimatePresence>
           </div>
 
+          <Link href="/rental" className="site-nav__link">
+            租赁
+          </Link>
+
           {/* Company */}
           <div 
             className="nav-dropdown-wrapper nav-dropdown-wrapper--mega"

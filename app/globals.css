@@ -1,3 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --ui-background: 0 0% 100%;
+    --ui-foreground: 240 10% 3.9%;
+    --ui-card: 0 0% 100%;
+    --ui-card-foreground: 240 10% 3.9%;
+    --ui-popover: 0 0% 100%;
+    --ui-popover-foreground: 240 10% 3.9%;
+    --ui-primary: 240 5.9% 10%;
+    --ui-primary-foreground: 0 0% 98%;
+    --ui-secondary: 240 4.8% 95.9%;
+    --ui-secondary-foreground: 240 5.9% 10%;
+    --ui-muted: 240 4.8% 95.9%;
+    --ui-muted-foreground: 240 3.8% 46.1%;
+    --ui-accent: 240 4.8% 95.9%;
+    --ui-accent-foreground: 240 5.9% 10%;
+    --ui-destructive: 0 84.2% 60.2%;
+    --ui-destructive-foreground: 0 0% 98%;
+    --ui-border: 240 5.9% 90%;
+    --ui-input: 240 5.9% 90%;
+    --ui-ring: 240 10% 3.9%;
+    --radius: 0.75rem;
+  }
+
+  [data-theme="dark"] {
+    --ui-background: 240 10% 3.9%;
+    --ui-foreground: 0 0% 98%;
+    --ui-card: 240 5.9% 10%;
+    --ui-card-foreground: 0 0% 98%;
+    --ui-popover: 240 10% 3.9%;
+    --ui-popover-foreground: 0 0% 98%;
+    --ui-primary: 263.4 70% 50.4%; /* Purple #8b5cf6 */
+    --ui-primary-foreground: 210 40% 98%;
+    --ui-secondary: 240 3.7% 15.9%;
+    --ui-secondary-foreground: 0 0% 98%;
+    --ui-muted: 240 3.7% 15.9%;
+    --ui-muted-foreground: 240 5% 64.9%;
+    --ui-accent: 240 3.7% 15.9%;
+    --ui-accent-foreground: 0 0% 98%;
+    --ui-destructive: 0 62.8% 30.6%;
+    --ui-destructive-foreground: 0 0% 98%;
+    --ui-border: 240 3.7% 15.9%;
+    --ui-input: 240 3.7% 15.9%;
+    --ui-ring: 240 4.9% 83.9%;
+  }
+}
+
 :root {
   --background: #f7f8f8;
   --foreground: #101113;
@@ -40,6 +91,16 @@
   --signup-foreground: #08090a;
   --auth-muted: #a4acb6;
   --shadow-soft: 0 24px 56px -36px rgba(0, 0, 0, 0.9);
+}
+
+
+.scrollbar-none {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
 }
 
 * {

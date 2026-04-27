@@ -201,8 +201,8 @@ function VisualPanel({ page }: { page: (typeof useCasePages)[UseCaseSlug] }) {
     return <PythonCodeShowcase />;
   }
 
-  const p = page as any;
-  return 'visual' in p ? (
+  const p = page as { visual?: string };
+  return typeof p.visual === 'string' ? (
     <div className={`uc-detail-visual uc-detail-visual--${p.visual}`}>
       <div className="uc-detail-visual__topbar">
         <span />

@@ -332,15 +332,8 @@ export default function EnterprisePage() {
               <p className="ent-section__desc">
                 企业级支持让您的团队快速、自信地推进项目。
               </p>
-              <div className="ent-section__actions">
-                <Link
-                  href="/contact-sales"
-                  className="ent-btn ent-btn--primary"
-                >
-                  申请报价
-                </Link>
-              </div>
             </div>
+
 
             <div className="ent-features">
               {supportFeatures.map((f) => (
@@ -371,14 +364,6 @@ export default function EnterprisePage() {
               <p className="ent-section__desc">
                 为受监管行业和关键工作负载构建的安全计算环境。
               </p>
-              <div className="ent-section__actions">
-                <Link href="#" className="ent-btn ent-btn--ghost">
-                  搜索安全云
-                </Link>
-                <Link href="/compliance" className="ent-btn ent-btn--ghost">
-                  合规中心
-                </Link>
-              </div>
             </div>
 
             <div className="ent-features">
@@ -439,14 +424,6 @@ export default function EnterprisePage() {
               <p className="ent-section__desc">
                 为运行大规模、长期工作负载的团队提供灵活的定价协议。
               </p>
-              <div className="ent-section__actions">
-                <Link
-                  href="/contact-sales"
-                  className="ent-btn ent-btn--primary"
-                >
-                  联系销售
-                </Link>
-              </div>
             </div>
 
             <div className="ent-features">

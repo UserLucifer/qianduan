@@ -1,202 +1,159 @@
 "use client";
 
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Eye, EyeOff } from "lucide-react";
 import LogoCarousel from "../components/LogoCarousel";
 import Image from "next/image";
 import "./login.css";
-
-type Step = "email" | "otp" | "name";
+import { loginWithPassword } from "@/api/auth";
+import { toErrorMessage } from "@/lib/format";
 
 export default function LoginPage() {
-  const [step, setStep] = useState<Step>("email");
+  const router = useRouter();
   const [email, setEmail] = useState("");
-  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
-  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const otpRef0 = useRef<HTMLInputElement>(null);
-  const otpRef1 = useRef<HTMLInputElement>(null);
-  const otpRef2 = useRef<HTMLInputElement>(null);
-  const otpRef3 = useRef<HTMLInputElement>(null);
-  const otpRef4 = useRef<HTMLInputElement>(null);
-  const otpRef5 = useRef<HTMLInputElement>(null);
-
-  const otpRefs = useMemo(
-    () => [otpRef0, otpRef1, otpRef2, otpRef3, otpRef4, otpRef5],
-    [otpRef0, otpRef1, otpRef2, otpRef3, otpRef4, otpRef5]
-  );
-
-  const handleEmailSubmit = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !email.includes("@")) return;
+    if (!email || !password) return;
     setIsLoading(true);
-    setTimeout(() => {
+    setError("");
+
+    try {
+      const res = await loginWithPassword({ email, password });
+      if (res && (res.code === 200 || res.code === 0) && res.data) {
+        localStorage.setItem("accessToken", res.data.accessToken);
+        router.push("/dashboard");
+      } else {
+        setError(res?.message || "Login failed. Please check your credentials.");
+      }
+    } catch (err) {
+      setError(toErrorMessage(err));
+    } finally {
       setIsLoading(false);
-      setStep("otp");
-    }, 800);
-  };
-
-  const handleOtpChange = (index: number, value: string) => {
-    if (!/^\d*$/.test(value)) return;
-
-    const newOtp = [...otp];
-    newOtp[index] = value;
-    setOtp(newOtp);
-
-    // Auto-advance
-    if (value && index < 5) {
-      otpRefs[index + 1].current?.focus();
-    }
-
-    // Auto-submit if all filled
-    if (newOtp.every((digit) => digit !== "")) {
-      setIsLoading(true);
-      setTimeout(() => {
-        setIsLoading(false);
-        setStep("name");
-      }, 1000);
     }
   };
 
-  const handleOtpKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Backspace" && !otp[index] && index > 0) {
-      otpRefs[index - 1].current?.focus();
-    }
-  };
-
-  const handleNameSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name) return;
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      // Dummy success redirect or alert
-      alert(`Welcome, ${name}! Redirecting to dashboard...`);
-      window.location.href = "/";
-    }, 1000);
-  };
-
-  // Focus the first OTP input when transitioning to the OTP step
+  // Redirect if already logged in
   useEffect(() => {
-    if (step === "otp") {
-      otpRefs[0].current?.focus();
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      router.push("/dashboard");
     }
-  }, [step, otpRefs]);
+  }, [router]);
 
   return (
     <div className="login-layout">
       {/* Left Column: Auth Flow */}
       <div className="login-left">
-        {step === "email" && (
-          <div className="login-form-container">
-            <div className="login-brand-logo" />
-            <h1 className="login-title">Welcome to 算力租赁</h1>
-            <p className="login-subtitle">Log in or register with your email.</p>
+        <div className="login-brand-header">
+          <div className="login-brand-logo-mini" />
+          <span className="login-brand-name">算力租赁</span>
+        </div>
 
-            <form style={{ width: "100%" }} onSubmit={handleEmailSubmit}>
+        <div className="login-form-container">
+          <h1 className="login-title">Welcome back.</h1>
+          <p className="login-subtitle">Log in to your account below.</p>
+
+          <form style={{ width: "100%" }} onSubmit={handleLogin}>
+            <div className="input-group">
               <input
                 type="email"
                 className="login-input"
-                placeholder="you@example.com"
+                placeholder="name@company.com"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setError("");
+                }}
                 required
+                disabled={isLoading}
               />
-              <button
-                type="submit"
-                className="login-button login-button--secondary"
-                disabled={!email || !email.includes("@") || isLoading}
-              >
-                {isLoading ? "Loading..." : "Continue"}
-              </button>
-            </form>
-
-            <div className="login-footer">
-              算力租赁 uses Google reCAPTCHA for secure authentication. <br />
-              Privacy - Terms
-            </div>
-          </div>
-        )}
-
-        {step === "otp" && (
-          <div className="login-form-container">
-            <div className="login-brand-logo" style={{ width: 48, height: 48 }} />
-            <h1 className="login-title">Check your email</h1>
-            <p className="login-subtitle" style={{ marginBottom: 16 }}>
-              We sent you a sign-in code to: <strong>{email}</strong>
-              <br />
-              Paste (or type) it below to continue.
-            </p>
-
-            <div className="otp-container">
-              {otp.map((digit, i) => (
-                <input
-                  key={i}
-                  ref={otpRefs[i]}
-                  className="otp-input"
-                  type="text"
-                  maxLength={1}
-                  value={digit}
-                  onChange={(e) => handleOtpChange(i, e.target.value)}
-                  onKeyDown={(e) => handleOtpKeyDown(i, e)}
-                />
-              ))}
             </div>
 
-            <button className="resend-button">Resend code</button>
-
-            {isLoading && (
-              <div style={{ color: "var(--muted)", fontSize: 12, marginTop: 16 }}>
-                Loading...
-              </div>
-            )}
-          </div>
-        )}
-
-        {step === "name" && (
-          <div className="login-form-container">
-            <div className="login-brand-logo" style={{ width: 48, height: 48 }} />
-            <h1 className="login-title">How shall we call you?</h1>
-
-            <form style={{ width: "100%", marginTop: 24 }} onSubmit={handleNameSubmit}>
+            <div className="input-group" style={{ position: "relative" }}>
               <input
-                type="email"
+                type={showPassword ? "text" : "password"}
                 className="login-input"
-                value={email}
-                disabled
-              />
-              <input
-                type="text"
-                className="login-input"
-                placeholder="Enter your name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                placeholder="Password"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setError("");
+                }}
                 required
-                autoFocus
+                disabled={isLoading}
               />
               <button
-                type="submit"
-                className="login-button login-button--primary"
-                disabled={!name || isLoading}
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowPassword(!showPassword)}
+                style={{
+                  position: "absolute",
+                  right: "12px",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  color: "#666",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: "4px"
+                }}
               >
-                {isLoading ? "Loading..." : "Next"}
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
-            </form>
+            </div>
+
+            {error && <div className="error-message" style={{ marginBottom: "16px" }}>{error}</div>}
+
+            <button
+              type="submit"
+              className="login-button login-button--primary"
+              disabled={isLoading}
+            >
+              {isLoading ? "Signing in..." : "Sign in"}
+            </button>
+          </form>
+
+          <div className="login-footer-links" style={{ marginTop: "24px" }}>
+            <div className="footer-subtext">
+              Don't have an account? <Link href="/signup" className="footer-link-bold">Sign up for free</Link>
+            </div>
+            <div className="footer-subtext">
+              Need help logging in? <Link href="/reset-password" className="footer-link-bold">Reset your password</Link>
+            </div>
           </div>
-        )}
+
+          <div className="login-legal-text">
+            By using 算力租赁, you acknowledge that we collect and use <br />
+            your personal information as described in our <span className="legal-link">Privacy Policy</span>.
+          </div>
+        </div>
       </div>
 
       {/* Right Column: Showcase */}
       <div className="login-right">
-        <Image
-          className="login-right-image"
-          src="/images/retool-blocks-login-door.jpg"
-          alt="Abstract 3D Shape"
-          fill
-          priority
-        />
-        <div className="login-right-footer">
-          <LogoCarousel />
+        <div className="login-right-illustration">
+          <Image
+            className="login-right-image"
+            src="/images/retool-blocks-login-door.jpg"
+            alt="Abstract 3D Shape"
+            fill
+            priority
+          />
+        </div>
+        <div className="login-right-content">
+          <div className="login-trusted-section">
+            <LogoCarousel />
+          </div>
         </div>
       </div>
     </div>

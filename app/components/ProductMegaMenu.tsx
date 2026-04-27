@@ -12,7 +12,7 @@ const productCategories = [
     name: '基础架构',
     icon: <FiCpu />,
     subItems: [
-      { name: 'GPU 计算', items: ['NVIDIA Blackwell', 'NVIDIA Hopper', 'NVIDIA Ada Lovelace'] },
+      { name: 'GPU 计算', href: '/gpu-computing', items: ['NVIDIA Blackwell', 'NVIDIA Hopper', 'NVIDIA Ada Lovelace'] },
       { name: 'CPU 计算', href: '#' },
       { name: '裸金属服务器', href: '#' },
       { name: '网络', href: '#' }

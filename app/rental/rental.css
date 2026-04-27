@@ -1,0 +1,197 @@
+/* ============================
+   Rental Page — Styles
+   ============================ */
+
+.rental-hero {
+  padding: 120px 24px 80px;
+  text-align: center;
+  background: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.05) 0%, transparent 70%);
+}
+
+.rental-hero__title {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 600;
+  color: var(--foreground);
+  letter-spacing: -0.04em;
+  margin-bottom: 16px;
+}
+
+.rental-hero__desc {
+  font-size: 1.125rem;
+  color: var(--muted);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Filter Section */
+.rental-filters {
+  width: min(1200px, calc(100vw - 40px));
+  margin: 0 auto 40px;
+  padding: 24px;
+  background: var(--surface-strong);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  align-items: flex-end;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filter-group__label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted-more);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.filter-select {
+  padding: 8px 12px;
+  background: var(--background);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--foreground);
+  font-size: 0.875rem;
+  min-width: 160px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.filter-select:focus {
+  border-color: #38bdf8;
+  outline: none;
+}
+
+/* Market List Table */
+.rental-market {
+  width: min(1200px, calc(100vw - 40px));
+  margin: 0 auto 120px;
+}
+
+.market-table-container {
+  background: var(--surface-strong);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.market-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.market-table th {
+  padding: 16px 24px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted-more);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid var(--line);
+}
+
+.market-table td {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--line);
+  color: var(--foreground);
+}
+
+.market-table tr:last-child td {
+  border-bottom: none;
+}
+
+.market-table tr:hover td {
+  background: rgba(255, 255, 255, 0.01);
+}
+
+.gpu-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gpu-name {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.gpu-specs {
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.status-badge--available {
+  background: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+}
+
+.status-badge--busy {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.price-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.price-value {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #38bdf8;
+}
+
+.price-unit {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.action-button {
+  padding: 8px 20px;
+  background: #38bdf8;
+  color: #000;
+  font-weight: 600;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  transition: opacity 0.2s;
+}
+
+.action-button:hover {
+  opacity: 0.9;
+}
+
+.action-button:disabled {
+  background: var(--line);
+  color: var(--muted);
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .rental-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .market-table th:nth-child(3),
+  .market-table td:nth-child(3) {
+    display: none;
+  }
+}
