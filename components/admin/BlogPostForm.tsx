@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { MultiSelect } from "@/components/ui/multi-select";
 import { Switch } from "@/components/ui/switch";
 import { createAdminBlogPost, updateAdminBlogPost } from "@/api/admin";
-import { BlogCategory, BlogTag, ApiMapObject } from "@/api/types";
+import { BlogCategory, BlogTag, AdminBlogPost } from "@/api/types";
 import { toErrorMessage } from "@/lib/format";
 
 const formSchema = z.object({
@@ -30,7 +30,7 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 interface BlogPostFormProps {
-  initialData?: ApiMapObject | null;
+  initialData?: AdminBlogPost | null;
   categories: BlogCategory[];
   tags: BlogTag[];
   onSuccess: () => void;

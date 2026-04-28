@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SearchPanel } from "@/components/shared/SearchPanel";
 import { DataTable, type DataTableColumn } from "@/components/shared/DataTable";
-import { DetailDrawer, type DetailSection } from "@/components/shared/DetailDrawer";
+import { DetailDrawer, type DetailSectionDef } from "@/components/shared/DetailDrawer";
 import { DateTimeText } from "@/components/shared/DateTimeText";
 import { ConfirmActionButton } from "@/components/shared/ConfirmActionButton";
 import { usePaginatedResource } from "@/hooks/usePaginatedResource";
@@ -105,20 +105,18 @@ export default function AdminConfigPage() {
     },
   ];
 
-  const detailSections: DetailSection[] = detail
-    ? [
+  const detailSections: DetailSectionDef<any>[] = [
       {
         title: "配置详情",
         fields: [
-          { label: "配置键", value: detail.configKey },
-          { label: "配置值", value: <pre className="whitespace-pre-wrap break-all text-xs text-muted-foreground">{detail.configValue}</pre> },
-          { label: "说明", value: formatEmpty(detail.configDesc) },
-          { label: "创建时间", value: <DateTimeText value={detail.createdAt} /> },
-          { label: "更新时间", value: <DateTimeText value={detail.updatedAt} /> },
+          { label: "配置键", render: (detail) => detail.configKey },
+          { label: "配置值", render: (detail) => <pre className="whitespace-pre-wrap break-all text-xs text-muted-foreground">{detail.configValue}</pre> },
+          { label: "说明", render: (detail) => formatEmpty(detail.configDesc) },
+          { label: "创建时间", render: (detail) => <DateTimeText value={detail.createdAt} /> },
+          { label: "更新时间", render: (detail) => <DateTimeText value={detail.updatedAt} /> },
         ],
       },
-    ]
-    : [];
+    ];
 
   return (
     <div className="space-y-6">
@@ -137,7 +135,7 @@ export default function AdminConfigPage() {
         </div>
       </SearchPanel>
       <DataTable columns={columns} data={page.records} rowKey={(row) => row.configKey} loading={loading} emptyText="暂无系统配置" pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
-      <DetailDrawer open={detailOpen} title="系统配置详情" subtitle={detail?.configKey} sections={detailSections} onClose={() => setDetailOpen(false)} />
+      <DetailDrawer data={detail} open={detailOpen} title="系统配置详情" subtitle={(data) => data.configKey} sections={detailSections} onClose={() => setDetailOpen(false)} />
 
       {/* Edit Dialog */}
       <Dialog open={editOpen} onOpenChange={setEditOpen}>

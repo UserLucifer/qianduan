@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DataTable, type DataTableColumn } from "@/components/shared/DataTable";
 import { DateTimeText } from "@/components/shared/DateTimeText";
-import { DetailDrawer, type DetailSection } from "@/components/shared/DetailDrawer";
+import { DetailDrawer, type DetailSectionDef } from "@/components/shared/DetailDrawer";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SearchPanel } from "@/components/shared/SearchPanel";
 import { StatusBadge } from "@/components/shared/StatusBadge";
@@ -63,19 +63,19 @@ export default function NotificationsPage() {
     { key: "actions", title: "操作", className: "text-right", render: (row) => <Button variant="ghost" size="sm" className="text-muted-foreground hover:bg-white/5" onClick={() => void openDetail(row.id)}><Eye className="h-3.5 w-3.5" />详情</Button> },
   ];
 
-  const sections: DetailSection[] = detail ? [
+  const sections: DetailSectionDef<any>[] = [
     {
       title: "通知内容",
       fields: [
-        { label: "标题", value: detail.title },
-        { label: "类型", value: notificationTypeLabel(detail.type) },
-        { label: "业务类型", value: detail.bizType || "-" },
-        { label: "业务 ID", value: detail.bizId ?? "-" },
-        { label: "内容", value: <p className="whitespace-pre-wrap leading-6">{detail.content}</p> },
-        { label: "时间", value: <DateTimeText value={detail.createdAt} /> },
+        { label: "标题", render: (detail) => detail.title },
+        { label: "类型", render: (detail) => notificationTypeLabel(detail.type) },
+        { label: "业务类型", render: (detail) => detail.bizType || "-" },
+        { label: "业务 ID", render: (detail) => detail.bizId ?? "-" },
+        { label: "内容", render: (detail) => <p className="whitespace-pre-wrap leading-6">{detail.content}</p> },
+        { label: "时间", render: (detail) => <DateTimeText value={detail.createdAt} /> },
       ],
     },
-  ] : [];
+  ];
 
   return (
     <div className="space-y-6">
@@ -122,7 +122,7 @@ export default function NotificationsPage() {
       </SearchPanel>
       {error || actionError ? <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-200">{error ?? actionError}</div> : null}
       <DataTable columns={columns} data={page.records} rowKey={(row) => row.id} loading={loading} emptyText="暂无通知。" pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
-      <DetailDrawer open={Boolean(detail)} title="通知详情" subtitle={detail?.title} sections={sections} onClose={() => setDetail(null)} />
+      <DetailDrawer data={detail} open={Boolean(detail)} title="通知详情" subtitle={(data) => data.title} sections={sections} onClose={() => setDetail(null)} />
     </div>
   );
 }

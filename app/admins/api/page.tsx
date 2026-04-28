@@ -10,15 +10,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SearchPanel } from "@/components/shared/SearchPanel";
 import { DataTable, type DataTableColumn } from "@/components/shared/DataTable";
-import { DetailDrawer, type DetailSection } from "@/components/shared/DetailDrawer";
+import { DetailDrawer, type DetailSectionDef } from "@/components/shared/DetailDrawer";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import { MoneyText } from "@/components/shared/MoneyText";
 import { DateTimeText } from "@/components/shared/DateTimeText";
 import { CopyableSecret } from "@/components/shared/CopyableSecret";
 import { usePaginatedResource } from "@/hooks/usePaginatedResource";
 import { getAdminApiCredentialDetail, getAdminApiCredentials, getAdminApiDeployOrderDetail, getAdminApiDeployOrders } from "@/api/admin";
-import type { AdminApiCredentialQuery, AdminApiCredentialRow, AdminApiDeployOrderQuery, ApiDeployOrderResponse, ApiMapObject } from "@/api/types";
-import { formatEmpty, pickString, toErrorMessage } from "@/lib/format";
+import type { AdminApiCredentialQuery, AdminApiCredentialRow, AdminApiDeployOrderQuery, ApiDeployOrderResponse } from "@/api/types";
+import { formatEmpty, toErrorMessage } from "@/lib/format";
 
 interface CredentialFilters {
   userId: string;
@@ -44,7 +44,7 @@ const deployFiltersInitial: DeployFilters = { userId: "", deployNo: "", status: 
 export default function AdminApiPage() {
   const [credentialFilters, setCredentialFilters] = useState<CredentialFilters>(credentialFiltersInitial);
   const [deployFilters, setDeployFilters] = useState<DeployFilters>(deployFiltersInitial);
-  const [credentialDetail, setCredentialDetail] = useState<ApiMapObject | null>(null);
+  const [credentialDetail, setCredentialDetail] = useState<AdminApiCredentialRow | null>(null);
   const [deployDetail, setDeployDetail] = useState<ApiDeployOrderResponse | null>(null);
   const [drawer, setDrawer] = useState<"credential" | "deploy" | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
@@ -96,18 +96,18 @@ export default function AdminApiPage() {
   };
 
   const credentialColumns: DataTableColumn<AdminApiCredentialRow>[] = [
-    { key: "credentialNo", title: "凭证编号", render: (row) => <CopyableSecret value={pickString(row.credentialNo)} maskedValue={pickString(row.credentialNo)} canReveal={false} /> },
+    { key: "credentialNo", title: "凭证编号", render: (row) => <CopyableSecret value={row.credentialNo} maskedValue={row.credentialNo} canReveal={false} /> },
     { key: "userId", title: "用户 ID", render: (row) => formatEmpty(row.userId) },
     { key: "apiName", title: "API 名称", render: (row) => formatEmpty(row.apiName) },
     { key: "apiBaseUrl", title: "API 地址", render: (row) => formatEmpty(row.apiBaseUrl) },
-    { key: "tokenMasked", title: "Token", render: (row) => <CopyableSecret value={pickString(row.tokenMasked)} maskedValue={pickString(row.tokenMasked)} /> },
+    { key: "tokenMasked", title: "Token", render: (row) => <CopyableSecret value={row.tokenMasked} maskedValue={row.tokenMasked} /> },
     { key: "tokenStatus", title: "Token 状态", render: (row) => <StatusBadge status={row.tokenStatus} /> },
     { key: "generatedAt", title: "生成时间", render: (row) => <DateTimeText value={typeof row.generatedAt === "string" ? row.generatedAt : null} /> },
     {
       key: "actions",
       title: "操作",
       render: (row) => (
-        <Button variant="ghost" size="sm" className="text-muted-foreground hover:bg-white/5" onClick={() => void openCredentialDetail(pickString(row.credentialNo))}>
+        <Button variant="ghost" size="sm" className="text-muted-foreground hover:bg-white/5" onClick={() => void openCredentialDetail(row.credentialNo || "")}>
           <Eye className="h-4 w-4" />
           详情
         </Button>
@@ -135,54 +135,50 @@ export default function AdminApiPage() {
     },
   ];
 
-  const credentialSections: DetailSection[] = credentialDetail
-    ? [
+  const credentialSections: DetailSectionDef<any>[] = [
         {
           title: "凭证信息",
           fields: [
-            { label: "凭证编号", value: <CopyableSecret value={pickString(credentialDetail.credentialNo)} maskedValue={pickString(credentialDetail.credentialNo)} canReveal={false} /> },
-            { label: "用户 ID", value: pickString(credentialDetail.userId) },
-            { label: "API 名称", value: pickString(credentialDetail.apiName) },
-            { label: "Token 状态", value: <StatusBadge status={credentialDetail.tokenStatus} /> },
-            { label: "API 地址", value: pickString(credentialDetail.apiBaseUrl) },
-            { label: "Token", value: <CopyableSecret value={pickString(credentialDetail.tokenMasked)} maskedValue={pickString(credentialDetail.tokenMasked)} /> },
+            { label: "凭证编号", render: (credentialDetail) => <CopyableSecret value={credentialDetail.credentialNo} maskedValue={credentialDetail.credentialNo} canReveal={false} /> },
+            { label: "用户 ID", render: (credentialDetail) => credentialDetail.userId },
+            { label: "API 名称", render: (credentialDetail) => credentialDetail.apiName },
+            { label: "Token 状态", render: (credentialDetail) => <StatusBadge status={credentialDetail.tokenStatus} /> },
+            { label: "API 地址", render: (credentialDetail) => credentialDetail.apiBaseUrl },
+            { label: "Token", render: (credentialDetail) => <CopyableSecret value={credentialDetail.tokenMasked} maskedValue={credentialDetail.tokenMasked} /> },
           ],
         },
         {
           title: "关联业务",
           fields: [
-            { label: "租赁订单", value: <CopyableSecret value={pickString(credentialDetail.orderNo)} maskedValue={pickString(credentialDetail.orderNo)} canReveal={false} /> },
-            { label: "模型", value: pickString(credentialDetail.modelNameSnapshot) },
-            { label: "部署费用", value: pickString(credentialDetail.deployFeeSnapshot) },
-            { label: "生成时间", value: <DateTimeText value={typeof credentialDetail.generatedAt === "string" ? credentialDetail.generatedAt : null} /> },
+            { label: "租赁订单", render: (credentialDetail) => <CopyableSecret value={credentialDetail.orderNo} maskedValue={credentialDetail.orderNo} canReveal={false} /> },
+            { label: "模型", render: (credentialDetail) => credentialDetail.modelNameSnapshot },
+            { label: "部署费用", render: (credentialDetail) => credentialDetail.deployFeeSnapshot },
+            { label: "生成时间", render: (credentialDetail) => <DateTimeText value={typeof credentialDetail.generatedAt === "string" ? credentialDetail.generatedAt : null} /> },
           ],
         },
-      ]
-    : [];
+      ];
 
-  const deploySections: DetailSection[] = deployDetail
-    ? [
+  const deploySections: DetailSectionDef<any>[] = [
         {
           title: "部署订单",
           fields: [
-            { label: "部署订单号", value: <CopyableSecret value={deployDetail.deployNo} maskedValue={deployDetail.deployNo} canReveal={false} /> },
-            { label: "租赁订单", value: <CopyableSecret value={deployDetail.orderNo} maskedValue={deployDetail.orderNo} canReveal={false} /> },
-            { label: "凭证编号", value: <CopyableSecret value={deployDetail.credentialNo} maskedValue={deployDetail.credentialNo} canReveal={false} /> },
-            { label: "状态", value: <StatusBadge status={deployDetail.status} /> },
+            { label: "部署订单号", render: (deployDetail) => <CopyableSecret value={deployDetail.deployNo} maskedValue={deployDetail.deployNo} canReveal={false} /> },
+            { label: "租赁订单", render: (deployDetail) => <CopyableSecret value={deployDetail.orderNo} maskedValue={deployDetail.orderNo} canReveal={false} /> },
+            { label: "凭证编号", render: (deployDetail) => <CopyableSecret value={deployDetail.credentialNo} maskedValue={deployDetail.credentialNo} canReveal={false} /> },
+            { label: "状态", render: (deployDetail) => <StatusBadge status={deployDetail.status} /> },
           ],
         },
         {
           title: "费用与时间",
           fields: [
-            { label: "AI 模型", value: deployDetail.modelNameSnapshot },
-            { label: "部署费用", value: <MoneyText value={deployDetail.deployFeeAmount} /> },
-            { label: "钱包流水", value: <CopyableSecret value={deployDetail.walletTxNo} maskedValue={deployDetail.walletTxNo} canReveal={false} /> },
-            { label: "支付时间", value: <DateTimeText value={deployDetail.paidAt} /> },
-            { label: "创建时间", value: <DateTimeText value={deployDetail.createdAt} /> },
+            { label: "AI 模型", render: (deployDetail) => deployDetail.modelNameSnapshot },
+            { label: "部署费用", render: (deployDetail) => <MoneyText value={deployDetail.deployFeeAmount} /> },
+            { label: "钱包流水", render: (deployDetail) => <CopyableSecret value={deployDetail.walletTxNo} maskedValue={deployDetail.walletTxNo} canReveal={false} /> },
+            { label: "支付时间", render: (deployDetail) => <DateTimeText value={deployDetail.paidAt} /> },
+            { label: "创建时间", render: (deployDetail) => <DateTimeText value={deployDetail.createdAt} /> },
           ],
         },
-      ]
-    : [];
+      ];
 
   return (
     <div className="space-y-6">
@@ -237,7 +233,7 @@ export default function AdminApiPage() {
               <Input type="date" value={credentialFilters.endTime} onChange={(event) => setCredentialFilters((current) => ({ ...current, endTime: event.target.value }))} className="h-9 w-[150px] bg-background text-foreground" />
             </div>
           </SearchPanel>
-          <DataTable columns={credentialColumns} data={credentials.page.records} rowKey={(row) => pickString(row.credentialNo)} loading={credentials.loading} emptyText="暂无 API 凭证" pageNo={credentials.page.pageNo} pageSize={credentials.page.pageSize} total={credentials.page.total} onPageChange={credentials.changePage} />
+          <DataTable columns={credentialColumns} data={credentials.page.records} rowKey={(row) => row.credentialNo || ""} loading={credentials.loading} emptyText="暂无 API 凭证" pageNo={credentials.page.pageNo} pageSize={credentials.page.pageSize} total={credentials.page.total} onPageChange={credentials.changePage} />
         </TabsContent>
 
         <TabsContent value="deploy" className="space-y-4">
@@ -283,17 +279,15 @@ export default function AdminApiPage() {
         </TabsContent>
       </Tabs>
 
-      <DetailDrawer
-        open={drawer === "credential"}
+      <DetailDrawer data={credentialDetail} open={drawer === "credential"}
         title="API 凭证详情"
-        subtitle={pickString(credentialDetail?.credentialNo)}
+        subtitle={(data) => data?.credentialNo}
         sections={credentialSections}
         onClose={() => setDrawer(null)}
       />
-      <DetailDrawer
-        open={drawer === "deploy"}
+      <DetailDrawer data={deployDetail} open={drawer === "deploy"}
         title="部署订单详情"
-        subtitle={deployDetail?.deployNo}
+        subtitle={(data) => data?.deployNo}
         sections={deploySections}
         onClose={() => setDrawer(null)}
       />

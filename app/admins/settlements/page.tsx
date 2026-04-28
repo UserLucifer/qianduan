@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SearchPanel } from "@/components/shared/SearchPanel";
 import { DataTable, type DataTableColumn } from "@/components/shared/DataTable";
-import { DetailDrawer, type DetailSection } from "@/components/shared/DetailDrawer";
+import { DetailDrawer, type DetailSectionDef } from "@/components/shared/DetailDrawer";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import { MoneyText } from "@/components/shared/MoneyText";
 import { DateTimeText } from "@/components/shared/DateTimeText";
@@ -84,37 +84,35 @@ export default function AdminSettlementsPage() {
     },
   ];
 
-  const detailSections: DetailSection[] = detail
-    ? [
+  const detailSections: DetailSectionDef<any>[] = [
         {
           title: "结算信息",
           fields: [
-            { label: "结算编号", value: <CopyableSecret value={detail.settlementNo} maskedValue={detail.settlementNo} canReveal={false} /> },
-            { label: "租赁订单", value: <CopyableSecret value={detail.orderNo} maskedValue={detail.orderNo} canReveal={false} /> },
-            { label: "结算类型", value: settlementTypeLabel(detail.settlementType) },
-            { label: "状态", value: <StatusBadge status={detail.status} /> },
+            { label: "结算编号", render: (detail) => <CopyableSecret value={detail.settlementNo} maskedValue={detail.settlementNo} canReveal={false} /> },
+            { label: "租赁订单", render: (detail) => <CopyableSecret value={detail.orderNo} maskedValue={detail.orderNo} canReveal={false} /> },
+            { label: "结算类型", render: (detail) => settlementTypeLabel(detail.settlementType) },
+            { label: "状态", render: (detail) => <StatusBadge status={detail.status} /> },
           ],
         },
         {
           title: "金额信息",
           fields: [
-            { label: "本金", value: <MoneyText value={detail.principalAmount} currency={detail.currency} /> },
-            { label: "收益", value: <MoneyText value={detail.profitAmount} currency={detail.currency} /> },
-            { label: "违约金", value: <MoneyText value={detail.penaltyAmount} currency={detail.currency} /> },
-            { label: "实际结算", value: <MoneyText value={detail.actualSettleAmount} currency={detail.currency} /> },
+            { label: "本金", render: (detail) => <MoneyText value={detail.principalAmount} currency={detail.currency} /> },
+            { label: "收益", render: (detail) => <MoneyText value={detail.profitAmount} currency={detail.currency} /> },
+            { label: "违约金", render: (detail) => <MoneyText value={detail.penaltyAmount} currency={detail.currency} /> },
+            { label: "实际结算", render: (detail) => <MoneyText value={detail.actualSettleAmount} currency={detail.currency} /> },
           ],
         },
         {
           title: "审核与流水",
           fields: [
-            { label: "审核人", value: formatEmpty(detail.reviewedBy) },
-            { label: "审核时间", value: <DateTimeText value={detail.reviewedAt} /> },
-            { label: "钱包流水", value: <CopyableSecret value={detail.walletTxNo} maskedValue={detail.walletTxNo ?? "-"} canReveal={false} /> },
-            { label: "备注", value: formatEmpty(detail.remark) },
+            { label: "审核人", render: (detail) => formatEmpty(detail.reviewedBy) },
+            { label: "审核时间", render: (detail) => <DateTimeText value={detail.reviewedAt} /> },
+            { label: "钱包流水", render: (detail) => <CopyableSecret value={detail.walletTxNo} maskedValue={detail.walletTxNo ?? "-"} canReveal={false} /> },
+            { label: "备注", render: (detail) => formatEmpty(detail.remark) },
           ],
         },
-      ]
-    : [];
+      ];
 
   return (
     <div className="space-y-6">
@@ -177,7 +175,7 @@ export default function AdminSettlementsPage() {
         </div>
       </SearchPanel>
       <DataTable columns={columns} data={page.records} rowKey={(row) => row.settlementNo} loading={loading} emptyText="暂无结算订单" pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
-      <DetailDrawer open={detailOpen} title="结算订单详情" subtitle={detail?.settlementNo} sections={detailSections} onClose={() => setDetailOpen(false)} />
+      <DetailDrawer data={detail} open={detailOpen} title="结算订单详情" subtitle={(data) => data.settlementNo} sections={detailSections} onClose={() => setDetailOpen(false)} />
     </div>
   );
 }

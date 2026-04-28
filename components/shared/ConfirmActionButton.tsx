@@ -47,16 +47,16 @@ export function ConfirmActionButton({
           {children}
         </Button>
       </DialogTrigger>
-      <DialogContent className="border-white/10 bg-[#18181b] text-zinc-100">
+      <DialogContent className="border-[var(--admin-border)] bg-[var(--admin-panel-strong)] text-[var(--admin-text)]">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
-          <DialogDescription className="text-zinc-500">{description}</DialogDescription>
+          <DialogDescription className="text-[var(--admin-muted)]">{description}</DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <Button
             type="button"
             variant="outline"
-            className="border-white/10 bg-white/[0.03] text-muted-foreground hover:bg-white/[0.06]"
+            className="border-[var(--admin-border)] bg-[var(--admin-panel-soft)] text-[var(--admin-muted)] hover:bg-[var(--admin-hover)]"
             onClick={() => setOpen(false)}
           >
             取消

@@ -7,7 +7,7 @@ import { ConfirmActionButton } from "@/components/shared/ConfirmActionButton";
 import { CopyableSecret } from "@/components/shared/CopyableSecret";
 import { DataTable, type DataTableColumn } from "@/components/shared/DataTable";
 import { DateTimeText } from "@/components/shared/DateTimeText";
-import { DetailDrawer, type DetailSection } from "@/components/shared/DetailDrawer";
+import { DetailDrawer, type DetailSectionDef } from "@/components/shared/DetailDrawer";
 import { MoneyText } from "@/components/shared/MoneyText";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { StatusBadge } from "@/components/shared/StatusBadge";
@@ -86,29 +86,29 @@ export default function DashboardApiPage() {
     },
   ];
 
-  const detailSections: DetailSection[] = detail ? [
+  const detailSections: DetailSectionDef<any>[] = [
     {
       title: "凭证信息",
       fields: [
-        { label: "凭证编号", value: <span className="font-mono">{formatEmpty(detail.credentialNo)}</span> },
-        { label: "Token 状态", value: <StatusBadge status={detail.tokenStatus} /> },
-        { label: "API 名称", value: formatEmpty(detail.apiName) },
-        { label: "API Base URL", value: <CopyableSecret value={detail.apiBaseUrl} canReveal={false} /> },
-        { label: "Token", value: <CopyableSecret value={detail.tokenMasked} maskedValue={detail.tokenMasked} canReveal={false} /> },
-        { label: "模型", value: formatEmpty(detail.modelNameSnapshot) },
+        { label: "凭证编号", render: (detail) => <span className="font-mono">{formatEmpty(detail.credentialNo)}</span> },
+        { label: "Token 状态", render: (detail) => <StatusBadge status={detail.tokenStatus} /> },
+        { label: "API 名称", render: (detail) => formatEmpty(detail.apiName) },
+        { label: "API Base URL", render: (detail) => <CopyableSecret value={detail.apiBaseUrl} canReveal={false} /> },
+        { label: "Token", render: (detail) => <CopyableSecret value={detail.tokenMasked} maskedValue={detail.tokenMasked} canReveal={false} /> },
+        { label: "模型", render: (detail) => formatEmpty(detail.modelNameSnapshot) },
       ],
     },
     {
       title: "部署信息",
       fields: [
-        { label: "关联订单", value: <span className="font-mono">{detail.orderNo}</span> },
-        { label: "订单状态", value: <StatusBadge status={detail.orderStatus} /> },
-        { label: "部署状态", value: <StatusBadge status={detail.deployOrderStatus} /> },
-        { label: "部署费用", value: <MoneyText value={detail.deployFeeSnapshot} /> },
-        { label: "支付时间", value: <DateTimeText value={detail.paidAt} /> },
+        { label: "关联订单", render: (detail) => <span className="font-mono">{detail.orderNo}</span> },
+        { label: "订单状态", render: (detail) => <StatusBadge status={detail.orderStatus} /> },
+        { label: "部署状态", render: (detail) => <StatusBadge status={detail.deployOrderStatus} /> },
+        { label: "部署费用", render: (detail) => <MoneyText value={detail.deployFeeSnapshot} /> },
+        { label: "支付时间", render: (detail) => <DateTimeText value={detail.paidAt} /> },
       ],
     },
-  ] : [];
+  ];
 
   return (
     <div className="space-y-6">
@@ -118,7 +118,7 @@ export default function DashboardApiPage() {
       <div className="rounded-lg border border-white/10 bg-white/[0.03] p-4 text-sm leading-6 text-zinc-400">
         API 调用说明由后端凭证详情返回的 API Base URL 和 Token 组成。前端不明文暴露未脱敏 Token，复制操作仅对后端已返回字段生效。
       </div>
-      <DetailDrawer open={Boolean(detail)} title="API 部署详情" subtitle={detail?.orderNo} sections={detailSections} onClose={() => setDetail(null)} />
+      <DetailDrawer data={detail} open={Boolean(detail)} title="API 部署详情" subtitle={(data) => data.orderNo} sections={detailSections} onClose={() => setDetail(null)} />
     </div>
   );
 }

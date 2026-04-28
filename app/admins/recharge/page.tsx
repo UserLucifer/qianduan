@@ -1,5 +1,8 @@
 "use client";
 
+import { HasPermission } from "@/components/shared/HasPermission";
+import { AdminRole } from "@/types/enums";
+
 import { useCallback, useState } from "react";
 import { Check, Eye, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,9 +12,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SearchPanel } from "@/components/shared/SearchPanel";
 import { DataTable, type DataTableColumn } from "@/components/shared/DataTable";
-import { DetailDrawer, type DetailSection } from "@/components/shared/DetailDrawer";
+import { DetailDrawer, type DetailSectionDef } from "@/components/shared/DetailDrawer";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import { MoneyText } from "@/components/shared/MoneyText";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { DateTimeText } from "@/components/shared/DateTimeText";
 import { CopyableSecret } from "@/components/shared/CopyableSecret";
 import { ConfirmActionButton } from "@/components/shared/ConfirmActionButton";
@@ -35,6 +39,13 @@ export default function AdminRechargePage() {
   const [detailOpen, setDetailOpen] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
 
+  // Approval Dialog States
+  const [actionRow, setActionRow] = useState<RechargeOrderResponse | null>(null);
+  const [dialogType, setDialogType] = useState<"approve" | "reject" | null>(null);
+  const [actualAmountInput, setActualAmountInput] = useState<string>("");
+  const [reviewRemark, setReviewRemark] = useState<string>("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const loader = useCallback(async (params: RechargeOrderQueryRequest) => (await getAdminRechargeOrders(params)).data, []);
   const { page, loading, error, updateParams, changePage, reload } = usePaginatedResource(loader, initialQuery);
 
@@ -57,34 +68,55 @@ export default function AdminRechargePage() {
     }
   };
 
-  const approve = async (row: RechargeOrderResponse) => {
-    const value = window.prompt("请输入实际到账金额", String(row.actualAmount || row.applyAmount));
-    if (value === null) return;
-    const actualAmount = Number(value);
+  const openApprove = (row: RechargeOrderResponse) => {
+    setActionRow(row);
+    setDialogType("approve");
+    setActualAmountInput(String(row.actualAmount || row.applyAmount));
+    setReviewRemark("");
+    setActionError(null);
+  };
+
+  const openReject = (row: RechargeOrderResponse) => {
+    setActionRow(row);
+    setDialogType("reject");
+    setReviewRemark("");
+    setActionError(null);
+  };
+
+  const handleApprove = async () => {
+    if (!actionRow) return;
+    const actualAmount = Number(actualAmountInput);
     if (!Number.isFinite(actualAmount) || actualAmount <= 0) {
       setActionError("实际到账金额必须是大于 0 的数字。");
       return;
     }
-    const reviewRemark = window.prompt("审核备注（可选）") ?? undefined;
     try {
-      await approveRecharge(row.rechargeNo, { actualAmount, reviewRemark });
+      setIsSubmitting(true);
+      await approveRecharge(actionRow.rechargeNo, { actualAmount, reviewRemark });
+      setDialogType(null);
       await reload();
     } catch (err) {
       setActionError(toErrorMessage(err));
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const reject = async (row: RechargeOrderResponse) => {
-    const reviewRemark = window.prompt("请输入拒绝原因");
+  const handleReject = async () => {
+    if (!actionRow) return;
     if (!reviewRemark || !reviewRemark.trim()) {
       setActionError("拒绝充值必须填写原因。");
       return;
     }
     try {
-      await rejectRecharge(row.rechargeNo, { reviewRemark });
+      setIsSubmitting(true);
+      await rejectRecharge(actionRow.rechargeNo, { reviewRemark });
+      setDialogType(null);
       await reload();
     } catch (err) {
       setActionError(toErrorMessage(err));
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -106,14 +138,16 @@ export default function AdminRechargePage() {
           </Button>
           {row.status === "SUBMITTED" || row.status === "PENDING_REVIEW" ? (
             <>
-              <ConfirmActionButton title="通过充值审核" description="通过后将按实际到账金额为用户钱包入账。" onConfirm={() => approve(row)}>
-                <Check className="h-4 w-4" />
-                通过
-              </ConfirmActionButton>
-              <ConfirmActionButton title="拒绝充值审核" description="拒绝必须填写原因，用户可在充值记录中查看。" onConfirm={() => reject(row)}>
-                <X className="h-4 w-4" />
-                拒绝
-              </ConfirmActionButton>
+              <HasPermission role={[AdminRole.SUPER_ADMIN, AdminRole.FINANCE]}>
+                <Button variant="ghost" size="sm" className="font-medium text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 dark:text-emerald-400 dark:hover:bg-emerald-500/10" onClick={() => openApprove(row)}>
+                  <Check className="h-4 w-4 mr-1" />
+                  通过
+                </Button>
+                <Button variant="ghost" size="sm" className="font-medium text-rose-600 hover:text-rose-700 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-500/10" onClick={() => openReject(row)}>
+                  <X className="h-4 w-4 mr-1" />
+                  拒绝
+                </Button>
+              </HasPermission>
             </>
           ) : null}
         </div>
@@ -121,44 +155,42 @@ export default function AdminRechargePage() {
     },
   ];
 
-  const detailSections: DetailSection[] = detail
-    ? [
+  const detailSections: DetailSectionDef<any>[] = [
         {
           title: "订单信息",
           fields: [
-            { label: "充值订单号", value: <CopyableSecret value={detail.rechargeNo} maskedValue={detail.rechargeNo} canReveal={false} /> },
-            { label: "状态", value: <StatusBadge status={detail.status} /> },
-            { label: "申请金额", value: <MoneyText value={detail.applyAmount} currency={detail.currency} /> },
-            { label: "实际到账", value: <MoneyText value={detail.actualAmount} currency={detail.currency} /> },
+            { label: "充值订单号", render: (detail) => <CopyableSecret value={detail.rechargeNo} maskedValue={detail.rechargeNo} canReveal={false} /> },
+            { label: "状态", render: (detail) => <StatusBadge status={detail.status} /> },
+            { label: "申请金额", render: (detail) => <MoneyText value={detail.applyAmount} currency={detail.currency} /> },
+            { label: "实际到账", render: (detail) => <MoneyText value={detail.actualAmount} currency={detail.currency} /> },
           ],
         },
         {
           title: "收款信息",
           fields: [
-            { label: "支付方式", value: detail.channelName },
-            { label: "网络", value: detail.network },
-            { label: "收款账户", value: <CopyableSecret value={detail.accountNo} /> },
-            { label: "外部交易号", value: <CopyableSecret value={detail.externalTxNo} /> },
+            { label: "支付方式", render: (detail) => detail.channelName },
+            { label: "网络", render: (detail) => detail.network },
+            { label: "收款账户", render: (detail) => <CopyableSecret value={detail.accountNo} /> },
+            { label: "外部交易号", render: (detail) => <CopyableSecret value={detail.externalTxNo} /> },
           ],
         },
         {
           title: "审核信息",
           fields: [
-            { label: "审核人", value: formatEmpty(detail.reviewedBy) },
-            { label: "审核时间", value: <DateTimeText value={detail.reviewedAt} /> },
-            { label: "审核备注", value: formatEmpty(detail.reviewRemark) },
-            { label: "钱包流水", value: <CopyableSecret value={detail.walletTxNo} maskedValue={detail.walletTxNo ?? "-"} canReveal={false} /> },
+            { label: "审核人", render: (detail) => formatEmpty(detail.reviewedBy) },
+            { label: "审核时间", render: (detail) => <DateTimeText value={detail.reviewedAt} /> },
+            { label: "审核备注", render: (detail) => formatEmpty(detail.reviewRemark) },
+            { label: "钱包流水", render: (detail) => <CopyableSecret value={detail.walletTxNo} maskedValue={detail.walletTxNo ?? "-"} canReveal={false} /> },
           ],
         },
         {
           title: "时间信息",
           fields: [
-            { label: "创建时间", value: <DateTimeText value={detail.createdAt} /> },
-            { label: "到账时间", value: <DateTimeText value={detail.creditedAt} /> },
+            { label: "创建时间", render: (detail) => <DateTimeText value={detail.createdAt} /> },
+            { label: "到账时间", render: (detail) => <DateTimeText value={detail.creditedAt} /> },
           ],
         },
-      ]
-    : [];
+      ];
 
   return (
     <div className="space-y-6">
@@ -200,7 +232,114 @@ export default function AdminRechargePage() {
         </div>
       </SearchPanel>
       <DataTable columns={columns} data={page.records} rowKey={(row) => row.rechargeNo} loading={loading} emptyText="暂无充值订单" pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
-      <DetailDrawer open={detailOpen} title="充值订单详情" subtitle={detail?.rechargeNo} sections={detailSections} onClose={() => setDetailOpen(false)} />
+      <DetailDrawer data={detail} open={detailOpen} title="充值订单详情" subtitle={(data) => data.rechargeNo} sections={detailSections} onClose={() => setDetailOpen(false)} />
+
+      {/* Approve Dialog */}
+      <Dialog open={dialogType === "approve"} onOpenChange={(open) => !open && setDialogType(null)}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>通过充值审核</DialogTitle>
+            <DialogDescription>
+              请确认实际到账金额，确认后将直接入账至用户钱包。
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label className="text-right">订单号</Label>
+              <span className="col-span-3 text-sm font-mono text-muted-foreground">{actionRow?.rechargeNo}</span>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label className="text-right">申请金额</Label>
+              <span className="col-span-3 text-sm font-semibold">{actionRow?.applyAmount} {actionRow?.currency}</span>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="actualAmount" className="text-right">实际到账</Label>
+              <Input
+                id="actualAmount"
+                type="number"
+                value={actualAmountInput}
+                onChange={(e) => setActualAmountInput(e.target.value)}
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="approveRemark" className="text-right">审核备注</Label>
+              <Input
+                id="approveRemark"
+                placeholder="可选填写备注"
+                value={reviewRemark}
+                onChange={(e) => setReviewRemark(e.target.value)}
+                className="col-span-3"
+              />
+            </div>
+            {actionError && (
+              <div className="text-sm text-rose-500 col-span-4 mt-2">
+                {actionError}
+              </div>
+            )}
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDialogType(null)} disabled={isSubmitting}>取消</Button>
+            <Button onClick={handleApprove} disabled={isSubmitting} className="bg-emerald-600 hover:bg-emerald-700 text-white">
+              确认通过
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Reject Dialog */}
+      <Dialog open={dialogType === "reject"} onOpenChange={(open) => !open && setDialogType(null)}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>拒绝充值审核</DialogTitle>
+            <DialogDescription>
+              拒绝后订单将被标记为已拒绝。请填写拒绝原因，此原因可能展示给用户。
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label className="text-right">订单号</Label>
+              <span className="col-span-3 text-sm font-mono text-muted-foreground">{actionRow?.rechargeNo}</span>
+            </div>
+            <div className="grid grid-cols-4 items-start gap-4">
+              <Label htmlFor="rejectRemark" className="text-right mt-2">拒绝原因</Label>
+              <div className="col-span-3 space-y-2">
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {["支付凭证不清晰", "未查询到实际到账", "金额不匹配"].map((reason) => (
+                    <Button
+                      key={reason}
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setReviewRemark(reason)}
+                      className="text-xs h-7"
+                    >
+                      {reason}
+                    </Button>
+                  ))}
+                </div>
+                <textarea
+                  id="rejectRemark"
+                  className="flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                  placeholder="必填，输入拒绝原因..."
+                  value={reviewRemark}
+                  onChange={(e) => setReviewRemark(e.target.value)}
+                />
+              </div>
+            </div>
+            {actionError && (
+              <div className="text-sm text-rose-500 col-span-4 mt-2">
+                {actionError}
+              </div>
+            )}
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDialogType(null)} disabled={isSubmitting}>取消</Button>
+            <Button variant="destructive" onClick={handleReject} disabled={isSubmitting}>
+              确认拒绝
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

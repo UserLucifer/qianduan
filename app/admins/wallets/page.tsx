@@ -10,7 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SearchPanel } from "@/components/shared/SearchPanel";
 import { DataTable, type DataTableColumn } from "@/components/shared/DataTable";
-import { DetailDrawer, type DetailSection } from "@/components/shared/DetailDrawer";
+import { DetailDrawer, type DetailSectionDef } from "@/components/shared/DetailDrawer";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import { MoneyText } from "@/components/shared/MoneyText";
 import { DateTimeText } from "@/components/shared/DateTimeText";
@@ -107,37 +107,35 @@ export default function AdminWalletsPage() {
     { key: "createdAt", title: "时间", render: (row) => <DateTimeText value={row.createdAt} /> },
   ];
 
-  const detailSections: DetailSection[] = detail
-    ? [
+  const detailSections: DetailSectionDef<any>[] = [
         {
           title: "钱包信息",
           fields: [
-            { label: "钱包编号", value: detail.walletNo },
-            { label: "用户 ID", value: detail.userId },
-            { label: "状态", value: <StatusBadge status={detail.status} /> },
-            { label: "币种", value: detail.currency },
+            { label: "钱包编号", render: (detail) => detail.walletNo },
+            { label: "用户 ID", render: (detail) => detail.userId },
+            { label: "状态", render: (detail) => <StatusBadge status={detail.status} /> },
+            { label: "币种", render: (detail) => detail.currency },
           ],
         },
         {
           title: "资金信息",
           fields: [
-            { label: "可用余额", value: <MoneyText value={detail.availableBalance} currency={detail.currency} /> },
-            { label: "冻结金额", value: <MoneyText value={detail.frozenBalance} currency={detail.currency} /> },
-            { label: "累计充值", value: <MoneyText value={detail.totalRecharge} currency={detail.currency} /> },
-            { label: "累计提现", value: <MoneyText value={detail.totalWithdraw} currency={detail.currency} /> },
-            { label: "累计收益", value: <MoneyText value={detail.totalProfit} currency={detail.currency} /> },
-            { label: "累计佣金", value: <MoneyText value={detail.totalCommission} currency={detail.currency} /> },
+            { label: "可用余额", render: (detail) => <MoneyText value={detail.availableBalance} currency={detail.currency} /> },
+            { label: "冻结金额", render: (detail) => <MoneyText value={detail.frozenBalance} currency={detail.currency} /> },
+            { label: "累计充值", render: (detail) => <MoneyText value={detail.totalRecharge} currency={detail.currency} /> },
+            { label: "累计提现", render: (detail) => <MoneyText value={detail.totalWithdraw} currency={detail.currency} /> },
+            { label: "累计收益", render: (detail) => <MoneyText value={detail.totalProfit} currency={detail.currency} /> },
+            { label: "累计佣金", render: (detail) => <MoneyText value={detail.totalCommission} currency={detail.currency} /> },
           ],
         },
         {
           title: "时间信息",
           fields: [
-            { label: "创建时间", value: <DateTimeText value={detail.createdAt} /> },
-            { label: "更新时间", value: <DateTimeText value={detail.updatedAt} /> },
+            { label: "创建时间", render: (detail) => <DateTimeText value={detail.createdAt} /> },
+            { label: "更新时间", render: (detail) => <DateTimeText value={detail.updatedAt} /> },
           ],
         },
-      ]
-    : [];
+      ];
 
   return (
     <div className="space-y-6">
@@ -236,7 +234,7 @@ export default function AdminWalletsPage() {
         </TabsContent>
       </Tabs>
 
-      <DetailDrawer open={detailOpen} title="钱包详情" subtitle={detail?.walletNo} sections={detailSections} onClose={() => setDetailOpen(false)} />
+      <DetailDrawer data={detail} open={detailOpen} title="钱包详情" subtitle={(data) => data.walletNo} sections={detailSections} onClose={() => setDetailOpen(false)} />
     </div>
   );
 }

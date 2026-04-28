@@ -1,4 +1,4 @@
-import { apiGet, apiPost, apiPut } from "./http";
+import { adminApiGet, adminApiPost, adminApiPut } from "./http";
 import type {
   AdminApiCredentialQuery,
   AdminApiCredentialRow,
@@ -26,7 +26,6 @@ import type {
   AdminWalletTransactionQuery,
   AiModelResponse,
   ApiDeployOrderResponse,
-  ApiMapObject,
   BlogCategory,
   BlogTag,
   CommissionRecordResponse,
@@ -44,6 +43,7 @@ import type {
   RentalCycleRuleResponse,
   RentalOrderDetailResponse,
   SchedulerRunResult,
+  SchedulerLogResponse,
   SettlementOrderResponse,
   SysAdminLog,
   SysNotification,
@@ -53,6 +53,8 @@ import type {
   WalletTransactionResponse,
   WithdrawOrderQueryRequest,
   WithdrawOrderResponse,
+  TeamSummaryResponse,
+  AdminBlogPost,
 } from "./types";
 
 export type {
@@ -101,88 +103,26 @@ export type {
   WithdrawOrderResponse as AdminWithdrawOrderResponse,
 };
 
-const numberFromMap = (map: ApiMapObject, keys: string[]): number => {
-  for (const key of keys) {
-    const value = map[key];
-    if (typeof value === "number" && Number.isFinite(value)) return value;
-    if (typeof value === "string") {
-      const parsed = Number(value);
-      if (Number.isFinite(parsed)) return parsed;
-    }
-  }
-  return 0;
-};
-
-const stringFromMap = (map: ApiMapObject, keys: string[], fallback = "NORMAL"): string => {
-  for (const key of keys) {
-    const value = map[key];
-    if (typeof value === "string" && value.trim()) return value;
-  }
-  return fallback;
-};
-
-export const adaptDashboardOverview = (
-  overview: ApiMapObject,
-  finance: ApiMapObject,
-  orders: ApiMapObject,
-  users: ApiMapObject,
-): AdminDashboardOverview => ({
-  totalUserCount: numberFromMap(users, ["totalUserCount", "totalUsers", "total"]),
-  todayNewUserCount: numberFromMap(users, ["todayNewUserCount", "newUserCount", "todayNewUsers"]),
-  activeUserCount: numberFromMap(users, ["activeUserCount", "activeUsers"]),
-  totalOrderCount: numberFromMap(orders, ["totalOrderCount", "totalOrders"]),
-  runningOrderCount: numberFromMap(orders, ["runningOrderCount", "runningOrders"]),
-  pendingPayOrderCount: numberFromMap(orders, ["pendingPayOrderCount", "pendingPaymentOrderCount", "pendingPayOrders"]),
-  abnormalOrderCount: numberFromMap(orders, ["abnormalOrderCount", "exceptionOrderCount", "abnormalOrders"]),
-  systemStatus: stringFromMap(overview, ["systemStatus", "status"], "NORMAL"),
-});
-
-export const adaptDashboardFinance = (finance: ApiMapObject): AdminDashboardFinance => ({
-  totalRechargeAmount: numberFromMap(finance, ["totalRechargeAmount", "rechargeAmount"]),
-  pendingRechargeCount: numberFromMap(finance, ["pendingRechargeCount", "pendingRecharges"]),
-  totalWithdrawAmount: numberFromMap(finance, ["totalWithdrawAmount", "withdrawAmount"]),
-  pendingWithdrawCount: numberFromMap(finance, ["pendingWithdrawCount", "pendingWithdraws"]),
-  pendingPaidWithdrawCount: numberFromMap(finance, ["pendingPaidWithdrawCount", "pendingPayWithdrawCount", "pendingPaidWithdraws"]),
-  totalProfitAmount: numberFromMap(finance, ["totalProfitAmount", "totalProfit"]),
-  pendingProfitAmount: numberFromMap(finance, ["pendingProfitAmount", "pendingProfit"]),
-  totalCommissionAmount: numberFromMap(finance, ["totalCommissionAmount", "totalCommission"]),
-});
-
-export const adaptDashboardOrders = (orders: ApiMapObject): AdminDashboardOrders => ({
-  totalOrderCount: numberFromMap(orders, ["totalOrderCount", "totalOrders"]),
-  runningOrderCount: numberFromMap(orders, ["runningOrderCount", "runningOrders"]),
-  pendingPayOrderCount: numberFromMap(orders, ["pendingPayOrderCount", "pendingPaymentOrderCount", "pendingPayOrders"]),
-  abnormalOrderCount: numberFromMap(orders, ["abnormalOrderCount", "exceptionOrderCount", "abnormalOrders"]),
-  completedOrderCount: numberFromMap(orders, ["completedOrderCount", "settledOrderCount", "completedOrders"]),
-});
-
-export const adaptDashboardUsers = (users: ApiMapObject): AdminDashboardUsers => ({
-  totalUserCount: numberFromMap(users, ["totalUserCount", "totalUsers", "total"]),
-  todayNewUserCount: numberFromMap(users, ["todayNewUserCount", "newUserCount", "todayNewUsers"]),
-  activeUserCount: numberFromMap(users, ["activeUserCount", "activeUsers"]),
-  disabledUserCount: numberFromMap(users, ["disabledUserCount", "disabledUsers"]),
-});
-
 export const adminLogin = (data: AdminLoginRequest) =>
-  apiPost<AdminLoginResponse, AdminLoginRequest>("/api/admin/auth/login", data);
+  adminApiPost<AdminLoginResponse, AdminLoginRequest>("/api/admin/auth/login", data);
 
 export const adminLogout = () =>
-  apiPost<void>("/api/admin/auth/logout");
+  adminApiPost<void>("/api/admin/auth/logout");
 
 export const getAdminMe = () =>
-  apiGet<AdminMeResponse>("/api/admin/auth/me");
+  adminApiGet<AdminMeResponse>("/api/admin/auth/me");
 
 export const getAdminOverviewMap = () =>
-  apiGet<ApiMapObject>("/api/admin/dashboard/overview");
+  adminApiGet<any>("/api/admin/dashboard/overview");
 
 export const getAdminFinanceMap = () =>
-  apiGet<ApiMapObject>("/api/admin/dashboard/finance");
+  adminApiGet<any>("/api/admin/dashboard/finance");
 
 export const getAdminOrdersMap = () =>
-  apiGet<ApiMapObject>("/api/admin/dashboard/orders");
+  adminApiGet<any>("/api/admin/dashboard/orders");
 
 export const getAdminUsersMap = () =>
-  apiGet<ApiMapObject>("/api/admin/dashboard/users");
+  adminApiGet<any>("/api/admin/dashboard/users");
 
 export const getAdminOverview = async () => {
   const [overview, finance, orders, users] = await Promise.all([
@@ -195,8 +135,8 @@ export const getAdminOverview = async () => {
   return {
     ...overview,
     data: {
-      ...adaptDashboardOverview(overview.data, finance.data, orders.data, users.data),
-      ...adaptDashboardFinance(finance.data),
+      ...overview.data,
+      ...finance.data,
     },
   };
 };
@@ -210,48 +150,48 @@ export const getAdminDashboardBundle = async () => {
   ]);
 
   return {
-    overview: adaptDashboardOverview(overview.data, finance.data, orders.data, users.data),
-    finance: adaptDashboardFinance(finance.data),
-    orders: adaptDashboardOrders(orders.data),
-    users: adaptDashboardUsers(users.data),
+    overview: overview.data,
+    finance: finance.data,
+    orders: orders.data,
+    users: users.data,
   };
 };
 
 export const getAdminUsers = (params: AdminUserQuery = {}) =>
-  apiGet<PageResult<AdminUserRow>>("/api/admin/users", { params });
+  adminApiGet<PageResult<AdminUserRow>>("/api/admin/users", { params });
 
 export const getAdminUserDetail = (userId: number) =>
-  apiGet<ApiMapObject>(`/api/admin/users/${userId}`);
+  adminApiGet<AdminUserRow>(`/api/admin/users/${userId}`);
 
 export const enableAdminUser = (userId: number) =>
-  apiPost<ApiMapObject>(`/api/admin/users/${userId}/enable`);
+  adminApiPost<AdminUserRow>(`/api/admin/users/${userId}/enable`);
 
 export const disableAdminUser = (userId: number) =>
-  apiPost<ApiMapObject>(`/api/admin/users/${userId}/disable`);
+  adminApiPost<AdminUserRow>(`/api/admin/users/${userId}/disable`);
 
 export const getAdminUserTeam = (userId: number) =>
-  apiGet<ApiMapObject>(`/api/admin/users/${userId}/team`);
+  adminApiGet<TeamSummaryResponse>(`/api/admin/users/${userId}/team`);
 
 export const getAdminWallets = (params: AdminWalletQuery = {}) =>
-  apiGet<PageResult<UserWallet>>("/api/admin/wallets", { params });
+  adminApiGet<PageResult<UserWallet>>("/api/admin/wallets", { params });
 
 export const getAdminWalletByUser = (userId: number) =>
-  apiGet<UserWallet>(`/api/admin/wallets/${userId}`);
+  adminApiGet<UserWallet>(`/api/admin/wallets/${userId}`);
 
 export const getAdminWalletTransactions = (params: AdminWalletTransactionQuery = {}) =>
-  apiGet<PageResult<WalletTransactionResponse>>("/api/admin/wallet-transactions", { params });
+  adminApiGet<PageResult<WalletTransactionResponse>>("/api/admin/wallet-transactions", { params });
 
 export const getAdminRechargeOrders = (params: RechargeOrderQueryRequest = {}) =>
-  apiGet<PageResult<RechargeOrderResponse>>("/api/admin/recharge/orders", { params });
+  adminApiGet<PageResult<RechargeOrderResponse>>("/api/admin/recharge/orders", { params });
 
 export const getAdminRechargeOrderDetail = (rechargeNo: string) =>
-  apiGet<RechargeOrderResponse>(`/api/admin/recharge/orders/${rechargeNo}`);
+  adminApiGet<RechargeOrderResponse>(`/api/admin/recharge/orders/${rechargeNo}`);
 
 export const approveRecharge = (
   rechargeNo: string,
   data: { actualAmount: number; reviewRemark?: string },
 ) =>
-  apiPost<RechargeOrderResponse, { actualAmount: number; reviewRemark?: string }>(
+  adminApiPost<RechargeOrderResponse, { actualAmount: number; reviewRemark?: string }>(
     `/api/admin/recharge/orders/${rechargeNo}/approve`,
     data,
   );
@@ -260,22 +200,22 @@ export const rejectRecharge = (
   rechargeNo: string,
   data: { reviewRemark: string },
 ) =>
-  apiPost<RechargeOrderResponse, { reviewRemark: string }>(
+  adminApiPost<RechargeOrderResponse, { reviewRemark: string }>(
     `/api/admin/recharge/orders/${rechargeNo}/reject`,
     data,
   );
 
 export const getAdminWithdrawOrders = (params: WithdrawOrderQueryRequest = {}) =>
-  apiGet<PageResult<WithdrawOrderResponse>>("/api/admin/withdraw/orders", { params });
+  adminApiGet<PageResult<WithdrawOrderResponse>>("/api/admin/withdraw/orders", { params });
 
 export const getAdminWithdrawOrderDetail = (withdrawNo: string) =>
-  apiGet<WithdrawOrderResponse>(`/api/admin/withdraw/orders/${withdrawNo}`);
+  adminApiGet<WithdrawOrderResponse>(`/api/admin/withdraw/orders/${withdrawNo}`);
 
 export const approveWithdraw = (
   withdrawNo: string,
   data: { reviewRemark?: string },
 ) =>
-  apiPost<WithdrawOrderResponse, { reviewRemark?: string }>(
+  adminApiPost<WithdrawOrderResponse, { reviewRemark?: string }>(
     `/api/admin/withdraw/orders/${withdrawNo}/approve`,
     data,
   );
@@ -284,7 +224,7 @@ export const markWithdrawPaid = (
   withdrawNo: string,
   data: { payProofNo: string },
 ) =>
-  apiPost<WithdrawOrderResponse, { payProofNo: string }>(
+  adminApiPost<WithdrawOrderResponse, { payProofNo: string }>(
     `/api/admin/withdraw/orders/${withdrawNo}/paid`,
     data,
   );
@@ -293,214 +233,217 @@ export const rejectWithdraw = (
   withdrawNo: string,
   data: { reviewRemark: string },
 ) =>
-  apiPost<WithdrawOrderResponse, { reviewRemark: string }>(
+  adminApiPost<WithdrawOrderResponse, { reviewRemark: string }>(
     `/api/admin/withdraw/orders/${withdrawNo}/reject`,
     data,
   );
 
 export const getAdminRentalOrders = (params: AdminRentalOrderQuery = {}) =>
-  apiGet<PageResult<RentalOrderDetailResponse>>("/api/admin/rental/orders", { params });
+  adminApiGet<PageResult<RentalOrderDetailResponse>>("/api/admin/rental/orders", { params });
 
 export const getAdminRentalOrderDetail = (orderNo: string) =>
-  apiGet<ApiMapObject>(`/api/admin/rental/orders/${orderNo}`);
+  adminApiGet<RentalOrderDetailResponse>(`/api/admin/rental/orders/${orderNo}`);
 
 export const getAdminApiCredentials = (params: AdminApiCredentialQuery = {}) =>
-  apiGet<PageResult<AdminApiCredentialRow>>("/api/admin/api-credentials", { params });
+  adminApiGet<PageResult<AdminApiCredentialRow>>("/api/admin/api-credentials", { params });
 
 export const getAdminApiCredentialDetail = (credentialNo: string) =>
-  apiGet<ApiMapObject>(`/api/admin/api-credentials/${credentialNo}`);
+  adminApiGet<AdminApiCredentialRow>(`/api/admin/api-credentials/${credentialNo}`);
 
 export const getAdminApiDeployOrders = (params: AdminApiDeployOrderQuery = {}) =>
-  apiGet<PageResult<ApiDeployOrderResponse>>("/api/admin/api-deploy-orders", { params });
+  adminApiGet<PageResult<ApiDeployOrderResponse>>("/api/admin/api-deploy-orders", { params });
 
 export const getAdminApiDeployOrderDetail = (deployNo: string) =>
-  apiGet<ApiDeployOrderResponse>(`/api/admin/api-deploy-orders/${deployNo}`);
+  adminApiGet<ApiDeployOrderResponse>(`/api/admin/api-deploy-orders/${deployNo}`);
 
 export const getAdminProfitRecords = (params: AdminProfitRecordQuery = {}) =>
-  apiGet<PageResult<ProfitRecordResponse>>("/api/admin/profit/records", { params });
+  adminApiGet<PageResult<ProfitRecordResponse>>("/api/admin/profit/records", { params });
 
 export const getAdminProfitRecordDetail = (profitNo: string) =>
-  apiGet<ProfitRecordResponse>(`/api/admin/profit/records/${profitNo}`);
+  adminApiGet<ProfitRecordResponse>(`/api/admin/profit/records/${profitNo}`);
 
 export const getAdminCommissionRecords = (params: AdminCommissionRecordQuery = {}) =>
-  apiGet<PageResult<CommissionRecordResponse>>("/api/admin/commission/records", { params });
+  adminApiGet<PageResult<CommissionRecordResponse>>("/api/admin/commission/records", { params });
 
 export const getAdminCommissionRecordDetail = (commissionNo: string) =>
-  apiGet<CommissionRecordResponse>(`/api/admin/commission/records/${commissionNo}`);
+  adminApiGet<CommissionRecordResponse>(`/api/admin/commission/records/${commissionNo}`);
 
 export const getAdminSettlementOrders = (params: AdminSettlementOrderQuery = {}) =>
-  apiGet<PageResult<SettlementOrderResponse>>("/api/admin/settlement/orders", { params });
+  adminApiGet<PageResult<SettlementOrderResponse>>("/api/admin/settlement/orders", { params });
 
 export const getAdminSettlementOrderDetail = (settlementNo: string) =>
-  apiGet<SettlementOrderResponse>(`/api/admin/settlement/orders/${settlementNo}`);
+  adminApiGet<SettlementOrderResponse>(`/api/admin/settlement/orders/${settlementNo}`);
 
 export const getAdminTeamRelations = (params: AdminTeamRelationQuery = {}) =>
-  apiGet<PageResult<UserTeamRelation>>("/api/admin/team/relations", { params });
+  adminApiGet<PageResult<UserTeamRelation>>("/api/admin/team/relations", { params });
 
 export const getAdminProducts = (params: AdminCatalogQuery = {}) =>
-  apiGet<PageResult<ProductResponse>>("/api/admin/products", { params });
+  adminApiGet<PageResult<ProductResponse>>("/api/admin/products", { params });
 
 export const getAdminProductDetail = (productCode: string) =>
-  apiGet<ProductResponse>(`/api/admin/products/${productCode}`);
+  adminApiGet<ProductResponse>(`/api/admin/products/${productCode}`);
 
 export const createAdminProduct = (data: AdminProductRequest) =>
-  apiPost<ProductResponse, AdminProductRequest>("/api/admin/products", data);
+  adminApiPost<ProductResponse, AdminProductRequest>("/api/admin/products", data);
 
 export const updateAdminProduct = (productCode: string, data: AdminProductRequest) =>
-  apiPut<ProductResponse, AdminProductRequest>(`/api/admin/products/${productCode}`, data);
+  adminApiPut<ProductResponse, AdminProductRequest>(`/api/admin/products/${productCode}`, data);
 
 export const enableAdminProduct = (productCode: string) =>
-  apiPost<ProductResponse>(`/api/admin/products/${productCode}/enable`);
+  adminApiPost<ProductResponse>(`/api/admin/products/${productCode}/enable`);
 
 export const disableAdminProduct = (productCode: string) =>
-  apiPost<ProductResponse>(`/api/admin/products/${productCode}/disable`);
+  adminApiPost<ProductResponse>(`/api/admin/products/${productCode}/disable`);
 
 export const getAdminRegions = (params: AdminCatalogQuery = {}) =>
-  apiGet<PageResult<RegionResponse>>("/api/admin/regions", { params });
+  adminApiGet<PageResult<RegionResponse>>("/api/admin/regions", { params });
 
 export const createAdminRegion = (data: RegionResponse) =>
-  apiPost<RegionResponse, RegionResponse>("/api/admin/regions", data);
+  adminApiPost<RegionResponse, RegionResponse>("/api/admin/regions", data);
 
 export const updateAdminRegion = (id: number, data: RegionResponse) =>
-  apiPut<RegionResponse, RegionResponse>(`/api/admin/regions/${id}`, data);
+  adminApiPut<RegionResponse, RegionResponse>(`/api/admin/regions/${id}`, data);
 
 export const enableAdminRegion = (id: number) =>
-  apiPost<RegionResponse>(`/api/admin/regions/${id}/enable`);
+  adminApiPost<RegionResponse>(`/api/admin/regions/${id}/enable`);
 
 export const disableAdminRegion = (id: number) =>
-  apiPost<RegionResponse>(`/api/admin/regions/${id}/disable`);
+  adminApiPost<RegionResponse>(`/api/admin/regions/${id}/disable`);
 
 export const getAdminGpuModels = (params: AdminCatalogQuery = {}) =>
-  apiGet<PageResult<GpuModelResponse>>("/api/admin/gpu-models", { params });
+  adminApiGet<PageResult<GpuModelResponse>>("/api/admin/gpu-models", { params });
 
 export const createAdminGpuModel = (data: GpuModelResponse) =>
-  apiPost<GpuModelResponse, GpuModelResponse>("/api/admin/gpu-models", data);
+  adminApiPost<GpuModelResponse, GpuModelResponse>("/api/admin/gpu-models", data);
 
 export const updateAdminGpuModel = (id: number, data: GpuModelResponse) =>
-  apiPut<GpuModelResponse, GpuModelResponse>(`/api/admin/gpu-models/${id}`, data);
+  adminApiPut<GpuModelResponse, GpuModelResponse>(`/api/admin/gpu-models/${id}`, data);
 
 export const enableAdminGpuModel = (id: number) =>
-  apiPost<GpuModelResponse>(`/api/admin/gpu-models/${id}/enable`);
+  adminApiPost<GpuModelResponse>(`/api/admin/gpu-models/${id}/enable`);
 
 export const disableAdminGpuModel = (id: number) =>
-  apiPost<GpuModelResponse>(`/api/admin/gpu-models/${id}/disable`);
+  adminApiPost<GpuModelResponse>(`/api/admin/gpu-models/${id}/disable`);
 
 export const getAdminAiModels = (params: AdminCatalogQuery = {}) =>
-  apiGet<PageResult<AiModelResponse>>("/api/admin/ai-models", { params });
+  adminApiGet<PageResult<AiModelResponse>>("/api/admin/ai-models", { params });
 
 export const createAdminAiModel = (data: AiModelResponse) =>
-  apiPost<AiModelResponse, AiModelResponse>("/api/admin/ai-models", data);
+  adminApiPost<AiModelResponse, AiModelResponse>("/api/admin/ai-models", data);
 
 export const updateAdminAiModel = (modelCode: string, data: AiModelResponse) =>
-  apiPut<AiModelResponse, AiModelResponse>(`/api/admin/ai-models/${modelCode}`, data);
+  adminApiPut<AiModelResponse, AiModelResponse>(`/api/admin/ai-models/${modelCode}`, data);
 
 export const enableAdminAiModel = (modelCode: string) =>
-  apiPost<AiModelResponse>(`/api/admin/ai-models/${modelCode}/enable`);
+  adminApiPost<AiModelResponse>(`/api/admin/ai-models/${modelCode}/enable`);
 
 export const disableAdminAiModel = (modelCode: string) =>
-  apiPost<AiModelResponse>(`/api/admin/ai-models/${modelCode}/disable`);
+  adminApiPost<AiModelResponse>(`/api/admin/ai-models/${modelCode}/disable`);
 
 export const getAdminCycleRules = (params: AdminCatalogQuery = {}) =>
-  apiGet<PageResult<RentalCycleRuleResponse>>("/api/admin/rental-cycle-rules", { params });
+  adminApiGet<PageResult<RentalCycleRuleResponse>>("/api/admin/rental-cycle-rules", { params });
 
 export const createAdminCycleRule = (data: RentalCycleRuleResponse) =>
-  apiPost<RentalCycleRuleResponse, RentalCycleRuleResponse>("/api/admin/rental-cycle-rules", data);
+  adminApiPost<RentalCycleRuleResponse, RentalCycleRuleResponse>("/api/admin/rental-cycle-rules", data);
 
 export const updateAdminCycleRule = (cycleCode: string, data: RentalCycleRuleResponse) =>
-  apiPut<RentalCycleRuleResponse, RentalCycleRuleResponse>(
+  adminApiPut<RentalCycleRuleResponse, RentalCycleRuleResponse>(
     `/api/admin/rental-cycle-rules/${cycleCode}`,
     data,
   );
 
 export const enableAdminCycleRule = (cycleCode: string) =>
-  apiPost<RentalCycleRuleResponse>(`/api/admin/rental-cycle-rules/${cycleCode}/enable`);
+  adminApiPost<RentalCycleRuleResponse>(`/api/admin/rental-cycle-rules/${cycleCode}/enable`);
 
 export const disableAdminCycleRule = (cycleCode: string) =>
-  apiPost<RentalCycleRuleResponse>(`/api/admin/rental-cycle-rules/${cycleCode}/disable`);
+  adminApiPost<RentalCycleRuleResponse>(`/api/admin/rental-cycle-rules/${cycleCode}/disable`);
 
 export const getAdminSysConfigs = (params: AdminSysConfigQueryRequest = {}) =>
-  apiGet<PageResult<AdminSysConfigResponse>>("/api/admin/sys-configs", { params });
+  adminApiGet<PageResult<AdminSysConfigResponse>>("/api/admin/sys-configs", { params });
 
 export const getAdminSysConfigDetail = (configKey: string) =>
-  apiGet<AdminSysConfigResponse>(`/api/admin/sys-configs/${configKey}`);
+  adminApiGet<AdminSysConfigResponse>(`/api/admin/sys-configs/${configKey}`);
 
 export const updateAdminSysConfig = (configKey: string, data: UpdateSysConfigRequest) =>
-  apiPut<AdminSysConfigResponse, UpdateSysConfigRequest>(
+  adminApiPut<AdminSysConfigResponse, UpdateSysConfigRequest>(
     `/api/admin/sys-configs/${configKey}`,
     data,
   );
 
 export const getAdminNotifications = (params: NotificationQueryRequest = {}) =>
-  apiGet<PageResult<SysNotification>>("/api/admin/notifications", { params });
+  adminApiGet<PageResult<SysNotification>>("/api/admin/notifications", { params });
 
 export const getAdminNotificationDetail = (id: number) =>
-  apiGet<SysNotification>(`/api/admin/notifications/${id}`);
+  adminApiGet<SysNotification>(`/api/admin/notifications/${id}`);
 
 export const createAdminNotification = (data: NotificationCreateRequest) =>
-  apiPost<SysNotification, NotificationCreateRequest>("/api/admin/notifications", data);
+  adminApiPost<SysNotification, NotificationCreateRequest>("/api/admin/notifications", data);
 
 export const broadcastAdminNotification = (data: NotificationBroadcastRequest) =>
-  apiPost<number, NotificationBroadcastRequest>("/api/admin/notifications/broadcast", data);
+  adminApiPost<number, NotificationBroadcastRequest>("/api/admin/notifications/broadcast", data);
 
 export const cancelAdminNotification = (id: number) =>
-  apiPost<void>(`/api/admin/notifications/${id}/cancel`);
+  adminApiPost<void>(`/api/admin/notifications/${id}/cancel`);
 
 export const getAdminLogs = (params: AdminLogQuery = {}) =>
-  apiGet<PageResult<SysAdminLog>>("/api/admin/logs", { params });
+  adminApiGet<PageResult<SysAdminLog>>("/api/admin/logs", { params });
 
 export const getAdminLogDetail = (id: number) =>
-  apiGet<SysAdminLog>(`/api/admin/logs/${id}`);
+  adminApiGet<SysAdminLog>(`/api/admin/logs/${id}`);
 
-export const runScheduler = (task: string) =>
-  apiPost<SchedulerRunResult>(`/api/admin/scheduler/${task}/run`);
+export const runScheduler = (task: string, data: Record<string, any> = {}) =>
+  adminApiPost<SchedulerRunResult, Record<string, any>>(`/api/admin/scheduler/${task}/run`, data);
+
+export const getAdminSchedulerLogs = (params: { taskName?: string } & PageQuery = {}) =>
+  adminApiGet<PageResult<SchedulerLogResponse>>("/api/admin/scheduler/logs", { params });
 
 export const getAdminBlogCategories = (params: PageQuery = {}) =>
-  apiGet<PageResult<BlogCategory>>("/api/admin/blog/categories", { params });
+  adminApiGet<PageResult<BlogCategory>>("/api/admin/blog/categories", { params });
 
 export const getAdminBlogTags = (params: PageQuery = {}) =>
-  apiGet<PageResult<BlogTag>>("/api/admin/blog/tags", { params });
+  adminApiGet<PageResult<BlogTag>>("/api/admin/blog/tags", { params });
 
 export const getAdminBlogPosts = (params: AdminCatalogQuery = {}) =>
-  apiGet<PageResult<ApiMapObject>>("/api/admin/blog/posts", { params });
+  adminApiGet<PageResult<AdminBlogPost>>("/api/admin/blog/posts", { params });
 
 export const publishAdminBlogPost = (id: number) =>
-  apiPost<ApiMapObject>(`/api/admin/blog/posts/${id}/publish`);
+  adminApiPost<AdminBlogPost>(`/api/admin/blog/posts/${id}/publish`);
 
 export const unpublishAdminBlogPost = (id: number) =>
-  apiPost<ApiMapObject>(`/api/admin/blog/posts/${id}/unpublish`);
+  adminApiPost<AdminBlogPost>(`/api/admin/blog/posts/${id}/unpublish`);
 
 export const createAdminBlogCategory = (data: Partial<BlogCategory>) =>
-  apiPost<BlogCategory, Partial<BlogCategory>>("/api/admin/blog/categories", data);
+  adminApiPost<BlogCategory, Partial<BlogCategory>>("/api/admin/blog/categories", data);
 
 export const updateAdminBlogCategory = (id: number, data: Partial<BlogCategory>) =>
-  apiPut<BlogCategory, Partial<BlogCategory>>(`/api/admin/blog/categories/${id}`, data);
+  adminApiPut<BlogCategory, Partial<BlogCategory>>(`/api/admin/blog/categories/${id}`, data);
 
 export const disableAdminBlogCategory = (id: number) =>
-  apiPost<BlogCategory>(`/api/admin/blog/categories/${id}/disable`);
+  adminApiPost<BlogCategory>(`/api/admin/blog/categories/${id}/disable`);
 
 export const enableAdminBlogCategory = (id: number) =>
-  apiPost<BlogCategory>(`/api/admin/blog/categories/${id}/enable`);
+  adminApiPost<BlogCategory>(`/api/admin/blog/categories/${id}/enable`);
 
-export const createAdminBlogPost = (data: ApiMapObject) =>
-  apiPost<ApiMapObject, ApiMapObject>("/api/admin/blog/posts", data);
+export const createAdminBlogPost = (data: any) =>
+  adminApiPost<any>("/api/admin/blog/posts", data);
 
 export const getAdminBlogPostDetail = (id: number) =>
-  apiGet<ApiMapObject>(`/api/admin/blog/posts/${id}`);
+  adminApiGet<AdminBlogPost>(`/api/admin/blog/posts/${id}`);
 
-export const updateAdminBlogPost = (id: number, data: ApiMapObject) =>
-  apiPut<ApiMapObject, ApiMapObject>(`/api/admin/blog/posts/${id}`, data);
+export const updateAdminBlogPost = (id: number, data: any) =>
+  adminApiPut<any, any>(`/api/admin/blog/posts/${id}`, data);
 
 export const deleteAdminBlogPost = (id: number) =>
-  apiPost<void>(`/api/admin/blog/posts/${id}/delete`);
+  adminApiPost<void>(`/api/admin/blog/posts/${id}/delete`);
 
 export const createAdminBlogTag = (data: Partial<BlogTag>) =>
-  apiPost<BlogTag, Partial<BlogTag>>("/api/admin/blog/tags", data);
+  adminApiPost<BlogTag, Partial<BlogTag>>("/api/admin/blog/tags", data);
 
 export const updateAdminBlogTag = (id: number, data: Partial<BlogTag>) =>
-  apiPut<BlogTag, Partial<BlogTag>>(`/api/admin/blog/tags/${id}`, data);
+  adminApiPut<BlogTag, Partial<BlogTag>>(`/api/admin/blog/tags/${id}`, data);
 
 export const disableAdminBlogTag = (id: number) =>
-  apiPost<BlogTag>(`/api/admin/blog/tags/${id}/disable`);
+  adminApiPost<BlogTag>(`/api/admin/blog/tags/${id}/disable`);
 
 export const enableAdminBlogTag = (id: number) =>
-  apiPost<BlogTag>(`/api/admin/blog/tags/${id}/enable`);
+  adminApiPost<BlogTag>(`/api/admin/blog/tags/${id}/enable`);

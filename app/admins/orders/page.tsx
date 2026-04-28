@@ -9,15 +9,16 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SearchPanel } from "@/components/shared/SearchPanel";
 import { DataTable, type DataTableColumn } from "@/components/shared/DataTable";
-import { DetailDrawer, type DetailSection } from "@/components/shared/DetailDrawer";
+import { DetailDrawer, type DetailSectionDef } from "@/components/shared/DetailDrawer";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import { MoneyText } from "@/components/shared/MoneyText";
 import { DateTimeText } from "@/components/shared/DateTimeText";
 import { CopyableSecret } from "@/components/shared/CopyableSecret";
 import { usePaginatedResource } from "@/hooks/usePaginatedResource";
 import { getAdminRentalOrderDetail, getAdminRentalOrders } from "@/api/admin";
-import type { AdminRentalOrderQuery, ApiMapObject, RentalOrderDetailResponse } from "@/api/types";
-import { formatEmpty, pickString, toErrorMessage } from "@/lib/format";
+import type {  AdminRentalOrderQuery, RentalOrderDetailResponse } from "@/api/types";
+import { formatEmpty, toErrorMessage } from "@/lib/format";
+import { RentalOrderStatus } from "@/types/enums";
 
 interface OrderFilters {
   userId: string;
@@ -42,7 +43,7 @@ const initialQuery: AdminRentalOrderQuery = { pageNo: 1, pageSize: 10 };
 
 export default function AdminOrdersPage() {
   const [filters, setFilters] = useState<OrderFilters>(initialFilters);
-  const [detail, setDetail] = useState<ApiMapObject | null>(null);
+  const [detail, setDetail] = useState<RentalOrderDetailResponse | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
 
@@ -94,55 +95,53 @@ export default function AdminOrdersPage() {
     },
   ];
 
-  const detailSections: DetailSection[] = detail
-    ? [
+  const detailSections: DetailSectionDef<any>[] = [
         {
           title: "订单信息",
           fields: [
-            { label: "订单号", value: <CopyableSecret value={pickString(detail.orderNo)} maskedValue={pickString(detail.orderNo)} canReveal={false} /> },
-            { label: "用户 ID", value: pickString(detail.userId) },
-            { label: "订单状态", value: <StatusBadge status={detail.orderStatus} /> },
-            { label: "支付金额", value: pickString(detail.orderAmount) },
+            { label: "订单号", render: (detail) => <CopyableSecret value={((detail.orderNo) || "-").toString()} maskedValue={((detail.orderNo) || "-").toString()} canReveal={false} /> },
+            { label: "用户 ID", render: (detail) => ((detail.userId) || "-").toString() },
+            { label: "订单状态", render: (detail) => <StatusBadge status={detail.orderStatus} /> },
+            { label: "支付金额", render: (detail) => ((detail.orderAmount) || "-").toString() },
           ],
         },
         {
           title: "产品信息",
           fields: [
-            { label: "产品名称", value: pickString(detail.productNameSnapshot) },
-            { label: "产品编码", value: pickString(detail.productCodeSnapshot) },
-            { label: "GPU 型号", value: pickString(detail.gpuModelSnapshot) },
-            { label: "地区", value: pickString(detail.regionNameSnapshot) },
+            { label: "产品名称", render: (detail) => ((detail.productNameSnapshot) || "-").toString() },
+            { label: "产品编码", render: (detail) => ((detail.productCodeSnapshot) || "-").toString() },
+            { label: "GPU 型号", render: (detail) => ((detail.gpuModelSnapshot) || "-").toString() },
+            { label: "地区", render: (detail) => ((detail.regionNameSnapshot) || "-").toString() },
           ],
         },
         {
           title: "收益与结算",
           fields: [
-            { label: "预计日收益", value: pickString(detail.expectedDailyProfit) },
-            { label: "预计总收益", value: pickString(detail.expectedTotalProfit) },
-            { label: "收益状态", value: <StatusBadge status={detail.profitStatus} /> },
-            { label: "结算状态", value: <StatusBadge status={detail.settlementStatus} /> },
+            { label: "预计日收益", render: (detail) => ((detail.expectedDailyProfit) || "-").toString() },
+            { label: "预计总收益", render: (detail) => ((detail.expectedTotalProfit) || "-").toString() },
+            { label: "收益状态", render: (detail) => <StatusBadge status={detail.profitStatus} /> },
+            { label: "结算状态", render: (detail) => <StatusBadge status={detail.settlementStatus} /> },
           ],
         },
         {
           title: "API 信息",
           fields: [
-            { label: "凭证编号", value: <CopyableSecret value={pickString(detail.credentialNo)} maskedValue={pickString(detail.credentialNo)} canReveal={false} /> },
-            { label: "API 状态", value: <StatusBadge status={detail.tokenStatus} /> },
-            { label: "部署状态", value: <StatusBadge status={detail.deployOrderStatus} /> },
-            { label: "API 地址", value: pickString(detail.apiBaseUrl) },
+            { label: "凭证编号", render: (detail) => <CopyableSecret value={((detail.credentialNo) || "-").toString()} maskedValue={((detail.credentialNo) || "-").toString()} canReveal={false} /> },
+            { label: "API 状态", render: (detail) => <StatusBadge status={detail.tokenStatus} /> },
+            { label: "部署状态", render: (detail) => <StatusBadge status={detail.deployOrderStatus} /> },
+            { label: "API 地址", render: (detail) => ((detail.apiBaseUrl) || "-").toString() },
           ],
         },
         {
           title: "时间信息",
           fields: [
-            { label: "创建时间", value: <DateTimeText value={typeof detail.createdAt === "string" ? detail.createdAt : null} /> },
-            { label: "支付时间", value: <DateTimeText value={typeof detail.paidAt === "string" ? detail.paidAt : null} /> },
-            { label: "激活时间", value: <DateTimeText value={typeof detail.activatedAt === "string" ? detail.activatedAt : null} /> },
-            { label: "到期时间", value: <DateTimeText value={typeof detail.expiredAt === "string" ? detail.expiredAt : null} /> },
+            { label: "创建时间", render: (detail) => <DateTimeText value={typeof detail.createdAt === "string" ? detail.createdAt : null} /> },
+            { label: "支付时间", render: (detail) => <DateTimeText value={typeof detail.paidAt === "string" ? detail.paidAt : null} /> },
+            { label: "激活时间", render: (detail) => <DateTimeText value={typeof detail.activatedAt === "string" ? detail.activatedAt : null} /> },
+            { label: "到期时间", render: (detail) => <DateTimeText value={typeof detail.expiredAt === "string" ? detail.expiredAt : null} /> },
           ],
         },
-      ]
-    : [];
+      ];
 
   return (
     <div className="space-y-6">
@@ -175,11 +174,11 @@ export default function AdminOrdersPage() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value=" ">全部状态</SelectItem>
-              <SelectItem value="PENDING_PAY">待支付</SelectItem>
-              <SelectItem value="RUNNING">运行中</SelectItem>
-              <SelectItem value="PAUSED">已暂停</SelectItem>
-              <SelectItem value="COMPLETED">已完成</SelectItem>
-              <SelectItem value="CANCELLED">已取消</SelectItem>
+              <SelectItem value={RentalOrderStatus.PENDING_PAY}>待支付</SelectItem>
+              <SelectItem value={RentalOrderStatus.RUNNING}>运行中</SelectItem>
+              <SelectItem value={RentalOrderStatus.PAUSED}>已暂停</SelectItem>
+              <SelectItem value={RentalOrderStatus.SETTLED}>已结算</SelectItem>
+              <SelectItem value={RentalOrderStatus.CANCELED}>已取消</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -192,7 +191,7 @@ export default function AdminOrdersPage() {
             <SelectContent>
               <SelectItem value=" ">全部状态</SelectItem>
               <SelectItem value="PENDING">待处理</SelectItem>
-              <SelectItem value="RUNNING">进行中</SelectItem>
+              <SelectItem value={RentalOrderStatus.RUNNING}>进行中</SelectItem>
               <SelectItem value="SUCCESS">成功</SelectItem>
               <SelectItem value="FAILED">失败</SelectItem>
             </SelectContent>
@@ -207,8 +206,8 @@ export default function AdminOrdersPage() {
             <SelectContent>
               <SelectItem value=" ">全部状态</SelectItem>
               <SelectItem value="PENDING">待结算</SelectItem>
-              <SelectItem value="SETTLING">结算中</SelectItem>
-              <SelectItem value="SETTLED">已结算</SelectItem>
+              <SelectItem value={RentalOrderStatus.SETTLING}>结算中</SelectItem>
+              <SelectItem value={RentalOrderStatus.SETTLED}>已结算</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -222,7 +221,7 @@ export default function AdminOrdersPage() {
         </div>
       </SearchPanel>
       <DataTable columns={columns} data={page.records} rowKey={(row) => row.orderNo} loading={loading} emptyText="暂无租赁订单" pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
-      <DetailDrawer open={detailOpen} title="租赁订单详情" subtitle={pickString(detail?.orderNo)} sections={detailSections} onClose={() => setDetailOpen(false)} />
+      <DetailDrawer data={detail} open={detailOpen} title="租赁订单详情" subtitle={(data) => ((data.orderNo) || "-").toString()} sections={detailSections} onClose={() => setDetailOpen(false)} />
     </div>
   );
 }

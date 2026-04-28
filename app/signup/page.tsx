@@ -6,7 +6,7 @@ import LogoCarousel from "../components/LogoCarousel";
 import Image from "next/image";
 import "../login/login.css"; // Reuse login styles
 import { sendSignupEmailCode, register, verifySignupEmailCode } from "@/api/auth";
-import { toErrorMessage } from "@/lib/format";
+import { toErrorMessage, translateErrorMessage } from "@/lib/format";
 
 type Step = "email" | "otp" | "profile";
 
@@ -49,7 +49,7 @@ export default function SignupPage() {
         setStep("otp");
         setCountdown(60);
       } else {
-        setError(res?.message || "Failed to send code");
+        setError(translateErrorMessage(res?.message || "Failed to send code"));
       }
     } catch (err) {
       setError(toErrorMessage(err));
@@ -66,7 +66,7 @@ export default function SignupPage() {
       if (res && (res.code === 200 || res.code === 0)) {
         setStep("profile");
       } else {
-        setError(res?.message || "Invalid verification code");
+        setError(translateErrorMessage(res?.message || "Invalid verification code"));
       }
     } catch (err) {
       setError(toErrorMessage(err));
@@ -79,7 +79,7 @@ export default function SignupPage() {
     e.preventDefault();
     if (!nickname || !password) return;
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      setError("两次输入的密码不一致");
       return;
     }
     
@@ -93,10 +93,10 @@ export default function SignupPage() {
         password,
       });
       if (res && (res.code === 200 || res.code === 0) && res.data) {
-        localStorage.setItem("accessToken", res.data.accessToken);
+        localStorage.setItem("user_access_token", res.data.accessToken);
         window.location.href = "/dashboard";
       } else {
-        setError(res?.message || "Registration failed");
+        setError(translateErrorMessage(res?.message || "Registration failed"));
       }
     } catch (err) {
       setError(toErrorMessage(err));

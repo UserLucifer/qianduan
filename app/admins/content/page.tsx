@@ -16,7 +16,7 @@ import {
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SearchPanel } from "@/components/shared/SearchPanel";
 import { DataTable, type DataTableColumn } from "@/components/shared/DataTable";
-import { DetailDrawer, type DetailSection } from "@/components/shared/DetailDrawer";
+import { DetailDrawer, type DetailSectionDef } from "@/components/shared/DetailDrawer";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import { DateTimeText } from "@/components/shared/DateTimeText";
 import { ConfirmActionButton } from "@/components/shared/ConfirmActionButton";
@@ -31,10 +31,11 @@ import {
   updateAdminBlogPost,
   deleteAdminBlogPost
 } from "@/api/admin";
-import type { AdminCatalogQuery, ApiMapObject, BlogCategory, BlogTag } from "@/api/types";
-import { formatEmpty, pickNumber, pickString, toErrorMessage } from "@/lib/format";
+import type { AdminCatalogQuery, AdminBlogPost, BlogCategory, BlogTag } from "@/api/types";
+import { formatEmpty, toErrorMessage } from "@/lib/format";
 import { CategoryManager, TagManager } from "@/components/admin/BlogManagers";
 import { BlogPostForm } from "@/components/admin/BlogPostForm";
+import { BlogPublishStatus } from "@/types/enums";
 
 interface Filters {
   status: string;
@@ -47,10 +48,10 @@ export default function AdminContentPage() {
   const [filters, setFilters] = useState<Filters>(initialFilters);
   const [categories, setCategories] = useState<BlogCategory[]>([]);
   const [tags, setTags] = useState<BlogTag[]>([]);
-  const [detail, setDetail] = useState<ApiMapObject | null>(null);
+  const [detail, setDetail] = useState<AdminBlogPost | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
   const [formOpen, setFormOpen] = useState(false);
-  const [editingPost, setEditingPost] = useState<ApiMapObject | null>(null);
+  const [editingPost, setEditingPost] = useState<AdminBlogPost | null>(null);
   const [categoryMgrOpen, setCategoryMgrOpen] = useState(false);
   const [tagMgrOpen, setTagMgrOpen] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
@@ -75,8 +76,8 @@ export default function AdminContentPage() {
     refreshDictionaries();
   }, [refreshDictionaries]);
 
-  const togglePublish = async (row: ApiMapObject, enabled: boolean) => {
-    const id = pickNumber(row.id);
+  const togglePublish = async (row: AdminBlogPost, enabled: boolean) => {
+    const id = Number(row.id);
     if (!id) return;
     try {
       if (enabled) {
@@ -90,8 +91,8 @@ export default function AdminContentPage() {
     }
   };
 
-  const toggleTop = async (row: ApiMapObject, isTop: boolean) => {
-    const id = pickNumber(row.id);
+  const toggleTop = async (row: AdminBlogPost, isTop: boolean) => {
+    const id = Number(row.id);
     if (!id) return;
     try {
       await updateAdminBlogPost(id, { isTop: isTop ? 1 : 0 });
@@ -110,21 +111,21 @@ export default function AdminContentPage() {
     }
   };
 
-  const columns: DataTableColumn<ApiMapObject>[] = [
+  const columns: DataTableColumn<AdminBlogPost>[] = [
     { key: "id", title: "ID", render: (row) => <span className="font-mono text-xs text-[var(--admin-muted)]">{formatEmpty(row.id)}</span> },
     {
       key: "title", title: "标题", render: (row) => (
         <div className="flex items-center gap-2">
-          {pickNumber(row.isTop) === 1 && <ArrowUpCircle className="h-4 w-4 text-amber-500 shrink-0" />}
-          <span className="line-clamp-1 max-w-[300px] font-medium text-[var(--admin-text)]">{pickString(row.title)}</span>
+          {Number(row.isTop) === 1 && <ArrowUpCircle className="h-4 w-4 text-amber-500 shrink-0" />}
+          <span className="line-clamp-1 max-w-[300px] font-medium text-[var(--admin-text)]">{((row.title) || "-").toString()}</span>
         </div>
       )
     },
-    { key: "categoryName", title: "分类", render: (row) => <Badge variant="outline" className="font-normal text-[var(--admin-muted)] border-[var(--admin-border)]">{pickString(row.categoryName)}</Badge> },
+    { key: "categoryName", title: "分类", render: (row) => <Badge variant="outline" className="font-normal text-[var(--admin-muted)] border-[var(--admin-border)]">{((row.categoryName) || "-").toString()}</Badge> },
     {
       key: "isTop", title: "置顶", render: (row) => (
         <Switch
-          checked={pickNumber(row.isTop) === 1}
+          checked={Number(row.isTop) === 1}
           onCheckedChange={(checked) => toggleTop(row, checked)}
           className="scale-75 origin-left"
         />
@@ -134,7 +135,7 @@ export default function AdminContentPage() {
       key: "status", title: "发布状态", render: (row) => (
         <div className="flex items-center gap-2">
           <Switch
-            checked={pickNumber(row.status) === 1}
+            checked={Number(row.status) === 1}
             onCheckedChange={(checked) => togglePublish(row, checked)}
             className="scale-75 origin-left"
           />
@@ -154,7 +155,7 @@ export default function AdminContentPage() {
           <Button variant="ghost" size="sm" className="text-[var(--admin-text)] hover:bg-[var(--admin-hover)]" onClick={() => { setDetail(row); setDetailOpen(true); }}>
             详情
           </Button>
-          <ConfirmActionButton title="删除文章" description="确定要删除这篇文章吗？此操作不可撤销。" onConfirm={() => handleDelete(pickNumber(row.id)!)}>
+          <ConfirmActionButton title="删除文章" description="确定要删除这篇文章吗？此操作不可撤销。" onConfirm={() => handleDelete(Number(row.id)!)}>
             <span className="text-red-500">删除</span>
           </ConfirmActionButton>
         </div>
@@ -162,25 +163,23 @@ export default function AdminContentPage() {
     },
   ];
 
-  const detailSections: DetailSection[] = detail
-    ? [
+  const detailSections: DetailSectionDef<any>[] = [
       {
         title: "文章基本信息",
         fields: [
-          { label: "文章 ID", value: pickString(detail.id) },
-          { label: "标题", value: pickString(detail.title) },
-          { label: "摘要", value: pickString(detail.summary) || "无" },
-          { label: "分类", value: pickString(detail.categoryName) },
-          { label: "标签", value: Array.isArray(detail.tagNames) ? detail.tagNames.join(", ") : "无" },
-          { label: "发布状态", value: <StatusBadge status={detail.status} /> },
-          { label: "是否置顶", value: pickNumber(detail.isTop) === 1 ? "是" : "否" },
-          { label: "封面图", value: detail.coverImageUrl ? <img src={detail.coverImageUrl as string} className="h-20 w-32 object-cover rounded border" /> : "无" },
-          { label: "创建时间", value: <DateTimeText value={typeof detail.createdAt === "string" ? detail.createdAt : null} /> },
-          { label: "更新时间", value: <DateTimeText value={typeof detail.updatedAt === "string" ? detail.updatedAt : null} /> },
+          { label: "文章 ID", render: (detail) => ((detail.id) || "-").toString() },
+          { label: "标题", render: (detail) => ((detail.title) || "-").toString() },
+          { label: "摘要", render: (detail) => ((detail.summary) || "-").toString() || "无" },
+          { label: "分类", render: (detail) => ((detail.categoryName) || "-").toString() },
+          { label: "标签", render: (detail) => Array.isArray(detail.tagNames) ? detail.tagNames.join(", ") : "无" },
+          { label: "发布状态", render: (detail) => <StatusBadge status={detail.status} /> },
+          { label: "是否置顶", render: (detail) => Number(detail.isTop) === 1 ? "是" : "否" },
+          { label: "封面图", render: (detail) => detail.coverImageUrl ? <img src={detail.coverImageUrl as string} className="h-20 w-32 object-cover rounded border" /> : "无" },
+          { label: "创建时间", render: (detail) => <DateTimeText value={typeof detail.createdAt === "string" ? detail.createdAt : null} /> },
+          { label: "更新时间", render: (detail) => <DateTimeText value={typeof detail.updatedAt === "string" ? detail.updatedAt : null} /> },
         ],
       },
-    ]
-    : [];
+    ];
 
   return (
     <div className="space-y-6">
@@ -224,8 +223,8 @@ export default function AdminContentPage() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value=" ">全部状态</SelectItem>
-              <SelectItem value="1">已发布</SelectItem>
-              <SelectItem value="0">草稿/下架</SelectItem>
+              <SelectItem value={BlogPublishStatus.PUBLISHED.toString()}>已发布</SelectItem>
+              <SelectItem value={BlogPublishStatus.DRAFT.toString()}>草稿/下架</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -234,7 +233,7 @@ export default function AdminContentPage() {
       <DataTable
         columns={columns}
         data={page.records}
-        rowKey={(row) => pickString(row.id) || "unknown"}
+        rowKey={(row) => ((row.id) || "-").toString() || "unknown"}
         loading={loading}
         emptyText="暂无内容数据"
         pageNo={page.pageNo}
@@ -244,7 +243,7 @@ export default function AdminContentPage() {
       />
 
       {/* Detail Drawer */}
-      <DetailDrawer open={detailOpen} title="文章详情" subtitle={pickString(detail?.title)} sections={detailSections} onClose={() => setDetailOpen(false)} />
+      <DetailDrawer data={detail} open={detailOpen} title="文章详情" subtitle={(data) => ((data.title) || "-").toString()} sections={detailSections} onClose={() => setDetailOpen(false)} />
 
       {/* Post Form Dialog */}
       <Dialog open={formOpen} onOpenChange={setFormOpen}>

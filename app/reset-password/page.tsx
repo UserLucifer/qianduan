@@ -6,7 +6,7 @@ import LogoCarousel from "../components/LogoCarousel";
 import Image from "next/image";
 import "../login/login.css";
 import { sendResetPasswordCode, resetPassword, verifyResetPasswordCode } from "@/api/auth";
-import { toErrorMessage } from "@/lib/format";
+import { toErrorMessage, translateErrorMessage } from "@/lib/format";
 
 type Step = "email" | "otp" | "reset";
 
@@ -49,7 +49,7 @@ export default function ResetPasswordPage() {
         setStep("otp");
         setCountdown(60);
       } else {
-        setError(res?.message || "Failed to send reset code");
+        setError(translateErrorMessage(res?.message || "Failed to send reset code"));
       }
     } catch (err) {
       setError(toErrorMessage(err));
@@ -66,7 +66,7 @@ export default function ResetPasswordPage() {
       if (res && (res.code === 200 || res.code === 0)) {
         setStep("reset");
       } else {
-        setError(res?.message || "Invalid verification code");
+        setError(translateErrorMessage(res?.message || "Invalid verification code"));
       }
     } catch (err) {
       setError(toErrorMessage(err));
@@ -79,7 +79,7 @@ export default function ResetPasswordPage() {
     e.preventDefault();
     if (!newPassword) return;
     if (newPassword !== confirmPassword) {
-      setError("Passwords do not match");
+      setError("两次输入的密码不一致");
       return;
     }
 
@@ -97,7 +97,7 @@ export default function ResetPasswordPage() {
           window.location.href = "/login";
         }, 2000);
       } else {
-        setError(res?.message || "Reset failed");
+        setError(translateErrorMessage(res?.message || "Reset failed"));
       }
     } catch (err) {
       setError(toErrorMessage(err));

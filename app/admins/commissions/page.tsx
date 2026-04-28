@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SearchPanel } from "@/components/shared/SearchPanel";
 import { DataTable, type DataTableColumn } from "@/components/shared/DataTable";
-import { DetailDrawer, type DetailSection } from "@/components/shared/DetailDrawer";
+import { DetailDrawer, type DetailSectionDef } from "@/components/shared/DetailDrawer";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import { MoneyText } from "@/components/shared/MoneyText";
 import { DateTimeText } from "@/components/shared/DateTimeText";
@@ -83,37 +83,35 @@ export default function AdminCommissionsPage() {
     },
   ];
 
-  const detailSections: DetailSection[] = detail
-    ? [
+  const detailSections: DetailSectionDef<any>[] = [
         {
           title: "佣金信息",
           fields: [
-            { label: "佣金编号", value: <CopyableSecret value={detail.commissionNo} maskedValue={detail.commissionNo} canReveal={false} /> },
-            { label: "状态", value: <StatusBadge status={detail.status} /> },
-            { label: "层级", value: `L${detail.levelNo}` },
-            { label: "佣金金额", value: <MoneyText value={detail.commissionAmount} /> },
+            { label: "佣金编号", render: (detail) => <CopyableSecret value={detail.commissionNo} maskedValue={detail.commissionNo} canReveal={false} /> },
+            { label: "状态", render: (detail) => <StatusBadge status={detail.status} /> },
+            { label: "层级", render: (detail) => `L${detail.levelNo}` },
+            { label: "佣金金额", render: (detail) => <MoneyText value={detail.commissionAmount} /> },
           ],
         },
         {
           title: "来源信息",
           fields: [
-            { label: "来源用户", value: detail.sourceUserId },
-            { label: "来源订单 ID", value: detail.sourceOrderId },
-            { label: "来源收益 ID", value: detail.sourceProfitId },
-            { label: "来源收益", value: <MoneyText value={detail.sourceProfitAmount} /> },
+            { label: "来源用户", render: (detail) => detail.sourceUserId },
+            { label: "来源订单 ID", render: (detail) => detail.sourceOrderId },
+            { label: "来源收益 ID", render: (detail) => detail.sourceProfitId },
+            { label: "来源收益", render: (detail) => <MoneyText value={detail.sourceProfitAmount} /> },
           ],
         },
         {
           title: "结算信息",
           fields: [
-            { label: "佣金比例", value: formatPercent(detail.commissionRateSnapshot) },
-            { label: "钱包流水", value: <CopyableSecret value={detail.walletTxNo} maskedValue={detail.walletTxNo ?? "-"} canReveal={false} /> },
-            { label: "结算时间", value: <DateTimeText value={detail.settledAt} /> },
-            { label: "创建时间", value: <DateTimeText value={detail.createdAt} /> },
+            { label: "佣金比例", render: (detail) => formatPercent(detail.commissionRateSnapshot) },
+            { label: "钱包流水", render: (detail) => <CopyableSecret value={detail.walletTxNo} maskedValue={detail.walletTxNo ?? "-"} canReveal={false} /> },
+            { label: "结算时间", render: (detail) => <DateTimeText value={detail.settledAt} /> },
+            { label: "创建时间", render: (detail) => <DateTimeText value={detail.createdAt} /> },
           ],
         },
-      ]
-    : [];
+      ];
 
   return (
     <div className="space-y-6">
@@ -176,7 +174,7 @@ export default function AdminCommissionsPage() {
         </div>
       </SearchPanel>
       <DataTable columns={columns} data={page.records} rowKey={(row) => row.commissionNo} loading={loading} emptyText="暂无佣金记录" pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
-      <DetailDrawer open={detailOpen} title="佣金记录详情" subtitle={detail?.commissionNo} sections={detailSections} onClose={() => setDetailOpen(false)} />
+      <DetailDrawer data={detail} open={detailOpen} title="佣金记录详情" subtitle={(data) => data.commissionNo} sections={detailSections} onClose={() => setDetailOpen(false)} />
     </div>
   );
 }

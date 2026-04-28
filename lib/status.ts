@@ -11,34 +11,61 @@ export interface StatusMeta {
   tone: StatusTone;
 }
 
+import {
+  CommonStatus,
+  RentalOrderStatus,
+  RechargeOrderStatus,
+  WithdrawOrderStatus,
+  ApiTokenStatus,
+  ApiDeployOrderStatus,
+  ProfitStatus,
+  RentalSettlementOrderStatus,
+  RentalOrderSettlementStatus,
+  NotificationBizType,
+  WalletBusinessType,
+  WalletTransactionType,
+  RentalSettlementType
+} from "@/types/enums";
+
 const STATUS_MAP: Record<string, StatusMeta> = {
-  ACTIVE: { label: "已启用", tone: "success" },
-  ENABLED: { label: "已启用", tone: "success" },
-  DISABLED: { label: "已禁用", tone: "neutral" },
-  INACTIVE: { label: "未启用", tone: "neutral" },
-  SUBMITTED: { label: "待审核", tone: "warning" },
-  PENDING_REVIEW: { label: "待审核", tone: "warning" },
-  APPROVED: { label: "已通过", tone: "success" },
-  REJECTED: { label: "已拒绝", tone: "danger" },
-  CANCELED: { label: "已取消", tone: "neutral" },
-  CANCELLED: { label: "已取消", tone: "neutral" },
-  PAID: { label: "已支付", tone: "success" },
-  PENDING_PAY: { label: "待支付", tone: "warning" },
-  PENDING_PAYMENT: { label: "待支付", tone: "warning" },
-  PENDING_ACTIVATION: { label: "待激活", tone: "warning" },
-  ACTIVATING: { label: "激活中", tone: "info" },
-  RUNNING: { label: "运行中", tone: "success" },
-  PAUSED: { label: "已暂停", tone: "warning" },
-  EXPIRED: { label: "已到期", tone: "neutral" },
-  SETTLING: { label: "结算中", tone: "info" },
-  SETTLED: { label: "已结算", tone: "success" },
-  EARLY_CLOSED: { label: "提前结束", tone: "neutral" },
-  PENDING: { label: "待处理", tone: "warning" },
-  SUCCESS: { label: "成功", tone: "success" },
-  FAILED: { label: "失败", tone: "danger" },
-  NORMAL: { label: "正常", tone: "success" },
-  ABNORMAL: { label: "异常", tone: "danger" },
-  CANCELED_BY_SYSTEM: { label: "系统取消", tone: "neutral" },
+  [CommonStatus.ENABLED.toString()]: { label: "已启用", tone: "success" },
+  [CommonStatus.DISABLED.toString()]: { label: "已禁用", tone: "neutral" },
+
+  [RentalOrderStatus.PENDING_PAY]: { label: "待支付", tone: "warning" },
+  [RentalOrderStatus.PAID]: { label: "已支付/打款", tone: "success" },
+  [RentalOrderStatus.PENDING_ACTIVATION]: { label: "待激活", tone: "warning" },
+  [RentalOrderStatus.ACTIVATING]: { label: "激活中", tone: "info" },
+  [RentalOrderStatus.RUNNING]: { label: "运行中", tone: "success" },
+  [RentalOrderStatus.PAUSED]: { label: "已暂停", tone: "warning" },
+  [RentalOrderStatus.EXPIRED]: { label: "已到期", tone: "neutral" },
+  [RentalOrderStatus.SETTLING]: { label: "结算中", tone: "info" },
+  [RentalOrderStatus.SETTLED]: { label: "已结算", tone: "success" },
+  [RentalOrderStatus.EARLY_CLOSED]: { label: "提前结束", tone: "neutral" },
+  [RentalOrderStatus.CANCELED]: { label: "已取消", tone: "neutral" },
+
+  [RechargeOrderStatus.SUBMITTED]: { label: "待审核", tone: "warning" },
+  [RechargeOrderStatus.APPROVED]: { label: "已通过", tone: "success" },
+  [RechargeOrderStatus.REJECTED]: { label: "已拒绝", tone: "danger" },
+
+  [WithdrawOrderStatus.PENDING_REVIEW]: { label: "待审核", tone: "warning" },
+  // [WithdrawOrderStatus.PAID]: { label: "已打款", tone: "success" }, // Duplicate with RentalOrderStatus.PAID
+
+  [ApiTokenStatus.GENERATED]: { label: "已生成", tone: "neutral" },
+  [ApiTokenStatus.ACTIVE]: { label: "正常", tone: "success" },
+  [ApiTokenStatus.REVOKED]: { label: "已撤销", tone: "danger" },
+
+  [ApiDeployOrderStatus.REFUNDED]: { label: "已退款", tone: "neutral" },
+
+  [ProfitStatus.NOT_STARTED]: { label: "未开始", tone: "neutral" },
+  [ProfitStatus.FINISHED]: { label: "已结束", tone: "success" },
+
+  [RentalOrderSettlementStatus.UNSETTLED]: { label: "未结算", tone: "neutral" },
+
+  "NORMAL": { label: "正常", tone: "success" },
+  "ABNORMAL": { label: "异常", tone: "danger" },
+  "INACTIVE": { label: "未启用", tone: "neutral" },
+  "DEPLOYING": { label: "部署中", tone: "info" },
+  "COMPLETED": { label: "已完成", tone: "success" },
 };
 
 const NUMERIC_STATUS_MAP: Record<number, StatusMeta> = {
@@ -55,16 +82,16 @@ export function getStatusMeta(status: string | number | boolean | null | undefin
 
 export function bizTypeLabel(type: string | null | undefined): string {
   const labels: Record<string, string> = {
-    RECHARGE: "充值",
-    WITHDRAW: "提现",
-    RENT_PAY: "租赁支付",
-    API_DEPLOY_FEE: "API 部署费",
-    RENT_PROFIT: "租赁收益",
-    COMMISSION_PROFIT: "佣金收益",
-    SETTLEMENT: "结算",
-    EARLY_PENALTY: "提前结算违约金",
-    REFUND: "退款",
-    ADJUST: "系统调账",
+    [WalletBusinessType.RECHARGE]: "充值",
+    [WalletBusinessType.WITHDRAW]: "提现",
+    [WalletBusinessType.RENT_PAY]: "租赁支付",
+    [WalletBusinessType.API_DEPLOY_FEE]: "API 部署",
+    [WalletBusinessType.RENT_PROFIT]: "租赁收益",
+    [WalletBusinessType.COMMISSION_PROFIT]: "佣金收益",
+    [WalletBusinessType.SETTLEMENT]: "结算",
+    [WalletBusinessType.EARLY_PENALTY]: "提前结算违约金",
+    [WalletBusinessType.REFUND]: "退款",
+    [WalletBusinessType.ADJUST]: "调账",
   };
   if (!type) return "-";
   return labels[type] ?? type;
@@ -72,10 +99,10 @@ export function bizTypeLabel(type: string | null | undefined): string {
 
 export function txTypeLabel(type: string | null | undefined): string {
   const labels: Record<string, string> = {
-    IN: "入账",
-    OUT: "支出",
-    FREEZE: "冻结",
-    UNFREEZE: "解冻",
+    [WalletTransactionType.IN]: "入账",
+    [WalletTransactionType.OUT]: "支出",
+    [WalletTransactionType.FREEZE]: "冻结",
+    [WalletTransactionType.UNFREEZE]: "解冻",
   };
   if (!type) return "-";
   return labels[type] ?? type;
@@ -83,12 +110,12 @@ export function txTypeLabel(type: string | null | undefined): string {
 
 export function notificationTypeLabel(type: string | null | undefined): string {
   const labels: Record<string, string> = {
-    SYSTEM: "系统通知",
-    ANNOUNCEMENT: "公告",
-    ALERT: "风险提醒",
-    ORDER: "订单通知",
-    FINANCE: "财务通知",
-    PROFIT: "收益通知",
+    "SYSTEM": "系统通知",
+    "ANNOUNCEMENT": "公告",
+    "ALERT": "风险提醒",
+    "ORDER": "订单通知",
+    "FINANCE": "财务通知",
+    "PROFIT": "收益通知",
   };
   if (!type) return "-";
   return labels[type] ?? type;
@@ -96,9 +123,9 @@ export function notificationTypeLabel(type: string | null | undefined): string {
 
 export function settlementTypeLabel(type: string | null | undefined): string {
   const labels: Record<string, string> = {
-    EXPIRE: "到期结算",
-    EARLY_TERMINATE: "提前结算",
-    MANUAL: "人工结算",
+    [RentalSettlementType.EXPIRE]: "到期结算",
+    [RentalSettlementType.EARLY_TERMINATE]: "提前结算",
+    [RentalSettlementType.MANUAL]: "人工结算",
   };
   if (!type) return "-";
   return labels[type] ?? type;

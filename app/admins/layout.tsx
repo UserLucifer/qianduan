@@ -6,6 +6,9 @@ import { usePathname } from "next/navigation";
 import { AdminHeader } from "@/components/admin/header";
 import { AdminSidebar } from "@/components/admin/sidebar";
 
+import { SysConfigProvider } from "@/app/contexts/SysConfigContext";
+import { AdminAuthProvider } from "@/app/contexts/AdminAuthContext";
+
 type AdminTheme = "light" | "dark";
 
 function getSavedAdminTheme(): AdminTheme {
@@ -31,8 +34,20 @@ export default function AdminRootLayout({
     applyAdminTheme(getSavedAdminTheme());
   }, []);
 
+  const content = isLoginPage ? (
+    <>{children}</>
+  ) : (
+    <div className="admin-shell flex min-h-screen selection:bg-[#5e6ad2]/30">
+      <AdminSidebar />
+      <div className="relative flex-1 pl-64">
+        <AdminHeader />
+        <main className="admin-main min-h-[calc(100vh-64px)] p-8">{children}</main>
+      </div>
+    </div>
+  );
+
   return (
-    <>
+    <SysConfigProvider>
       <style
         dangerouslySetInnerHTML={{
           __html: `
@@ -211,21 +226,13 @@ export default function AdminRootLayout({
           from { opacity: 0; }
           to { opacity: 1; }
         }
-      `,
+      `
         }}
       />
-
-      {isLoginPage ? (
-        <>{children}</>
-      ) : (
-        <div className="admin-shell flex min-h-screen selection:bg-[#5e6ad2]/30">
-          <AdminSidebar />
-          <div className="relative flex-1 pl-64">
-            <AdminHeader />
-            <main className="admin-main min-h-[calc(100vh-64px)] p-8">{children}</main>
-          </div>
-        </div>
-      )}
-    </>
+      <AdminAuthProvider>
+        {content}
+      </AdminAuthProvider>
+    </SysConfigProvider>
   );
 }
+

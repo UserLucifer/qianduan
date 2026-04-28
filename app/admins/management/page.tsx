@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SearchPanel } from "@/components/shared/SearchPanel";
 import { DataTable, type DataTableColumn } from "@/components/shared/DataTable";
-import { DetailDrawer, type DetailSection } from "@/components/shared/DetailDrawer";
+import { DetailDrawer, type DetailSectionDef } from "@/components/shared/DetailDrawer";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import { DateTimeText } from "@/components/shared/DateTimeText";
 import { ConfirmActionButton } from "@/components/shared/ConfirmActionButton";
@@ -19,9 +19,13 @@ import {
   enableAdminUser,
   getAdminUserDetail,
   getAdminUsers,
+  getAdminWalletByUser,
+  getAdminUserTeam,
+  getAdminRentalOrders,
 } from "@/api/admin";
-import type { AdminUserQuery, AdminUserRow, ApiMapObject } from "@/api/types";
-import { formatEmpty, pickString, toErrorMessage } from "@/lib/format";
+import type { AdminUserQuery, AdminUserRow } from "@/api/types";
+import { formatEmpty, toErrorMessage } from "@/lib/format";
+import { CommonStatus } from "@/types/enums";
 
 interface UserFilters {
   userId: string;
@@ -43,7 +47,7 @@ const initialQuery: AdminUserQuery = { pageNo: 1, pageSize: 10 };
 
 export default function AdminUsersPage() {
   const [filters, setFilters] = useState<UserFilters>(initialFilters);
-  const [detail, setDetail] = useState<ApiMapObject | null>(null);
+  const [detail, setDetail] = useState<AdminUserRow | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
   const [detailLoading, setDetailLoading] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
@@ -74,8 +78,24 @@ export default function AdminUsersPage() {
     setDetailLoading(true);
     setActionError(null);
     try {
-      const res = await getAdminUserDetail(id);
-      setDetail(res.data);
+      const [resDetail, resWallet, resTeam, resOrders] = await Promise.allSettled([
+        getAdminUserDetail(id),
+        getAdminWalletByUser(id),
+        getAdminUserTeam(id),
+        getAdminRentalOrders({ user_id: id, pageNo: 1, pageSize: 1 })
+      ]);
+
+      const detailData = resDetail.status === "fulfilled" && (resDetail.value.code === 200 || resDetail.value.code === 0) ? resDetail.value.data : {};
+      const walletData = resWallet.status === "fulfilled" && (resWallet.value.code === 200 || resWallet.value.code === 0) ? resWallet.value.data : null;
+      const teamData = resTeam.status === "fulfilled" && (resTeam.value.code === 200 || resTeam.value.code === 0) ? resTeam.value.data : null;
+      const orderData = resOrders.status === "fulfilled" && (resOrders.value.code === 200 || resOrders.value.code === 0) ? resOrders.value.data : null;
+
+      setDetail({
+        ...detailData,
+        walletData,
+        teamData,
+        orderData,
+      });
     } catch (err) {
       setActionError(toErrorMessage(err));
     } finally {
@@ -103,11 +123,11 @@ export default function AdminUsersPage() {
   };
 
   const columns: DataTableColumn<AdminUserRow>[] = [
-    { key: "userId", title: "用户 ID", render: (row) => formatEmpty(row.userId) },
+    { key: "userId", title: "用户 ID", render: (row) => formatEmpty(row.userId ?? row.id ?? row.id) },
     { key: "email", title: "邮箱", render: (row) => formatEmpty(row.email) },
     { key: "nickname", title: "昵称", render: (row) => formatEmpty(row.nickname) },
     { key: "status", title: "状态", render: (row) => <StatusBadge status={row.status} /> },
-    { key: "createdAt", title: "注册时间", render: (row) => <DateTimeText value={typeof row.createdAt === "string" ? row.createdAt : null} /> },
+    { key: "createdAt", title: "注册时间", render: (row) => <DateTimeText value={typeof row.createdAt === "string" ? row.createdAt : (typeof row.createdAt === "string" ? row.createdAt : null)} /> },
     {
       key: "actions",
       title: "操作",
@@ -142,35 +162,33 @@ export default function AdminUsersPage() {
     },
   ];
 
-  const detailSections: DetailSection[] = detail
-    ? [
+  const detailSections: DetailSectionDef<any>[] = [
         {
           title: "基础信息",
           fields: [
-            { label: "用户 ID", value: pickString(detail.userId) },
-            { label: "邮箱", value: pickString(detail.email) },
-            { label: "昵称", value: pickString(detail.nickname) },
-            { label: "状态", value: <StatusBadge status={detail.status} /> },
+            { label: "用户 ID", render: (detail) => ((detail.userId ?? detail.id ?? detail.id) || "-").toString() },
+            { label: "邮箱", render: (detail) => ((detail.email) || "-").toString() },
+            { label: "昵称", render: (detail) => ((detail.nickname) || "-").toString() },
+            { label: "状态", render: (detail) => <StatusBadge status={detail.status} /> },
           ],
         },
         {
           title: "业务信息",
           fields: [
-            { label: "钱包余额", value: pickString(detail.availableBalance) },
-            { label: "冻结金额", value: pickString(detail.frozenBalance) },
-            { label: "团队人数", value: pickString(detail.teamCount) },
-            { label: "订单数量", value: pickString(detail.orderCount) },
+            { label: "钱包余额", render: (detail) => ((detail.walletData?.availableBalance ?? detail.walletData?.availableBalance ?? detail.availableBalance ?? detail.availableBalance) || "-").toString() },
+            { label: "冻结金额", render: (detail) => ((detail.walletData?.frozenBalance ?? detail.walletData?.frozenBalance ?? detail.frozenBalance ?? detail.frozenBalance) || "-").toString() },
+            { label: "团队人数", render: (detail) => ((detail.teamData?.totalTeamCount ?? detail.teamData?.teamCount ?? detail.teamCount) || "-").toString() },
+            { label: "订单数量", render: (detail) => ((detail.orderData?.total ?? detail.orderCount ?? detail.orderCount) || "-").toString() },
           ],
         },
         {
           title: "时间信息",
           fields: [
-            { label: "注册时间", value: <DateTimeText value={typeof detail.createdAt === "string" ? detail.createdAt : null} /> },
-            { label: "更新时间", value: <DateTimeText value={typeof detail.updatedAt === "string" ? detail.updatedAt : null} /> },
+            { label: "注册时间", render: (detail) => <DateTimeText value={typeof detail.createdAt === "string" ? detail.createdAt : (typeof detail.createdAt === "string" ? detail.createdAt : null)} /> },
+            { label: "更新时间", render: (detail) => <DateTimeText value={typeof detail.updatedAt === "string" ? detail.updatedAt : (typeof detail.updatedAt === "string" ? detail.updatedAt : null)} /> },
           ],
         },
-      ]
-    : [];
+      ];
 
   return (
     <div className="space-y-6">
@@ -210,8 +228,8 @@ export default function AdminUsersPage() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value=" ">全部状态</SelectItem>
-              <SelectItem value="1">已启用</SelectItem>
-              <SelectItem value="0">已禁用</SelectItem>
+              <SelectItem value={CommonStatus.ENABLED.toString()}>已启用</SelectItem>
+              <SelectItem value={CommonStatus.DISABLED.toString()}>已禁用</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -237,10 +255,10 @@ export default function AdminUsersPage() {
         onPageChange={changePage}
       />
 
-      <DetailDrawer
+      <DetailDrawer data={detail}
         open={detailOpen}
         title="用户详情"
-        subtitle={detailLoading ? "加载中" : pickString(detail?.email)}
+        subtitle={(data) => detailLoading ? "加载中" : ((data.email) || "-").toString()}
         sections={detailSections}
         onClose={() => setDetailOpen(false)}
       />

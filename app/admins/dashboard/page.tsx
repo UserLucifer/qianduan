@@ -26,9 +26,12 @@ import { getAdminDashboardBundle } from "@/api/admin";
 import { formatMoney, formatNumber } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
+import { useSysConfig } from "@/app/contexts/SysConfigContext";
+
 export default function AdminDashboardPage() {
   const loader = useCallback(() => getAdminDashboardBundle(), []);
   const { data, loading, error, reload } = useAsyncResource(loader);
+  const { getConfig } = useSysConfig();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -83,7 +86,7 @@ export default function AdminDashboardPage() {
           subtitle={
             <div className="flex items-center gap-1.5 text-blue-600 dark:text-blue-400">
               <ArrowUpRight className="h-3.5 w-3.5" />
-              <span className="font-semibold">{data?.users.todayNewUserCount ?? 0}</span>
+              <span className="font-semibold">{data?.users?.todayNewUserCount ?? 0}</span>
               <span>今日新增</span>
             </div>
           }
@@ -99,9 +102,9 @@ export default function AdminDashboardPage() {
           subtitle={
             <div className={cn(
               "flex items-center gap-1.5",
-              (data?.orders.abnormalOrderCount ?? 0) > 0 ? "text-rose-600 dark:text-rose-400" : "text-emerald-600 dark:text-emerald-400"
+              (data?.orders?.abnormalOrderCount ?? 0) > 0 ? "text-rose-600 dark:text-rose-400" : "text-emerald-600 dark:text-emerald-400"
             )}>
-              <span className="font-semibold">{data?.orders.abnormalOrderCount ?? 0}</span>
+              <span className="font-semibold">{data?.orders?.abnormalOrderCount ?? 0}</span>
               <span>异常订单</span>
             </div>
           }
@@ -117,7 +120,7 @@ export default function AdminDashboardPage() {
           subtitle={
             <div className="flex items-center gap-1.5 text-slate-500 dark:text-zinc-400">
               <Banknote className="h-3.5 w-3.5" />
-              <span>流水：{formatMoney(data?.finance.totalRechargeAmount)}</span>
+              <span>流水：{formatMoney(data?.finance?.totalRechargeAmount)}</span>
             </div>
           }
           icon={CircleDollarSign}
@@ -138,15 +141,15 @@ export default function AdminDashboardPage() {
               <div className="relative flex h-3 w-3">
                 <span className={cn(
                   "absolute inline-flex h-full w-full animate-ping rounded-full opacity-75",
-                  data?.overview.systemStatus === "ABNORMAL" ? "bg-rose-400" : "bg-emerald-400"
+                  getConfig("SYSTEM_STATUS", data?.overview.systemStatus) === "ABNORMAL" ? "bg-rose-400" : "bg-emerald-400"
                 )}></span>
                 <span className={cn(
                   "relative inline-flex h-3 w-3 rounded-full",
-                  data?.overview.systemStatus === "ABNORMAL" ? "bg-rose-500" : "bg-emerald-500"
+                  getConfig("SYSTEM_STATUS", data?.overview.systemStatus) === "ABNORMAL" ? "bg-rose-500" : "bg-emerald-500"
                 )}></span>
               </div>
               <span className="text-lg font-bold tracking-tight text-slate-900 dark:text-zinc-50">
-                {data?.overview.systemStatus === "ABNORMAL" ? "服务运行异常" : "所有服务运行正常"}
+                {getConfig("SYSTEM_STATUS", data?.overview.systemStatus) === "ABNORMAL" ? "服务运行异常" : "所有服务运行正常"}
               </span>
             </div>
             <p className="mt-2 text-xs text-slate-500 dark:text-zinc-500">

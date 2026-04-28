@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bell, LayoutGrid, Moon, Search, Settings, Sun } from "lucide-react";
+import { Bell, LayoutGrid, LogOut, Moon, Search, Settings, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { getAdminMe, type AdminMeResponse } from "@/api/admin";
+import { adminLogout, getAdminMe, type AdminMeResponse } from "@/api/admin";
 
 type AdminTheme = "light" | "dark";
 
@@ -102,6 +102,30 @@ export function AdminHeader() {
   const pathname = usePathname();
   const [admin, setAdmin] = useState<AdminMeResponse | null>(null);
   const pathSegments = pathname.split("/").filter(Boolean);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    if (dropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [dropdownOpen]);
+
+  const handleLogout = async () => {
+    try {
+      await adminLogout();
+    } catch (e) {
+      // ignore
+    } finally {
+      window.location.href = "/admins/login";
+    }
+  };
 
   useEffect(() => {
     let mounted = true;
@@ -155,13 +179,32 @@ export function AdminHeader() {
             <Settings className="h-4 w-4" />
           </Link>
         </Button>
-        <div className="admin-user-chip ml-3 flex h-9 items-center gap-2 rounded-lg border px-3">
-          <div className="flex h-6 w-6 items-center justify-center rounded-md bg-[#5e6ad2]/20 text-xs font-medium text-[var(--admin-brand-soft)]">
-            {(admin?.nickname || admin?.username || "A").slice(0, 1).toUpperCase()}
-          </div>
-          <span className="max-w-32 truncate text-sm text-[var(--admin-muted)]">
-            {admin?.nickname || admin?.username || "管理员"}
-          </span>
+        <div className="relative" ref={dropdownRef}>
+          <button
+            type="button"
+            className="admin-user-chip ml-3 flex h-9 items-center gap-2 rounded-lg border px-3 transition-colors hover:bg-[var(--admin-hover)]"
+            onClick={() => setDropdownOpen((prev) => !prev)}
+          >
+            <div className="flex h-6 w-6 items-center justify-center rounded-md bg-[#5e6ad2]/20 text-xs font-medium text-[var(--admin-brand-soft)]">
+              {(admin?.nickname || admin?.username || "A").slice(0, 1).toUpperCase()}
+            </div>
+            <span className="max-w-32 truncate text-sm text-[var(--admin-muted)]">
+              {admin?.nickname || admin?.username || "管理员"}
+            </span>
+          </button>
+          
+          {dropdownOpen ? (
+            <div className="absolute right-0 top-full mt-1.5 w-32 overflow-hidden rounded-lg border border-[var(--admin-border)] bg-[var(--admin-panel-strong)] py-1 shadow-lg backdrop-blur-xl">
+              <button
+                type="button"
+                className="flex w-full items-center gap-2 px-3 py-2 text-sm text-rose-500 transition-colors hover:bg-rose-500/10"
+                onClick={handleLogout}
+              >
+                <LogOut className="h-4 w-4" />
+                退出登录
+              </button>
+            </div>
+          ) : null}
         </div>
       </div>
     </header>

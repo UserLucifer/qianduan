@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Loader2 } from "lucide-react";
+import { Loader2, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -154,6 +154,29 @@ export function NotificationForm({ isBroadcast = false, onSuccess, onCancel }: N
               </FormItem>
             )}
           />
+        </div>
+
+        {/* 预览区域 */}
+        <div className="mt-2 rounded-lg border border-[var(--admin-border)] bg-[var(--admin-panel-soft)] p-4">
+          <div className="mb-3 text-xs font-medium text-[var(--admin-subtle)] uppercase tracking-wider">
+            实时预览 (模拟展示)
+          </div>
+          <div className="flex gap-3 items-start">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#5e6ad2]/10 text-[#5e6ad2]">
+              <Bell className="h-4 w-4" />
+            </div>
+            <div className="min-w-0 flex-1 space-y-1">
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-sm font-medium text-[var(--admin-text)] truncate">
+                  {form.watch("title") || "在此输入标题..."}
+                </p>
+                <span className="text-[10px] text-[var(--admin-muted)] whitespace-nowrap">刚刚</span>
+              </div>
+              <p className="text-xs text-[var(--admin-muted)] break-words whitespace-pre-wrap">
+                {form.watch("content") || "通知内容将展示在这里。"}
+              </p>
+            </div>
+          </div>
         </div>
 
         <div className="flex justify-end gap-3 pt-4 border-t border-[var(--admin-border)]">

@@ -10,7 +10,7 @@ import { ConfirmActionButton } from "@/components/shared/ConfirmActionButton";
 import { CopyableSecret } from "@/components/shared/CopyableSecret";
 import { DataTable, type DataTableColumn } from "@/components/shared/DataTable";
 import { DateTimeText } from "@/components/shared/DateTimeText";
-import { DetailDrawer, type DetailSection } from "@/components/shared/DetailDrawer";
+import { DetailDrawer, type DetailSectionDef } from "@/components/shared/DetailDrawer";
 import { MoneyText } from "@/components/shared/MoneyText";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SearchPanel } from "@/components/shared/SearchPanel";
@@ -111,30 +111,30 @@ export default function WithdrawPage() {
     },
   ];
 
-  const detailSections: DetailSection[] = detail ? [
+  const detailSections: DetailSectionDef<any>[] = [
     {
       title: "提现信息",
       fields: [
-        { label: "订单号", value: <span className="font-mono">{detail.withdrawNo}</span> },
-        { label: "状态", value: <StatusBadge status={detail.status} /> },
-        { label: "申请金额", value: <MoneyText value={detail.applyAmount} /> },
-        { label: "手续费", value: <MoneyText value={detail.feeAmount} /> },
-        { label: "到账金额", value: <MoneyText value={detail.actualAmount} /> },
-        { label: "网络", value: detail.network },
-        { label: "账户名", value: detail.accountName || "-" },
-        { label: "收款地址", value: <CopyableSecret value={detail.accountNo} canReveal={false} /> },
+        { label: "订单号", render: (detail) => <span className="font-mono">{detail.withdrawNo}</span> },
+        { label: "状态", render: (detail) => <StatusBadge status={detail.status} /> },
+        { label: "申请金额", render: (detail) => <MoneyText value={detail.applyAmount} /> },
+        { label: "手续费", render: (detail) => <MoneyText value={detail.feeAmount} /> },
+        { label: "到账金额", render: (detail) => <MoneyText value={detail.actualAmount} /> },
+        { label: "网络", render: (detail) => detail.network },
+        { label: "账户名", render: (detail) => detail.accountName || "-" },
+        { label: "收款地址", render: (detail) => <CopyableSecret value={detail.accountNo} canReveal={false} /> },
       ],
     },
     {
       title: "审核与打款",
       fields: [
-        { label: "审核备注", value: detail.reviewRemark || "-" },
-        { label: "审核时间", value: <DateTimeText value={detail.reviewedAt} /> },
-        { label: "打款凭证", value: detail.payProofNo || "-" },
-        { label: "打款时间", value: <DateTimeText value={detail.paidAt} /> },
+        { label: "审核备注", render: (detail) => detail.reviewRemark || "-" },
+        { label: "审核时间", render: (detail) => <DateTimeText value={detail.reviewedAt} /> },
+        { label: "打款凭证", render: (detail) => detail.payProofNo || "-" },
+        { label: "打款时间", render: (detail) => <DateTimeText value={detail.paidAt} /> },
       ],
     },
-  ] : [];
+  ];
 
   return (
     <div className="space-y-6">
@@ -209,7 +209,7 @@ export default function WithdrawPage() {
       {message ? <div className="rounded-lg border border-emerald-400/20 bg-emerald-400/10 p-4 text-sm text-emerald-200">{message}</div> : null}
       {error || actionError ? <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-200">{error ?? actionError}</div> : null}
       <DataTable columns={columns} data={page.records} rowKey={(row) => row.withdrawNo} loading={loading} emptyText="暂无提现申请。" pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
-      <DetailDrawer open={Boolean(detail)} title="提现详情" subtitle={detail?.withdrawNo} sections={detailSections} onClose={() => setDetail(null)} />
+      <DetailDrawer data={detail} open={Boolean(detail)} title="提现详情" subtitle={(data) => data.withdrawNo} sections={detailSections} onClose={() => setDetail(null)} />
     </div>
   );
 }

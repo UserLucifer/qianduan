@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SearchPanel } from "@/components/shared/SearchPanel";
 import { DataTable, type DataTableColumn } from "@/components/shared/DataTable";
-import { DetailDrawer, type DetailSection } from "@/components/shared/DetailDrawer";
+import { DetailDrawer, type DetailSectionDef } from "@/components/shared/DetailDrawer";
 import { DateTimeText } from "@/components/shared/DateTimeText";
 import { usePaginatedResource } from "@/hooks/usePaginatedResource";
 import { getAdminLogDetail, getAdminLogs } from "@/api/admin";
@@ -76,35 +76,33 @@ export default function AdminLogsPage() {
     },
   ];
 
-  const detailSections: DetailSection[] = detail
-    ? [
+  const detailSections: DetailSectionDef<any>[] = [
         {
           title: "日志信息",
           fields: [
-            { label: "日志 ID", value: detail.id },
-            { label: "管理员 ID", value: detail.adminId },
-            { label: "动作", value: detail.action },
-            { label: "IP", value: detail.ip },
+            { label: "日志 ID", render: (detail) => detail.id },
+            { label: "管理员 ID", render: (detail) => detail.adminId },
+            { label: "动作", render: (detail) => detail.action },
+            { label: "IP", render: (detail) => detail.ip },
           ],
         },
         {
           title: "业务对象",
           fields: [
-            { label: "业务类型", value: detail.targetTable },
-            { label: "目标 ID", value: detail.targetId },
-            { label: "备注", value: formatEmpty(detail.remark) },
-            { label: "时间", value: <DateTimeText value={detail.createdAt} /> },
+            { label: "业务类型", render: (detail) => detail.targetTable },
+            { label: "目标 ID", render: (detail) => detail.targetId },
+            { label: "备注", render: (detail) => formatEmpty(detail.remark) },
+            { label: "时间", render: (detail) => <DateTimeText value={detail.createdAt} /> },
           ],
         },
         {
           title: "变更内容",
           fields: [
-            { label: "变更前", value: <pre className="whitespace-pre-wrap break-all text-xs text-muted-foreground">{formatEmpty(detail.beforeValue)}</pre> },
-            { label: "变更后", value: <pre className="whitespace-pre-wrap break-all text-xs text-muted-foreground">{formatEmpty(detail.afterValue)}</pre> },
+            { label: "变更前", render: (detail) => <pre className="whitespace-pre-wrap break-all text-xs text-muted-foreground">{formatEmpty(detail.beforeValue)}</pre> },
+            { label: "变更后", render: (detail) => <pre className="whitespace-pre-wrap break-all text-xs text-muted-foreground">{formatEmpty(detail.afterValue)}</pre> },
           ],
         },
-      ]
-    : [];
+      ];
 
   return (
     <div className="space-y-6">
@@ -143,7 +141,7 @@ export default function AdminLogsPage() {
         </div>
       </SearchPanel>
       <DataTable columns={columns} data={page.records} rowKey={(row) => row.id} loading={loading} emptyText="暂无操作日志" pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
-      <DetailDrawer open={detailOpen} title="操作日志详情" subtitle={detail ? `#${detail.id}` : undefined} sections={detailSections} onClose={() => setDetailOpen(false)} />
+      <DetailDrawer data={detail} open={detailOpen} title="操作日志详情" subtitle={(data) => data ? `#${data.id}` : undefined} sections={detailSections} onClose={() => setDetailOpen(false)} />
     </div>
   );
 }

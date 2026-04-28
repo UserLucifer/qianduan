@@ -17,8 +17,6 @@ export interface PageQuery {
   pageSize?: number;
 }
 
-export type ApiMapValue = string | number | boolean | null | undefined | ApiMapValue[];
-export type ApiMapObject = Record<string, any>; // Use any for more flexibility in mapped objects
 
 export interface UserProfile {
   id: number;
@@ -249,29 +247,34 @@ export interface RentalOrderSummaryResponse {
 }
 
 export interface RentalOrderDetailResponse extends RentalOrderSummaryResponse {
-  productId: number;
-  aiModelId: number;
-  cycleRuleId: number;
-  productCodeSnapshot: string;
-  regionNameSnapshot: string;
-  gpuModelSnapshot: string;
-  gpuMemorySnapshotGb: number;
-  gpuPowerTopsSnapshot: number;
-  gpuRentPriceSnapshot: number;
-  tokenOutputPerDaySnapshot: number;
-  aiVendorNameSnapshot: string;
-  monthlyTokenConsumptionSnapshot: number;
-  tokenUnitPriceSnapshot: number;
-  deployFeeSnapshot: number;
-  yieldMultiplierSnapshot: number;
-  earlyPenaltyRateSnapshot: number;
-  currency: string;
-  paidAmount: number;
+  productId?: number;
+  userId?: number;
+  aiModelId?: number;
+  cycleRuleId?: number;
+  productCodeSnapshot?: string;
+  regionNameSnapshot?: string;
+  gpuModelSnapshot?: string;
+  gpuMemorySnapshotGb?: number;
+  gpuPowerTopsSnapshot?: number;
+  gpuRentPriceSnapshot?: number;
+  tokenOutputPerDaySnapshot?: number;
+  aiVendorNameSnapshot?: string;
+  monthlyTokenConsumptionSnapshot?: number;
+  tokenUnitPriceSnapshot?: number;
+  deployFeeSnapshot?: number;
+  yieldMultiplierSnapshot?: number;
+  earlyPenaltyRateSnapshot?: number;
+  currency?: string;
+  paidAmount?: number;
   machinePayTxNo?: string;
   expiredAt?: string;
   canceledAt?: string;
   finishedAt?: string;
-  apiCredential?: ApiCredentialResponse;
+  apiCredential?: any;
+  credentialNo?: string;
+  tokenStatus?: string;
+  deployOrderStatus?: string;
+  apiBaseUrl?: string;
 }
 
 export interface RentalOrderQueryRequest extends PageQuery {
@@ -583,13 +586,24 @@ export interface AdminDashboardUsers {
   disabledUserCount: number;
 }
 
-export interface AdminUserRow extends ApiMapObject {
+export interface AdminUserRow {
   id?: number;
-  userId?: string | number | null;
-  email?: string | null;
-  nickname?: string | null;
-  status?: number | null;
-  createdAt?: string | null;
+  userId?: string;
+  email?: string;
+  nickname?: string;
+  status?: number;
+  walletNo?: string;
+  availableBalance?: number;
+  frozenBalance?: number;
+  totalProfit?: number;
+  totalCommission?: number;
+  orderCount?: number;
+  createdAt?: string;
+  updatedAt?: string;
+  walletData?: any;
+  teamData?: any;
+  orderData?: any;
+  teamCount?: number;
 }
 
 export interface AdminUserQuery extends PageQuery {
@@ -649,14 +663,22 @@ export interface AdminApiCredentialQuery extends PageQuery {
   end_time?: string;
 }
 
-export interface AdminApiCredentialRow extends ApiMapObject {
-  credentialNo?: string | null;
-  userId?: number | null;
-  apiName?: string | null;
-  apiBaseUrl?: string | null;
-  tokenMasked?: string | null;
-  tokenStatus?: string | null;
-  generatedAt?: string | null;
+export interface AdminApiCredentialRow {
+  id?: number;
+  credentialNo?: string;
+  orderNo?: string;
+  userId?: number;
+  apiName?: string;
+  apiBaseUrl?: string;
+  tokenMasked?: string;
+  tokenStatus?: string;
+  deployOrderStatus?: string;
+  deployFeeSnapshot?: number;
+  modelNameSnapshot?: string;
+  generatedAt?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  expiredAt?: string;
 }
 
 export interface AdminApiDeployOrderQuery extends PageQuery {
@@ -812,6 +834,19 @@ export interface SchedulerRunResult {
   errorMessage?: string;
 }
 
+export interface SchedulerLogResponse {
+  id: number;
+  taskName: string;
+  status: string;
+  totalCount: number;
+  successCount: number;
+  failCount: number;
+  errorMessage?: string;
+  startedAt: string;
+  finishedAt?: string;
+  createdAt: string;
+}
+
 export interface BlogCategory {
   id: number;
   categoryName: string;
@@ -826,6 +861,24 @@ export interface BlogTag {
   tagName: string;
   sortNo?: number;
   status: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface AdminBlogPost {
+  id?: number;
+  categoryId?: number;
+  categoryName?: string;
+  title?: string;
+  summary?: string;
+  coverImageUrl?: string;
+  contentMarkdown?: string;
+  publishStatus?: number;
+  status?: number;
+  isTop?: number;
+  sortNo?: number;
+  tagIds?: number[];
+  tagNames?: string[];
   createdAt?: string;
   updatedAt?: string;
 }

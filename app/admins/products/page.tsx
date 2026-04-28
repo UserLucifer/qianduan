@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SearchPanel } from "@/components/shared/SearchPanel";
 import { DataTable, type DataTableColumn } from "@/components/shared/DataTable";
-import { DetailDrawer, type DetailSection } from "@/components/shared/DetailDrawer";
+import { DetailDrawer, type DetailSectionDef } from "@/components/shared/DetailDrawer";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import { MoneyText } from "@/components/shared/MoneyText";
 import { DateTimeText } from "@/components/shared/DateTimeText";
@@ -149,54 +149,52 @@ export default function AdminProductsPage() {
     },
   ];
 
-  const detailSections: DetailSection[] = detail
-    ? [
+  const detailSections: DetailSectionDef<any>[] = [
       {
         title: "基础信息",
         fields: [
-          { label: "产品编码", value: <CopyableSecret value={detail.productCode} maskedValue={detail.productCode} canReveal={false} /> },
-          { label: "产品名称", value: detail.productName },
-          { label: "机器编码", value: detail.machineCode },
-          { label: "机器别名", value: detail.machineAlias },
-          { label: "状态", value: <StatusBadge status={detail.status} /> },
-          { label: "可租赁至", value: <DateTimeText value={detail.rentableUntil} /> },
+          { label: "产品编码", render: (detail) => <CopyableSecret value={detail.productCode} maskedValue={detail.productCode} canReveal={false} /> },
+          { label: "产品名称", render: (detail) => detail.productName },
+          { label: "机器编码", render: (detail) => detail.machineCode },
+          { label: "机器别名", render: (detail) => detail.machineAlias },
+          { label: "状态", render: (detail) => <StatusBadge status={detail.status} /> },
+          { label: "可租赁至", render: (detail) => <DateTimeText value={detail.rentableUntil} /> },
         ],
       },
       {
         title: "GPU 规格",
         fields: [
-          { label: "GPU 型号", value: (detail as any).gpuModelName || (detail as any).gpu_model_name },
-          { label: "显存", value: `${formatNumber((detail as any).gpuMemoryGb ?? (detail as any).gpu_memory_gb)} GB` },
-          { label: "算力", value: `${formatNumber((detail as any).gpuPowerTops ?? (detail as any).gpu_power_tops)} TOPS` },
-          { label: "CUDA", value: (detail as any).cudaVersion || (detail as any).cuda_version },
-          { label: "驱动版本", value: (detail as any).driverVersion || (detail as any).driver_version },
-          { label: "缓存优化", value: ((detail as any).hasCacheOptimization ?? (detail as any).has_cache_optimization) === 1 ? "支持" : "不支持" },
+          { label: "GPU 型号", render: (detail) => (detail as any).gpuModelName || (detail as any).gpu_model_name },
+          { label: "显存", render: (detail) => `${formatNumber((detail as any).gpuMemoryGb ?? (detail as any).gpu_memory_gb)} GB` },
+          { label: "算力", render: (detail) => `${formatNumber((detail as any).gpuPowerTops ?? (detail as any).gpu_power_tops)} TOPS` },
+          { label: "CUDA", render: (detail) => (detail as any).cudaVersion || (detail as any).cuda_version },
+          { label: "驱动版本", render: (detail) => (detail as any).driverVersion || (detail as any).driver_version },
+          { label: "缓存优化", render: (detail) => ((detail as any).hasCacheOptimization ?? (detail as any).has_cache_optimization) === 1 ? "支持" : "不支持" },
         ],
       },
       {
         title: "租赁与库存",
         fields: [
-          { label: "地区", value: detail.regionName },
-          { label: "租赁价格", value: <MoneyText value={detail.rentPrice} /> },
-          { label: "总库存", value: formatNumber(detail.totalStock) },
-          { label: "可用库存", value: formatNumber(detail.availableStock) },
-          { label: "已租库存", value: formatNumber(detail.rentedStock) },
-          { label: "日 Token 产出", value: formatNumber(detail.tokenOutputPerDay) },
+          { label: "地区", render: (detail) => detail.regionName },
+          { label: "租赁价格", render: (detail) => <MoneyText value={detail.rentPrice} /> },
+          { label: "总库存", render: (detail) => formatNumber(detail.totalStock) },
+          { label: "可用库存", render: (detail) => formatNumber(detail.availableStock) },
+          { label: "已租库存", render: (detail) => formatNumber(detail.rentedStock) },
+          { label: "日 Token 产出", render: (detail) => formatNumber(detail.tokenOutputPerDay) },
         ],
       },
       {
         title: "整机规格",
         fields: [
-          { label: "CPU", value: detail.cpuModel },
-          { label: "CPU 核数", value: formatNumber(detail.cpuCores) },
-          { label: "内存", value: `${formatNumber(detail.memoryGb)} GB` },
-          { label: "系统盘", value: `${formatNumber(detail.systemDiskGb)} GB` },
-          { label: "数据盘", value: `${formatNumber(detail.dataDiskGb)} GB` },
-          { label: "最大扩展盘", value: `${formatNumber(detail.maxExpandDiskGb)} GB` },
+          { label: "CPU", render: (detail) => detail.cpuModel },
+          { label: "CPU 核数", render: (detail) => formatNumber(detail.cpuCores) },
+          { label: "内存", render: (detail) => `${formatNumber(detail.memoryGb)} GB` },
+          { label: "系统盘", render: (detail) => `${formatNumber(detail.systemDiskGb)} GB` },
+          { label: "数据盘", render: (detail) => `${formatNumber(detail.dataDiskGb)} GB` },
+          { label: "最大扩展盘", render: (detail) => `${formatNumber(detail.maxExpandDiskGb)} GB` },
         ],
       },
-    ]
-    : [];
+    ];
 
   return (
     <div className="space-y-6">
@@ -250,7 +248,7 @@ export default function AdminProductsPage() {
         </div>
       </SearchPanel>
       <DataTable columns={columns} data={page.records} rowKey={(row) => row.productCode} loading={loading} emptyText="暂无算力产品" pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
-      <DetailDrawer open={detailOpen} title="算力产品详情" subtitle={detail?.productCode} sections={detailSections} onClose={() => setDetailOpen(false)} />
+      <DetailDrawer data={detail} open={detailOpen} title="算力产品详情" subtitle={(data) => data.productCode} sections={detailSections} onClose={() => setDetailOpen(false)} />
 
       <Dialog open={formOpen} onOpenChange={setFormOpen}>
         <DialogContent className="max-w-xl border-[var(--admin-border)] bg-[var(--admin-panel-strong)] text-[var(--admin-text)] flex flex-col items-stretch">

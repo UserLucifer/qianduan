@@ -129,7 +129,7 @@ export default function SettingsPage() {
                 <KeyRound className="h-4 w-4 text-zinc-500" />
                 本地登录 Token
               </div>
-              <CopyableSecret value={typeof window === "undefined" ? "" : localStorage.getItem("accessToken") ?? ""} />
+              <CopyableSecret value={typeof window === "undefined" ? "" : localStorage.getItem("user_access_token") ?? ""} />
             </div>
             <div className="flex items-center justify-between rounded-lg border border-white/10 bg-white/[0.025] p-4">
               <div>

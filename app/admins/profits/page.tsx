@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SearchPanel } from "@/components/shared/SearchPanel";
 import { DataTable, type DataTableColumn } from "@/components/shared/DataTable";
-import { DetailDrawer, type DetailSection } from "@/components/shared/DetailDrawer";
+import { DetailDrawer, type DetailSectionDef } from "@/components/shared/DetailDrawer";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import { MoneyText } from "@/components/shared/MoneyText";
 import { DateTimeText } from "@/components/shared/DateTimeText";
@@ -94,37 +94,35 @@ export default function AdminProfitsPage() {
     },
   ];
 
-  const detailSections: DetailSection[] = detail
-    ? [
+  const detailSections: DetailSectionDef<any>[] = [
         {
           title: "收益信息",
           fields: [
-            { label: "收益编号", value: <CopyableSecret value={detail.profitNo} maskedValue={detail.profitNo} canReveal={false} /> },
-            { label: "订单号", value: <CopyableSecret value={detail.orderNo} maskedValue={detail.orderNo} canReveal={false} /> },
-            { label: "状态", value: <StatusBadge status={detail.status} /> },
-            { label: "收益日期", value: formatDate(detail.profitDate) },
+            { label: "收益编号", render: (detail) => <CopyableSecret value={detail.profitNo} maskedValue={detail.profitNo} canReveal={false} /> },
+            { label: "订单号", render: (detail) => <CopyableSecret value={detail.orderNo} maskedValue={detail.orderNo} canReveal={false} /> },
+            { label: "状态", render: (detail) => <StatusBadge status={detail.status} /> },
+            { label: "收益日期", render: (detail) => formatDate(detail.profitDate) },
           ],
         },
         {
           title: "计算快照",
           fields: [
-            { label: "基础收益", value: <MoneyText value={detail.baseProfitAmount} /> },
-            { label: "最终收益", value: <MoneyText value={detail.finalProfitAmount} /> },
-            { label: "Token 单价", value: formatEmpty(detail.tokenPriceSnapshot) },
-            { label: "收益倍率", value: formatEmpty(detail.yieldMultiplierSnapshot) },
+            { label: "基础收益", render: (detail) => <MoneyText value={detail.baseProfitAmount} /> },
+            { label: "最终收益", render: (detail) => <MoneyText value={detail.finalProfitAmount} /> },
+            { label: "Token 单价", render: (detail) => formatEmpty(detail.tokenPriceSnapshot) },
+            { label: "收益倍率", render: (detail) => formatEmpty(detail.yieldMultiplierSnapshot) },
           ],
         },
         {
           title: "关联信息",
           fields: [
-            { label: "产品", value: detail.productNameSnapshot },
-            { label: "AI 模型", value: detail.aiModelNameSnapshot },
-            { label: "钱包流水", value: <CopyableSecret value={detail.walletTxNo} maskedValue={detail.walletTxNo ?? "-"} canReveal={false} /> },
-            { label: "结算时间", value: <DateTimeText value={detail.settledAt} /> },
+            { label: "产品", render: (detail) => detail.productNameSnapshot },
+            { label: "AI 模型", render: (detail) => detail.aiModelNameSnapshot },
+            { label: "钱包流水", render: (detail) => <CopyableSecret value={detail.walletTxNo} maskedValue={detail.walletTxNo ?? "-"} canReveal={false} /> },
+            { label: "结算时间", render: (detail) => <DateTimeText value={detail.settledAt} /> },
           ],
         },
-      ]
-    : [];
+      ];
 
   return (
     <div className="space-y-6">
@@ -134,7 +132,7 @@ export default function AdminProfitsPage() {
           {actionError ?? error}
         </div>
       ) : null}
-      <Card className="border-white/10 bg-[#18181b]/80 text-zinc-100">
+      <Card className="border-[var(--admin-border)] bg-[var(--admin-panel-strong)] text-[var(--admin-text)]">
         <CardHeader>
           <CardTitle className="text-sm font-medium">收益分布</CardTitle>
         </CardHeader>
@@ -193,7 +191,7 @@ export default function AdminProfitsPage() {
         </div>
       </SearchPanel>
       <DataTable columns={columns} data={page.records} rowKey={(row) => row.profitNo} loading={loading} emptyText="暂无收益记录" pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
-      <DetailDrawer open={detailOpen} title="收益记录详情" subtitle={detail?.profitNo} sections={detailSections} onClose={() => setDetailOpen(false)} />
+      <DetailDrawer data={detail} open={detailOpen} title="收益记录详情" subtitle={(data) => data.profitNo} sections={detailSections} onClose={() => setDetailOpen(false)} />
     </div>
   );
 }

@@ -10,7 +10,7 @@ import { ConfirmActionButton } from "@/components/shared/ConfirmActionButton";
 import { CopyableSecret } from "@/components/shared/CopyableSecret";
 import { DataTable, type DataTableColumn } from "@/components/shared/DataTable";
 import { DateTimeText } from "@/components/shared/DateTimeText";
-import { DetailDrawer, type DetailSection } from "@/components/shared/DetailDrawer";
+import { DetailDrawer, type DetailSectionDef } from "@/components/shared/DetailDrawer";
 import { MoneyText } from "@/components/shared/MoneyText";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SearchPanel } from "@/components/shared/SearchPanel";
@@ -123,28 +123,28 @@ export default function RechargePage() {
     },
   ];
 
-  const detailSections: DetailSection[] = detail ? [
+  const detailSections: DetailSectionDef<any>[] = [
     {
       title: "充值信息",
       fields: [
-        { label: "订单号", value: <span className="font-mono">{detail.rechargeNo}</span> },
-        { label: "金额", value: <MoneyText value={detail.applyAmount} /> },
-        { label: "实际到账", value: <MoneyText value={detail.actualAmount} /> },
-        { label: "状态", value: <StatusBadge status={detail.status} /> },
-        { label: "交易哈希", value: <CopyableSecret value={detail.externalTxNo} canReveal={false} /> },
-        { label: "凭证 URL", value: <CopyableSecret value={detail.paymentProofUrl} canReveal={false} /> },
+        { label: "订单号", render: (detail) => <span className="font-mono">{detail.rechargeNo}</span> },
+        { label: "金额", render: (detail) => <MoneyText value={detail.applyAmount} /> },
+        { label: "实际到账", render: (detail) => <MoneyText value={detail.actualAmount} /> },
+        { label: "状态", render: (detail) => <StatusBadge status={detail.status} /> },
+        { label: "交易哈希", render: (detail) => <CopyableSecret value={detail.externalTxNo} canReveal={false} /> },
+        { label: "凭证 URL", render: (detail) => <CopyableSecret value={detail.paymentProofUrl} canReveal={false} /> },
       ],
     },
     {
       title: "审核信息",
       fields: [
-        { label: "审核备注", value: detail.reviewRemark || "-" },
-        { label: "审核时间", value: <DateTimeText value={detail.reviewedAt} /> },
-        { label: "入账时间", value: <DateTimeText value={detail.creditedAt} /> },
-        { label: "钱包流水", value: detail.walletTxNo || "-" },
+        { label: "审核备注", render: (detail) => detail.reviewRemark || "-" },
+        { label: "审核时间", render: (detail) => <DateTimeText value={detail.reviewedAt} /> },
+        { label: "入账时间", render: (detail) => <DateTimeText value={detail.creditedAt} /> },
+        { label: "钱包流水", render: (detail) => detail.walletTxNo || "-" },
       ],
     },
-  ] : [];
+  ];
 
   return (
     <div className="space-y-6">
@@ -230,7 +230,7 @@ export default function RechargePage() {
       {message ? <div className="rounded-lg border border-emerald-400/20 bg-emerald-400/10 p-4 text-sm text-emerald-200">{message}</div> : null}
       {error || actionError ? <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-200">{error ?? actionError}</div> : null}
       <DataTable columns={columns} data={page.records} rowKey={(row) => row.rechargeNo} loading={loading} emptyText="暂无充值订单。" pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
-      <DetailDrawer open={Boolean(detail)} title="充值订单详情" subtitle={detail?.rechargeNo} sections={detailSections} onClose={() => setDetail(null)} />
+      <DetailDrawer data={detail} open={Boolean(detail)} title="充值订单详情" subtitle={(data) => data.rechargeNo} sections={detailSections} onClose={() => setDetail(null)} />
     </div>
   );
 }

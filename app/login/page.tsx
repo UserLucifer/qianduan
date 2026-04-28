@@ -8,7 +8,7 @@ import LogoCarousel from "../components/LogoCarousel";
 import Image from "next/image";
 import "./login.css";
 import { loginWithPassword } from "@/api/auth";
-import { toErrorMessage } from "@/lib/format";
+import { toErrorMessage, translateErrorMessage } from "@/lib/format";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -27,10 +27,10 @@ export default function LoginPage() {
     try {
       const res = await loginWithPassword({ email, password });
       if (res && (res.code === 200 || res.code === 0) && res.data) {
-        localStorage.setItem("accessToken", res.data.accessToken);
+        localStorage.setItem("user_access_token", res.data.accessToken);
         router.push("/dashboard");
       } else {
-        setError(res?.message || "Login failed. Please check your credentials.");
+        setError(translateErrorMessage(res?.message || "Login failed. Please check your credentials."));
       }
     } catch (err) {
       setError(toErrorMessage(err));
@@ -41,7 +41,7 @@ export default function LoginPage() {
 
   // Redirect if already logged in
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
+    const token = localStorage.getItem("user_access_token");
     if (token) {
       router.push("/dashboard");
     }
