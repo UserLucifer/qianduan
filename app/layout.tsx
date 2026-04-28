@@ -18,9 +18,8 @@ const themeScript = `
     const storageKey = "theme";
     const storedTheme = window.localStorage.getItem(storageKey);
     const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const theme = storedTheme === "light" || storedTheme === "dark"
       ? storedTheme
-      : (systemPrefersDark ? "dark" : "light");
+      : "light";
 
     document.documentElement.dataset.theme = theme;
     document.documentElement.style.colorScheme = theme;

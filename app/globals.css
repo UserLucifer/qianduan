@@ -14,8 +14,8 @@
     --ui-primary-foreground: 0 0% 98%;
     --ui-secondary: 240 4.8% 95.9%;
     --ui-secondary-foreground: 240 5.9% 10%;
-    --ui-muted: 240 4.8% 95.9%;
-    --ui-muted-foreground: 240 3.8% 46.1%;
+    --ui-muted: 221 5% 96%;
+    --ui-muted-foreground: 221 5% 41%;
     --ui-accent: 240 4.8% 95.9%;
     --ui-accent-foreground: 240 5.9% 10%;
     --ui-destructive: 0 84.2% 60.2%;
@@ -37,8 +37,8 @@
     --ui-primary-foreground: 210 40% 98%;
     --ui-secondary: 240 3.7% 15.9%;
     --ui-secondary-foreground: 0 0% 98%;
-    --ui-muted: 240 3.7% 15.9%;
-    --ui-muted-foreground: 240 5% 64.9%;
+    --ui-muted: 220 7% 16%;
+    --ui-muted-foreground: 220 7% 65%;
     --ui-accent: 240 3.7% 15.9%;
     --ui-accent-foreground: 0 0% 98%;
     --ui-destructive: 0 62.8% 30.6%;

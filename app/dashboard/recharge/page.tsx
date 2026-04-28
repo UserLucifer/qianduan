@@ -110,7 +110,7 @@ export default function RechargePage() {
       className: "text-right",
       render: (row) => (
         <div className="flex justify-end gap-2">
-          <Button variant="ghost" size="sm" className="text-slate-600 hover:bg-gray-100 dark:text-zinc-300 dark:hover:bg-white/5" onClick={() => void openDetail(row.rechargeNo)}>
+          <Button variant="ghost" size="sm" className="text-slate-600 hover:bg-gray-100 dark:text-muted-foreground dark:hover:bg-white/5" onClick={() => void openDetail(row.rechargeNo)}>
             <Eye className="h-3.5 w-3.5" />详情
           </Button>
           {row.status === "SUBMITTED" ? (

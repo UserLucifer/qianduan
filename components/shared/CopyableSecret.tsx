@@ -31,7 +31,7 @@ export function CopyableSecret({
   return (
     <span
       className={cn(
-        "inline-flex max-w-full items-center gap-1 rounded-md border border-white/10 bg-white/[0.03] px-2 py-1 font-mono text-xs text-zinc-300",
+        "inline-flex max-w-full items-center gap-1 rounded-md border border-white/10 bg-white/[0.03] px-2 py-1 font-mono text-xs text-muted-foreground",
         className,
       )}
     >

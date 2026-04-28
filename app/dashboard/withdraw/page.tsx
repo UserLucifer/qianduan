@@ -98,7 +98,7 @@ export default function WithdrawPage() {
       className: "text-right",
       render: (row) => (
         <div className="flex justify-end gap-2">
-          <Button variant="ghost" size="sm" className="text-zinc-300 hover:bg-white/5" onClick={() => void openDetail(row.withdrawNo)}>
+          <Button variant="ghost" size="sm" className="text-muted-foreground hover:bg-white/5" onClick={() => void openDetail(row.withdrawNo)}>
             <Eye className="h-3.5 w-3.5" />详情
           </Button>
           {row.status === "PENDING_REVIEW" ? (

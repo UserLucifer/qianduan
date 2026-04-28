@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useState } from "react";
-import { Eye, Power, PowerOff, Plus } from "lucide-react";
+import { useCallback, useState, useEffect } from "react";
+import { Edit2, Eye, Power, PowerOff, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,14 +19,19 @@ import { usePaginatedResource } from "@/hooks/usePaginatedResource";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { disableAdminProduct, enableAdminProduct, getAdminProductDetail, getAdminProducts } from "@/api/admin";
-import type { AdminCatalogQuery, ProductResponse } from "@/api/types";
+import {
+  disableAdminProduct,
+  enableAdminProduct,
+  getAdminProductDetail,
+  getAdminProducts,
+  getAdminRegions,
+  getAdminGpuModels,
+} from "@/api/admin";
+import type { AdminCatalogQuery, ProductResponse, RegionResponse, GpuModelResponse } from "@/api/types";
 import { formatEmpty, formatNumber, toErrorMessage } from "@/lib/format";
 import { ProductForm } from "@/components/admin/CatalogForms";
-import { Edit2 } from "lucide-react";
 
 interface ProductFilters {
   productCode: string;
@@ -35,7 +40,7 @@ interface ProductFilters {
   gpuModelId: string;
 }
 
-const initialFilters: ProductFilters = { productCode: "", status: "", regionId: "", gpuModelId: "" };
+const initialFilters: ProductFilters = { productCode: "", status: " ", regionId: "", gpuModelId: "" };
 const initialQuery: AdminCatalogQuery = { pageNo: 1, pageSize: 10 };
 
 export default function AdminProductsPage() {
@@ -46,14 +51,33 @@ export default function AdminProductsPage() {
   const [editingRow, setEditingRow] = useState<ProductResponse | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
 
+  const [regions, setRegions] = useState<RegionResponse[]>([]);
+  const [gpuModels, setGpuModels] = useState<GpuModelResponse[]>([]);
+
   const loader = useCallback(async (params: AdminCatalogQuery) => (await getAdminProducts(params)).data, []);
   const { page, loading, error, updateParams, changePage, reload } = usePaginatedResource(loader, initialQuery);
+
+  useEffect(() => {
+    const fetchCatalogs = async () => {
+      try {
+        const [regRes, gpuRes] = await Promise.all([
+          getAdminRegions({ pageSize: 1000 }),
+          getAdminGpuModels({ pageSize: 1000 }),
+        ]);
+        setRegions(regRes.data.records);
+        setGpuModels(gpuRes.data.records);
+      } catch (err) {
+        console.error("Failed to fetch catalogs", err);
+      }
+    };
+    fetchCatalogs();
+  }, []);
 
   const buildQuery = (nextFilters: ProductFilters): AdminCatalogQuery => ({
     pageNo: 1,
     pageSize: page.pageSize,
     product_code: nextFilters.productCode || undefined,
-    status: nextFilters.status ? Number(nextFilters.status) : undefined,
+    status: nextFilters.status?.trim() ? Number(nextFilters.status) : undefined,
     region_id: nextFilters.regionId ? Number(nextFilters.regionId) : undefined,
     gpu_model_id: nextFilters.gpuModelId ? Number(nextFilters.gpuModelId) : undefined,
   });
@@ -90,11 +114,11 @@ export default function AdminProductsPage() {
 
   const columns: DataTableColumn<ProductResponse>[] = [
     { key: "productCode", title: "产品编码", render: (row) => <CopyableSecret value={row.productCode} maskedValue={row.productCode} canReveal={false} /> },
-    { key: "productName", title: "算力产品", render: (row) => formatEmpty(row.productName) },
-    { key: "gpuModelName", title: "GPU 型号", render: (row) => formatEmpty(row.gpuModelName) },
-    { key: "regionName", title: "地区", render: (row) => formatEmpty(row.regionName) },
+    { key: "productName", title: "算力产品", render: (row: any) => formatEmpty(row.productName || row.product_name) },
+    { key: "gpuModelName", title: "GPU 型号", render: (row: any) => formatEmpty(row.gpuModelName || row.gpu_model_name) },
+    { key: "regionName", title: "地区", render: (row: any) => formatEmpty(row.regionName || row.region_name) },
     { key: "rentPrice", title: "租赁价格", render: (row) => <MoneyText value={row.rentPrice} /> },
-    { key: "availableStock", title: "可用库存", render: (row) => `${formatNumber(row.availableStock)} / ${formatNumber(row.totalStock)}` },
+    { key: "availableStock", title: "可用库存", render: (row: any) => `${formatNumber(row.availableStock ?? row.available_stock)} / ${formatNumber(row.totalStock ?? row.total_stock)}` },
     { key: "status", title: "状态", render: (row) => <StatusBadge status={row.status} /> },
     {
       key: "actions",
@@ -127,51 +151,51 @@ export default function AdminProductsPage() {
 
   const detailSections: DetailSection[] = detail
     ? [
-        {
-          title: "基础信息",
-          fields: [
-            { label: "产品编码", value: <CopyableSecret value={detail.productCode} maskedValue={detail.productCode} canReveal={false} /> },
-            { label: "产品名称", value: detail.productName },
-            { label: "机器编码", value: detail.machineCode },
-            { label: "机器别名", value: detail.machineAlias },
-            { label: "状态", value: <StatusBadge status={detail.status} /> },
-            { label: "可租赁至", value: <DateTimeText value={detail.rentableUntil} /> },
-          ],
-        },
-        {
-          title: "GPU 规格",
-          fields: [
-            { label: "GPU 型号", value: detail.gpuModelName },
-            { label: "显存", value: `${formatNumber(detail.gpuMemoryGb)} GB` },
-            { label: "算力", value: `${formatNumber(detail.gpuPowerTops)} TOPS` },
-            { label: "CUDA", value: detail.cudaVersion },
-            { label: "驱动版本", value: detail.driverVersion },
-            { label: "缓存优化", value: detail.hasCacheOptimization === 1 ? "支持" : "不支持" },
-          ],
-        },
-        {
-          title: "租赁与库存",
-          fields: [
-            { label: "地区", value: detail.regionName },
-            { label: "租赁价格", value: <MoneyText value={detail.rentPrice} /> },
-            { label: "总库存", value: formatNumber(detail.totalStock) },
-            { label: "可用库存", value: formatNumber(detail.availableStock) },
-            { label: "已租库存", value: formatNumber(detail.rentedStock) },
-            { label: "日 Token 产出", value: formatNumber(detail.tokenOutputPerDay) },
-          ],
-        },
-        {
-          title: "整机规格",
-          fields: [
-            { label: "CPU", value: detail.cpuModel },
-            { label: "CPU 核数", value: formatNumber(detail.cpuCores) },
-            { label: "内存", value: `${formatNumber(detail.memoryGb)} GB` },
-            { label: "系统盘", value: `${formatNumber(detail.systemDiskGb)} GB` },
-            { label: "数据盘", value: `${formatNumber(detail.dataDiskGb)} GB` },
-            { label: "最大扩展盘", value: `${formatNumber(detail.maxExpandDiskGb)} GB` },
-          ],
-        },
-      ]
+      {
+        title: "基础信息",
+        fields: [
+          { label: "产品编码", value: <CopyableSecret value={detail.productCode} maskedValue={detail.productCode} canReveal={false} /> },
+          { label: "产品名称", value: detail.productName },
+          { label: "机器编码", value: detail.machineCode },
+          { label: "机器别名", value: detail.machineAlias },
+          { label: "状态", value: <StatusBadge status={detail.status} /> },
+          { label: "可租赁至", value: <DateTimeText value={detail.rentableUntil} /> },
+        ],
+      },
+      {
+        title: "GPU 规格",
+        fields: [
+          { label: "GPU 型号", value: (detail as any).gpuModelName || (detail as any).gpu_model_name },
+          { label: "显存", value: `${formatNumber((detail as any).gpuMemoryGb ?? (detail as any).gpu_memory_gb)} GB` },
+          { label: "算力", value: `${formatNumber((detail as any).gpuPowerTops ?? (detail as any).gpu_power_tops)} TOPS` },
+          { label: "CUDA", value: (detail as any).cudaVersion || (detail as any).cuda_version },
+          { label: "驱动版本", value: (detail as any).driverVersion || (detail as any).driver_version },
+          { label: "缓存优化", value: ((detail as any).hasCacheOptimization ?? (detail as any).has_cache_optimization) === 1 ? "支持" : "不支持" },
+        ],
+      },
+      {
+        title: "租赁与库存",
+        fields: [
+          { label: "地区", value: detail.regionName },
+          { label: "租赁价格", value: <MoneyText value={detail.rentPrice} /> },
+          { label: "总库存", value: formatNumber(detail.totalStock) },
+          { label: "可用库存", value: formatNumber(detail.availableStock) },
+          { label: "已租库存", value: formatNumber(detail.rentedStock) },
+          { label: "日 Token 产出", value: formatNumber(detail.tokenOutputPerDay) },
+        ],
+      },
+      {
+        title: "整机规格",
+        fields: [
+          { label: "CPU", value: detail.cpuModel },
+          { label: "CPU 核数", value: formatNumber(detail.cpuCores) },
+          { label: "内存", value: `${formatNumber(detail.memoryGb)} GB` },
+          { label: "系统盘", value: `${formatNumber(detail.systemDiskGb)} GB` },
+          { label: "数据盘", value: `${formatNumber(detail.dataDiskGb)} GB` },
+          { label: "最大扩展盘", value: `${formatNumber(detail.maxExpandDiskGb)} GB` },
+        ],
+      },
+    ]
     : [];
 
   return (
@@ -229,12 +253,12 @@ export default function AdminProductsPage() {
       <DetailDrawer open={detailOpen} title="算力产品详情" subtitle={detail?.productCode} sections={detailSections} onClose={() => setDetailOpen(false)} />
 
       <Dialog open={formOpen} onOpenChange={setFormOpen}>
-        <DialogContent className="max-w-2xl border-[var(--admin-border)] bg-[var(--admin-panel-strong)] text-[var(--admin-text)]">
-          <DialogHeader>
-            <DialogTitle>{editingRow ? "编辑算力产品" : "新增算力产品"}</DialogTitle>
-          </DialogHeader>
+        <DialogContent className="max-w-xl border-[var(--admin-border)] bg-[var(--admin-panel-strong)] text-[var(--admin-text)] flex flex-col items-stretch">
+          <DialogTitle className="sr-only">编辑算力产品</DialogTitle>
           <ProductForm
             initialData={editingRow}
+            regions={regions}
+            gpuModels={gpuModels}
             onSuccess={() => { setFormOpen(false); reload(); }}
             onCancel={() => setFormOpen(false)}
           />

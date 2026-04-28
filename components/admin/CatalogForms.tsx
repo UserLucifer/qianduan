@@ -19,6 +19,7 @@ import { Switch } from "@/components/ui/switch";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toErrorMessage } from "@/lib/format";
+import type { RegionResponse, GpuModelResponse } from "@/api/types";
 
 // --- Schemas ---
 
@@ -94,7 +95,12 @@ interface BaseFormProps<T> {
   onCancel: () => void;
 }
 
-export function ProductForm({ initialData, onSuccess, onCancel }: BaseFormProps<any>) {
+interface ProductFormProps extends BaseFormProps<any> {
+  regions: RegionResponse[];
+  gpuModels: GpuModelResponse[];
+}
+
+export function ProductForm({ initialData, regions, gpuModels, onSuccess, onCancel }: ProductFormProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -110,23 +116,23 @@ export function ProductForm({ initialData, onSuccess, onCancel }: BaseFormProps<
       machineAlias: "",
       regionId: 0,
       gpuModelId: 0,
-      gpuMemoryGb: 0,
+      gpuMemoryGb: 24,
       gpuPowerTops: 0,
       rentPrice: 0,
-      totalStock: 0,
-      availableStock: 0,
+      totalStock: 1,
+      availableStock: 1,
       rentedStock: 0,
       cpuModel: "",
-      cpuCores: 1,
-      memoryGb: 1,
-      systemDiskGb: 1,
-      dataDiskGb: 1,
+      cpuCores: 8,
+      memoryGb: 32,
+      systemDiskGb: 50,
+      dataDiskGb: 100,
       maxExpandDiskGb: 0,
-      driverVersion: "",
-      cudaVersion: "",
+      driverVersion: "535.104.05",
+      cudaVersion: "12.2",
       hasCacheOptimization: false,
       status: 1,
-      rentableUntil: new Date().toISOString(),
+      rentableUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
       tokenOutputPerMinute: 0,
       tokenOutputPerDay: 0,
     },
@@ -152,69 +158,248 @@ export function ProductForm({ initialData, onSuccess, onCancel }: BaseFormProps<
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        {error && <div className="text-sm font-medium text-destructive">{error}</div>}
-        <div className="grid grid-cols-2 gap-4">
-          <FormField control={form.control} name="productCode" render={({ field }: { field: any }) => (
-            <FormItem>
-              <FormLabel>产品编码</FormLabel>
-              <FormControl><Input {...field} disabled={!!initialData} placeholder="P-GPU-001" /></FormControl>
-              <FormMessage />
-            </FormItem>
-          )} />
-          <FormField control={form.control} name="productName" render={({ field }: { field: any }) => (
-            <FormItem>
-              <FormLabel>产品名称</FormLabel>
-              <FormControl><Input {...field} placeholder="RTX 4090 高级算力" /></FormControl>
-              <FormMessage />
-            </FormItem>
-          )} />
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        {error && <div className="p-3 rounded-md bg-rose-500/10 border border-rose-500/20 text-rose-500 text-sm font-medium">{error}</div>}
+        
+        <div className="max-h-[60vh] overflow-y-auto px-1 space-y-8 custom-scrollbar">
+          {/* 基础信息 */}
+          <section>
+            <h3 className="text-sm font-bold text-[var(--admin-muted)] mb-4 flex items-center gap-2">
+              <span className="w-1 h-3 bg-[#5e6ad2] rounded-full"></span>
+              基础信息
+            </h3>
+            <div className="grid grid-cols-2 gap-4">
+              <FormField control={form.control} name="productCode" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>产品编码</FormLabel>
+                  <FormControl><Input {...field} disabled={!!initialData} placeholder="P-GPU-001" className="bg-background" /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+              <FormField control={form.control} name="productName" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>产品名称</FormLabel>
+                  <FormControl><Input {...field} placeholder="RTX 4090 高级算力" className="bg-background" /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+              <FormField control={form.control} name="machineCode" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>机器编码</FormLabel>
+                  <FormControl><Input {...field} placeholder="M-001" className="bg-background" /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+              <FormField control={form.control} name="machineAlias" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>机器别名</FormLabel>
+                  <FormControl><Input {...field} placeholder="Alpha-1" className="bg-background" /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+              <FormField control={form.control} name="regionId" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>所属地区</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value ? String(field.value) : undefined}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background">
+                        <SelectValue placeholder="选择地区" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {regions.map(r => <SelectItem key={r.id} value={String(r.id)}>{r.regionName}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )} />
+              <FormField control={form.control} name="rentPrice" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>租赁价格 (USDT/H)</FormLabel>
+                  <FormControl><Input type="number" step="0.01" {...field} className="bg-background" /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+            </div>
+          </section>
+
+          {/* GPU 与 硬件规格 */}
+          <section>
+            <h3 className="text-sm font-bold text-[var(--admin-muted)] mb-4 flex items-center gap-2">
+              <span className="w-1 h-3 bg-[#5e6ad2] rounded-full"></span>
+              硬件规格
+            </h3>
+            <div className="grid grid-cols-2 gap-4">
+              <FormField control={form.control} name="gpuModelId" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>GPU 型号</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value ? String(field.value) : undefined}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background">
+                        <SelectValue placeholder="选择 GPU" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {gpuModels.map(m => <SelectItem key={m.id} value={String(m.id)}>{m.modelName}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )} />
+              <FormField control={form.control} name="gpuMemoryGb" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>显存 (GB)</FormLabel>
+                  <FormControl><Input type="number" {...field} className="bg-background" /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+              <FormField control={form.control} name="gpuPowerTops" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>算力 (TOPS)</FormLabel>
+                  <FormControl><Input type="number" {...field} className="bg-background" /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+              <FormField control={form.control} name="cpuModel" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>CPU 型号</FormLabel>
+                  <FormControl><Input {...field} placeholder="Intel Xeon Gold" className="bg-background" /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+              <FormField control={form.control} name="cpuCores" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>CPU 核心数</FormLabel>
+                  <FormControl><Input type="number" {...field} className="bg-background" /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+              <FormField control={form.control} name="memoryGb" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>内存 (GB)</FormLabel>
+                  <FormControl><Input type="number" {...field} className="bg-background" /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+            </div>
+          </section>
+
+          {/* 存储与软件 */}
+          <section>
+            <h3 className="text-sm font-bold text-[var(--admin-muted)] mb-4 flex items-center gap-2">
+              <span className="w-1 h-3 bg-[#5e6ad2] rounded-full"></span>
+              存储与环境
+            </h3>
+            <div className="grid grid-cols-2 gap-4">
+              <FormField control={form.control} name="systemDiskGb" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>系统盘 (GB)</FormLabel>
+                  <FormControl><Input type="number" {...field} className="bg-background" /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+              <FormField control={form.control} name="dataDiskGb" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>数据盘 (GB)</FormLabel>
+                  <FormControl><Input type="number" {...field} className="bg-background" /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+              <FormField control={form.control} name="driverVersion" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>驱动版本</FormLabel>
+                  <FormControl><Input {...field} className="bg-background" /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+              <FormField control={form.control} name="cudaVersion" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>CUDA 版本</FormLabel>
+                  <FormControl><Input {...field} className="bg-background" /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+              <FormField control={form.control} name="hasCacheOptimization" render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm bg-background">
+                  <div className="space-y-0.5">
+                    <FormLabel>缓存优化</FormLabel>
+                    <FormDescription className="text-xs">启用后可提升大模型加载速度</FormDescription>
+                  </div>
+                  <FormControl>
+                    <Switch checked={field.value} onCheckedChange={field.onChange} />
+                  </FormControl>
+                </FormItem>
+              )} />
+              <FormField control={form.control} name="status" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>状态</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={String(field.value)}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background">
+                        <SelectValue placeholder="选择状态" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="1">启用</SelectItem>
+                      <SelectItem value="0">禁用</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )} />
+            </div>
+          </section>
+
+          {/* 库存与能力 */}
+          <section>
+            <h3 className="text-sm font-bold text-[var(--admin-muted)] mb-4 flex items-center gap-2">
+              <span className="w-1 h-3 bg-[#5e6ad2] rounded-full"></span>
+              库存与处理能力
+            </h3>
+            <div className="grid grid-cols-2 gap-4">
+              <FormField control={form.control} name="totalStock" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>总库存</FormLabel>
+                  <FormControl><Input type="number" {...field} className="bg-background" /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+              <FormField control={form.control} name="availableStock" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>可用库存</FormLabel>
+                  <FormControl><Input type="number" {...field} className="bg-background" /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+              <FormField control={form.control} name="tokenOutputPerMinute" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>每分钟 Token 输出</FormLabel>
+                  <FormControl><Input type="number" {...field} className="bg-background" /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+              <FormField control={form.control} name="tokenOutputPerDay" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>每日 Token 输出</FormLabel>
+                  <FormControl><Input type="number" {...field} className="bg-background" /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+            </div>
+          </section>
         </div>
-        <div className="grid grid-cols-2 gap-4">
-          <FormField control={form.control} name="machineCode" render={({ field }: { field: any }) => (
-            <FormItem>
-              <FormLabel>机器编码</FormLabel>
-              <FormControl><Input {...field} /></FormControl>
-              <FormMessage />
-            </FormItem>
-          )} />
-          <FormField control={form.control} name="machineAlias" render={({ field }: { field: any }) => (
-            <FormItem>
-              <FormLabel>机器别名</FormLabel>
-              <FormControl><Input {...field} /></FormControl>
-              <FormMessage />
-            </FormItem>
-          )} />
-        </div>
-        <div className="grid grid-cols-2 gap-4">
-          <FormField control={form.control} name="rentPrice" render={({ field }: { field: any }) => (
-            <FormItem>
-              <FormLabel>租赁价格 (USDT/H)</FormLabel>
-              <FormControl><Input type="number" {...field} /></FormControl>
-              <FormMessage />
-            </FormItem>
-          )} />
-          <FormField control={form.control} name="status" render={({ field }: { field: any }) => (
-            <FormItem>
-              <FormLabel>状态</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={String(field.value)}>
-                <FormControl>
-                  <SelectTrigger><SelectValue placeholder="选择状态" /></SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="1">启用</SelectItem>
-                  <SelectItem value="0">禁用</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )} />
-        </div>
-        <div className="flex justify-end gap-3 pt-4">
-          <Button type="button" variant="outline" onClick={onCancel} disabled={loading}>取消</Button>
-          <Button type="submit" className="bg-[#5e6ad2] text-white" disabled={loading}>
+
+        <div className="flex justify-end gap-3 pt-4 border-t border-[var(--admin-border)]">
+          <Button type="button" variant="ghost" onClick={onCancel}>
+            取消
+          </Button>
+          <Button 
+            type="submit" 
+            disabled={loading}
+            className="bg-[#5e6ad2] hover:bg-[#7170ff] text-white font-semibold min-w-[120px]"
+          >
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {initialData ? "更新" : "创建"}
+            {initialData ? "更新产品" : "创建产品"}
           </Button>
         </div>
       </form>
@@ -259,43 +444,50 @@ export function AiModelForm({ initialData, onSuccess, onCancel }: BaseFormProps<
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        {error && <div className="text-sm font-medium text-destructive">{error}</div>}
-        <FormField control={form.control} name="modelCode" render={({ field }: { field: any }) => (
-          <FormItem>
-            <FormLabel>模型编码</FormLabel>
-            <FormControl><Input {...field} disabled={!!initialData} /></FormControl>
-            <FormMessage />
-          </FormItem>
-        )} />
-        <FormField control={form.control} name="modelName" render={({ field }: { field: any }) => (
-          <FormItem>
-            <FormLabel>模型名称</FormLabel>
-            <FormControl><Input {...field} /></FormControl>
-            <FormMessage />
-          </FormItem>
-        )} />
-        <div className="grid grid-cols-2 gap-4">
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        {error && <div className="mb-4 text-sm font-medium text-destructive">{error}</div>}
+        <div className="grid grid-cols-2 gap-x-6 gap-y-4 py-4 w-full">
+          <FormField control={form.control} name="modelCode" render={({ field }: { field: any }) => (
+            <FormItem className="w-full">
+              <FormLabel>模型编码</FormLabel>
+              <FormControl><Input {...field} disabled={!!initialData} placeholder="gpt-4o" /></FormControl>
+              <FormMessage />
+            </FormItem>
+          )} />
+          <FormField control={form.control} name="modelName" render={({ field }: { field: any }) => (
+            <FormItem className="w-full">
+              <FormLabel>模型名称</FormLabel>
+              <FormControl><Input {...field} placeholder="GPT-4 Omni" /></FormControl>
+              <FormMessage />
+            </FormItem>
+          )} />
           <FormField control={form.control} name="vendorName" render={({ field }: { field: any }) => (
-            <FormItem>
+            <FormItem className="w-full">
               <FormLabel>厂商</FormLabel>
-              <FormControl><Input {...field} /></FormControl>
+              <FormControl><Input {...field} placeholder="OpenAI" /></FormControl>
               <FormMessage />
             </FormItem>
           )} />
           <FormField control={form.control} name="tokenUnitPrice" render={({ field }: { field: any }) => (
-            <FormItem>
-              <FormLabel>Token 单价</FormLabel>
-              <FormControl><Input type="number" {...field} /></FormControl>
+            <FormItem className="w-full">
+              <FormLabel>Token 单价 (USDT/M)</FormLabel>
+              <FormControl><Input type="number" step="0.0001" {...field} /></FormControl>
+              <FormMessage />
+            </FormItem>
+          )} />
+          <FormField control={form.control} name="logoUrl" render={({ field }: { field: any }) => (
+            <FormItem className="">
+              <FormLabel>Logo URL</FormLabel>
+              <FormControl><Input {...field} placeholder="https://example.com/logo.png" /></FormControl>
               <FormMessage />
             </FormItem>
           )} />
         </div>
-        <div className="flex justify-end gap-3 pt-4">
-          <Button type="button" variant="outline" onClick={onCancel}>取消</Button>
-          <Button type="submit" className="bg-[#5e6ad2] text-white" disabled={loading}>
+        <div className="flex justify-center gap-3 pt-4 border-t mt-6">
+          <Button type="button" variant="outline" onClick={onCancel} >取消</Button>
+          <Button type="submit" className=" bg-[#5e6ad2] text-white hover:bg-[#7170ff] drop-shadow-md transition-all hover:scale-[1.02] active:scale-[0.98]" disabled={loading}>
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            保存
+            保存模型
           </Button>
         </div>
       </form>
@@ -331,27 +523,29 @@ export function GpuModelForm({ initialData, onSuccess, onCancel }: BaseFormProps
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        {error && <div className="text-sm font-medium text-destructive">{error}</div>}
-        <FormField control={form.control} name="modelCode" render={({ field }: { field: any }) => (
-          <FormItem>
-            <FormLabel>型号编码</FormLabel>
-            <FormControl><Input {...field} /></FormControl>
-            <FormMessage />
-          </FormItem>
-        )} />
-        <FormField control={form.control} name="modelName" render={({ field }: { field: any }) => (
-          <FormItem>
-            <FormLabel>型号名称</FormLabel>
-            <FormControl><Input {...field} /></FormControl>
-            <FormMessage />
-          </FormItem>
-        )} />
-        <div className="flex justify-end gap-3 pt-4">
-          <Button type="button" variant="outline" onClick={onCancel}>取消</Button>
-          <Button type="submit" className="bg-[#5e6ad2] text-white" disabled={loading}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        {error && <div className="mb-4 text-sm font-medium text-destructive">{error}</div>}
+        <div className="grid grid-cols-2 gap-x-6 gap-y-4 py-4 w-full">
+          <FormField control={form.control} name="modelCode" render={({ field }: { field: any }) => (
+            <FormItem className="w-full">
+              <FormLabel>型号编码</FormLabel>
+              <FormControl><Input {...field} placeholder="H100-NVLINK" /></FormControl>
+              <FormMessage />
+            </FormItem>
+          )} />
+          <FormField control={form.control} name="modelName" render={({ field }: { field: any }) => (
+            <FormItem className="w-full">
+              <FormLabel>型号名称</FormLabel>
+              <FormControl><Input {...field} placeholder="NVIDIA H100 (80GB)" /></FormControl>
+              <FormMessage />
+            </FormItem>
+          )} />
+        </div>
+        <div className="flex justify-center gap-3 pt-4 border-t mt-6">
+          <Button type="button" variant="outline" onClick={onCancel} >取消</Button>
+          <Button type="submit" className=" bg-[#5e6ad2] text-white hover:bg-[#7170ff] drop-shadow-md transition-all hover:scale-[1.02] active:scale-[0.98]" disabled={loading}>
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            保存
+            保存型号
           </Button>
         </div>
       </form>
@@ -387,27 +581,29 @@ export function RegionForm({ initialData, onSuccess, onCancel }: BaseFormProps<a
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        {error && <div className="text-sm font-medium text-destructive">{error}</div>}
-        <FormField control={form.control} name="regionCode" render={({ field }: { field: any }) => (
-          <FormItem>
-            <FormLabel>地区编码</FormLabel>
-            <FormControl><Input {...field} /></FormControl>
-            <FormMessage />
-          </FormItem>
-        )} />
-        <FormField control={form.control} name="regionName" render={({ field }: { field: any }) => (
-          <FormItem>
-            <FormLabel>地区名称</FormLabel>
-            <FormControl><Input {...field} /></FormControl>
-            <FormMessage />
-          </FormItem>
-        )} />
-        <div className="flex justify-end gap-3 pt-4">
-          <Button type="button" variant="outline" onClick={onCancel}>取消</Button>
-          <Button type="submit" className="bg-[#5e6ad2] text-white" disabled={loading}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        {error && <div className="mb-4 text-sm font-medium text-destructive">{error}</div>}
+        <div className="grid grid-cols-2 gap-x-6 gap-y-4 py-4 w-full">
+          <FormField control={form.control} name="regionCode" render={({ field }: { field: any }) => (
+            <FormItem className="w-full">
+              <FormLabel>地区编码</FormLabel>
+              <FormControl><Input {...field} placeholder="us-east-1" /></FormControl>
+              <FormMessage />
+            </FormItem>
+          )} />
+          <FormField control={form.control} name="regionName" render={({ field }: { field: any }) => (
+            <FormItem className="w-full">
+              <FormLabel>地区名称</FormLabel>
+              <FormControl><Input {...field} placeholder="弗吉尼亚 (美国东部)" /></FormControl>
+              <FormMessage />
+            </FormItem>
+          )} />
+        </div>
+        <div className="flex justify-center gap-3 pt-4 border-t mt-6">
+          <Button type="button" variant="outline" onClick={onCancel} >取消</Button>
+          <Button type="submit" className=" bg-[#5e6ad2] text-white hover:bg-[#7170ff] drop-shadow-md transition-all hover:scale-[1.02] active:scale-[0.98]" disabled={loading}>
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            保存
+            保存地区
           </Button>
         </div>
       </form>
@@ -451,43 +647,43 @@ export function CycleRuleForm({ initialData, onSuccess, onCancel }: BaseFormProp
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        {error && <div className="text-sm font-medium text-destructive">{error}</div>}
-        <FormField control={form.control} name="cycleCode" render={({ field }: { field: any }) => (
-          <FormItem>
-            <FormLabel>周期编码</FormLabel>
-            <FormControl><Input {...field} disabled={!!initialData} /></FormControl>
-            <FormMessage />
-          </FormItem>
-        )} />
-        <FormField control={form.control} name="cycleName" render={({ field }: { field: any }) => (
-          <FormItem>
-            <FormLabel>周期名称</FormLabel>
-            <FormControl><Input {...field} /></FormControl>
-            <FormMessage />
-          </FormItem>
-        )} />
-        <div className="grid grid-cols-2 gap-4">
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        {error && <div className="mb-4 text-sm font-medium text-destructive">{error}</div>}
+        <div className="grid grid-cols-2 gap-x-6 gap-y-4 py-4 w-full">
+          <FormField control={form.control} name="cycleCode" render={({ field }: { field: any }) => (
+            <FormItem className="w-full">
+              <FormLabel>周期编码</FormLabel>
+              <FormControl><Input {...field} disabled={!!initialData} placeholder="daily-01" /></FormControl>
+              <FormMessage />
+            </FormItem>
+          )} />
+          <FormField control={form.control} name="cycleName" render={({ field }: { field: any }) => (
+            <FormItem className="w-full">
+              <FormLabel>周期名称</FormLabel>
+              <FormControl><Input {...field} placeholder="按日结算 (低费率)" /></FormControl>
+              <FormMessage />
+            </FormItem>
+          )} />
           <FormField control={form.control} name="cycleDays" render={({ field }: { field: any }) => (
-            <FormItem>
+            <FormItem className="w-full">
               <FormLabel>天数</FormLabel>
               <FormControl><Input type="number" {...field} /></FormControl>
               <FormMessage />
             </FormItem>
           )} />
           <FormField control={form.control} name="yieldMultiplier" render={({ field }: { field: any }) => (
-            <FormItem>
+            <FormItem className="w-full">
               <FormLabel>收益倍率</FormLabel>
               <FormControl><Input type="number" step="0.1" {...field} /></FormControl>
               <FormMessage />
             </FormItem>
           )} />
         </div>
-        <div className="flex justify-end gap-3 pt-4">
-          <Button type="button" variant="outline" onClick={onCancel}>取消</Button>
-          <Button type="submit" className="bg-[#5e6ad2] text-white" disabled={loading}>
+        <div className="flex justify-center gap-3 pt-4 border-t mt-6">
+          <Button type="button" variant="outline" onClick={onCancel} >取消</Button>
+          <Button type="submit" className=" bg-[#5e6ad2] text-white hover:bg-[#7170ff] drop-shadow-md transition-all hover:scale-[1.02] active:scale-[0.98]" disabled={loading}>
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            保存
+            保存规则
           </Button>
         </div>
       </form>

@@ -1426,7 +1426,7 @@ _None_
 
 | Status | Description | Content / Schema |
 |---:|---|---|
-| `200` | OK | `*/*`: `ApiResponsePageResultProduct` |
+| `200` | OK | `*/*`: `ApiResponsePageResultAdminProductResponse` |
 
 ### `POST` /api/admin/products
 
@@ -1470,7 +1470,7 @@ _None_
 
 | Status | Description | Content / Schema |
 |---:|---|---|
-| `200` | OK | `*/*`: `ApiResponseProduct` |
+| `200` | OK | `*/*`: `ApiResponseAdminProductResponse` |
 
 ### `PUT` /api/admin/products/{productCode}
 
@@ -4452,6 +4452,17 @@ _None_
 | `data` | `PageResultMapStringObject` | - |
 | `timestamp` | `string` (date-time) | - |
 
+### ApiResponsePageResultAdminProductResponse
+
+- Type: `object`
+
+| Field | Type | Description |
+|---|---|---|
+| `code` | `integer` (int32) | - |
+| `message` | `string` | - |
+| `data` | `PageResultAdminProductResponse` | - |
+| `timestamp` | `string` (date-time) | - |
+
 ### ApiResponsePageResultProduct
 
 - Type: `object`
@@ -4659,6 +4670,17 @@ _None_
 | `code` | `integer` (int32) | - |
 | `message` | `string` | - |
 | `data` | `PageResultWithdrawOrderResponse` | - |
+| `timestamp` | `string` (date-time) | - |
+
+### ApiResponseAdminProductResponse
+
+- Type: `object`
+
+| Field | Type | Description |
+|---|---|---|
+| `code` | `integer` (int32) | - |
+| `message` | `string` | - |
+| `data` | `AdminProductResponse` | - |
 | `timestamp` | `string` (date-time) | - |
 
 ### ApiResponseProduct
@@ -5209,6 +5231,17 @@ _None_
 | `pageNo` | `integer` (int64) | - |
 | `pageSize` | `integer` (int64) | - |
 
+### PageResultAdminProductResponse
+
+- Type: `object`
+
+| Field | Type | Description |
+|---|---|---|
+| `records` | `array` array of `AdminProductResponse` | - |
+| `total` | `integer` (int64) | - |
+| `pageNo` | `integer` (int64) | - |
+| `pageSize` | `integer` (int64) | - |
+
 ### PageResultProduct
 
 - Type: `object`
@@ -5417,6 +5450,45 @@ _None_
 | `total` | `integer` (int64) | - |
 | `pageNo` | `integer` (int64) | - |
 | `pageSize` | `integer` (int64) | - |
+
+### AdminProductResponse
+
+- Type: `object`
+
+| Field | Type | Description |
+|---|---|---|
+| `id` | `integer` (int64) | - |
+| `productCode` | `string` | - |
+| `productName` | `string` | - |
+| `machineCode` | `string` | - |
+| `machineAlias` | `string` | - |
+| `regionId` | `integer` (int64) | - |
+| `regionName` | `string` | ???? |
+| `gpuModelId` | `integer` (int64) | - |
+| `gpuModelName` | `string` | GPU ???? |
+| `gpuMemoryGb` | `integer` (int32) | - |
+| `gpuPowerTops` | `number` | - |
+| `rentPrice` | `number` | - |
+| `tokenOutputPerMinute` | `integer` (int64) | - |
+| `tokenOutputPerDay` | `integer` (int64) | - |
+| `rentableUntil` | `string` (date) | - |
+| `totalStock` | `integer` (int32) | - |
+| `availableStock` | `integer` (int32) | - |
+| `rentedStock` | `integer` (int32) | - |
+| `cpuModel` | `string` | - |
+| `cpuCores` | `integer` (int32) | - |
+| `memoryGb` | `integer` (int32) | - |
+| `systemDiskGb` | `integer` (int32) | - |
+| `dataDiskGb` | `integer` (int32) | - |
+| `maxExpandDiskGb` | `integer` (int32) | - |
+| `driverVersion` | `string` | - |
+| `cudaVersion` | `string` | - |
+| `hasCacheOptimization` | `integer` (int32) | - |
+| `status` | `integer` (int32) | - |
+| `sortNo` | `integer` (int32) | - |
+| `versionNo` | `integer` (int32) | - |
+| `createdAt` | `string` (date-time) | - |
+| `updatedAt` | `string` (date-time) | - |
 
 ### Product
 

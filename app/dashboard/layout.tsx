@@ -12,8 +12,7 @@ export default function DashboardLayout({
 }) {
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
-    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-    const theme = savedTheme || systemTheme;
+    const theme = savedTheme || "light";
     document.documentElement.dataset.theme = theme;
     document.documentElement.style.colorScheme = theme;
   }, []);

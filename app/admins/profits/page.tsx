@@ -86,7 +86,7 @@ export default function AdminProfitsPage() {
       key: "actions",
       title: "操作",
       render: (row) => (
-        <Button variant="ghost" size="sm" className="text-zinc-300 hover:bg-white/5" onClick={() => void openDetail(row.profitNo)}>
+        <Button variant="ghost" size="sm" className="text-muted-foreground hover:bg-white/5" onClick={() => void openDetail(row.profitNo)}>
           <Eye className="h-4 w-4" />
           详情
         </Button>

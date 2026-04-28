@@ -9,8 +9,8 @@ import { AdminSidebar } from "@/components/admin/sidebar";
 type AdminTheme = "light" | "dark";
 
 function getSavedAdminTheme(): AdminTheme {
-  if (typeof window === "undefined") return "dark";
-  return window.localStorage.getItem("adminTheme") === "light" ? "light" : "dark";
+  if (typeof window === "undefined") return "light";
+  return window.localStorage.getItem("adminTheme") === "dark" ? "dark" : "light";
 }
 
 function applyAdminTheme(theme: AdminTheme) {

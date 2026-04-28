@@ -16,7 +16,6 @@ import { usePaginatedResource } from "@/hooks/usePaginatedResource";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { disableAdminGpuModel, enableAdminGpuModel, getAdminGpuModels } from "@/api/admin";
@@ -129,10 +128,8 @@ export default function AdminGpuPage() {
       <DataTable columns={columns} data={page.records} rowKey={(row) => row.id} loading={loading} emptyText="暂无 GPU 型号" pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
 
       <Dialog open={formOpen} onOpenChange={setFormOpen}>
-        <DialogContent className="border-[var(--admin-border)] bg-[var(--admin-panel-strong)] text-[var(--admin-text)]">
-          <DialogHeader>
-            <DialogTitle>{editingRow ? "编辑 GPU 型号" : "新增 GPU 型号"}</DialogTitle>
-          </DialogHeader>
+        <DialogContent className="max-w-xl border-[var(--admin-border)] bg-[var(--admin-panel-strong)] text-[var(--admin-text)] flex flex-col items-stretch">
+          <DialogTitle className="sr-only">编辑 GPU 型号</DialogTitle>
           <GpuModelForm
             initialData={editingRow}
             onSuccess={() => { setFormOpen(false); reload(); }}

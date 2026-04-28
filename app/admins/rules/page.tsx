@@ -16,7 +16,6 @@ import { usePaginatedResource } from "@/hooks/usePaginatedResource";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { disableAdminCycleRule, enableAdminCycleRule, getAdminCycleRules } from "@/api/admin";
@@ -143,10 +142,8 @@ export default function AdminRulesPage() {
       <DataTable columns={columns} data={page.records} rowKey={(row) => row.cycleCode} loading={loading} emptyText="暂无租赁周期规则" pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
 
       <Dialog open={formOpen} onOpenChange={setFormOpen}>
-        <DialogContent className="border-[var(--admin-border)] bg-[var(--admin-panel-strong)] text-[var(--admin-text)]">
-          <DialogHeader>
-            <DialogTitle>{editingRow ? "编辑租赁周期" : "新增租赁周期"}</DialogTitle>
-          </DialogHeader>
+        <DialogContent className="max-w-xl border-[var(--admin-border)] bg-[var(--admin-panel-strong)] text-[var(--admin-text)] flex flex-col items-stretch">
+          <DialogTitle className="sr-only">编辑周期规则</DialogTitle>
           <CycleRuleForm
             initialData={editingRow}
             onSuccess={() => { setFormOpen(false); reload(); }}

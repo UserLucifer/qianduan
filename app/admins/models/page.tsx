@@ -17,7 +17,6 @@ import { usePaginatedResource } from "@/hooks/usePaginatedResource";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { disableAdminAiModel, enableAdminAiModel, getAdminAiModels } from "@/api/admin";
@@ -147,10 +146,8 @@ export default function AdminModelsPage() {
       <DataTable columns={columns} data={page.records} rowKey={(row) => row.modelCode} loading={loading} emptyText="暂无 AI 模型" pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
 
       <Dialog open={formOpen} onOpenChange={setFormOpen}>
-        <DialogContent className="border-[var(--admin-border)] bg-[var(--admin-panel-strong)] text-[var(--admin-text)]">
-          <DialogHeader>
-            <DialogTitle>{editingRow ? "编辑 AI 模型" : "新增 AI 模型"}</DialogTitle>
-          </DialogHeader>
+        <DialogContent className="max-w-xl border-[var(--admin-border)] bg-[var(--admin-panel-strong)] text-[var(--admin-text)] flex flex-col items-stretch">
+          <DialogTitle className="sr-only">编辑 AI 模型</DialogTitle>
           <AiModelForm
             initialData={editingRow}
             onSuccess={() => { setFormOpen(false); reload(); }}

@@ -468,3 +468,39 @@ export const publishAdminBlogPost = (id: number) =>
 
 export const unpublishAdminBlogPost = (id: number) =>
   apiPost<ApiMapObject>(`/api/admin/blog/posts/${id}/unpublish`);
+
+export const createAdminBlogCategory = (data: Partial<BlogCategory>) =>
+  apiPost<BlogCategory, Partial<BlogCategory>>("/api/admin/blog/categories", data);
+
+export const updateAdminBlogCategory = (id: number, data: Partial<BlogCategory>) =>
+  apiPut<BlogCategory, Partial<BlogCategory>>(`/api/admin/blog/categories/${id}`, data);
+
+export const disableAdminBlogCategory = (id: number) =>
+  apiPost<BlogCategory>(`/api/admin/blog/categories/${id}/disable`);
+
+export const enableAdminBlogCategory = (id: number) =>
+  apiPost<BlogCategory>(`/api/admin/blog/categories/${id}/enable`);
+
+export const createAdminBlogPost = (data: ApiMapObject) =>
+  apiPost<ApiMapObject, ApiMapObject>("/api/admin/blog/posts", data);
+
+export const getAdminBlogPostDetail = (id: number) =>
+  apiGet<ApiMapObject>(`/api/admin/blog/posts/${id}`);
+
+export const updateAdminBlogPost = (id: number, data: ApiMapObject) =>
+  apiPut<ApiMapObject, ApiMapObject>(`/api/admin/blog/posts/${id}`, data);
+
+export const deleteAdminBlogPost = (id: number) =>
+  apiPost<void>(`/api/admin/blog/posts/${id}/delete`);
+
+export const createAdminBlogTag = (data: Partial<BlogTag>) =>
+  apiPost<BlogTag, Partial<BlogTag>>("/api/admin/blog/tags", data);
+
+export const updateAdminBlogTag = (id: number, data: Partial<BlogTag>) =>
+  apiPut<BlogTag, Partial<BlogTag>>(`/api/admin/blog/tags/${id}`, data);
+
+export const disableAdminBlogTag = (id: number) =>
+  apiPost<BlogTag>(`/api/admin/blog/tags/${id}/disable`);
+
+export const enableAdminBlogTag = (id: number) =>
+  apiPost<BlogTag>(`/api/admin/blog/tags/${id}/enable`);

@@ -47,7 +47,7 @@ export default function SettingsPage() {
           <Button
             type="button"
             variant="outline"
-            className="border-white/10 bg-white/[0.03] text-zinc-300 hover:bg-white/[0.06]"
+            className="border-white/10 bg-white/[0.03] text-muted-foreground hover:bg-white/[0.06]"
             onClick={() => void fetchUser()}
           >
             刷新

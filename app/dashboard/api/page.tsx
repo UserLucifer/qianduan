@@ -72,7 +72,7 @@ export default function DashboardApiPage() {
       className: "text-right",
       render: (row) => (
         <div className="flex justify-end gap-2">
-          <Button variant="ghost" size="sm" className="text-zinc-300 hover:bg-white/5" onClick={() => void openDeployInfo(row.orderNo)}>
+          <Button variant="ghost" size="sm" className="text-muted-foreground hover:bg-white/5" onClick={() => void openDeployInfo(row.orderNo)}>
             <Eye className="h-3.5 w-3.5" />
             查看
           </Button>

@@ -85,7 +85,7 @@ export function DataTable<T extends object>({
                   return (
                     <TableCell
                       key={String(column.key)}
-                      className={cn("px-4 py-3.5 text-sm text-slate-700 dark:text-zinc-300", column.className)}
+                      className={cn("px-4 py-3.5 text-sm text-slate-700 dark:text-muted-foreground", column.className)}
                     >
                       {column.render ? column.render(row) : String(cellValue ?? "-")}
                     </TableCell>
@@ -105,7 +105,7 @@ export function DataTable<T extends object>({
             <Button
               variant="outline"
               size="sm"
-              className="h-8 border-gray-200 bg-white font-medium text-slate-700 hover:bg-gray-50 dark:border-white/10 dark:bg-white/[0.03] dark:text-zinc-300 dark:hover:bg-white/[0.06]"
+              className="h-8 border-gray-200 bg-white font-medium text-slate-700 hover:bg-gray-50 dark:border-white/10 dark:bg-white/[0.03] dark:text-muted-foreground dark:hover:bg-white/[0.06]"
               disabled={!canPrevious}
               onClick={() => onPageChange(pageNo - 1)}
             >
@@ -114,7 +114,7 @@ export function DataTable<T extends object>({
             <Button
               variant="outline"
               size="sm"
-              className="h-8 border-gray-200 bg-white font-medium text-slate-700 hover:bg-gray-50 dark:border-white/10 dark:bg-white/[0.03] dark:text-zinc-300 dark:hover:bg-white/[0.06]"
+              className="h-8 border-gray-200 bg-white font-medium text-slate-700 hover:bg-gray-50 dark:border-white/10 dark:bg-white/[0.03] dark:text-muted-foreground dark:hover:bg-white/[0.06]"
               disabled={!canNext}
               onClick={() => onPageChange(pageNo + 1)}
             >

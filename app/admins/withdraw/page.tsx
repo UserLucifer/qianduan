@@ -108,7 +108,7 @@ export default function AdminWithdrawPage() {
       title: "操作",
       render: (row) => (
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" className="text-zinc-300 hover:bg-white/5" onClick={() => void openDetail(row.withdrawNo)}>
+          <Button variant="ghost" size="sm" className="text-muted-foreground hover:bg-white/5" onClick={() => void openDetail(row.withdrawNo)}>
             <Eye className="h-4 w-4" />
             详情
           </Button>

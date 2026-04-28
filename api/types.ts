@@ -17,8 +17,8 @@ export interface PageQuery {
   pageSize?: number;
 }
 
-export type ApiMapValue = string | number | boolean | null | undefined;
-export type ApiMapObject = Record<string, ApiMapValue>;
+export type ApiMapValue = string | number | boolean | null | undefined | ApiMapValue[];
+export type ApiMapObject = Record<string, any>; // Use any for more flexibility in mapped objects
 
 export interface UserProfile {
   id: number;

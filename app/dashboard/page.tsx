@@ -65,7 +65,7 @@ const orderColumns: DataTableColumn<RentalOrderSummaryResponse>[] = [
   {
     key: "orderNo",
     title: "订单号",
-    render: (row) => <span className="font-mono text-xs text-zinc-300">{row.orderNo}</span>,
+    render: (row) => <span className="font-mono text-xs text-muted-foreground">{row.orderNo}</span>,
   },
   {
     key: "productNameSnapshot",
@@ -147,7 +147,7 @@ export default function DashboardPage() {
         title="算力与资产控制台"
         description="聚合钱包余额、租赁订单、API 激活、收益、佣金、团队和最近通知，优先呈现可执行事项。"
         actions={
-          <Button onClick={() => void reload()} variant="outline" className="border-gray-200 bg-white text-slate-600 hover:bg-gray-50 hover:text-slate-900 dark:border-white/10 dark:bg-white/[0.03] dark:text-zinc-300 dark:hover:bg-white/[0.06]">
+          <Button onClick={() => void reload()} variant="outline" className="border-gray-200 bg-white text-slate-600 hover:bg-gray-50 hover:text-slate-900 dark:border-white/10 dark:bg-white/[0.03] dark:text-muted-foreground dark:hover:bg-white/[0.06]">
             刷新数据
           </Button>
         }
@@ -219,8 +219,8 @@ export default function DashboardPage() {
           </div>
           <div className="flex flex-wrap gap-2">
             <Button asChild className="bg-[#5e6ad2] text-white hover:bg-[#7170ff] dark:bg-[#5e6ad2] dark:hover:bg-[#7170ff]"><Link href="/dashboard/recharge"><CreditCard className="h-4 w-4" />充值</Link></Button>
-            <Button asChild variant="outline" className="border-gray-200 bg-white text-slate-600 hover:bg-gray-50 hover:text-slate-900 dark:border-white/10 dark:bg-white/[0.03] dark:text-zinc-300 dark:hover:bg-white/[0.06]"><Link href="/dashboard/withdraw"><Send className="h-4 w-4" />提现</Link></Button>
-            <Button asChild variant="outline" className="border-gray-200 bg-white text-slate-600 hover:bg-gray-50 hover:text-slate-900 dark:border-white/10 dark:bg-white/[0.03] dark:text-zinc-300 dark:hover:bg-white/[0.06]"><Link href="/dashboard/wallet"><ReceiptText className="h-4 w-4" />流水</Link></Button>
+            <Button asChild variant="outline" className="border-gray-200 bg-white text-slate-600 hover:bg-gray-50 hover:text-slate-900 dark:border-white/10 dark:bg-white/[0.03] dark:text-muted-foreground dark:hover:bg-white/[0.06]"><Link href="/dashboard/withdraw"><Send className="h-4 w-4" />提现</Link></Button>
+            <Button asChild variant="outline" className="border-gray-200 bg-white text-slate-600 hover:bg-gray-50 hover:text-slate-900 dark:border-white/10 dark:bg-white/[0.03] dark:text-muted-foreground dark:hover:bg-white/[0.06]"><Link href="/dashboard/wallet"><ReceiptText className="h-4 w-4" />流水</Link></Button>
           </div>
         </BentoCard>
 
@@ -228,7 +228,7 @@ export default function DashboardPage() {
           <StatusIndicator status={runningOrders > 0 ? "ACTIVE" : "INACTIVE"} label={runningOrders > 0 ? "存在可激活订单" : "暂无运行中订单"} pulse={runningOrders > 0} />
           <div className="rounded-lg border border-gray-100 bg-gray-50 p-4 dark:border-white/10 dark:bg-white/[0.03]">
             <div className="text-xs text-slate-500 dark:text-zinc-500">建议操作</div>
-            <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-zinc-300">
+            <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-muted-foreground">
               进入 API 管理页查看订单关联凭证、部署状态和 Token 到期时间。敏感字段默认脱敏。
             </p>
           </div>
@@ -267,7 +267,7 @@ export default function DashboardPage() {
               { label: "收益", href: "/dashboard/profits", icon: TrendingUp },
               { label: "团队", href: "/dashboard/team", icon: Users },
             ].map((item) => (
-              <Button key={item.href} asChild variant="outline" className="h-12 justify-start border-gray-200 bg-white text-slate-600 hover:bg-gray-50 hover:text-slate-900 dark:border-white/10 dark:bg-white/[0.03] dark:text-zinc-300 dark:hover:bg-white/[0.06]">
+              <Button key={item.href} asChild variant="outline" className="h-12 justify-start border-gray-200 bg-white text-slate-600 hover:bg-gray-50 hover:text-slate-900 dark:border-white/10 dark:bg-white/[0.03] dark:text-muted-foreground dark:hover:bg-white/[0.06]">
                 <Link href={item.href}><item.icon className="h-4 w-4" />{item.label}</Link>
               </Button>
             ))}

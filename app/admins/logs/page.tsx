@@ -68,7 +68,7 @@ export default function AdminLogsPage() {
       key: "actions",
       title: "操作",
       render: (row) => (
-        <Button variant="ghost" size="sm" className="text-zinc-300 hover:bg-white/5" onClick={() => void openDetail(row.id)}>
+        <Button variant="ghost" size="sm" className="text-muted-foreground hover:bg-white/5" onClick={() => void openDetail(row.id)}>
           <Eye className="h-4 w-4" />
           详情
         </Button>
@@ -99,8 +99,8 @@ export default function AdminLogsPage() {
         {
           title: "变更内容",
           fields: [
-            { label: "变更前", value: <pre className="whitespace-pre-wrap break-all text-xs text-zinc-300">{formatEmpty(detail.beforeValue)}</pre> },
-            { label: "变更后", value: <pre className="whitespace-pre-wrap break-all text-xs text-zinc-300">{formatEmpty(detail.afterValue)}</pre> },
+            { label: "变更前", value: <pre className="whitespace-pre-wrap break-all text-xs text-muted-foreground">{formatEmpty(detail.beforeValue)}</pre> },
+            { label: "变更后", value: <pre className="whitespace-pre-wrap break-all text-xs text-muted-foreground">{formatEmpty(detail.afterValue)}</pre> },
           ],
         },
       ]
