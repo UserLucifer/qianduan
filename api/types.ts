@@ -22,7 +22,7 @@ export interface UserProfile {
   id: number;
   userId: string;
   email: string;
-  nickname: string;
+  userName: string;
 }
 
 export interface UserMeResponse extends UserProfile {
@@ -43,7 +43,7 @@ export interface LoginResponse {
 export interface SignupRequest {
   email: string;
   code: string;
-  username: string;
+  userName: string;
   password: string;
   inviteCode?: string;
 }
@@ -251,7 +251,6 @@ export interface RentalOrderSummaryResponse {
 export interface RentalOrderDetailResponse extends RentalOrderSummaryResponse {
   productId?: number;
   userId?: number;
-  nickname?: string;
   userName?: string;
   email?: string;
   aiModelId?: number;
@@ -483,7 +482,7 @@ export interface TeamSummaryResponse {
 export interface TeamMemberResponse {
   userId: string;
   email: string;
-  nickname: string;
+  userName: string;
   status: number;
   levelDepth: number;
   createdAt: string;
@@ -541,14 +540,13 @@ export interface NotificationQueryRequest extends PageQuery {
 }
 
 export interface AdminLoginRequest {
-  username: string;
+  userName: string;
   password: string;
 }
 
 export interface AdminMeResponse {
   adminId: number;
-  username: string;
-  nickname: string;
+  userName: string;
   status: number;
   role: string;
 }
@@ -599,7 +597,7 @@ export interface AdminUserRow {
   id?: number;
   userId?: string;
   email?: string;
-  nickname?: string;
+  userName?: string;
   status?: number;
   walletNo?: string;
   availableBalance?: number;
@@ -894,7 +892,7 @@ export interface AdminBlogPost {
   updatedAt?: string;
 }
 export interface CreateAdminRequest {  
-  username: string;  
+  userName: string;  
   password?: string;  
   role: string;  
 } 

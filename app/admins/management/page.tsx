@@ -57,7 +57,7 @@ const initialQuery: AdminUserQuery = { pageNo: 1, pageSize: 10 };
 
 
 const formSchema = z.object({
-  username: z.string().min(3, "账号名至少3个字符"),
+  userName: z.string().min(3, "账号名至少3个字符"),
   password: z.string().min(6, "密码至少6个字符"),
   role: z.string().min(1, "请选择角色"),
 });
@@ -69,7 +69,7 @@ function CreateAdminDialog({ onSuccess }: { onSuccess: () => void }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      userName: "",
       password: "",
       role: "",
     },
@@ -105,7 +105,7 @@ function CreateAdminDialog({ onSuccess }: { onSuccess: () => void }) {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4">
             <FormField
               control={form.control}
-              name="username"
+              name="userName"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>账号名</FormLabel>
@@ -241,11 +241,11 @@ export default function AdminUsersPage() {
   };
 
   const columns: DataTableColumn<AdminUserRow>[] = [
-    { key: "userId", title: "用户 ID", render: (row) => formatEmpty(row.userId ?? row.id ?? row.id) },
+    { key: "userId", title: "用户 ID", render: (row) => formatEmpty(row.userId) },
     { key: "email", title: "邮箱", render: (row) => formatEmpty(row.email) },
-    { key: "nickname", title: "昵称", render: (row) => formatEmpty(row.nickname) },
+    { key: "userName", title: "用户名", render: (row) => formatEmpty(row.userName) },
     { key: "status", title: "状态", render: (row) => <StatusBadge status={row.status} /> },
-    { key: "createdAt", title: "注册时间", render: (row) => <DateTimeText value={typeof row.createdAt === "string" ? row.createdAt : (typeof row.createdAt === "string" ? row.createdAt : null)} /> },
+    { key: "createdAt", title: "注册时间", render: (row) => <DateTimeText value={row.createdAt} /> },
     {
       key: "actions",
       title: "操作",
@@ -284,26 +284,26 @@ export default function AdminUsersPage() {
         {
           title: "基础信息",
           fields: [
-            { label: "用户 ID", render: (detail) => ((detail.userId ?? detail.id ?? detail.id) || "-").toString() },
-            { label: "邮箱", render: (detail) => ((detail.email) || "-").toString() },
-            { label: "昵称", render: (detail) => ((detail.nickname) || "-").toString() },
+            { label: "用户 ID", render: (detail) => formatEmpty(detail.userId) },
+            { label: "邮箱", render: (detail) => formatEmpty(detail.email) },
+            { label: "用户名", render: (detail) => formatEmpty(detail.userName) },
             { label: "状态", render: (detail) => <StatusBadge status={detail.status} /> },
           ],
         },
         {
           title: "业务信息",
           fields: [
-            { label: "钱包余额", render: (detail) => ((detail.walletData?.availableBalance ?? detail.walletData?.availableBalance ?? detail.availableBalance ?? detail.availableBalance) || "-").toString() },
-            { label: "冻结金额", render: (detail) => ((detail.walletData?.frozenBalance ?? detail.walletData?.frozenBalance ?? detail.frozenBalance ?? detail.frozenBalance) || "-").toString() },
-            { label: "团队人数", render: (detail) => ((detail.teamData?.totalTeamCount ?? detail.teamData?.teamCount ?? detail.teamCount) || "-").toString() },
-            { label: "订单数量", render: (detail) => ((detail.orderData?.total ?? detail.orderCount ?? detail.orderCount) || "-").toString() },
+            { label: "钱包余额", render: (detail) => formatEmpty(detail.walletData?.availableBalance ?? detail.availableBalance) },
+            { label: "冻结金额", render: (detail) => formatEmpty(detail.walletData?.frozenBalance ?? detail.frozenBalance) },
+            { label: "团队人数", render: (detail) => formatEmpty(detail.teamData?.totalTeamCount ?? detail.teamCount) },
+            { label: "订单数量", render: (detail) => formatEmpty(detail.orderData?.total ?? detail.orderCount) },
           ],
         },
         {
           title: "时间信息",
           fields: [
-            { label: "注册时间", render: (detail) => <DateTimeText value={typeof detail.createdAt === "string" ? detail.createdAt : (typeof detail.createdAt === "string" ? detail.createdAt : null)} /> },
-            { label: "更新时间", render: (detail) => <DateTimeText value={typeof detail.updatedAt === "string" ? detail.updatedAt : (typeof detail.updatedAt === "string" ? detail.updatedAt : null)} /> },
+            { label: "注册时间", render: (detail) => <DateTimeText value={detail.createdAt} /> },
+            { label: "更新时间", render: (detail) => <DateTimeText value={detail.updatedAt} /> },
           ],
         },
       ];

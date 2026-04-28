@@ -23,7 +23,7 @@ const initialParams: TeamMemberQueryRequest = { pageNo: 1, pageSize: 10 };
 const columns: DataTableColumn<TeamMemberResponse>[] = [
   { key: "userId", title: "用户 ID", render: (row) => <span className="font-mono text-xs">{row.userId}</span> },
   { key: "email", title: "邮箱" },
-  { key: "nickname", title: "昵称", render: (row) => row.nickname || "-" },
+  { key: "userName", title: "用户名", render: (row) => row.userName || "-" },
   { key: "levelDepth", title: "层级", render: (row) => `${row.levelDepth} 级` },
   { key: "status", title: "状态", render: (row) => <StatusBadge status={row.status} /> },
   { key: "createdAt", title: "加入时间", render: (row) => <DateTimeText value={row.createdAt} /> },

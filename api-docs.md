@@ -876,7 +876,7 @@ Response `data` is a rental order detail object and includes:
 | Field | Type | Description |
 |---|---|---|
 | `orderNo` | string | Rental order number |
-| `userName` | string | User nickname for the order |
+| `userName` | string | User name for the order |
 | `apiCredential` | object/null | API credential detail |
 
 ### `GET` /api/admin/settlement/orders
@@ -2414,11 +2414,11 @@ _None_
 | `POST` | `/api/auth/login` | Login with email and password |
 | `POST` | `/api/auth/login/password` | Login with email and password |
 | `POST` | `/api/auth/password/reset` | Reset password with email code |
-| `POST` | `/api/auth/register` | Register with email code, username and password |
+| `POST` | `/api/auth/register` | Register with email code, user name and password |
 | `POST` | `/api/auth/reset-password` | Reset password with email code |
 | `POST` | `/api/auth/reset-password/email-code/send` | Send reset password email code |
 | `POST` | `/api/auth/reset-password/email-code/verify` | Verify reset password email code |
-| `POST` | `/api/auth/signup` | Signup with email code, username and password |
+| `POST` | `/api/auth/signup` | Signup with email code, user name and password |
 | `POST` | `/api/auth/signup/email-code/send` | Send signup email code |
 | `POST` | `/api/auth/signup/email-code/verify` | Verify signup email code |
 
@@ -2490,7 +2490,7 @@ _None_
 
 ### `POST` /api/auth/register
 
-**Summary:** Register with email code, username and password
+**Summary:** Register with email code, user name and password
 
 **Operation ID:** `register_1`
 
@@ -2578,7 +2578,7 @@ _None_
 
 ### `POST` /api/auth/signup
 
-**Summary:** Signup with email code, username and password
+**Summary:** Signup with email code, user name and password
 
 **Operation ID:** `signup`
 
@@ -3889,11 +3889,11 @@ _None_
 ### AdminLoginRequest
 
 - Type: `object`
-- Required fields: `password`, `username`
+- Required fields: `password`, `userName`
 
 | Field | Type | Description |
 |---|---|---|
-| `username` **required** | `string` | - |
+| `userName` **required** | `string` | - |
 | `password` **required** | `string` | - |
 
 ### AdminLoginResponse
@@ -3912,8 +3912,7 @@ _None_
 | Field | Type | Description |
 |---|---|---|
 | `adminId` | `integer` (int64) | - |
-| `username` | `string` | - |
-| `nickname` | `string` | - |
+| `userName` | `string` | - |
 | `status` | `integer` (int32) | - |
 | `role` | `string` | - |
 
@@ -6051,13 +6050,13 @@ _None_
 ### SignupRequest
 
 - Type: `object`
-- Required fields: `code`, `email`, `password`, `username`
+- Required fields: `code`, `email`, `password`, `userName`
 
 | Field | Type | Description |
 |---|---|---|
 | `email` **required** | `string` | - |
 | `code` **required** | `string` | - |
-| `username` **required** | `string` | - |
+| `userName` **required** | `string` | - |
 | `password` **required** | `string` | - |
 | `inviteCode` | `string` | - |
 
@@ -6114,7 +6113,6 @@ _None_
 | `userId` | `string` | - |
 | `userName` | `string` | 用户名称 |
 | `email` | `string` | - |
-| `nickname` | `string` | - |
 | `status` | `integer` (int32) | - |
 | `levelDepth` | `integer` (int32) | - |
 | `createdAt` | `string` (date-time) | - |
@@ -6159,7 +6157,7 @@ _None_
 | `id` | `integer` (int64) | - |
 | `userId` | `string` | - |
 | `email` | `string` | - |
-| `nickname` | `string` | - |
+| `userName` | `string` | - |
 | `status` | `integer` (int32) | - |
 
 ### UserProfile
@@ -6171,7 +6169,7 @@ _None_
 | `id` | `integer` (int64) | - |
 | `userId` | `string` | - |
 | `email` | `string` | - |
-| `nickname` | `string` | - |
+| `userName` | `string` | - |
 
 ### UserPushDevice
 

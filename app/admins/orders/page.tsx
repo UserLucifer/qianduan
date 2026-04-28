@@ -67,30 +67,13 @@ export default function AdminOrdersPage() {
     setDetailOpen(true);
     try {
       const res = await getAdminRentalOrderDetail(orderNo);
-      let data = res.data || (res as any);
-
-      // Auto-unwrap common nested keys if the top-level is a wrapper
-      if (data && typeof data === "object") {
-        const wrapperKeys = ["rentalOrder", "order", "item", "data"];
-        for (const key of wrapperKeys) {
-          if (data[key] && typeof data[key] === "object" && (data[key].orderNo || data[key].order_no)) {
-            data = data[key];
-            break;
-          }
-        }
-      }
-
-      setDetail(data);
+      setDetail(res.data);
     } catch (err) {
       setActionError(toErrorMessage(err));
     }
   };
 
-  // Helper to get field value with fallback to snake_case
-  const getField = (data: any, camelKey: string, snakeKey: string) => {
-    if (!data) return "-";
-    return (data[camelKey] ?? data[snakeKey] ?? "-").toString();
-  };
+
 
   const columns: DataTableColumn<RentalOrderDetailResponse>[] = [
     { key: "orderNo", title: "租赁订单号", render: (row) => <CopyableSecret value={row.orderNo} maskedValue={row.orderNo} canReveal={false} /> },
@@ -119,46 +102,46 @@ export default function AdminOrdersPage() {
     {
       title: "订单信息",
       fields: [
-        { label: "订单号", render: (detail) => <CopyableSecret value={getField(detail, "orderNo", "order_no")} maskedValue={getField(detail, "orderNo", "order_no")} canReveal={false} /> },
-        { label: "用户名称", render: (detail) => getField(detail, "userName", "user_name") },
-        { label: "订单状态", render: (detail) => <StatusBadge status={detail.orderStatus || detail.order_status} /> },
-        { label: "支付金额", render: (detail) => getField(detail, "orderAmount", "order_amount") },
+        { label: "订单号", render: (detail) => <CopyableSecret value={detail.orderNo} maskedValue={detail.orderNo} canReveal={false} /> },
+        { label: "用户名称", render: (detail) => formatEmpty(detail.userName) },
+        { label: "订单状态", render: (detail) => <StatusBadge status={detail.orderStatus} /> },
+        { label: "支付金额", render: (detail) => <MoneyText value={detail.orderAmount} currency={detail.currency} /> },
       ],
     },
     {
       title: "产品信息",
       fields: [
-        { label: "产品名称", render: (detail) => getField(detail, "productNameSnapshot", "product_name_snapshot") },
-        { label: "产品编码", render: (detail) => getField(detail, "productCodeSnapshot", "product_code_snapshot") },
-        { label: "GPU 型号", render: (detail) => getField(detail, "gpuModelSnapshot", "gpu_model_snapshot") },
-        { label: "地区", render: (detail) => getField(detail, "regionNameSnapshot", "region_name_snapshot") },
+        { label: "产品名称", render: (detail) => formatEmpty(detail.productNameSnapshot) },
+        { label: "产品编码", render: (detail) => formatEmpty(detail.productCodeSnapshot) },
+        { label: "GPU 型号", render: (detail) => formatEmpty(detail.gpuModelSnapshot) },
+        { label: "地区", render: (detail) => formatEmpty(detail.regionNameSnapshot) },
       ],
     },
     {
       title: "收益与结算",
       fields: [
-        { label: "预计日收益", render: (detail) => getField(detail, "expectedDailyProfit", "expected_daily_profit") },
-        { label: "预计总收益", render: (detail) => getField(detail, "expectedTotalProfit", "expected_total_profit") },
-        { label: "收益状态", render: (detail) => <StatusBadge status={detail.profitStatus || detail.profit_status} /> },
-        { label: "结算状态", render: (detail) => <StatusBadge status={detail.settlementStatus || detail.settlement_status} /> },
+        { label: "预计日收益", render: (detail) => <MoneyText value={detail.expectedDailyProfit} currency={detail.currency} /> },
+        { label: "预计总收益", render: (detail) => <MoneyText value={detail.expectedTotalProfit} currency={detail.currency} /> },
+        { label: "收益状态", render: (detail) => <StatusBadge status={detail.profitStatus} /> },
+        { label: "结算状态", render: (detail) => <StatusBadge status={detail.settlementStatus} /> },
       ],
     },
     {
       title: "API 信息",
       fields: [
-        { label: "凭证编号", render: (detail) => <CopyableSecret value={getField(detail, "credentialNo", "credential_no")} maskedValue={getField(detail, "credentialNo", "credential_no")} canReveal={false} /> },
-        { label: "API 状态", render: (detail) => <StatusBadge status={detail.tokenStatus || detail.token_status} /> },
-        { label: "部署状态", render: (detail) => <StatusBadge status={detail.deployOrderStatus || detail.deploy_order_status} /> },
-        { label: "API 地址", render: (detail) => getField(detail, "apiBaseUrl", "api_base_url") },
+        { label: "凭证编号", render: (detail) => <CopyableSecret value={detail.credentialNo} maskedValue={detail.credentialNo} canReveal={false} /> },
+        { label: "API 状态", render: (detail) => <StatusBadge status={detail.tokenStatus} /> },
+        { label: "部署状态", render: (detail) => <StatusBadge status={detail.deployOrderStatus} /> },
+        { label: "API 地址", render: (detail) => formatEmpty(detail.apiBaseUrl) },
       ],
     },
     {
       title: "时间信息",
       fields: [
-        { label: "创建时间", render: (detail) => <DateTimeText value={detail.createdAt || detail.created_at} /> },
-        { label: "支付时间", render: (detail) => <DateTimeText value={detail.paidAt || detail.paid_at} /> },
-        { label: "激活时间", render: (detail) => <DateTimeText value={detail.activatedAt || detail.activated_at} /> },
-        { label: "到期时间", render: (detail) => <DateTimeText value={detail.expiredAt || detail.expired_at} /> },
+        { label: "创建时间", render: (detail) => <DateTimeText value={detail.createdAt} /> },
+        { label: "支付时间", render: (detail) => <DateTimeText value={detail.paidAt} /> },
+        { label: "激活时间", render: (detail) => <DateTimeText value={detail.activatedAt} /> },
+        { label: "到期时间", render: (detail) => <DateTimeText value={detail.expiredAt} /> },
       ],
     },
   ];
@@ -241,7 +224,7 @@ export default function AdminOrdersPage() {
         </div>
       </SearchPanel>
       <DataTable columns={columns} data={page.records} rowKey={(row) => row.orderNo} loading={loading} emptyText="暂无租赁订单" pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
-      <DetailDrawer data={detail} open={detailOpen} title="租赁订单详情" subtitle={(data) => getField(data, "orderNo", "order_no")} sections={detailSections} onClose={() => setDetailOpen(false)} />
+      <DetailDrawer data={detail} open={detailOpen} title="租赁订单详情" subtitle={(data) => data.orderNo} sections={detailSections} onClose={() => setDetailOpen(false)} />
     </div>
   );
 }

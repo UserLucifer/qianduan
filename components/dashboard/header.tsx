@@ -104,9 +104,9 @@ export function Header() {
             onClick={() => setDropdownOpen((prev) => !prev)}
           >
             <div className="flex h-6 w-6 items-center justify-center rounded-md bg-[#5e6ad2]/20 text-xs font-medium text-[#5e6ad2] dark:text-[#9aa2ff]">
-              {(user?.nickname || user?.email || "U").slice(0, 1).toUpperCase()}
+              {(user?.userName || user?.email || "U").slice(0, 1).toUpperCase()}
             </div>
-            <span className="max-w-32 truncate text-sm font-medium text-slate-700 dark:text-muted-foreground">{user?.nickname || user?.email || "当前用户"}</span>
+            <span className="max-w-32 truncate text-sm font-medium text-slate-700 dark:text-muted-foreground">{user?.userName || user?.email || "当前用户"}</span>
           </button>
           
           {dropdownOpen ? (

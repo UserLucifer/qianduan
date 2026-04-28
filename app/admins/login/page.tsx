@@ -14,7 +14,7 @@ import { toErrorMessage } from "@/lib/format";
 
 export default function AdminLoginPage() {
   const router = useRouter();
-  const [username, setUsername] = useState("");
+  const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -24,7 +24,7 @@ export default function AdminLoginPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const res = await adminLogin({ username, password });
+      const res = await adminLogin({ userName, password });
       localStorage.setItem("admin_access_token", res.data.adminAccessToken);
       router.push("/admins/dashboard");
     } catch (err) {
@@ -63,8 +63,8 @@ export default function AdminLoginPage() {
                 <User className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-600" />
                 <Input
                   id="admin-username"
-                  value={username}
-                  onChange={(event) => setUsername(event.target.value)}
+                  value={userName}
+                  onChange={(event) => setUserName(event.target.value)}
                   required
                   className="h-11 border-white/10 bg-white/[0.04] pl-10 text-white placeholder:text-zinc-600 focus:border-[#5e6ad2]/60"
                   placeholder="请输入管理员账号"

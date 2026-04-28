@@ -15,7 +15,7 @@ export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [nickname, setNickname] = useState("");
+  const [userName, setUserName] = useState("");
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -77,7 +77,7 @@ export default function SignupPage() {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!nickname || !password) return;
+    if (!userName || !password) return;
     if (password !== confirmPassword) {
       setError("两次输入的密码不一致");
       return;
@@ -89,7 +89,7 @@ export default function SignupPage() {
       const res = await register({
         email,
         code: otp.join(""),
-        username: nickname,
+        userName: userName,
         password,
       });
       if (res && (res.code === 200 || res.code === 0) && res.data) {
@@ -224,9 +224,9 @@ export default function SignupPage() {
                   type="text"
                   className="login-input"
                   placeholder="Username"
-                  value={nickname}
+                  value={userName}
                   onChange={(e) => {
-                    setNickname(e.target.value);
+                    setUserName(e.target.value);
                     setError("");
                   }}
                   required

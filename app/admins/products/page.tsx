@@ -114,11 +114,11 @@ export default function AdminProductsPage() {
 
   const columns: DataTableColumn<ProductResponse>[] = [
     { key: "productCode", title: "产品编码", render: (row) => <CopyableSecret value={row.productCode} maskedValue={row.productCode} canReveal={false} /> },
-    { key: "productName", title: "算力产品", render: (row: any) => formatEmpty(row.productName || row.product_name) },
-    { key: "gpuModelName", title: "GPU 型号", render: (row: any) => formatEmpty(row.gpuModelName || row.gpu_model_name) },
-    { key: "regionName", title: "地区", render: (row: any) => formatEmpty(row.regionName || row.region_name) },
+    { key: "productName", title: "算力产品", render: (row: any) => formatEmpty(row.productName) },
+    { key: "gpuModelName", title: "GPU 型号", render: (row: any) => formatEmpty(row.gpuModelName) },
+    { key: "regionName", title: "地区", render: (row: any) => formatEmpty(row.regionName) },
     { key: "rentPrice", title: "租赁价格", render: (row) => <MoneyText value={row.rentPrice} /> },
-    { key: "availableStock", title: "可用库存", render: (row: any) => `${formatNumber(row.availableStock ?? row.available_stock)} / ${formatNumber(row.totalStock ?? row.total_stock)}` },
+    { key: "availableStock", title: "可用库存", render: (row: any) => `${formatNumber(row.availableStock)} / ${formatNumber(row.totalStock)}` },
     { key: "status", title: "状态", render: (row) => <StatusBadge status={row.status} /> },
     {
       key: "actions",
@@ -164,12 +164,12 @@ export default function AdminProductsPage() {
       {
         title: "GPU 规格",
         fields: [
-          { label: "GPU 型号", render: (detail) => (detail as any).gpuModelName || (detail as any).gpu_model_name },
-          { label: "显存", render: (detail) => `${formatNumber((detail as any).gpuMemoryGb ?? (detail as any).gpu_memory_gb)} GB` },
-          { label: "算力", render: (detail) => `${formatNumber((detail as any).gpuPowerTops ?? (detail as any).gpu_power_tops)} TOPS` },
-          { label: "CUDA", render: (detail) => (detail as any).cudaVersion || (detail as any).cuda_version },
-          { label: "驱动版本", render: (detail) => (detail as any).driverVersion || (detail as any).driver_version },
-          { label: "缓存优化", render: (detail) => ((detail as any).hasCacheOptimization ?? (detail as any).has_cache_optimization) === 1 ? "支持" : "不支持" },
+          { label: "GPU 型号", render: (detail) => (detail as any).gpuModelName },
+          { label: "显存", render: (detail) => `${formatNumber((detail as any).gpuMemoryGb)} GB` },
+          { label: "算力", render: (detail) => `${formatNumber((detail as any).gpuPowerTops)} TOPS` },
+          { label: "CUDA", render: (detail) => (detail as any).cudaVersion },
+          { label: "驱动版本", render: (detail) => (detail as any).driverVersion },
+          { label: "缓存优化", render: (detail) => ((detail as any).hasCacheOptimization) === 1 ? "支持" : "不支持" },
         ],
       },
       {

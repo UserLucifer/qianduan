@@ -189,10 +189,10 @@ export function AdminHeader() {
             onClick={() => setDropdownOpen((prev) => !prev)}
           >
             <div className="flex h-6 w-6 items-center justify-center rounded-md bg-[#5e6ad2]/20 text-xs font-medium text-[var(--admin-brand-soft)]">
-              {(admin?.nickname || admin?.username || "A").slice(0, 1).toUpperCase()}
+              {(admin?.userName || "A").slice(0, 1).toUpperCase()}
             </div>
             <span className="max-w-32 truncate text-sm text-[var(--admin-muted)]">
-              {admin?.nickname || admin?.username || "管理员"}
+              {admin?.userName || "管理员"}
             </span>
           </button>
           

@@ -72,10 +72,10 @@ export default function SettingsPage() {
           <CardContent className="space-y-5">
             <div className="flex items-center gap-4">
               <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-white/10 bg-[#5e6ad2]/20 text-lg font-medium text-[#c3c8ff]">
-                {(user?.nickname || user?.email || "U").slice(0, 1).toUpperCase()}
+                {(user?.userName || user?.email || "U").slice(0, 1).toUpperCase()}
               </div>
               <div>
-                <div className="text-base font-medium text-zinc-50">{loading ? "加载中" : user?.nickname || "未设置昵称"}</div>
+                <div className="text-base font-medium text-zinc-50">{loading ? "加载中" : user?.userName || "未设置用户名"}</div>
                 <div className="mt-1 text-xs text-zinc-500">UID：{user?.userId ?? "-"}</div>
               </div>
               <div className="ml-auto">
@@ -97,10 +97,10 @@ export default function SettingsPage() {
                 </div>
               </div>
               <div className="space-y-2">
-                <Label className="text-xs text-zinc-500">昵称</Label>
+                <Label className="text-xs text-zinc-500">用户名</Label>
                 <Input
                   readOnly
-                  value={user?.nickname ?? ""}
+                  value={user?.userName ?? ""}
                   placeholder="-"
                   className="border-white/10 bg-white/[0.03] text-zinc-200"
                 />
