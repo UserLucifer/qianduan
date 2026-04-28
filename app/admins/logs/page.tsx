@@ -5,6 +5,7 @@ import { Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SearchPanel } from "@/components/shared/SearchPanel";
 import { DataTable, type DataTableColumn } from "@/components/shared/DataTable";
@@ -103,7 +104,7 @@ export default function AdminLogsPage() {
   const columns: DataTableColumn<SysAdminLog>[] = [
     { key: "id", title: "日志 ID", render: (row) => formatEmpty(row.id) },
     { key: "operatorName", title: "操作人", render: (row) => formatEmpty(row.operatorName || row.adminId) },
-    { key: "action", title: "动作", render: (row) => translateAction(row.action) },
+    { key: "action", title: "动作", render: (row) => row.actionName || translateAction(row.action) },
     { key: "targetTable", title: "业务类型", render: (row) => translateBizType(row.targetTable) },
     { key: "targetId", title: "目标 ID", render: (row) => formatEmpty(row.targetId) },
     { key: "ip", title: "IP", render: (row) => formatEmpty(row.ip) },
@@ -126,7 +127,7 @@ export default function AdminLogsPage() {
           fields: [
             { label: "日志 ID", render: (detail) => detail.id },
             { label: "操作人", render: (detail) => formatEmpty(detail.operatorName || detail.adminId) },
-            { label: "动作", render: (detail) => translateAction(detail.action) },
+            { label: "动作", render: (detail) => detail.actionName || translateAction(detail.action) },
             { label: "IP", render: (detail) => detail.ip },
           ],
         },
@@ -169,7 +170,19 @@ export default function AdminLogsPage() {
         </div>
         <div className="space-y-2">
           <Label htmlFor="action">操作动作</Label>
-          <Input id="action" placeholder="输入动作" value={filters.action} onChange={(event) => setFilters((current) => ({ ...current, action: event.target.value }))} className="h-9 w-[150px] bg-background text-foreground" />
+          <Select value={filters.action || "ALL"} onValueChange={(value) => setFilters((current) => ({ ...current, action: value === "ALL" ? "" : value }))}>
+            <SelectTrigger id="action" className="h-9 w-[150px] bg-background text-foreground">
+              <SelectValue placeholder="全部动作" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ALL">全部动作</SelectItem>
+              {Object.entries(ACTION_MAP).map(([key, label]) => (
+                <SelectItem key={key} value={key}>
+                  {label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
         <div className="space-y-2">
           <Label htmlFor="bizType">业务类型</Label>

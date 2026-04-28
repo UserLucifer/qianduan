@@ -817,6 +817,7 @@ export interface SysAdminLog {
   adminId: number;
   operatorName?: string;
   action: string;
+  actionName?: string;
   targetTable: string;
   targetId: number;
   beforeValue?: string;
@@ -891,6 +892,44 @@ export interface AdminBlogPost {
   createdAt?: string;
   updatedAt?: string;
 }
+export interface AdminRechargeChannelResponse {
+  channelId: number;
+  channelCode: string;
+  channelName: string;
+  network: string;
+  displayUrl: string;
+  accountName: string;
+  accountNo: string;
+  minAmount: number;
+  maxAmount: number;
+  feeRate: number;
+  sortNo: number;
+  status: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AdminRechargeChannelQuery extends PageQuery {
+  channelName?: string;
+  status?: number;
+}
+
+export interface CreateRechargeChannelRequest {
+  channelCode: string;
+  channelName: string;
+  network?: string;
+  displayUrl?: string;
+  accountName?: string;
+  accountNo?: string;
+  minAmount: number;
+  maxAmount: number;
+  feeRate: number;
+  sortNo: number;
+  status: number;
+}
+
+export interface UpdateRechargeChannelRequest extends CreateRechargeChannelRequest {}
+
 export interface CreateAdminRequest {  
   userName: string;  
   password?: string;  

@@ -16,6 +16,8 @@ import type {
   AdminMeResponse,
   AdminProductRequest,
   AdminProfitRecordQuery,
+  AdminRechargeChannelQuery,
+  AdminRechargeChannelResponse,
   AdminRentalOrderQuery,
   AdminSettlementOrderQuery,
   AdminSysConfigQueryRequest,
@@ -30,6 +32,7 @@ import type {
   BlogCategory,
   BlogTag,
   CommissionRecordResponse,
+  CreateRechargeChannelRequest,
   GpuModelResponse,
   NotificationBroadcastRequest,
   NotificationCreateRequest,
@@ -48,6 +51,7 @@ import type {
   SettlementOrderResponse,
   SysAdminLog,
   SysNotification,
+  UpdateRechargeChannelRequest,
   UpdateSysConfigRequest,
   UserTeamRelation,
   UserWallet,
@@ -209,6 +213,18 @@ export const rejectRecharge = (
     `/api/admin/recharge/orders/${rechargeNo}/reject`,
     data,
   );
+
+export const getAdminRechargeChannels = (params: AdminRechargeChannelQuery = {}) =>
+  adminApiGet<PageResult<AdminRechargeChannelResponse>>("/api/admin/recharge/channels", { params });
+
+export const createAdminRechargeChannel = (data: CreateRechargeChannelRequest) =>
+  adminApiPost<AdminRechargeChannelResponse, CreateRechargeChannelRequest>("/api/admin/recharge/channels", data);
+
+export const updateAdminRechargeChannel = (id: number, data: UpdateRechargeChannelRequest) =>
+  adminApiPut<AdminRechargeChannelResponse, UpdateRechargeChannelRequest>(`/api/admin/recharge/channels/${id}`, data);
+
+export const deleteAdminRechargeChannel = (id: number) =>
+  adminApiPost<void>(`/api/admin/recharge/channels/${id}/delete`);
 
 export const getAdminWithdrawOrders = (params: WithdrawOrderQueryRequest = {}) =>
   adminApiGet<PageResult<WithdrawOrderResponse>>("/api/admin/withdraw/orders", { params });

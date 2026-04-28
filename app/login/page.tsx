@@ -30,7 +30,7 @@ export default function LoginPage() {
         localStorage.setItem("user_access_token", res.data.accessToken);
         router.push("/dashboard");
       } else {
-        setError(translateErrorMessage(res?.message || "Login failed. Please check your credentials."));
+        setError(translateErrorMessage(res?.message || "登录失败，请检查您的凭据。"));
       }
     } catch (err) {
       setError(toErrorMessage(err));
@@ -57,8 +57,8 @@ export default function LoginPage() {
         </div>
 
         <div className="login-form-container">
-          <h1 className="login-title">Welcome back.</h1>
-          <p className="login-subtitle">Log in to your account below.</p>
+          <h1 className="login-title">欢迎回来</h1>
+          <p className="login-subtitle">登录您的账号</p>
 
           <form style={{ width: "100%" }} onSubmit={handleLogin}>
             <div className="input-group">
@@ -80,7 +80,7 @@ export default function LoginPage() {
               <input
                 type={showPassword ? "text" : "password"}
                 className="login-input"
-                placeholder="Password"
+                placeholder="密码"
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
@@ -119,22 +119,22 @@ export default function LoginPage() {
               className="login-button login-button--primary"
               disabled={isLoading}
             >
-              {isLoading ? "Signing in..." : "Sign in"}
+              {isLoading ? "登录中..." : "登录"}
             </button>
           </form>
 
           <div className="login-footer-links" style={{ marginTop: "24px" }}>
             <div className="footer-subtext">
-              Don't have an account? <Link href="/signup" className="footer-link-bold">Sign up for free</Link>
+              还没有账号？ <Link href="/signup" className="footer-link-bold">免费注册</Link>
             </div>
             <div className="footer-subtext">
-              Need help logging in? <Link href="/reset-password" className="footer-link-bold">Reset your password</Link>
+              需要登录帮助？ <Link href="/reset-password" className="footer-link-bold">重置密码</Link>
             </div>
           </div>
 
           <div className="login-legal-text">
-            By using 算力租赁, you acknowledge that we collect and use <br />
-            your personal information as described in our <span className="legal-link">Privacy Policy</span>.
+            通过使用 算力租赁，您承认我们收集并使用 <br />
+            您的个人信息，如我们的 <span className="legal-link">隐私政策</span>中所述。
           </div>
         </div>
       </div>

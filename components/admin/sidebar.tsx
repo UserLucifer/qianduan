@@ -41,6 +41,7 @@ const adminMenuGroups = [
     group: "财务审核",
     items: [
       { name: "充值审核", icon: CircleDollarSign, href: "/admins/recharge" },
+      { name: "充值渠道", icon: Database, href: "/admins/recharge-channels" },
       { name: "提现审核", icon: Wallet, href: "/admins/withdraw" },
       { name: "收益记录", icon: TrendingUp, href: "/admins/profits" },
       { name: "佣金记录", icon: ReceiptText, href: "/admins/commissions" },

@@ -49,7 +49,7 @@ export default function SignupPage() {
         setStep("otp");
         setCountdown(60);
       } else {
-        setError(translateErrorMessage(res?.message || "Failed to send code"));
+        setError(translateErrorMessage(res?.message || "发送失败"));
       }
     } catch (err) {
       setError(toErrorMessage(err));
@@ -66,7 +66,7 @@ export default function SignupPage() {
       if (res && (res.code === 200 || res.code === 0)) {
         setStep("profile");
       } else {
-        setError(translateErrorMessage(res?.message || "Invalid verification code"));
+        setError(translateErrorMessage(res?.message || "验证码无效"));
       }
     } catch (err) {
       setError(toErrorMessage(err));
@@ -96,7 +96,7 @@ export default function SignupPage() {
         localStorage.setItem("user_access_token", res.data.accessToken);
         window.location.href = "/dashboard";
       } else {
-        setError(translateErrorMessage(res?.message || "Registration failed"));
+        setError(translateErrorMessage(res?.message || "注册失败"));
       }
     } catch (err) {
       setError(toErrorMessage(err));
@@ -152,34 +152,34 @@ export default function SignupPage() {
         <div className="login-form-container">
           {step === "email" && (
             <>
-              <h1 className="login-title">Welcome to 算力租赁.</h1>
-              <p className="login-subtitle">Sign up to continue building.</p>
+              <h1 className="login-title">欢迎来到 算力租赁</h1>
+              <p className="login-subtitle">注册以继续使用</p>
 
               <form style={{ width: "100%" }} onSubmit={handleEmailSubmit}>
                 <input
                   type="email"
                   className="login-input"
-                  placeholder="Work email"
+                  placeholder="工作邮箱"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
                 />
                 {error && <div className="error-message">{error}</div>}
                 <button type="submit" className="login-button login-button--primary" disabled={isLoading}>
-                  {isLoading ? "Continuing..." : "Continue"}
+                  {isLoading ? "处理中..." : "继续"}
                 </button>
               </form>
               <div className="footer-subtext" style={{ marginTop: 24 }}>
-                Have an account already? <Link href="/login" className="footer-link-bold">Sign in</Link>
+                已经有账号了？ <Link href="/login" className="footer-link-bold">登录</Link>
               </div>
             </>
           )}
 
           {step === "otp" && (
             <>
-              <h1 className="login-title">Verify your email</h1>
+              <h1 className="login-title">验证您的邮箱</h1>
               <p className="login-subtitle">
-                We've sent a 6-digit code to <br />
+                我们已向以下地址发送了 6 位验证码 <br />
                 <span style={{ color: "#000", fontWeight: 600 }}>{email}</span>
               </p>
               <div className="otp-container">
@@ -206,10 +206,10 @@ export default function SignupPage() {
                   onClick={() => handleEmailSubmit()}
                   disabled={isLoading || countdown > 0}
                 >
-                  {countdown > 0 ? `Resend code in ${countdown}s` : "Resend code"}
+                  {countdown > 0 ? `${countdown}s 后重新发送` : "重新发送验证码"}
                 </button>
                 <button className="resend-button" style={{ alignSelf: "center" }} onClick={() => setStep("email")}>
-                  Back to email
+                  返回邮箱输入
                 </button>
               </div>
             </>
@@ -217,13 +217,13 @@ export default function SignupPage() {
 
           {step === "profile" && (
             <>
-              <h1 className="login-title">Almost there.</h1>
-              <p className="login-subtitle">Set your display name and password.</p>
+              <h1 className="login-title">即将完成</h1>
+              <p className="login-subtitle">设置您的用户名和密码。</p>
               <form style={{ width: "100%" }} onSubmit={handleRegister}>
                 <input
                   type="text"
                   className="login-input"
-                  placeholder="Username"
+                  placeholder="用户名"
                   value={userName}
                   onChange={(e) => {
                     setUserName(e.target.value);
@@ -236,7 +236,7 @@ export default function SignupPage() {
                 <input
                   type="password"
                   className="login-input"
-                  placeholder="Set password"
+                  placeholder="设置密码"
                   value={password}
                   onChange={(e) => {
                     setPassword(e.target.value);
@@ -248,7 +248,7 @@ export default function SignupPage() {
                 <input
                   type="password"
                   className="login-input"
-                  placeholder="Confirm password"
+                  placeholder="确认密码"
                   value={confirmPassword}
                   onChange={(e) => {
                     setConfirmPassword(e.target.value);
@@ -259,7 +259,7 @@ export default function SignupPage() {
                 />
                 {error && <div className="error-message">{error}</div>}
                 <button type="submit" className="login-button login-button--primary" disabled={isLoading}>
-                  {isLoading ? "Creating account..." : "Sign up"}
+                  {isLoading ? "创建账号中..." : "注册"}
                 </button>
                 <button 
                   type="button" 
@@ -267,15 +267,15 @@ export default function SignupPage() {
                   style={{ width: "100%", marginTop: 12 }} 
                   onClick={() => setStep("otp")}
                 >
-                  Back to verification
+                  返回验证码输入
                 </button>
               </form>
             </>
           )}
 
           <div className="login-legal-text" style={{ marginTop: 40 }}>
-            By using 算力租赁, you are agreeing to <br />
-            our <span className="legal-link">privacy policy</span> and <span className="legal-link">terms of service</span>.
+            通过使用 算力租赁，即表示您同意我们的 <br />
+            <span className="legal-link">隐私政策</span> 和 <span className="legal-link">服务条款</span>。
           </div>
         </div>
       </div>

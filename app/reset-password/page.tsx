@@ -49,7 +49,7 @@ export default function ResetPasswordPage() {
         setStep("otp");
         setCountdown(60);
       } else {
-        setError(translateErrorMessage(res?.message || "Failed to send reset code"));
+        setError(translateErrorMessage(res?.message || "重置验证码发送失败"));
       }
     } catch (err) {
       setError(toErrorMessage(err));
@@ -66,7 +66,7 @@ export default function ResetPasswordPage() {
       if (res && (res.code === 200 || res.code === 0)) {
         setStep("reset");
       } else {
-        setError(translateErrorMessage(res?.message || "Invalid verification code"));
+        setError(translateErrorMessage(res?.message || "验证码无效"));
       }
     } catch (err) {
       setError(toErrorMessage(err));
@@ -97,7 +97,7 @@ export default function ResetPasswordPage() {
           window.location.href = "/login";
         }, 2000);
       } else {
-        setError(translateErrorMessage(res?.message || "Reset failed"));
+        setError(translateErrorMessage(res?.message || "重置失败"));
       }
     } catch (err) {
       setError(toErrorMessage(err));
@@ -153,15 +153,15 @@ export default function ResetPasswordPage() {
         <div className="login-form-container">
           {success ? (
             <div className="success-container">
-              <h1 className="login-title">Password reset!</h1>
-              <p className="login-subtitle">Your password has been updated. Redirecting to login...</p>
+              <h1 className="login-title">密码重置成功！</h1>
+              <p className="login-subtitle">您的密码已更新。正在跳转至登录页面...</p>
             </div>
           ) : (
             <>
               {step === "email" && (
                 <>
-                  <h1 className="login-title">Reset your password</h1>
-                  <p className="login-subtitle">Enter the email address associated with your account.</p>
+                  <h1 className="login-title">重置您的密码</h1>
+                  <p className="login-subtitle">输入与您的账号关联的电子邮箱地址。</p>
                   <form style={{ width: "100%" }} onSubmit={handleEmailSubmit}>
                     <input
                       type="email"
@@ -173,18 +173,18 @@ export default function ResetPasswordPage() {
                     />
                     {error && <div className="error-message">{error}</div>}
                     <button type="submit" className="login-button login-button--primary" disabled={isLoading}>
-                      {isLoading ? "Sending..." : "Send reset link"}
+                      {isLoading ? "发送中..." : "发送重置链接"}
                     </button>
                   </form>
-                  <Link href="/login" className="back-link">Back to sign in</Link>
+                  <Link href="/login" className="back-link">返回登录</Link>
                 </>
               )}
 
               {step === "otp" && (
                 <>
-                  <h1 className="login-title">Verify your email</h1>
+                  <h1 className="login-title">验证您的邮箱</h1>
                   <p className="login-subtitle">
-                    We've sent a reset code to <br />
+                    我们已向以下地址发送了重置码 <br />
                     <span style={{ color: "#000", fontWeight: 600 }}>{email}</span>
                   </p>
                   <div className="otp-container">
@@ -211,10 +211,10 @@ export default function ResetPasswordPage() {
                       onClick={() => handleEmailSubmit()}
                       disabled={isLoading || countdown > 0}
                     >
-                      {countdown > 0 ? `Resend code in ${countdown}s` : "Resend code"}
+                      {countdown > 0 ? `${countdown}s 后重新发送` : "重新发送验证码"}
                     </button>
                     <button className="resend-button" style={{ alignSelf: "center" }} onClick={() => setStep("email")}>
-                      Back to email
+                      返回邮箱输入
                     </button>
                   </div>
                 </>
@@ -222,13 +222,13 @@ export default function ResetPasswordPage() {
 
               {step === "reset" && (
                 <>
-                  <h1 className="login-title">Set new password.</h1>
-                  <p className="login-subtitle">Enter your new secure password.</p>
+                  <h1 className="login-title">设置新密码</h1>
+                  <p className="login-subtitle">输入您的新安全密码。</p>
                   <form style={{ width: "100%" }} onSubmit={handleReset}>
                     <input
                       type="password"
                       className="login-input"
-                      placeholder="New password"
+                      placeholder="新密码"
                       value={newPassword}
                       onChange={(e) => {
                         setNewPassword(e.target.value);
@@ -241,7 +241,7 @@ export default function ResetPasswordPage() {
                     <input
                       type="password"
                       className="login-input"
-                      placeholder="Confirm password"
+                      placeholder="确认密码"
                       value={confirmPassword}
                       onChange={(e) => {
                         setConfirmPassword(e.target.value);
@@ -252,7 +252,7 @@ export default function ResetPasswordPage() {
                     />
                     {error && <div className="error-message">{error}</div>}
                     <button type="submit" className="login-button login-button--primary" disabled={isLoading}>
-                      {isLoading ? "Resetting..." : "Update password"}
+                      {isLoading ? "重置中..." : "更新密码"}
                     </button>
                     <button 
                       type="button" 
@@ -260,7 +260,7 @@ export default function ResetPasswordPage() {
                       style={{ width: "100%", marginTop: 12 }} 
                       onClick={() => setStep("otp")}
                     >
-                      Back to verification
+                      返回验证码输入
                     </button>
                   </form>
                 </>
@@ -269,8 +269,8 @@ export default function ResetPasswordPage() {
           )}
 
           <div className="login-legal-text" style={{ marginTop: 40 }}>
-            By using 算力租赁, you are agreeing to <br />
-            our <span className="legal-link">privacy policy</span> and <span className="legal-link">terms of service</span>.
+            通过使用 算力租赁，即表示您同意我们的 <br />
+            <span className="legal-link">隐私政策</span> 和 <span className="legal-link">服务条款</span>。
           </div>
         </div>
       </div>

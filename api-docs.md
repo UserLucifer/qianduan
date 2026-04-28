@@ -1146,7 +1146,7 @@ _None_
 
 | Status | Description | Content / Schema |
 |---:|---|---|
-| `200` | OK | `*/*`: `ApiResponseUserWallet` |
+| `200` | OK | `*/*`: `ApiResponseAdminWalletResponse` |
 
 ## Admin Catalog
 
@@ -6069,6 +6069,7 @@ _None_
 | `id` | `integer` (int64) | - |
 | `adminId` | `integer` (int64) | - |
 | `action` | `string` | - |
+| `actionName` | `string` | 操作中文名称 |
 | `targetTable` | `string` | - |
 | `targetId` | `integer` (int64) | - |
 | `beforeValue` | `string` | - |
