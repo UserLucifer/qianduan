@@ -80,7 +80,7 @@ export default function AdminWalletsPage() {
 
   const walletColumns: DataTableColumn<UserWallet>[] = [
     { key: "walletNo", title: "钱包编号", render: (row) => formatEmpty(row.walletNo) },
-    { key: "userId", title: "用户 ID", render: (row) => formatEmpty(row.userId) },
+    { key: "userName", title: "用户名称", render: (row) => formatEmpty(row.userName) },
     { key: "availableBalance", title: "可用余额", render: (row) => <MoneyText value={row.availableBalance} currency={row.currency} /> },
     { key: "frozenBalance", title: "冻结金额", render: (row) => <MoneyText value={row.frozenBalance} currency={row.currency} /> },
     { key: "totalRecharge", title: "累计充值", render: (row) => <MoneyText value={row.totalRecharge} currency={row.currency} /> },
@@ -112,7 +112,7 @@ export default function AdminWalletsPage() {
           title: "钱包信息",
           fields: [
             { label: "钱包编号", render: (detail) => detail.walletNo },
-            { label: "用户 ID", render: (detail) => detail.userId },
+            { label: "用户名称", render: (detail) => detail.userName },
             { label: "状态", render: (detail) => <StatusBadge status={detail.status} /> },
             { label: "币种", render: (detail) => detail.currency },
           ],

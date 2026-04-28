@@ -1,14 +1,30 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
-import { Bell, KeyRound, Moon, Search, Sun, Wallet } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Bell, KeyRound, Moon, Search, Sun, Wallet, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getCurrentUser, type UserMeResponse } from "@/api/user";
 
 export function Header() {
   const [user, setUser] = useState<UserMeResponse | null>(null);
   const [theme, setTheme] = useState<string>("dark");
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    if (dropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [dropdownOpen]);
 
   useEffect(() => {
     let mounted = true;
@@ -35,6 +51,12 @@ export function Header() {
     document.documentElement.dataset.theme = newTheme;
     document.documentElement.style.colorScheme = newTheme;
     localStorage.setItem("theme", newTheme);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("user_access_token");
+    localStorage.removeItem("accessToken");
+    router.push("/login");
   };
 
   return (
@@ -75,11 +97,30 @@ export function Header() {
             <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-[#5e6ad2]" />
           </Link>
         </Button>
-        <div className="ml-3 flex h-9 items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-3 transition-colors dark:border-white/10 dark:bg-white/[0.03]">
-          <div className="flex h-6 w-6 items-center justify-center rounded-md bg-[#5e6ad2]/20 text-xs font-medium text-[#5e6ad2] dark:text-[#9aa2ff]">
-            {(user?.nickname || user?.email || "U").slice(0, 1).toUpperCase()}
-          </div>
-          <span className="max-w-32 truncate text-sm font-medium text-slate-700 dark:text-muted-foreground">{user?.nickname || user?.email || "当前用户"}</span>
+        <div className="relative ml-3" ref={dropdownRef}>
+          <button
+            type="button"
+            className="flex h-9 items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-3 transition-colors hover:bg-gray-100 dark:border-white/10 dark:bg-white/[0.03] dark:hover:bg-white/5"
+            onClick={() => setDropdownOpen((prev) => !prev)}
+          >
+            <div className="flex h-6 w-6 items-center justify-center rounded-md bg-[#5e6ad2]/20 text-xs font-medium text-[#5e6ad2] dark:text-[#9aa2ff]">
+              {(user?.nickname || user?.email || "U").slice(0, 1).toUpperCase()}
+            </div>
+            <span className="max-w-32 truncate text-sm font-medium text-slate-700 dark:text-muted-foreground">{user?.nickname || user?.email || "当前用户"}</span>
+          </button>
+          
+          {dropdownOpen ? (
+            <div className="absolute right-0 top-full mt-1.5 w-32 overflow-hidden rounded-lg border border-gray-200 bg-white py-1 shadow-lg dark:border-white/10 dark:bg-[#0f1011]">
+              <button
+                type="button"
+                className="flex w-full items-center gap-2 px-3 py-2 text-sm text-rose-500 transition-colors hover:bg-rose-50 dark:hover:bg-rose-500/10"
+                onClick={handleLogout}
+              >
+                <LogOut className="h-4 w-4" />
+                退出登录
+              </button>
+            </div>
+          ) : null}
         </div>
       </div>
     </header>

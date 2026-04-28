@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Bell, LayoutGrid, LogOut, Moon, Search, Settings, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { adminLogout, getAdminMe, type AdminMeResponse } from "@/api/admin";
@@ -100,6 +100,7 @@ function AdminThemeToggle() {
 
 export function AdminHeader() {
   const pathname = usePathname();
+  const router = useRouter();
   const [admin, setAdmin] = useState<AdminMeResponse | null>(null);
   const pathSegments = pathname.split("/").filter(Boolean);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -123,7 +124,9 @@ export function AdminHeader() {
     } catch (e) {
       // ignore
     } finally {
-      window.location.href = "/admins/login";
+      localStorage.removeItem("admin_access_token");
+      localStorage.removeItem("adminAccessToken");
+      router.push("/admins/login");
     }
   };
 

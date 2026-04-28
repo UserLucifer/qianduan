@@ -122,6 +122,7 @@ export default function AdminRechargePage() {
 
   const columns: DataTableColumn<RechargeOrderResponse>[] = [
     { key: "rechargeNo", title: "充值订单号", render: (row) => <CopyableSecret value={row.rechargeNo} maskedValue={row.rechargeNo} canReveal={false} /> },
+    { key: "userName", title: "用户名称", render: (row) => formatEmpty(row.userName) },
     { key: "channelName", title: "支付方式", render: (row) => `${formatEmpty(row.channelName)} / ${formatEmpty(row.network)}` },
     { key: "applyAmount", title: "申请金额", render: (row) => <MoneyText value={row.applyAmount} currency={row.currency} /> },
     { key: "actualAmount", title: "到账金额", render: (row) => <MoneyText value={row.actualAmount} currency={row.currency} /> },
@@ -160,6 +161,7 @@ export default function AdminRechargePage() {
           title: "订单信息",
           fields: [
             { label: "充值订单号", render: (detail) => <CopyableSecret value={detail.rechargeNo} maskedValue={detail.rechargeNo} canReveal={false} /> },
+            { label: "用户名称", render: (detail) => detail.userName },
             { label: "状态", render: (detail) => <StatusBadge status={detail.status} /> },
             { label: "申请金额", render: (detail) => <MoneyText value={detail.applyAmount} currency={detail.currency} /> },
             { label: "实际到账", render: (detail) => <MoneyText value={detail.actualAmount} currency={detail.currency} /> },

@@ -77,7 +77,7 @@ export default function AdminSchedulerPage() {
   return (
     <div className="space-y-6">
       <PageHeader eyebrow="SCHEDULER" title="调度任务" description="手动执行平台内置调度任务，允许动态传入特定参数执行。" />
-      {error && !triggerTask ? <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-200">{error}</div> : null}
+      {error && !triggerTask ? <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-600 dark:text-rose-200">{error}</div> : null}
       
       <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
         {tasks.map((task) => {
@@ -91,22 +91,22 @@ export default function AdminSchedulerPage() {
                     <Icon className="h-4 w-4 text-emerald-500" />
                     {task.title}
                   </CardTitle>
-                  <p className="mt-2 text-xs leading-5 text-zinc-500">{task.description}</p>
+                  <p className="mt-2 text-xs leading-5 text-muted-foreground">{task.description}</p>
                 </div>
                 <StatusBadge status={result?.status ?? "PENDING"} />
               </CardHeader>
               <CardContent className="space-y-4 flex-1 flex flex-col justify-end">
-                <div className="grid grid-cols-3 gap-2 rounded-lg border border-white/10 bg-white/[0.025] p-3 text-center">
+                <div className="grid grid-cols-3 gap-2 rounded-lg border border-slate-200 bg-slate-50 dark:border-white/10 dark:bg-white/[0.025] p-3 text-center">
                   <Metric label="总数" value={result?.totalCount} />
                   <Metric label="成功" value={result?.successCount} />
                   <Metric label="失败" value={result?.failCount} />
                 </div>
-                {result?.errorMessage ? <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-3 text-xs text-rose-200">{result.errorMessage}</div> : null}
+                {result?.errorMessage ? <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-3 text-xs text-rose-600 dark:text-rose-200">{result.errorMessage}</div> : null}
                 <div className="flex gap-2">
                   <Button
                     variant="outline"
                     size="sm"
-                    className="border-white/10 bg-white/[0.03] text-zinc-300 hover:bg-white/[0.06] hover:text-white"
+                    className="border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:border-white/10 dark:bg-white/[0.03] dark:text-zinc-300 dark:hover:bg-white/[0.06] dark:hover:text-white"
                     onClick={() => setLogTask(task.key)}
                   >
                     <FileText className="h-4 w-4 mr-2" />
@@ -169,7 +169,7 @@ export default function AdminSchedulerPage() {
         <AlertDialogContent className="border-[var(--admin-border)] bg-[var(--admin-panel-strong)] text-[var(--admin-text)]">
           <AlertDialogHeader>
             <AlertDialogTitle className="flex items-center gap-2">
-              <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+              <CheckCircle2 className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
               {alertData?.title}
             </AlertDialogTitle>
             <AlertDialogDescription className="text-[var(--admin-muted)]">
@@ -195,8 +195,8 @@ export default function AdminSchedulerPage() {
 function Metric({ label, value }: { label: string; value?: number }) {
   return (
     <div>
-      <div className="text-lg font-semibold tabular-nums text-zinc-50">{formatNumber(value ?? 0)}</div>
-      <div className="mt-1 text-[11px] text-zinc-500">{label}</div>
+      <div className="text-lg font-semibold tabular-nums text-foreground dark:text-zinc-50">{formatNumber(value ?? 0)}</div>
+      <div className="mt-1 text-[11px] text-muted-foreground">{label}</div>
     </div>
   );
 }
@@ -242,9 +242,9 @@ function SchedulerLogsDrawer({ taskKey, open, onClose }: { taskKey: string | nul
       title: "执行统计",
       render: (row) => (
         <div className="flex gap-3 text-xs">
-          <span className="text-zinc-300">总计: {row.totalCount}</span>
-          <span className="text-emerald-400">成功: {row.successCount}</span>
-          <span className="text-rose-400">失败: {row.failCount}</span>
+          <span className="text-slate-600 dark:text-zinc-300">总计: {row.totalCount}</span>
+          <span className="text-emerald-600 dark:text-emerald-400">成功: {row.successCount}</span>
+          <span className="text-rose-600 dark:text-rose-400">失败: {row.failCount}</span>
         </div>
       ),
     },
@@ -252,7 +252,7 @@ function SchedulerLogsDrawer({ taskKey, open, onClose }: { taskKey: string | nul
       key: "errorMessage",
       title: "详细日志",
       render: (row) => (
-        <div className="max-w-xs truncate text-xs font-mono text-rose-300" title={row.errorMessage}>
+        <div className="max-w-xs truncate text-xs font-mono text-rose-600 dark:text-rose-300" title={row.errorMessage}>
           {formatEmpty(row.errorMessage)}
         </div>
       ),

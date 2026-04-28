@@ -223,6 +223,8 @@ export interface ApiDeployOrderResponse {
 
 export interface RentalOrderSummaryResponse {
   orderNo: string;
+  userId?: number;
+  userName?: string;
   productNameSnapshot: string;
   machineCodeSnapshot: string;
   machineAliasSnapshot: string;
@@ -249,6 +251,9 @@ export interface RentalOrderSummaryResponse {
 export interface RentalOrderDetailResponse extends RentalOrderSummaryResponse {
   productId?: number;
   userId?: number;
+  nickname?: string;
+  userName?: string;
+  email?: string;
   aiModelId?: number;
   cycleRuleId?: number;
   productCodeSnapshot?: string;
@@ -336,6 +341,8 @@ export interface CreateRechargeOrderRequest {
 
 export interface RechargeOrderResponse {
   rechargeNo: string;
+  userId?: number;
+  userName?: string;
   channelId: number;
   currency: string;
   channelName: string;
@@ -371,6 +378,8 @@ export interface CreateWithdrawOrderRequest {
 
 export interface WithdrawOrderResponse {
   withdrawNo: string;
+  userId?: number;
+  userName?: string;
   currency: string;
   withdrawMethod: string;
   network: string;
@@ -623,6 +632,7 @@ export interface UserWallet {
   id: number;
   walletNo: string;
   userId: number;
+  userName?: string;
   currency: string;
   availableBalance: number;
   frozenBalance: number;
@@ -807,6 +817,7 @@ export interface NotificationBroadcastRequest {
 export interface SysAdminLog {
   id: number;
   adminId: number;
+  operatorName?: string;
   action: string;
   targetTable: string;
   targetId: number;
@@ -882,3 +893,8 @@ export interface AdminBlogPost {
   createdAt?: string;
   updatedAt?: string;
 }
+export interface CreateAdminRequest {  
+  username: string;  
+  password?: string;  
+  role: string;  
+} 

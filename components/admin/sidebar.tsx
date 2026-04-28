@@ -32,7 +32,7 @@ const adminMenuGroups = [
     group: "运营中枢",
     items: [
       { name: "数据总览", icon: Gauge, href: "/admins/dashboard" },
-      { name: "用户管理", icon: Users, href: "/admins/management" },
+      { name: "系统管理", icon: Users, href: "/admins/management" },
       { name: "钱包管理", icon: Wallet, href: "/admins/wallets" },
       { name: "操作日志", icon: Database, href: "/admins/logs" },
     ],

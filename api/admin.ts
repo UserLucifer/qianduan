@@ -1,5 +1,6 @@
 import { adminApiGet, adminApiPost, adminApiPut } from "./http";
 import type {
+  CreateAdminRequest,
   AdminApiCredentialQuery,
   AdminApiCredentialRow,
   AdminApiDeployOrderQuery,
@@ -108,6 +109,10 @@ export const adminLogin = (data: AdminLoginRequest) =>
 
 export const adminLogout = () =>
   adminApiPost<void>("/api/admin/auth/logout");
+
+export const createAdminUser = (data: CreateAdminRequest) =>
+  adminApiPost<void, CreateAdminRequest>("/api/admin/auth/create", data);
+
 
 export const getAdminMe = () =>
   adminApiGet<AdminMeResponse>("/api/admin/auth/me");

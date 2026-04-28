@@ -141,6 +141,7 @@ export default function AdminWithdrawPage() {
 
   const columns: DataTableColumn<WithdrawOrderResponse>[] = [
     { key: "withdrawNo", title: "提现订单号", render: (row) => <CopyableSecret value={row.withdrawNo} maskedValue={row.withdrawNo} canReveal={false} /> },
+    { key: "userName", title: "用户名称", render: (row) => formatEmpty(row.userName) },
     { key: "applyAmount", title: "提现金额", render: (row) => <MoneyText value={row.applyAmount} currency={row.currency} /> },
     { key: "feeAmount", title: "手续费", render: (row) => <MoneyText value={row.feeAmount} currency={row.currency} /> },
     { key: "actualAmount", title: "到账金额", render: (row) => <MoneyText value={row.actualAmount} currency={row.currency} /> },
@@ -188,6 +189,7 @@ export default function AdminWithdrawPage() {
           title: "订单信息",
           fields: [
             { label: "提现订单号", render: (detail) => <CopyableSecret value={detail.withdrawNo} maskedValue={detail.withdrawNo} canReveal={false} /> },
+            { label: "用户名称", render: (detail) => detail.userName },
             { label: "状态", render: (detail) => <StatusBadge status={detail.status} /> },
             { label: "提现金额", render: (detail) => <MoneyText value={detail.applyAmount} currency={detail.currency} /> },
             { label: "到账金额", render: (detail) => <MoneyText value={detail.actualAmount} currency={detail.currency} /> },

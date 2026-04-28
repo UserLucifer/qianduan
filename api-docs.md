@@ -871,6 +871,14 @@ _None_
 |---:|---|---|
 | `200` | OK | `*/*`: `ApiResponseMapStringObject` |
 
+Response `data` is a rental order detail object and includes:
+
+| Field | Type | Description |
+|---|---|---|
+| `orderNo` | string | Rental order number |
+| `userName` | string | User nickname for the order |
+| `apiCredential` | object/null | API credential detail |
+
 ### `GET` /api/admin/settlement/orders
 
 **Summary:** Admin settlement orders
@@ -4038,6 +4046,7 @@ _None_
 | `id` | `integer` (int64) | - |
 | `deployNo` | `string` | - |
 | `userId` | `integer` (int64) | - |
+| `userName` | `string` | 用户名称 |
 | `rentalOrderId` | `integer` (int64) | - |
 | `apiCredentialId` | `integer` (int64) | - |
 | `aiModelId` | `integer` (int64) | - |
@@ -4058,6 +4067,7 @@ _None_
 | Field | Type | Description |
 |---|---|---|
 | `deployNo` | `string` | - |
+| `userName` | `string` | 用户名称 |
 | `orderNo` | `string` | - |
 | `credentialNo` | `string` | - |
 | `modelNameSnapshot` | `string` | - |
@@ -4966,6 +4976,7 @@ _None_
 | `commissionNo` | `string` | - |
 | `benefitUserId` | `integer` (int64) | - |
 | `sourceUserId` | `integer` (int64) | - |
+| `userName` | `string` | 用户名称 |
 | `sourceOrderId` | `integer` (int64) | - |
 | `sourceProfitId` | `integer` (int64) | - |
 | `levelNo` | `integer` (int32) | - |
@@ -5000,6 +5011,7 @@ _None_
 |---|---|---|
 | `commissionNo` | `string` | - |
 | `sourceUserId` | `integer` (int64) | - |
+| `userName` | `string` | 用户名称 |
 | `sourceOrderId` | `integer` (int64) | - |
 | `sourceProfitId` | `integer` (int64) | - |
 | `levelNo` | `integer` (int32) | - |
@@ -5651,6 +5663,7 @@ _None_
 | Field | Type | Description |
 |---|---|---|
 | `rechargeNo` | `string` | - |
+| `userName` | `string` | 用户名称 |
 | `channelId` | `integer` (int64) | - |
 | `currency` | `string` | - |
 | `channelName` | `string` | - |
@@ -5775,6 +5788,7 @@ _None_
 | `id` | `integer` (int64) | - |
 | `orderNo` | `string` | - |
 | `userId` | `integer` (int64) | - |
+| `userName` | `string` | 用户名称 |
 | `productId` | `integer` (int64) | - |
 | `aiModelId` | `integer` (int64) | - |
 | `cycleRuleId` | `integer` (int64) | - |
@@ -5827,6 +5841,7 @@ _None_
 | Field | Type | Description |
 |---|---|---|
 | `orderNo` | `string` | - |
+| `userName` | `string` | 用户名称 |
 | `productId` | `integer` (int64) | - |
 | `aiModelId` | `integer` (int64) | - |
 | `cycleRuleId` | `integer` (int64) | - |
@@ -5891,6 +5906,7 @@ _None_
 | Field | Type | Description |
 |---|---|---|
 | `orderNo` | `string` | - |
+| `userName` | `string` | 用户名称 |
 | `productNameSnapshot` | `string` | - |
 | `machineCodeSnapshot` | `string` | - |
 | `machineAliasSnapshot` | `string` | - |
@@ -5922,6 +5938,7 @@ _None_
 | `id` | `integer` (int64) | - |
 | `profitNo` | `string` | - |
 | `userId` | `integer` (int64) | - |
+| `userName` | `string` | 用户名称 |
 | `rentalOrderId` | `integer` (int64) | - |
 | `profitDate` | `string` (date) | - |
 | `gpuDailyTokenSnapshot` | `integer` (int64) | - |
@@ -5946,6 +5963,7 @@ _None_
 | `id` | `integer` (int64) | - |
 | `settlementNo` | `string` | - |
 | `userId` | `integer` (int64) | - |
+| `userName` | `string` | 用户名称 |
 | `rentalOrderId` | `integer` (int64) | - |
 | `settlementType` | `string` | - |
 | `currency` | `string` | - |
@@ -6094,6 +6112,7 @@ _None_
 | Field | Type | Description |
 |---|---|---|
 | `userId` | `string` | - |
+| `userName` | `string` | 用户名称 |
 | `email` | `string` | - |
 | `nickname` | `string` | - |
 | `status` | `integer` (int32) | - |
@@ -6236,6 +6255,7 @@ _None_
 | `txNo` | `string` | - |
 | `idempotencyKey` | `string` | - |
 | `userId` | `integer` (int64) | - |
+| `userName` | `string` | 用户名称 |
 | `walletId` | `integer` (int64) | - |
 | `currency` | `string` | - |
 | `txType` | `string` | - |
@@ -6269,6 +6289,7 @@ _None_
 | Field | Type | Description |
 |---|---|---|
 | `txNo` | `string` | - |
+| `userName` | `string` | 用户名称 |
 | `txType` | `string` | - |
 | `amount` | `number` | - |
 | `beforeAvailableBalance` | `number` | - |
@@ -6299,6 +6320,7 @@ _None_
 | Field | Type | Description |
 |---|---|---|
 | `withdrawNo` | `string` | - |
+| `userName` | `string` | 用户名称 |
 | `currency` | `string` | - |
 | `withdrawMethod` | `string` | - |
 | `network` | `string` | - |
