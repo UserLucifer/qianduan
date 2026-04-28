@@ -60,6 +60,8 @@ import type {
   WithdrawOrderResponse,
   TeamSummaryResponse,
   AdminBlogPost,
+  SysAdminRow,
+  SysAdminQuery,
 } from "./types";
 
 export type {
@@ -115,7 +117,10 @@ export const adminLogout = () =>
   adminApiPost<void>("/api/admin/auth/logout");
 
 export const createAdminUser = (data: CreateAdminRequest) =>
-  adminApiPost<void, CreateAdminRequest>("/api/admin/auth/create", data);
+  adminApiPost<void, CreateAdminRequest>("/api/admin/auth/register", data);
+
+export const getAdminList = (params: SysAdminQuery = {}) =>
+  adminApiGet<PageResult<SysAdminRow>>("/api/admin/auth/admins", { params });
 
 
 export const getAdminMe = () =>

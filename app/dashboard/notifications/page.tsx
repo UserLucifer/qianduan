@@ -55,12 +55,12 @@ export default function NotificationsPage() {
   };
 
   const columns: DataTableColumn<SysNotification>[] = [
-    { key: "title", title: "标题", render: (row) => <span className="font-medium text-zinc-100">{row.title}</span> },
+    { key: "title", title: "标题", render: (row) => <span className="font-medium text-foreground">{row.title}</span> },
     { key: "type", title: "通知类型", render: (row) => notificationTypeLabel(row.type) },
     { key: "bizType", title: "业务类型", render: (row) => row.bizType || "-" },
     { key: "readStatus", title: "已读状态", render: (row) => <StatusBadge status={row.readStatus === 1 ? "SETTLED" : "PENDING"} label={row.readStatus === 1 ? "已读" : "未读"} /> },
     { key: "createdAt", title: "时间", render: (row) => <DateTimeText value={row.createdAt} /> },
-    { key: "actions", title: "操作", className: "text-right", render: (row) => <Button variant="ghost" size="sm" className="text-muted-foreground hover:bg-white/5" onClick={() => void openDetail(row.id)}><Eye className="h-3.5 w-3.5" />详情</Button> },
+    { key: "actions", title: "操作", className: "text-right", render: (row) => <Button variant="ghost" size="sm" className="text-muted-foreground hover:bg-foreground/5" onClick={() => void openDetail(row.id)}><Eye className="h-3.5 w-3.5" />详情</Button> },
   ];
 
   const sections: DetailSectionDef<any>[] = [
@@ -120,7 +120,7 @@ export default function NotificationsPage() {
           </Select>
         </div>
       </SearchPanel>
-      {error || actionError ? <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-200">{error ?? actionError}</div> : null}
+      {error || actionError ? <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-500">{error ?? actionError}</div> : null}
       <DataTable columns={columns} data={page.records} rowKey={(row) => row.id} loading={loading} emptyText="暂无通知。" pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
       <DetailDrawer data={detail} open={Boolean(detail)} title="通知详情" subtitle={(data) => data.title} sections={sections} onClose={() => setDetail(null)} />
     </div>

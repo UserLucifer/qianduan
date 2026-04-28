@@ -3,8 +3,6 @@
 export enum AdminRole {
   SUPER_ADMIN = "SUPER_ADMIN",
   ADMIN = "ADMIN",
-  FINANCE = "FINANCE",
-  MAINTAINER = "MAINTAINER",
 }
 
 export enum ApiDeployOrderStatus {

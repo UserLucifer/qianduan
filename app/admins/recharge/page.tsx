@@ -139,7 +139,7 @@ export default function AdminRechargePage() {
           </Button>
           {row.status === "SUBMITTED" || row.status === "PENDING_REVIEW" ? (
             <>
-              <HasPermission role={[AdminRole.SUPER_ADMIN, AdminRole.FINANCE]}>
+              <HasPermission role={[AdminRole.SUPER_ADMIN, AdminRole.ADMIN]}>
                 <Button variant="ghost" size="sm" className="font-medium text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 dark:text-emerald-400 dark:hover:bg-emerald-500/10" onClick={() => openApprove(row)}>
                   <Check className="h-4 w-4 mr-1" />
                   通过

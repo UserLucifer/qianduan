@@ -484,6 +484,7 @@ createdAt, updatedAt
 | `POST` | `/api/admin/auth/login` | 公开 | body: `AdminLoginRequest` | `AdminLoginResponse` |
 | `GET` | `/api/admin/auth/me` | 管理员 | 无 | `AdminMeResponse` |
 | `POST` | `/api/admin/auth/logout` | 管理员 | 无 | `null` |
+| `GET` | `/api/admin/auth/admins` | 管理员 | query: `pageNo,pageSize,userName,role,status` | `PageResult<AdminListResponse>` |
 
 请求体：
 
@@ -499,6 +500,9 @@ adminAccessToken, tokenType, expiresIn
 
 AdminMeResponse:
 adminId, userName, role, status
+
+AdminListResponse:
+adminId, userName, role, status, lastLoginAt, createdAt
 ```
 
 ## 12. 管理端目录维护

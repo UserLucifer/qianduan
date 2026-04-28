@@ -32,9 +32,14 @@ const adminMenuGroups = [
     group: "运营中枢",
     items: [
       { name: "数据总览", icon: Gauge, href: "/admins/dashboard" },
-      { name: "系统管理", icon: Users, href: "/admins/management" },
       { name: "钱包管理", icon: Wallet, href: "/admins/wallets" },
       { name: "操作日志", icon: Database, href: "/admins/logs" },
+    ],
+  },
+  {
+    group: "用户管理",
+    items: [
+      { name: "客户列表", icon: Users, href: "/admins/users" },
     ],
   },
   {
@@ -62,10 +67,11 @@ const adminMenuGroups = [
     ],
   },
   {
-    group: "系统配置",
+    group: "系统设置",
     items: [
-      { name: "内容管理", icon: BookOpenText, href: "/admins/content" },
+      { name: "管理员设置", icon: ShieldCheck, href: "/admins/management" },
       { name: "通知管理", icon: Bell, href: "/admins/notifications" },
+      { name: "内容管理", icon: BookOpenText, href: "/admins/content" },
       { name: "系统配置", icon: Settings, href: "/admins/config" },
       { name: "调度任务", icon: SlidersHorizontal, href: "/admins/scheduler" },
     ],

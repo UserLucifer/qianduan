@@ -114,7 +114,7 @@ export default function RechargeChannelsPage() {
               禁用
             </ConfirmActionButton>
           )}
-          <ConfirmActionButton title="删除渠道" description="确定要删除该充值渠道吗？此操作不可撤销。" variant="danger" onConfirm={() => handleDelete(row)}>
+          <ConfirmActionButton title="删除渠道" description="确定要删除该充值渠道吗？此操作不可撤销。" variant="destructive" onConfirm={() => handleDelete(row)}>
             <Trash2 className="h-3.5 w-3.5 mr-1" />
             删除
           </ConfirmActionButton>

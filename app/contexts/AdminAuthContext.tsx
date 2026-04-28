@@ -16,8 +16,8 @@ export const useAdminAuth = () => useContext(AdminAuthContext);
 
 // 基于角色的细粒度路由拦截规则
 const roleRoutes: Record<string, AdminRole[]> = {
-  "/admins/recharge": [AdminRole.SUPER_ADMIN, AdminRole.FINANCE],
-  "/admins/withdraw": [AdminRole.SUPER_ADMIN, AdminRole.FINANCE],
+  "/admins/recharge": [AdminRole.SUPER_ADMIN, AdminRole.ADMIN],
+  "/admins/withdraw": [AdminRole.SUPER_ADMIN, AdminRole.ADMIN],
   "/admins/config": [AdminRole.SUPER_ADMIN],
   "/admins/scheduler": [AdminRole.SUPER_ADMIN],
   "/admins/logs": [AdminRole.SUPER_ADMIN],

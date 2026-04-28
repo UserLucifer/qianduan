@@ -594,23 +594,39 @@ export interface AdminDashboardUsers {
 }
 
 export interface AdminUserRow {
-  id?: number;
-  userId?: string;
-  email?: string;
-  userName?: string;
-  status?: number;
+  id: number;
+  userId: string;
+  email: string;
+  userName: string;
+  status: number;
   walletNo?: string;
   availableBalance?: number;
   frozenBalance?: number;
   totalProfit?: number;
   totalCommission?: number;
   orderCount?: number;
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt: string;
+  updatedAt: string;
   walletData?: any;
   teamData?: any;
   orderData?: any;
   teamCount?: number;
+}
+
+export interface SysAdminRow {
+  adminId: number;
+  userName: string;
+  nickname?: string;
+  role: string;
+  status: number;
+  lastLoginAt?: string;
+  createdAt: string;
+}
+
+export interface SysAdminQuery extends PageQuery {
+  userName?: string;
+  role?: string;
+  status?: number;
 }
 
 export interface AdminUserQuery extends PageQuery {
@@ -928,10 +944,10 @@ export interface CreateRechargeChannelRequest {
   status: number;
 }
 
-export interface UpdateRechargeChannelRequest extends CreateRechargeChannelRequest {}
+export interface UpdateRechargeChannelRequest extends CreateRechargeChannelRequest { }
 
-export interface CreateAdminRequest {  
-  userName: string;  
-  password?: string;  
-  role: string;  
+export interface CreateAdminRequest {
+  userName: string;
+  password?: string;
+  role: string;
 } 
