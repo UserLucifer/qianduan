@@ -1,22 +1,25 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { CheckCheck, Eye } from "lucide-react";
+import { CheckCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { DataTable, type DataTableColumn } from "@/components/shared/DataTable";
-import { DateTimeText } from "@/components/shared/DateTimeText";
-import { DetailDrawer, type DetailSectionDef } from "@/components/shared/DetailDrawer";
+import { Label } from "@/components/ui/label";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SearchPanel } from "@/components/shared/SearchPanel";
-import { StatusBadge } from "@/components/shared/StatusBadge";
-import { getNotificationDetail, getUserNotifications, markAllAsRead, markAsRead } from "@/api/notification";
+import { DateTimeText } from "@/components/shared/DateTimeText";
+import { getUserNotifications, markAllAsRead, markAsRead } from "@/api/notification";
 import type { NotificationQueryRequest, PageResult, SysNotification } from "@/api/types";
 import { usePaginatedResource } from "@/hooks/usePaginatedResource";
 import { notificationTypeLabel } from "@/lib/status";
 import { toErrorMessage } from "@/lib/format";
+import { cn } from "@/lib/utils";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 const initialParams: NotificationQueryRequest = { pageNo: 1, pageSize: 10 };
 
@@ -27,22 +30,7 @@ export default function NotificationsPage() {
   }, []);
   const { page, loading, error, updateParams, changePage, reload } = usePaginatedResource(loader, initialParams);
   const [filters, setFilters] = useState<NotificationQueryRequest>(initialParams);
-  const [detail, setDetail] = useState<SysNotification | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
-
-  const openDetail = async (id: number) => {
-    setActionError(null);
-    try {
-      const res = await getNotificationDetail(id);
-      setDetail(res.data);
-      if (res.data.readStatus === 0) {
-        await markAsRead(id);
-        await reload();
-      }
-    } catch (err) {
-      setActionError(toErrorMessage(err));
-    }
-  };
 
   const readAll = async () => {
     setActionError(null);
@@ -54,28 +42,19 @@ export default function NotificationsPage() {
     }
   };
 
-  const columns: DataTableColumn<SysNotification>[] = [
-    { key: "title", title: "标题", render: (row) => <span className="font-medium text-foreground">{row.title}</span> },
-    { key: "type", title: "通知类型", render: (row) => notificationTypeLabel(row.type) },
-    { key: "bizType", title: "业务类型", render: (row) => row.bizType || "-" },
-    { key: "readStatus", title: "已读状态", render: (row) => <StatusBadge status={row.readStatus === 1 ? "SETTLED" : "PENDING"} label={row.readStatus === 1 ? "已读" : "未读"} /> },
-    { key: "createdAt", title: "时间", render: (row) => <DateTimeText value={row.createdAt} /> },
-    { key: "actions", title: "操作", className: "text-right", render: (row) => <Button variant="ghost" size="sm" className="text-muted-foreground hover:bg-foreground/5" onClick={() => void openDetail(row.id)}><Eye className="h-3.5 w-3.5" />详情</Button> },
-  ];
-
-  const sections: DetailSectionDef<any>[] = [
-    {
-      title: "通知内容",
-      fields: [
-        { label: "标题", render: (detail) => detail.title },
-        { label: "类型", render: (detail) => notificationTypeLabel(detail.type) },
-        { label: "业务类型", render: (detail) => detail.bizType || "-" },
-        { label: "业务 ID", render: (detail) => detail.bizId ?? "-" },
-        { label: "内容", render: (detail) => <p className="whitespace-pre-wrap leading-6">{detail.content}</p> },
-        { label: "时间", render: (detail) => <DateTimeText value={detail.createdAt} /> },
-      ],
-    },
-  ];
+  const handleAccordionChange = async (value: string) => {
+    if (!value) return;
+    const id = Number(value);
+    const notification = page.records.find((n) => n.id === id);
+    if (notification && notification.readStatus === 0) {
+      try {
+        await markAsRead(id);
+        await reload();
+      } catch (err) {
+        setActionError(toErrorMessage(err));
+      }
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -83,8 +62,14 @@ export default function NotificationsPage() {
         eyebrow="消息通知"
         title="系统通知"
         description="查看系统、订单、财务、收益相关通知，支持标记已读。"
-        actions={<Button onClick={() => void readAll()} className="bg-[#5e6ad2] text-white hover:bg-[#7170ff]"><CheckCheck className="h-4 w-4" />全部已读</Button>}
+        actions={
+          <Button onClick={() => void readAll()} className="bg-[#5e6ad2] text-white hover:bg-[#7170ff]">
+            <CheckCheck className="h-4 w-4 mr-2" />
+            全部已读
+          </Button>
+        }
       />
+      
       <SearchPanel
         onSearch={() => updateParams({ ...filters, pageNo: 1 })}
         onReset={() => {
@@ -120,9 +105,96 @@ export default function NotificationsPage() {
           </Select>
         </div>
       </SearchPanel>
-      {error || actionError ? <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-500">{error ?? actionError}</div> : null}
-      <DataTable columns={columns} data={page.records} rowKey={(row) => row.id} loading={loading} emptyText="暂无通知。" pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
-      <DetailDrawer data={detail} open={Boolean(detail)} title="通知详情" subtitle={(data) => data.title} sections={sections} onClose={() => setDetail(null)} />
+      
+      {error || actionError ? (
+        <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-500">
+          {error ?? actionError}
+        </div>
+      ) : null}
+
+      <div className="space-y-4">
+        {loading && page.records.length === 0 ? (
+          <div className="py-8 text-center text-sm text-muted-foreground">加载中...</div>
+        ) : page.records.length === 0 ? (
+          <div className="py-8 text-center text-sm text-muted-foreground">暂无通知。</div>
+        ) : (
+          <Accordion type="single" collapsible onValueChange={handleAccordionChange} className="space-y-3">
+            {page.records.map((row) => {
+              const isUnread = row.readStatus === 0;
+              return (
+                <AccordionItem 
+                  key={row.id} 
+                  value={row.id.toString()} 
+                  className={cn(
+                    "border rounded-lg bg-card text-card-foreground shadow-sm px-4",
+                    isUnread ? "border-l-4 border-l-blue-500" : ""
+                  )}
+                >
+                  <AccordionTrigger className="hover:no-underline py-4 group">
+                    <div className="flex flex-1 items-center justify-between gap-4 pr-4">
+                      <div className="flex items-center gap-3">
+                        {isUnread && <div className="h-2 w-2 rounded-full bg-blue-500 shrink-0" />}
+                        <span className={cn(
+                          "text-left transition-colors",
+                          isUnread ? "font-semibold text-foreground" : "text-muted-foreground font-medium opacity-80"
+                        )}>
+                          {row.title}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-4 shrink-0 mr-2">
+                        <span className={cn("text-xs", isUnread ? "opacity-100" : "opacity-70")}>
+                          {notificationTypeLabel(row.type)}
+                        </span>
+                        <div className={cn("text-xs", isUnread ? "opacity-100" : "opacity-70")}>
+                          <DateTimeText value={row.createdAt} />
+                        </div>
+                      </div>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="pt-0 pb-4">
+                    <div className="rounded-md bg-muted/30 p-4 text-muted-foreground">
+                      <div className="mb-3 text-xs opacity-70 font-mono">
+                        业务 ID: {row.bizId || "-"}
+                      </div>
+                      <p className="whitespace-pre-wrap leading-relaxed text-sm text-foreground/90">
+                        {row.content}
+                      </p>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              );
+            })}
+          </Accordion>
+        )}
+      </div>
+      
+      {page.total > 0 && (
+        <div className="flex items-center justify-between border border-gray-100 rounded-xl px-4 py-4 text-xs text-slate-500 bg-white shadow-sm dark:border-white/5 dark:text-zinc-500 dark:bg-zinc-950 dark:shadow-none mt-6">
+          <span className="font-medium">
+            第 {page.pageNo} / {Math.max(1, Math.ceil(page.total / page.pageSize))} 页，共 {page.total} 条数据
+          </span>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 border-gray-200 bg-white font-medium text-slate-700 hover:bg-gray-50 dark:border-white/10 dark:bg-white/[0.03] dark:text-muted-foreground dark:hover:bg-white/[0.06]"
+              disabled={page.pageNo <= 1}
+              onClick={() => changePage(page.pageNo - 1)}
+            >
+              上一页
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 border-gray-200 bg-white font-medium text-slate-700 hover:bg-gray-50 dark:border-white/10 dark:bg-white/[0.03] dark:text-muted-foreground dark:hover:bg-white/[0.06]"
+              disabled={page.pageNo >= Math.ceil(page.total / page.pageSize)}
+              onClick={() => changePage(page.pageNo + 1)}
+            >
+              下一页
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
