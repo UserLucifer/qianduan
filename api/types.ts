@@ -328,6 +328,7 @@ export interface RechargeChannelResponse {
   accountNo: string;
   minAmount: number;
   maxAmount: number;
+  feeRate: number;
 }
 
 export interface CreateRechargeOrderRequest {
