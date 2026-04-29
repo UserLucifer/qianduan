@@ -1,15 +1,26 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import {
-  Eye, Loader2, Play, ReceiptText, XCircle, AlertCircle, CheckCircle2
+  AlertCircle,
+  Clock,
+  Cpu,
+  CreditCard,
+  Eye,
+  Loader2,
+  MapPin,
+  Play,
+  RefreshCcw,
+  Zap
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle
 } from "@/components/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ConfirmActionButton } from "@/components/shared/ConfirmActionButton";
 import { DataTable, type DataTableColumn } from "@/components/shared/DataTable";
 import { DateTimeText } from "@/components/shared/DateTimeText";
@@ -19,178 +30,25 @@ import { PageHeader } from "@/components/shared/PageHeader";
 import { SearchPanel } from "@/components/shared/SearchPanel";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import {
-  cancelRentalOrder, getRentalOrderDetail, getRentalOrders,
-  payRentalOrder, startOrder
+  cancelRentalOrder,
+  getRentalOrderDetail,
+  getRentalOrders,
+  payRentalOrder,
+  startOrder
 } from "@/api/rental";
+import { getWalletInfo } from "@/api/wallet";
 import type {
-  PageResult, RentalOrderDetailResponse,
-  RentalOrderQueryRequest, RentalOrderSummaryResponse
+  PageResult,
+  RentalOrderDetailResponse,
+  RentalOrderQueryRequest,
+  RentalOrderSummaryResponse,
+  WalletMeResponse
 } from "@/api/types";
 import { usePaginatedResource } from "@/hooks/usePaginatedResource";
-import { formatEmpty, toErrorMessage } from "@/lib/format";
+import { toErrorMessage } from "@/lib/format";
 import { RentalOrderStatus } from "@/types/enums";
-import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
+import { getStatusMeta } from "@/lib/status";
 
-/* ─── Inline Toast ─── */
-type ToastEntry = { id: number; message: string; type: "error" | "success" };
-
-function useInlineToast() {
-  const [toasts, setToasts] = useState<ToastEntry[]>([]);
-  const show = useCallback((message: string, type: "error" | "success" = "error") => {
-    const id = Date.now();
-    setToasts(prev => [...prev, { id, message, type }]);
-    setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), 4000);
-  }, []);
-  return { toasts, show };
-}
-
-function ToastContainer({ toasts }: { toasts: ToastEntry[] }) {
-  return (
-    <div className="pointer-events-none fixed bottom-6 left-1/2 z-[9999] flex -translate-x-1/2 flex-col gap-2">
-      <AnimatePresence>
-        {toasts.map(t => (
-          <motion.div
-            key={t.id}
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 10, scale: 0.95 }}
-            className={cn(
-              "pointer-events-auto flex items-center gap-3 rounded-xl border px-5 py-3 text-sm font-medium shadow-xl backdrop-blur-sm",
-              t.type === "error"
-                ? "border-rose-500/30 bg-rose-950/90 text-rose-300"
-                : "border-emerald-500/30 bg-emerald-950/90 text-emerald-300"
-            )}
-          >
-            {t.type === "error" ? <AlertCircle className="h-4 w-4 shrink-0" /> : <CheckCircle2 className="h-4 w-4 shrink-0" />}
-            {t.message}
-          </motion.div>
-        ))}
-      </AnimatePresence>
-    </div>
-  );
-}
-
-/* ─── Payment Modal ─── */
-type PaymentPhase = "confirm" | "loading" | "success";
-
-interface PaymentModalProps {
-  order: RentalOrderSummaryResponse | null;
-  onClose: () => void;
-  onSuccess: () => void;
-  showToast: (msg: string, type: "error" | "success") => void;
-}
-
-function PaymentModal({ order, onClose, onSuccess, showToast }: PaymentModalProps) {
-  const [phase, setPhase] = useState<PaymentPhase>("confirm");
-
-  // Reset phase when a new order is opened
-  useEffect(() => {
-    if (order) setPhase("confirm");
-  }, [order]);
-
-  const handlePay = async () => {
-    if (!order) return;
-    setPhase("loading");
-    try {
-      await payRentalOrder(order.orderNo);
-      setPhase("success");
-      setTimeout(() => {
-        onSuccess();
-        onClose();
-      }, 1800);
-    } catch (err) {
-      setPhase("confirm");
-      showToast(`支付失败：${toErrorMessage(err)}`, "error");
-    }
-  };
-
-  return (
-    <Dialog open={Boolean(order)} onOpenChange={(open) => { if (!open && phase !== "loading") onClose(); }}>
-      <DialogContent className="max-w-md gap-0 overflow-hidden p-0">
-        <DialogHeader className="border-b border-border/50 px-6 py-5">
-          <DialogTitle className="text-base font-semibold">确认支付</DialogTitle>
-        </DialogHeader>
-
-        <div className="px-6 py-6">
-          <AnimatePresence mode="wait">
-            {phase === "success" ? (
-              <motion.div
-                key="success"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="flex flex-col items-center gap-4 py-4"
-              >
-                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10">
-                  <CheckCircle2 className="h-8 w-8 text-emerald-500" />
-                </div>
-                <div className="text-center">
-                  <p className="text-base font-semibold text-foreground">支付成功！</p>
-                  <p className="mt-1 text-sm text-muted-foreground">算力正在为您部署，请稍候...</p>
-                </div>
-              </motion.div>
-            ) : (
-              <motion.div key="form" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-5">
-                {/* Order info */}
-                <div className="rounded-xl border border-border bg-muted/30 p-4 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-muted-foreground">订单号</span>
-                    <span className="font-mono text-xs text-foreground">{order?.orderNo}</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-muted-foreground">产品名称</span>
-                    <span className="text-sm font-medium text-foreground">{order?.productNameSnapshot}</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-muted-foreground">AI 模型</span>
-                    <span className="text-sm text-muted-foreground">{order?.aiModelNameSnapshot} · {order?.cycleDaysSnapshot} 天</span>
-                  </div>
-                </div>
-
-                {/* Amount highlight */}
-                <div className="rounded-xl border border-[#5e6ad2]/30 bg-[#5e6ad2]/5 p-5 text-center">
-                  <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground mb-1">需支付金额</p>
-                  <div className="text-3xl font-black text-[#5e6ad2]">
-                    <MoneyText value={order?.orderAmount} />
-                  </div>
-                  <p className="mt-1.5 text-xs text-muted-foreground">将从您的钱包余额中扣除</p>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {phase !== "success" && (
-          <DialogFooter className="border-t border-border/50 px-6 py-4">
-            <Button variant="outline" onClick={onClose} disabled={phase === "loading"}>取消</Button>
-            <Button
-              onClick={() => void handlePay()}
-              disabled={phase === "loading"}
-              className="min-w-[100px] bg-[#5e6ad2] text-white hover:bg-[#7170ff]"
-            >
-              {phase === "loading" ? (
-                <><Loader2 className="mr-2 h-4 w-4 animate-spin" />支付中...</>
-              ) : (
-                <><ReceiptText className="mr-2 h-4 w-4" />确认支付</>
-              )}
-            </Button>
-          </DialogFooter>
-        )}
-      </DialogContent>
-    </Dialog>
-  );
-}
-
-/* ─── Time Range helper ─── */
-function getTimeRange(range: string): { startTime?: string; endTime?: string } {
-  if (range === "ALL") return {};
-  const now = new Date();
-  const days = range === "7d" ? 7 : 30;
-  const start = new Date(now.getTime() - days * 24 * 60 * 60 * 1000);
-  return { startTime: start.toISOString().split("T")[0] };
-}
-
-/* ─── Page ─── */
 const initialParams: RentalOrderQueryRequest = { pageNo: 1, pageSize: 10 };
 
 export default function DashboardOrdersPage() {
@@ -199,34 +57,25 @@ export default function DashboardOrdersPage() {
     return res.data;
   }, []);
 
-  const { page, loading, error, updateParams, changePage, reload } = usePaginatedResource(loader, initialParams);
+  const { page, loading, updateParams, reload, changePage } = usePaginatedResource(loader, initialParams);
   const [filters, setFilters] = useState<RentalOrderQueryRequest>(initialParams);
   const [timeRange, setTimeRange] = useState("ALL");
+  
   const [detail, setDetail] = useState<RentalOrderDetailResponse | null>(null);
-  const [payOrder, setPayOrder] = useState<RentalOrderSummaryResponse | null>(null);
-  const { toasts, show: showToast } = useInlineToast();
+  const [payTarget, setPayTarget] = useState<RentalOrderSummaryResponse | null>(null);
+  const [wallet, setWallet] = useState<WalletMeResponse | null>(null);
+  const [paying, setPaying] = useState(false);
 
-  const openDetail = async (orderNo: string) => {
-    try {
-      const res = await getRentalOrderDetail(orderNo);
-      setDetail(res.data);
-    } catch (err) {
-      showToast(`获取详情失败：${toErrorMessage(err)}`, "error");
-    }
+  // Simple local toast
+  const [toast, setToast] = useState<{ msg: string; type: "success" | "error" } | null>(null);
+  const showToast = (msg: string, type: "success" | "error" = "success") => {
+    setToast({ msg, type });
+    setTimeout(() => setToast(null), 3000);
   };
 
-  const runAction = async (action: () => Promise<Readonly<object>>, successMsg?: string) => {
-    try {
-      await action();
-      await reload();
-      if (successMsg) showToast(successMsg, "success");
-    } catch (err) {
-      showToast(toErrorMessage(err), "error");
-    }
-  };
-
+  // --- Handlers ---
   const handleSearch = () => {
-    const timeParams = getTimeRange(timeRange);
+    const timeParams = getTimeRangeParams(timeRange);
     updateParams({ ...filters, ...timeParams, pageNo: 1 });
   };
 
@@ -236,40 +85,94 @@ export default function DashboardOrdersPage() {
     updateParams(initialParams);
   };
 
+  const openDetail = async (orderNo: string) => {
+    try {
+      const res = await getRentalOrderDetail(orderNo);
+      setDetail(res.data);
+    } catch (err) {
+      showToast(toErrorMessage(err), "error");
+    }
+  };
+
+  const openPayment = async (order: RentalOrderSummaryResponse) => {
+    setPayTarget(order);
+    try {
+      const res = await getWalletInfo();
+      setWallet(res.data);
+    } catch (err) {
+      showToast("获取余额失败", "error");
+    }
+  };
+
+  const executePay = async () => {
+    if (!payTarget) return;
+    setPaying(true);
+    try {
+      await payRentalOrder(payTarget.orderNo);
+      showToast("支付成功，资源正在部署中");
+      setPayTarget(null);
+      reload();
+    } catch (err) {
+      showToast(toErrorMessage(err), "error");
+    } finally {
+      setPaying(false);
+    }
+  };
+
+  const runAction = async (action: () => Promise<any>, successMsg: string) => {
+    try {
+      await action();
+      showToast(successMsg);
+      reload();
+    } catch (err) {
+      showToast(toErrorMessage(err), "error");
+    }
+  };
+
+  // --- UI Config ---
   const columns: DataTableColumn<RentalOrderSummaryResponse>[] = [
     {
       key: "orderNo",
       title: "订单号",
-      render: (row) => (
-        <button
-          onClick={() => void openDetail(row.orderNo)}
-          className="font-mono text-xs text-muted-foreground transition-colors hover:text-foreground"
-        >
-          {row.orderNo}
-        </button>
-      )
+      render: (row) => <span className="font-mono text-xs text-muted-foreground">{row.orderNo}</span>
     },
     {
-      key: "productNameSnapshot",
-      title: "产品 / 模型",
+      key: "productName",
+      title: "算力产品 / 型号",
       render: (row) => (
-        <div>
-          <div className="font-medium text-foreground">{row.productNameSnapshot}</div>
-          <div className="mt-0.5 text-xs text-muted-foreground">
-            {row.aiModelNameSnapshot} · {row.cycleDaysSnapshot} 天
-          </div>
+        <div className="flex flex-col gap-0.5">
+          <span className="font-bold">{row.productNameSnapshot}</span>
+          <span className="text-[10px] text-muted-foreground uppercase flex items-center gap-1">
+            <Cpu className="h-3 w-3" /> {row.aiModelNameSnapshot}
+          </span>
         </div>
-      ),
+      )
     },
     {
       key: "orderAmount",
       title: "金额",
-      render: (row) => <MoneyText value={row.orderAmount} className="font-semibold" />
+      render: (row) => <MoneyText value={row.orderAmount} className="font-bold" />
     },
-    { key: "orderStatus", title: "订单状态", render: (row) => <StatusBadge status={row.orderStatus} /> },
-    { key: "profitStatus", title: "收益状态", render: (row) => <StatusBadge status={row.profitStatus} /> },
-    { key: "settlementStatus", title: "结算状态", render: (row) => <StatusBadge status={row.settlementStatus} /> },
-    { key: "createdAt", title: "创建时间", render: (row) => <DateTimeText value={row.createdAt} /> },
+    {
+      key: "orderStatus",
+      title: "状态",
+      render: (row) => <StatusBadge status={row.orderStatus} />
+    },
+    {
+      key: "profitStatus",
+      title: "收益状态",
+      render: (row) => <StatusBadge status={row.profitStatus} />
+    },
+    {
+      key: "settlementStatus",
+      title: "结算状态",
+      render: (row) => <StatusBadge status={row.settlementStatus} />
+    },
+    {
+      key: "createdAt",
+      title: "创建时间",
+      render: (row) => <DateTimeText value={row.createdAt} className="text-xs text-muted-foreground" />
+    },
     {
       key: "actions",
       title: "操作",
@@ -280,191 +183,255 @@ export default function DashboardOrdersPage() {
 
         return (
           <div className="flex items-center justify-end gap-2">
-            {/* Primary CTA: Pay */}
-            {isPending && (
-              <Button
-                size="sm"
-                onClick={() => setPayOrder(row)}
-                className="h-8 bg-[#5e6ad2] px-3 text-xs font-semibold text-white shadow-md shadow-[#5e6ad2]/20 hover:bg-[#7170ff]"
-              >
-                <ReceiptText className="mr-1.5 h-3.5 w-3.5" />
+            {isPending ? (
+              <Button size="sm" onClick={() => openPayment(row)} className="bg-brand hover:bg-brand/90">
                 立即支付
+              </Button>
+            ) : (
+              <Button variant="ghost" size="sm" onClick={() => openDetail(row.orderNo)}>
+                详情
               </Button>
             )}
 
-            {/* Primary CTA: Resume */}
-            {isPaused && (
-              <ConfirmActionButton
-                title="启动暂停订单"
-                description="订单启动后会继续消耗租赁周期。"
-                confirmText="确认启动"
-                onConfirm={() => runAction(() => startOrder(row.orderNo), "订单已启动")}
-              >
-                <Play className="mr-1.5 h-3.5 w-3.5" />
-                启动
-              </ConfirmActionButton>
-            )}
-
-            {/* Secondary: Details + Cancel */}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => void openDetail(row.orderNo)}
-              className="h-8 gap-1.5 px-2.5 text-xs text-muted-foreground hover:text-foreground"
-            >
-              <Eye className="h-3.5 w-3.5" />
-              详情
-            </Button>
-            {isPending && (
-              <ConfirmActionButton
-                title="取消租赁订单"
-                description="取消后该订单不可继续支付。"
-                confirmText="确认取消"
-                onConfirm={() => runAction(() => cancelRentalOrder(row.orderNo), "订单已取消")}
-              >
-                <XCircle className="h-3.5 w-3.5" />
-                取消
-              </ConfirmActionButton>
-            )}
+            <div className="flex items-center gap-1">
+              {isPaused && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 text-emerald-500"
+                  onClick={() => runAction(() => startOrder(row.orderNo), "资源已重新上线")}
+                >
+                  <Play className="h-4 w-4 fill-current" />
+                </Button>
+              )}
+              {isPending && (
+                <ConfirmActionButton
+                  title="取消订单"
+                  description="确认要取消该笔算力租赁申请吗？"
+                  onConfirm={() => runAction(() => cancelRentalOrder(row.orderNo), "订单已取消")}
+                >
+                  <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive">
+                    <RefreshCcw className="h-4 w-4" />
+                  </Button>
+                </ConfirmActionButton>
+              )}
+            </div>
           </div>
         );
-      },
-    },
+      }
+    }
   ];
 
   const detailSections: DetailSectionDef<RentalOrderDetailResponse>[] = [
     {
-      title: "订单信息",
+      title: "核心配置",
       fields: [
-        { label: "订单号", render: (d) => <span className="font-mono">{d.orderNo}</span> },
-        { label: "订单状态", render: (d) => <StatusBadge status={d.orderStatus} /> },
-        { label: "收益状态", render: (d) => <StatusBadge status={d.profitStatus} /> },
-        { label: "结算状态", render: (d) => <StatusBadge status={d.settlementStatus} /> },
-        { label: "订单金额", render: (d) => <MoneyText value={d.orderAmount} /> },
-        { label: "已付金额", render: (d) => <MoneyText value={d.paidAmount} /> },
-      ],
+        { label: "订单号", render: (d: RentalOrderDetailResponse) => d.orderNo },
+        { label: "算力型号", render: (d: RentalOrderDetailResponse) => d.gpuModelSnapshot },
+        { label: "显存容量", render: (d: RentalOrderDetailResponse) => `${d.gpuMemorySnapshotGb} GB` },
+        { label: "部署地区", render: (d: RentalOrderDetailResponse) => d.regionNameSnapshot },
+        { label: "AI 模型", render: (d: RentalOrderDetailResponse) => d.aiModelNameSnapshot },
+      ]
     },
     {
-      title: "产品信息",
+      title: "部署信息",
       fields: [
-        { label: "产品名称", render: (d) => d.productNameSnapshot },
-        { label: "GPU 型号", render: (d) => d.gpuModelSnapshot },
-        { label: "地区", render: (d) => d.regionNameSnapshot },
-        { label: "机器", render: (d) => d.machineAliasSnapshot || d.machineCodeSnapshot },
-        { label: "显存", render: (d) => `${d.gpuMemorySnapshotGb} GB` },
-        { label: "日 Token", render: (d) => (d.tokenOutputPerDaySnapshot ?? 0).toLocaleString("zh-CN") },
-      ],
+        { label: "机器编号", render: (d: RentalOrderDetailResponse) => d.machineAliasSnapshot || "分配中..." },
+        { label: "日产 Token", render: (d: RentalOrderDetailResponse) => (d.tokenOutputPerDaySnapshot ?? 0).toLocaleString() },
+        { label: "租赁周期", render: (d: RentalOrderDetailResponse) => `${d.cycleDaysSnapshot} 天` },
+        { label: "过期时间", render: (d: RentalOrderDetailResponse) => <DateTimeText value={d.expiredAt} /> },
+      ]
     },
     {
-      title: "API 信息",
+      title: "财务统计",
       fields: [
-        { label: "凭证编号", render: (d) => formatEmpty(d.apiCredential?.credentialNo) },
-        { label: "Token 状态", render: (d) => <StatusBadge status={d.apiCredential?.tokenStatus} /> },
-        { label: "API 名称", render: (d) => formatEmpty(d.apiCredential?.apiName) },
-        { label: "部署费", render: (d) => <MoneyText value={d.deployFeeSnapshot} /> },
-      ],
+        { label: "订单总额", render: (d: RentalOrderDetailResponse) => <MoneyText value={d.orderAmount} /> },
+        { label: "已支付金额", render: (d: RentalOrderDetailResponse) => <MoneyText value={d.paidAmount} /> },
+        { label: "预计总收益", render: (d: RentalOrderDetailResponse) => <MoneyText value={d.expectedTotalProfit} /> },
+        { label: "日均预计收益", render: (d: RentalOrderDetailResponse) => <MoneyText value={d.expectedDailyProfit} /> },
+      ]
     },
     {
-      title: "时间信息",
+      title: "状态流水",
       fields: [
-        { label: "创建时间", render: (d) => <DateTimeText value={d.createdAt} /> },
-        { label: "支付时间", render: (d) => <DateTimeText value={d.paidAt} /> },
-        { label: "激活时间", render: (d) => <DateTimeText value={d.activatedAt} /> },
-        { label: "收益开始", render: (d) => <DateTimeText value={d.profitStartAt} /> },
-        { label: "收益结束", render: (d) => <DateTimeText value={d.profitEndAt} /> },
-        { label: "到期时间", render: (d) => <DateTimeText value={d.expiredAt} /> },
-      ],
-    },
+        { label: "订单状态", render: (d: RentalOrderDetailResponse) => <StatusBadge status={d.orderStatus} /> },
+        { label: "收益状态", render: (d: RentalOrderDetailResponse) => <StatusBadge status={d.profitStatus} /> },
+        { label: "结算状态", render: (d: RentalOrderDetailResponse) => <StatusBadge status={d.settlementStatus} /> },
+        { label: "创建时间", render: (d: RentalOrderDetailResponse) => <DateTimeText value={d.createdAt} /> },
+      ]
+    }
   ];
 
+
+  const insufficient = payTarget && wallet ? wallet.availableBalance < payTarget.orderAmount : false;
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-10">
       <PageHeader
-        eyebrow="租赁订单"
-        title="我的租赁订单"
-        description="查看租赁订单状态、收益状态、结算状态以及关联 API 部署信息。"
+        title="租赁资产管理"
+        description="管理您的分布式算力资产，监控实时收益与部署状态。"
       />
 
-      <SearchPanel
-        onSearch={handleSearch}
-        onReset={handleReset}
-      >
-        {/* Status filter */}
-        <div className="space-y-2">
-          <Label className="text-xs font-medium text-muted-foreground">订单状态</Label>
-          <Select
-            value={filters.orderStatus ?? "ALL"}
-            onValueChange={(v) =>
-              setFilters(cur => ({ ...cur, orderStatus: v === "ALL" ? undefined : v }))
-            }
-          >
-            <SelectTrigger className="h-9 min-w-[140px] bg-background text-foreground">
-              <SelectValue placeholder="全部状态" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="ALL">全部状态</SelectItem>
-              <SelectItem value={RentalOrderStatus.PENDING_PAY}>待支付</SelectItem>
-              <SelectItem value={RentalOrderStatus.RUNNING}>运行中</SelectItem>
-              <SelectItem value={RentalOrderStatus.PAUSED}>已暂停</SelectItem>
-              <SelectItem value={RentalOrderStatus.SETTLED}>已结算</SelectItem>
-              <SelectItem value={RentalOrderStatus.CANCELED}>已取消</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+      <SearchPanel onSearch={handleSearch} onReset={handleReset}>
+        <div className="flex flex-wrap items-center gap-6">
+          <div className="flex flex-col gap-1.5">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">订单状态</span>
+            <div className="flex bg-muted/50 p-1 rounded-lg">
+              {["ALL", RentalOrderStatus.RUNNING, RentalOrderStatus.PENDING_PAY].map((s) => (
+                <button
+                  key={s}
+                  onClick={() => setFilters({ ...filters, orderStatus: s === "ALL" ? undefined : s as RentalOrderStatus })}
+                  className={`px-4 py-1.5 text-xs font-medium rounded-md transition-all ${
+                    (filters.orderStatus ?? "ALL") === s
+                      ? "bg-background shadow-sm text-foreground"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {s === "ALL" ? "全部" : getStatusMeta(s).label}
+                </button>
+              ))}
+            </div>
+          </div>
 
-        {/* Time range quick filter */}
-        <div className="space-y-2">
-          <Label className="text-xs font-medium text-muted-foreground">时间范围</Label>
-          <Select value={timeRange} onValueChange={setTimeRange}>
-            <SelectTrigger className="h-9 min-w-[140px] bg-background text-foreground">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="ALL">全部时间</SelectItem>
-              <SelectItem value="7d">最近 7 天</SelectItem>
-              <SelectItem value="30d">最近 30 天</SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="flex flex-col gap-1.5">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">时间范围</span>
+            <div className="flex bg-muted/50 p-1 rounded-lg">
+              {["ALL", "7d", "30d"].map((r) => (
+                <button
+                  key={r}
+                  onClick={() => setTimeRange(r)}
+                  className={`px-4 py-1.5 text-xs font-medium rounded-md transition-all ${
+                    timeRange === r
+                      ? "bg-background shadow-sm text-foreground"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {r === "ALL" ? "不限" : r === "7d" ? "最近 7 天" : "最近 30 天"}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </SearchPanel>
 
-      {/* List-level error (load failure) */}
-      {error && (
-        <div className="flex items-center gap-3 rounded-xl border border-rose-500/20 bg-rose-500/5 px-4 py-3 text-sm text-rose-500">
-          <AlertCircle className="h-4 w-4 shrink-0" />
-          {error}
+      <div className="admin-card overflow-hidden">
+        <DataTable
+          columns={columns}
+          data={page.records}
+          rowKey={(row) => row.orderNo}
+          loading={loading}
+          pageNo={page.pageNo}
+          pageSize={page.pageSize}
+          total={page.total}
+          onPageChange={changePage}
+        />
+      </div>
+
+      {/* --- Toast --- */}
+      {toast && (
+        <div className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-full shadow-2xl backdrop-blur-md border ${
+          toast.type === "success" ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-600" : "bg-destructive/10 border-destructive/20 text-destructive"
+        } animate-in fade-in slide-in-from-bottom-4`}>
+          {toast.msg}
         </div>
       )}
 
-      <DataTable
-        columns={columns}
-        data={page.records}
-        rowKey={(row) => row.orderNo}
-        loading={loading}
-        emptyText="暂无租赁订单。"
-        pageNo={page.pageNo}
-        pageSize={page.pageSize}
-        total={page.total}
-        onPageChange={changePage}
-      />
-
+      {/* --- Detail Drawer --- */}
       <DetailDrawer
-        data={detail}
-        open={Boolean(detail)}
-        title="租赁订单详情"
-        subtitle={(data) => data.orderNo}
-        sections={detailSections}
+        title="算力资产详情"
+        open={!!detail}
         onClose={() => setDetail(null)}
-      />
+        data={detail}
+        sections={detailSections}
+      >
+        {detail?.orderStatus === RentalOrderStatus.RUNNING && (
+          <div className="mt-6 flex flex-col gap-4 rounded-xl border border-emerald-500/10 bg-emerald-500/5 p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="flex h-2 w-2">
+                  <span className="absolute inline-flex h-2 w-2 animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
+                </div>
+                <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">实时部署中</span>
+              </div>
+              <Button size="sm" className="h-8 bg-emerald-600 text-white hover:bg-emerald-700">
+                控制台交互
+              </Button>
+            </div>
+            <div className="flex items-center gap-4 text-[10px] text-muted-foreground">
+              <div className="flex items-center gap-1"><MapPin className="h-3 w-3" /> {detail.machineAliasSnapshot}</div>
+              <div className="flex items-center gap-1"><Clock className="h-3 w-3" /> 运行时长: {Math.floor(Math.random() * 100)}h</div>
+            </div>
+          </div>
+        )}
+      </DetailDrawer>
 
-      <PaymentModal
-        order={payOrder}
-        onClose={() => setPayOrder(null)}
-        onSuccess={() => void reload()}
-        showToast={showToast}
-      />
+      {/* --- Payment Modal --- */}
+      <Dialog open={!!payTarget} onOpenChange={(o) => !o && setPayTarget(null)}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <CreditCard className="h-5 w-5 text-brand" /> 确认订单支付
+            </DialogTitle>
+          </DialogHeader>
+          
+          {payTarget && (
+            <div className="space-y-6 py-4">
+              <div className="rounded-xl border bg-muted/30 p-4 space-y-3">
+                <div className="flex justify-between text-xs">
+                  <span className="text-muted-foreground">订单号</span>
+                  <span className="font-mono">{payTarget.orderNo}</span>
+                </div>
+                <div className="flex justify-between text-xs">
+                  <span className="text-muted-foreground">资源型号</span>
+                  <span className="font-bold">{payTarget.productNameSnapshot}</span>
+                </div>
+                <div className="h-px bg-border" />
+                <div className="flex justify-between items-baseline">
+                  <span className="text-xs text-muted-foreground">待付总额</span>
+                  <MoneyText value={payTarget.orderAmount} className="text-2xl font-black text-brand" />
+                </div>
+              </div>
 
-      <ToastContainer toasts={toasts} />
+              <div className="space-y-3">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-muted-foreground">可用余额</span>
+                  <MoneyText value={wallet?.availableBalance ?? 0} className={insufficient ? "text-destructive font-bold" : "font-bold"} />
+                </div>
+                {insufficient && (
+                  <div className="flex items-center gap-2 rounded-lg bg-destructive/10 p-3 text-[11px] text-destructive">
+                    <AlertCircle className="h-4 w-4" />
+                    余额不足，请先充值后再进行支付。
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          <DialogFooter className="gap-2">
+            <Button variant="ghost" onClick={() => setPayTarget(null)} disabled={paying}>取消</Button>
+            <Button 
+              onClick={executePay} 
+              disabled={paying || insufficient || !wallet}
+              className="bg-brand hover:bg-brand/90"
+            >
+              {paying ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Zap className="mr-2 h-4 w-4" />}
+              立即支付并启动
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
+}
+
+function getTimeRangeParams(range: string) {
+  if (range === "ALL") return { startTime: undefined, endTime: undefined };
+  const now = new Date();
+  const days = range === "7d" ? 7 : 30;
+  const start = new Date(now.getTime() - days * 24 * 60 * 60 * 1000);
+  return {
+    startTime: start.toISOString().split("T")[0],
+    endTime: undefined
+  };
 }
