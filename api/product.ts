@@ -30,8 +30,10 @@ export const getProductDetail = (productCode: string) =>
 export const getAiModels = () =>
   apiGet<AiModelResponse[]>("/api/ai-models");
 
-export const getGpuModels = () =>
-  apiGet<GpuModelResponse[]>("/api/gpu-models");
+export const getGpuModels = (regionId?: number) => {
+  const url = regionId ? `/api/gpu-models?regionId=${regionId}` : "/api/gpu-models";
+  return apiGet<GpuModelResponse[]>(url);
+};
 
 export const getRegions = () =>
   apiGet<RegionResponse[]>("/api/regions");

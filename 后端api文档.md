@@ -184,7 +184,7 @@ beforeFrozenBalance, afterFrozenBalance, bizType, bizOrderNo, remark, createdAt
 | 方法 | 路径 | 鉴权 | 传参 | 返回 data |
 |---|---|---|---|---|
 | `GET` | `/api/regions` | 用户 | 无 | `List<RegionResponse>` |
-| `GET` | `/api/gpu-models` | 用户 | 无 | `List<GpuModelResponse>` |
+| `GET` | `/api/gpu-models` | 用户 | query: `regionId` 可选 | `List<GpuModelResponse>` |
 | `GET` | `/api/ai-models` | 用户 | 无 | `List<AiModelResponse>` |
 | `GET` | `/api/rental-cycle-rules` | 用户 | 无 | `List<RentalCycleRuleResponse>` |
 | `GET` | `/api/products` | 用户 | query: `ProductQueryRequest` | `PageResult<ProductResponse>` |
@@ -195,6 +195,9 @@ beforeFrozenBalance, afterFrozenBalance, bizType, bizOrderNo, remark, createdAt
 ```text
 ProductQueryRequest:
 pageNo, pageSize, regionId, gpuModelId, minRentPrice, maxRentPrice
+
+GpuModel query:
+regionId 可选；不传返回全部启用 GPU 型号，传入时返回该地区有上架产品的 GPU 型号
 ```
 
 核心响应字段：
