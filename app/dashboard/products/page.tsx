@@ -132,17 +132,26 @@ export default function UserProductsPage() {
     if (selectedRegionId === null) return;
     const rId = selectedRegionId;
 
+    // ★ Synchronous pre-reset: clear stale data BEFORE any async work.
+    // This puts the product grid into skeleton mode immediately on region click.
+    setSelectedGpuModelId(null);
+    setGpuModels([]);
+    setProducts([]);
+    setPageNo(1);
+    setHasMore(true);
+    setProductsLoading(true); // skeleton shows immediately
+
     const fetchGpus = async () => {
       setGpuLoading(true);
-      setGpuModels([]);          // clear stale list immediately
-      setSelectedGpuModelId(null); // reset GPU selection
       try {
         const res = await getGpuModels(rId);
         setGpuModels(res.data);
-        // Auto-select first GPU model
+        // Auto-select first GPU model (triggers Effect 3 which will clear productsLoading)
         if (res.data.length > 0) setSelectedGpuModelId(res.data[0].id);
+        else setProductsLoading(false); // no GPU models → no products to load
       } catch (err) {
         setError(toErrorMessage(err));
+        setProductsLoading(false);
       } finally {
         setGpuLoading(false);
       }
@@ -348,8 +357,11 @@ export default function UserProductsPage() {
       </div>
 
       {productsLoading ? (
-        <div className="flex h-60 items-center justify-center">
-          <Loader2 className="h-7 w-7 animate-spin text-[#5e6ad2]" />
+        // Skeleton grid — same column layout as real cards, no flicker
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {Array.from({ length: columns * 2 }).map((_, i) => (
+            <div key={i} className="h-[250px] w-full animate-pulse rounded-2xl border border-border bg-muted" />
+          ))}
         </div>
       ) : (
         <div
