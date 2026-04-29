@@ -892,6 +892,52 @@ export interface BlogTag {
   updatedAt?: string;
 }
 
+export interface BlogCategoryResponse {
+  id: number;
+  categoryName: string;
+  sortNo?: number;
+  status: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface BlogTagResponse {
+  id: number;
+  tagName: string;
+  sortNo?: number;
+  status: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface BlogPostResponse {
+  id: number;
+  categoryId?: number;
+  categoryName?: string;
+  title: string;
+  summary?: string;
+  coverImageUrl?: string;
+  contentMarkdown?: string;
+  publishStatus?: number;
+  publishedAt?: string;
+  isTop?: number;
+  sortNo?: number;
+  viewCount?: number;
+  createdBy?: number;
+  tagIds?: number[];
+  tagNames?: string[];
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface BlogPostQueryRequest extends PageQuery {
+  category_id?: number;
+  tag_id?: number;
+  publish_status?: number;
+  start_time?: string;
+  end_time?: string;
+}
+
 export interface AdminBlogPost {
   id?: number;
   categoryId?: number;

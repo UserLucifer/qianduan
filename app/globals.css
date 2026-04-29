@@ -508,6 +508,65 @@ button {
   font-weight: 510;
 }
 
+.blog-markdown {
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.blog-markdown > * + * {
+  margin-top: 1.15rem;
+}
+
+.blog-markdown h1,
+.blog-markdown h2,
+.blog-markdown h3,
+.blog-markdown h4 {
+  color: var(--foreground);
+  font-weight: 590;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.blog-markdown h1 {
+  font-size: 2rem;
+}
+
+.blog-markdown h2 {
+  margin-top: 2rem;
+  font-size: 1.55rem;
+}
+
+.blog-markdown h3 {
+  margin-top: 1.6rem;
+  font-size: 1.2rem;
+}
+
+.blog-markdown a {
+  color: #9aa2ff;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.blog-markdown ul,
+.blog-markdown ol {
+  padding-left: 1.4rem;
+}
+
+.blog-markdown li + li {
+  margin-top: 0.45rem;
+}
+
+.blog-markdown blockquote {
+  border-left: 2px solid rgba(113, 112, 255, 0.6);
+  color: #d0d6e0;
+  padding-left: 1rem;
+}
+
+.blog-markdown pre {
+  margin-top: 1.4rem;
+}
+
 /* Product List specific styles */
 .product-table {
   display: flex;
