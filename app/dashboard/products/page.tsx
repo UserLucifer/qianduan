@@ -125,8 +125,8 @@ export default function UserProductsPage() {
   }, []);
 
   const loadPage = useCallback(async (pNo: number, isInitial = false) => {
-    if (!regionId || !gpuModelId) return; 
-    
+    if (!regionId || !gpuModelId) return;
+
     if (isInitial) setLoading(true);
     else setIsFetchingMore(true);
 
@@ -160,22 +160,22 @@ export default function UserProductsPage() {
 
     const performRegionalFetch = async (targetId: string) => {
       currentRegionRequestRef.current = targetId;
-      
+
       // Clear current state to ensure visual feedback
-      setGpuModels([]); 
+      setGpuModels([]);
       setGpuModelId(null);
-      setProducts([]); 
+      setProducts([]);
       setLoading(true);
-      
+
       try {
         // CALL SPECIFIC API: /api/gpu-models?regionId=xxx
         const res = await getGpuModels(Number(targetId));
-        
+
         // Ensure we only process the response for the most recent click
         if (currentRegionRequestRef.current !== targetId) return;
 
         setGpuModels(res.data);
-        
+
         // Level 2 default: pick first GPU from the region-specific list
         if (res.data.length > 0) {
           setGpuModelId(String(res.data[0].id));
@@ -293,8 +293,8 @@ export default function UserProductsPage() {
                 onClick={() => setRegionId(String(r.id))}
                 className={cn(
                   "h-9 rounded-full px-5 text-xs font-medium transition-all duration-200",
-                  regionId === String(r.id) 
-                    ? "bg-[#5e6ad2] text-white hover:bg-[#7170ff] shadow-lg shadow-[#5e6ad2]/20" 
+                  regionId === String(r.id)
+                    ? "bg-[#5e6ad2] text-white hover:bg-[#7170ff] shadow-lg shadow-[#5e6ad2]/20"
                     : "hover:bg-muted/50"
                 )}
               >
@@ -321,8 +321,8 @@ export default function UserProductsPage() {
                 onClick={() => setGpuModelId(String(g.id))}
                 className={cn(
                   "h-9 rounded-full px-5 text-xs font-medium transition-all duration-200",
-                  gpuModelId === String(g.id) 
-                    ? "bg-[#5e6ad2] text-white hover:bg-[#7170ff] shadow-lg shadow-[#5e6ad2]/20" 
+                  gpuModelId === String(g.id)
+                    ? "bg-[#5e6ad2] text-white hover:bg-[#7170ff] shadow-lg shadow-[#5e6ad2]/20"
                     : "hover:bg-muted/50"
                 )}
               >
@@ -376,9 +376,9 @@ export default function UserProductsPage() {
                             <h3 className="mt-2.5 text-2xl font-bold tracking-tight text-foreground">{p.gpuModelName}</h3>
                             <p className="mt-1 text-[11px] font-mono text-muted-foreground/60">{p.productCode}</p>
                           </div>
-                          <StatusBadge 
-                            status={(p.availableStock ?? 0) > 0 ? "ACTIVE" : "DISABLED"} 
-                            label={(p.availableStock ?? 0) > 0 ? "空闲中" : "无库存"} 
+                          <StatusBadge
+                            status={(p.availableStock ?? 0) > 0 ? "ACTIVE" : "DISABLED"}
+                            label={(p.availableStock ?? 0) > 0 ? "空闲中" : "无库存"}
                           />
                         </div>
 
