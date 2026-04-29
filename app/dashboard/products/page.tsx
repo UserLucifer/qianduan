@@ -68,20 +68,21 @@ export default function UserProductsPage() {
   const [aiModels, setAiModels] = useState<AiModelResponse[]>([]);
   const [cycleRules, setCycleRules] = useState<RentalCycleRuleResponse[]>([]);
 
-  const [regionId, setRegionId] = useState<string | null>(null);
-  const [gpuModelId, setGpuModelId] = useState<string | null>(null);
+  // Use number IDs to match backend types exactly — avoids string/number comparison bugs
+  const [selectedRegionId, setSelectedRegionId] = useState<number | null>(null);
+  const [selectedGpuModelId, setSelectedGpuModelId] = useState<number | null>(null);
   const [aiModelId, setAiModelId] = useState<number | null>(null);
   const [cycleRuleId, setCycleRuleId] = useState<number | null>(null);
 
   const [estimate, setEstimate] = useState<RentalEstimateResponse | null>(null);
-  const [loading, setLoading] = useState(true);
+  // Granular loading states — filter panel is NEVER hidden
+  const [initLoading, setInitLoading] = useState(true);      // first page load only
+  const [gpuLoading, setGpuLoading] = useState(false);       // GPU matrix row only
+  const [productsLoading, setProductsLoading] = useState(false); // product grid only
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
-
-  // Use a ref to track the latest requested region to prevent race conditions
-  const currentRegionRequestRef = useRef<string | null>(null);
 
   /* ─── Virtualization Logic ─── */
   const rows = useMemo(() => {
@@ -101,108 +102,106 @@ export default function UserProductsPage() {
     scrollMargin: containerRef.current?.offsetTop ?? 0,
   });
 
-  /* ─── Data Fetching ─── */
-  const fetchInitialData = useCallback(async () => {
-    setLoading(true);
-    try {
-      const [regionRes, aiRes, cycleRes] = await Promise.all([
-        getRegions(),
-        getAiModels(),
-        getRentalCycleRules(),
-      ]);
-      setRegions(regionRes.data);
-      setAiModels(aiRes.data);
-      setCycleRules(cycleRes.data);
-
-      // Default to "西北B"
-      const defaultRegion = regionRes.data.find(r => r.regionName.includes("西北B")) || regionRes.data[0];
-      if (defaultRegion) {
-        setRegionId(String(defaultRegion.id));
-      }
-    } catch (err) {
-      setError(toErrorMessage(err));
-    }
-  }, []);
-
-  const loadPage = useCallback(async (pNo: number, isInitial = false) => {
-    if (!regionId || !gpuModelId) return;
-
-    if (isInitial) setLoading(true);
-    else setIsFetchingMore(true);
-
-    try {
-      const res = await getProducts({
-        pageNo: pNo,
-        pageSize: PAGE_SIZE,
-        regionId: Number(regionId),
-        gpuModelId: Number(gpuModelId),
-      });
-
-      const newItems = res.data.records;
-      setProducts(prev => isInitial ? newItems : [...prev, ...newItems]);
-      setHasMore(newItems.length === PAGE_SIZE);
-      setPageNo(pNo);
-    } catch (err) {
-      setError(toErrorMessage(err));
-    } finally {
-      setLoading(false);
-      setIsFetchingMore(false);
-    }
-  }, [regionId, gpuModelId]);
-
+  /* ─── Effect 1: Init — load regions + static data (runs once) ─── */
   useEffect(() => {
-    void fetchInitialData();
-  }, [fetchInitialData]);
-
-  // Effect: Whenever regionId changes, fetch specific GPU models
-  useEffect(() => {
-    if (!regionId) return;
-
-    const performRegionalFetch = async (targetId: string) => {
-      currentRegionRequestRef.current = targetId;
-
-      // Clear current state to ensure visual feedback
-      setGpuModels([]);
-      setGpuModelId(null);
-      setProducts([]);
-      setLoading(true);
-
+    const init = async () => {
+      setInitLoading(true);
       try {
-        // CALL SPECIFIC API: /api/gpu-models?regionId=xxx
-        const res = await getGpuModels(Number(targetId));
-
-        // Ensure we only process the response for the most recent click
-        if (currentRegionRequestRef.current !== targetId) return;
-
-        setGpuModels(res.data);
-
-        // Level 2 default: pick first GPU from the region-specific list
-        if (res.data.length > 0) {
-          setGpuModelId(String(res.data[0].id));
-        } else {
-          setGpuModelId(""); // Indicate specific search finished with 0 results
-          setLoading(false);
-        }
+        const [regionRes, aiRes, cycleRes] = await Promise.all([
+          getRegions(),
+          getAiModels(),
+          getRentalCycleRules(),
+        ]);
+        setRegions(regionRes.data);
+        setAiModels(aiRes.data);
+        setCycleRules(cycleRes.data);
+        // Auto-select first region (北京A preferred)
+        const def = regionRes.data.find(r => r.regionName.includes("北京A")) ?? regionRes.data[0];
+        if (def) setSelectedRegionId(def.id);
       } catch (err) {
-        if (currentRegionRequestRef.current === targetId) {
-          setError(toErrorMessage(err));
-          setLoading(false);
-        }
+        setError(toErrorMessage(err));
+      } finally {
+        setInitLoading(false);
       }
     };
+    void init();
+  }, []);
 
-    void performRegionalFetch(regionId);
-  }, [regionId]);
-
-  // Effect: Whenever a specific GPU model is selected, load the products
+  /* ─── Effect 2: Region changed → fetch GPU models ─── */
   useEffect(() => {
-    if (regionId && gpuModelId && gpuModelId !== "") {
+    if (selectedRegionId === null) return;
+    const rId = selectedRegionId;
+
+    const fetchGpus = async () => {
+      setGpuLoading(true);
+      setGpuModels([]);          // clear stale list immediately
+      setSelectedGpuModelId(null); // reset GPU selection
+      try {
+        const res = await getGpuModels(rId);
+        setGpuModels(res.data);
+        // Auto-select first GPU model
+        if (res.data.length > 0) setSelectedGpuModelId(res.data[0].id);
+      } catch (err) {
+        setError(toErrorMessage(err));
+      } finally {
+        setGpuLoading(false);
+      }
+    };
+    void fetchGpus();
+  }, [selectedRegionId]);
+
+  /* ─── Effect 3: Both IDs valid → fetch products ─── */
+  useEffect(() => {
+    if (selectedRegionId === null || selectedGpuModelId === null) return;
+    const rId = selectedRegionId;
+    const gId = selectedGpuModelId;
+
+    const fetchProducts = async () => {
+      setProductsLoading(true);
       setProducts([]);
       setPageNo(1);
       setHasMore(true);
-      void loadPage(1, true);
+      try {
+        const res = await getProducts({
+          pageNo: 1,
+          pageSize: PAGE_SIZE,
+          regionId: rId,
+          gpuModelId: gId,
+        });
+        setProducts(res.data.records);
+        setHasMore(res.data.records.length === PAGE_SIZE);
+        setPageNo(1);
+      } catch (err) {
+        setError(toErrorMessage(err));
+      } finally {
+        setProductsLoading(false);
+      }
+    };
+    void fetchProducts();
+  }, [selectedRegionId, selectedGpuModelId]);
+
+  /* ─── Infinite scroll load-more ─── */
+  const loadMore = useCallback(async () => {
+    if (selectedRegionId === null || selectedGpuModelId === null) return;
+    if (!hasMore || isFetchingMore || productsLoading) return;
+    const nextPage = pageNo + 1;
+    setIsFetchingMore(true);
+    try {
+      const res = await getProducts({
+        pageNo: nextPage,
+        pageSize: PAGE_SIZE,
+        regionId: selectedRegionId,
+        gpuModelId: selectedGpuModelId,
+      });
+      setProducts(prev => [...prev, ...res.data.records]);
+      setHasMore(res.data.records.length === PAGE_SIZE);
+      setPageNo(nextPage);
+    } catch (err) {
+      setError(toErrorMessage(err));
+    } finally {
+      setIsFetchingMore(false);
     }
-  }, [regionId, gpuModelId, loadPage]);
+  }, [selectedRegionId, selectedGpuModelId, hasMore, isFetchingMore, productsLoading, pageNo]);
 
   /* ─── Handlers ─── */
   const handleStartRent = (product: ProductResponse) => {
@@ -262,11 +261,11 @@ export default function UserProductsPage() {
   useEffect(() => {
     const virtualItems = virtualizer.getVirtualItems();
     if (virtualItems.length === 0) return;
-    const lastVirtualRow = virtualItems[virtualItems.length - 1];
-    if (lastVirtualRow && lastVirtualRow.index >= rows.length && hasMore && !isFetchingMore && !loading) {
-      void loadPage(pageNo + 1);
+    const last = virtualItems[virtualItems.length - 1];
+    if (last && last.index >= rows.length && hasMore && !isFetchingMore && !productsLoading) {
+      void loadMore();
     }
-  }, [virtualizer.getVirtualItems(), rows.length, hasMore, isFetchingMore, loading, pageNo, loadPage]);
+  }, [virtualizer.getVirtualItems(), rows.length, hasMore, isFetchingMore, productsLoading, loadMore]);
 
   /* ─── Render List ─── */
   const renderList = () => (
@@ -288,12 +287,12 @@ export default function UserProductsPage() {
             {regions.map((r) => (
               <Button
                 key={r.id}
-                variant={regionId === String(r.id) ? "default" : "outline"}
+                variant={selectedRegionId === r.id ? "default" : "outline"}
                 size="sm"
-                onClick={() => setRegionId(String(r.id))}
+                onClick={() => setSelectedRegionId(r.id)}
                 className={cn(
                   "h-9 rounded-full px-5 text-xs font-medium transition-all duration-200",
-                  regionId === String(r.id)
+                  selectedRegionId === r.id
                     ? "bg-[#5e6ad2] text-white hover:bg-[#7170ff] shadow-lg shadow-[#5e6ad2]/20"
                     : "hover:bg-muted/50"
                 )}
@@ -313,119 +312,133 @@ export default function UserProductsPage() {
             可用 GPU 型号
           </div>
           <div className="flex flex-wrap gap-2.5">
-            {gpuModels.map((g) => (
-              <Button
-                key={g.id}
-                variant={gpuModelId === String(g.id) ? "default" : "outline"}
-                size="sm"
-                onClick={() => setGpuModelId(String(g.id))}
-                className={cn(
-                  "h-9 rounded-full px-5 text-xs font-medium transition-all duration-200",
-                  gpuModelId === String(g.id)
-                    ? "bg-[#5e6ad2] text-white hover:bg-[#7170ff] shadow-lg shadow-[#5e6ad2]/20"
-                    : "hover:bg-muted/50"
+            {gpuLoading ? (
+              // Skeleton placeholders while GPU list loads
+              Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="h-9 w-24 animate-pulse rounded-full bg-muted" />
+              ))
+            ) : (
+              <>
+                {gpuModels.map((g) => (
+                  <Button
+                    key={g.id}
+                    variant={selectedGpuModelId === g.id ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSelectedGpuModelId(g.id)}
+                    className={cn(
+                      "h-9 rounded-full px-5 text-xs font-medium transition-all duration-200",
+                      selectedGpuModelId === g.id
+                        ? "bg-[#5e6ad2] text-white hover:bg-[#7170ff] shadow-lg shadow-[#5e6ad2]/20"
+                        : "hover:bg-muted/50"
+                    )}
+                  >
+                    {g.modelName}
+                  </Button>
+                ))}
+                {gpuModels.length === 0 && selectedRegionId !== null && (
+                  <div className="flex items-center gap-2 py-2 text-xs italic text-muted-foreground opacity-60">
+                    <AlertCircle className="h-3.5 w-3.5" />
+                    该地区暂无可用算力资源
+                  </div>
                 )}
-              >
-                {g.modelName}
-              </Button>
-            ))}
-            {gpuModels.length === 0 && !loading && regionId && (
-              <div className="flex items-center gap-2 py-2 text-xs italic text-muted-foreground opacity-60">
-                <AlertCircle className="h-3.5 w-3.5" />
-                该地区暂无可用算力资源
-              </div>
+              </>
             )}
           </div>
         </div>
       </div>
 
-      {/* Virtualized Container */}
-      <div
-        ref={containerRef}
-        className="relative w-full"
-        style={{ height: virtualizer.getTotalSize() }}
-      >
-        {virtualizer.getVirtualItems().map((virtualRow) => {
-          const isLoaderRow = virtualRow.index >= rows.length;
-          const rowItems = rows[virtualRow.index];
-          const localY = virtualRow.start - virtualizer.options.scrollMargin;
+      {productsLoading ? (
+        <div className="flex h-60 items-center justify-center">
+          <Loader2 className="h-7 w-7 animate-spin text-[#5e6ad2]" />
+        </div>
+      ) : (
+        <div
+          ref={containerRef}
+          className="relative w-full"
+          style={{ height: virtualizer.getTotalSize() }}
+        >
+          {virtualizer.getVirtualItems().map((virtualRow) => {
+            const isLoaderRow = virtualRow.index >= rows.length;
+            const rowItems = rows[virtualRow.index];
+            const localY = virtualRow.start - virtualizer.options.scrollMargin;
 
-          return (
-            <div
-              key={virtualRow.key}
-              data-index={virtualRow.index}
-              ref={virtualizer.measureElement}
-              className="absolute left-0 top-0 w-full"
-              style={{ transform: `translateY(${localY}px)` }}
-            >
-              <div className="pb-6">
-                {isLoaderRow ? (
-                  <div className="flex w-full items-center justify-center py-12">
-                    <Loader2 className="h-8 w-8 animate-spin text-[#5e6ad2]" />
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-                    {rowItems.map((p) => (
-                      <BentoCard key={p.productCode} className="group relative transition-all duration-300 hover:-translate-y-1 hover:shadow-xl" contentClassName="p-7">
-                        <div className="flex items-start justify-between">
-                          <div>
-                            <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
-                              <MapPin className="h-3.5 w-3.5" />
-                              {p.regionName}
+            return (
+              <div
+                key={virtualRow.key}
+                data-index={virtualRow.index}
+                ref={virtualizer.measureElement}
+                className="absolute left-0 top-0 w-full"
+                style={{ transform: `translateY(${localY}px)` }}
+              >
+                <div className="pb-6">
+                  {isLoaderRow ? (
+                    <div className="flex w-full items-center justify-center py-12">
+                      <Loader2 className="h-8 w-8 animate-spin text-[#5e6ad2]" />
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+                      {rowItems.map((p) => (
+                        <BentoCard key={p.productCode} className="group relative transition-all duration-300 hover:-translate-y-1 hover:shadow-xl" contentClassName="p-7">
+                          <div className="flex items-start justify-between">
+                            <div>
+                              <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
+                                <MapPin className="h-3.5 w-3.5" />
+                                {p.regionName}
+                              </div>
+                              <h3 className="mt-2.5 text-2xl font-bold tracking-tight text-foreground">{p.gpuModelName}</h3>
+                              <p className="mt-1 text-[11px] font-mono text-muted-foreground/60">{p.productCode}</p>
                             </div>
-                            <h3 className="mt-2.5 text-2xl font-bold tracking-tight text-foreground">{p.gpuModelName}</h3>
-                            <p className="mt-1 text-[11px] font-mono text-muted-foreground/60">{p.productCode}</p>
+                            <StatusBadge
+                              status={(p.availableStock ?? 0) > 0 ? "ACTIVE" : "DISABLED"}
+                              label={(p.availableStock ?? 0) > 0 ? "\u7a7a\u95f2\u4e2d" : "\u65e0\u5e93\u5b58"}
+                            />
                           </div>
-                          <StatusBadge
-                            status={(p.availableStock ?? 0) > 0 ? "ACTIVE" : "DISABLED"}
-                            label={(p.availableStock ?? 0) > 0 ? "空闲中" : "无库存"}
-                          />
-                        </div>
 
-                        <div className="mt-8 grid grid-cols-2 gap-5">
-                          <div className="space-y-1.5">
-                            <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">
-                              <Cpu className="h-3.5 w-3.5" /> 显存容量
+                          <div className="mt-8 grid grid-cols-2 gap-5">
+                            <div className="space-y-1.5">
+                              <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">
+                                <Cpu className="h-3.5 w-3.5" /> 显存容量
+                              </div>
+                              <div className="text-base font-bold">{p.gpuMemoryGb} GB</div>
                             </div>
-                            <div className="text-base font-bold">{p.gpuMemoryGb} GB</div>
-                          </div>
-                          <div className="space-y-1.5">
-                            <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">
-                              <Zap className="h-3.5 w-3.5" /> 算力性能
+                            <div className="space-y-1.5">
+                              <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">
+                                <Zap className="h-3.5 w-3.5" /> 算力性能
+                              </div>
+                              <div className="text-base font-bold">{p.gpuPowerTops} TOPS</div>
                             </div>
-                            <div className="text-base font-bold">{p.gpuPowerTops} TOPS</div>
                           </div>
-                        </div>
 
-                        <div className="mt-9 flex items-end justify-between border-t border-border/50 pt-5">
-                          <div className="space-y-1">
-                            <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70">起步单价</div>
-                            <MoneyText value={p.rentPrice} className="text-xl font-black text-[#5e6ad2]" />
+                          <div className="mt-9 flex items-end justify-between border-t border-border/50 pt-5">
+                            <div className="space-y-1">
+                              <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70">起步单价</div>
+                              <MoneyText value={p.rentPrice} className="text-xl font-black text-[#5e6ad2]" />
+                            </div>
+                            <Button
+                              onClick={() => handleStartRent(p)}
+                              disabled={(p.availableStock ?? 0) <= 0}
+                              className="h-11 rounded-xl bg-[#5e6ad2] px-6 text-xs font-bold text-white transition-all hover:bg-[#7170ff] hover:shadow-lg hover:shadow-[#5e6ad2]/30 dark:bg-[#5e6ad2]"
+                            >
+                              开始租赁
+                            </Button>
                           </div>
-                          <Button
-                            onClick={() => handleStartRent(p)}
-                            disabled={(p.availableStock ?? 0) <= 0}
-                            className="h-11 rounded-xl bg-[#5e6ad2] px-6 text-xs font-bold text-white transition-all hover:bg-[#7170ff] hover:shadow-lg hover:shadow-[#5e6ad2]/30 dark:bg-[#5e6ad2]"
-                          >
-                            开始租赁
-                          </Button>
-                        </div>
-                      </BentoCard>
-                    ))}
-                  </div>
-                )}
+                        </BentoCard>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
+            );
+          })}
+          {products.length === 0 && (
+            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-muted/20 py-20 text-center">
+              <AlertCircle className="mb-4 h-10 w-10 text-muted-foreground/30" />
+              <h3 className="text-lg font-medium text-muted-foreground">暂无可用算力产品</h3>
+              <p className="mt-1 text-sm text-muted-foreground/60">尝试切换其他地区或型号以发现更多资源</p>
             </div>
-          );
-        })}
-        {products.length === 0 && !loading && (
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-muted/20 py-20 text-center">
-            <AlertCircle className="mb-4 h-10 w-10 text-muted-foreground/30" />
-            <h3 className="text-lg font-medium text-muted-foreground">暂无可用算力产品</h3>
-            <p className="mt-1 text-sm text-muted-foreground/60">尝试切换其他地区或型号以发现更多资源</p>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      )}
     </motion.div>
   );
 
@@ -612,7 +625,7 @@ export default function UserProductsPage() {
       {error && <div className="rounded-lg border border-rose-500/20 bg-rose-500/10 p-4 text-sm text-rose-500">{error}</div>}
 
       <AnimatePresence mode="wait">
-        {loading && products.length === 0 ? (
+        {initLoading ? (
           <motion.div
             key="loading"
             initial={{ opacity: 0 }}
