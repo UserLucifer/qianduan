@@ -6,6 +6,7 @@ import {
   Bell,
   CreditCard,
   KeyRound,
+  LayoutDashboard,
   PackagePlus,
   ReceiptText,
   Send,
@@ -16,15 +17,34 @@ import {
 } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Badge } from "@/components/ui/badge";
 import { BentoCard, BentoGrid } from "@/components/shared/BentoGrid";
 import { DateTimeText } from "@/components/shared/DateTimeText";
 import { MoneyText } from "@/components/shared/MoneyText";
 import { PageHeader } from "@/components/shared/PageHeader";
-import { StatsCard } from "@/components/shared/StatsCard";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import { StatusIndicator } from "@/components/shared/StatusIndicator";
 import { DataTable, type DataTableColumn } from "@/components/shared/DataTable";
 import { useAsyncResource } from "@/hooks/useAsyncResource";
+import { cn } from "@/lib/utils";
+import { MoreHorizontal, Terminal, Loader2 } from "lucide-react";
 import { getCommissionSummary } from "@/api/commission";
 import { getProfitRecords, getProfitSummary } from "@/api/profit";
 import { getRentalOrders } from "@/api/rental";
@@ -61,26 +81,7 @@ interface TrendPoint {
   profit: number;
 }
 
-const orderColumns: DataTableColumn<RentalOrderSummaryResponse>[] = [
-  {
-    key: "orderNo",
-    title: "订单号",
-    render: (row) => <span className="font-mono text-xs text-muted-foreground">{row.orderNo}</span>,
-  },
-  {
-    key: "productNameSnapshot",
-    title: "算力产品",
-    render: (row) => (
-      <div>
-        <div className="font-medium text-zinc-100">{row.productNameSnapshot}</div>
-        <div className="text-xs text-zinc-500">{row.machineAliasSnapshot || row.machineCodeSnapshot}</div>
-      </div>
-    ),
-  },
-  { key: "orderAmount", title: "金额", render: (row) => <MoneyText value={row.orderAmount} /> },
-  { key: "orderStatus", title: "订单状态", render: (row) => <StatusBadge status={row.orderStatus} /> },
-  { key: "createdAt", title: "创建时间", render: (row) => <DateTimeText value={row.createdAt} /> },
-];
+// orderColumns refactored to Table in component body
 
 const transactionColumns: DataTableColumn<WalletTransactionResponse>[] = [
   { key: "txType", title: "类型", render: (row) => <StatusBadge status={row.txType} label={txTypeLabel(row.txType)} /> },
@@ -162,41 +163,85 @@ export default function DashboardPage() {
         </div>
       ) : null}
 
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <Card className="border-border bg-card shadow-none">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">钱包总余额</CardTitle>
+            <Wallet className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold tracking-tighter">
+              {loading ? (
+                <div className="h-9 w-24 animate-pulse rounded bg-muted" />
+              ) : (
+                <MoneyText value={(data?.wallet.availableBalance ?? 0) + (data?.wallet.frozenBalance ?? 0)} />
+              )}
+            </div>
+            <p className="text-[10px] text-muted-foreground mt-1 uppercase font-bold tracking-wider">
+              可用 + 冻结余额
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-border bg-card shadow-none">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">有效租赁实例</CardTitle>
+            <Zap className="h-4 w-4 text-primary" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold tracking-tighter">
+              {loading ? (
+                <div className="h-9 w-12 animate-pulse rounded bg-muted" />
+              ) : (
+                runningOrders
+              )}
+            </div>
+            <p className="text-[10px] text-muted-foreground mt-1 uppercase font-bold tracking-wider">
+              {pendingPayOrders} 个待支付订单
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-border bg-card shadow-none">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">今日预计收益</CardTitle>
+            <TrendingUp className="h-4 w-4 text-emerald-500" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold tracking-tighter text-emerald-500">
+              {loading ? (
+                <div className="h-9 w-24 animate-pulse rounded bg-muted" />
+              ) : (
+                <MoneyText value={data?.profitSummary.todayProfit} />
+              )}
+            </div>
+            <p className="text-[10px] text-muted-foreground mt-1 uppercase font-bold tracking-wider">
+              累计收益: {formatMoney(data?.profitSummary.totalProfit ?? 0)}
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-border bg-card shadow-none">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">团队成员</CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold tracking-tighter">
+              {loading ? (
+                <div className="h-9 w-12 animate-pulse rounded bg-muted" />
+              ) : (
+                data?.teamSummary.totalTeamCount ?? 0
+              )}
+            </div>
+            <p className="text-[10px] text-muted-foreground mt-1 uppercase font-bold tracking-wider">
+              直属邀请: {data?.teamSummary.directTeamCount ?? 0} 人
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
       <BentoGrid>
-        <StatsCard
-          className="lg:col-span-3"
-          title="钱包余额"
-          value={<MoneyText value={(data?.wallet.availableBalance ?? 0) + (data?.wallet.frozenBalance ?? 0)} />}
-          description="可用 + 冻结"
-          icon={Wallet}
-          loading={loading}
-        />
-        <StatsCard
-          className="lg:col-span-3"
-          title="有效租赁"
-          value={runningOrders}
-          description={`${pendingPayOrders} 个待支付订单`}
-          icon={Zap}
-          loading={loading}
-          status={runningOrders > 0 ? "good" : "neutral"}
-        />
-        <StatsCard
-          className="lg:col-span-3"
-          title="今日收益"
-          value={<MoneyText value={data?.profitSummary.todayProfit} />}
-          description={`累计 ${formatMoney(data?.profitSummary.totalProfit ?? 0)}`}
-          icon={TrendingUp}
-          loading={loading}
-          status="good"
-        />
-        <StatsCard
-          className="lg:col-span-3"
-          title="团队人数"
-          value={data?.teamSummary.totalTeamCount ?? 0}
-          description={`直属 ${data?.teamSummary.directTeamCount ?? 0} 人`}
-          icon={Users}
-          loading={loading}
-        />
 
         <BentoCard title="资产中心" description="余额、冻结金额与资金流向" className="lg:col-span-4" contentClassName="space-y-4">
           <div className="grid grid-cols-2 gap-3">
@@ -275,32 +320,130 @@ export default function DashboardPage() {
         </BentoCard>
       </BentoGrid>
 
-      <div className="grid grid-cols-1 gap-5 xl:grid-cols-2">
-        <BentoCard title="最近租赁订单" description="展示最新 5 条订单">
-          <DataTable columns={orderColumns} data={data?.orders ?? []} rowKey={(row) => row.orderNo} loading={loading} emptyText="暂无租赁订单，先去算力市场选择 GPU 产品。" />
-        </BentoCard>
+      <div className="space-y-4">
+        <div className="flex items-center justify-between mt-10 mb-4">
+          <h3 className="text-lg font-medium tracking-tight">最近算力实例</h3>
+          <Button asChild variant="ghost" size="sm" className="text-xs text-muted-foreground hover:text-primary">
+            <Link href="/dashboard/orders">查看全部订单</Link>
+          </Button>
+        </div>
+
+        {loading && (data?.orders.length ?? 0) === 0 ? (
+          <div className="rounded-lg border border-border bg-card p-12 flex flex-col items-center justify-center gap-4">
+            <Loader2 className="h-8 w-8 animate-spin text-muted-foreground/40" />
+            <p className="text-sm text-muted-foreground font-medium">同步云端实例数据...</p>
+          </div>
+        ) : (data?.orders.length ?? 0) === 0 ? (
+          <div className="border border-dashed border-border rounded-xl p-16 flex flex-col items-center justify-center bg-muted/5">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted/30 mb-6">
+              <Zap className="h-8 w-8 text-muted-foreground/40" />
+            </div>
+            <h4 className="text-base font-semibold text-foreground mb-2">没有任何运行中的实例</h4>
+            <p className="text-sm text-muted-foreground mb-8 max-w-xs text-center">
+              您当前没有活跃的算力资源。立即前往算力市场，选择最适合您 AI 任务的 GPU 节点。
+            </p>
+            <Button asChild variant="outline" className="rounded-full px-8">
+              <Link href="/dashboard/products">
+                <PackagePlus className="mr-2 h-4 w-4" /> 立即部署新实例
+              </Link>
+            </Button>
+          </div>
+        ) : (
+          <div className="rounded-xl border border-border bg-card overflow-hidden">
+            <Table>
+              <TableHeader className="bg-muted/30">
+                <TableRow>
+                  <TableHead className="text-xs font-bold uppercase tracking-widest text-muted-foreground">实例名称</TableHead>
+                  <TableHead className="text-xs font-bold uppercase tracking-widest text-muted-foreground">配置方案</TableHead>
+                  <TableHead className="text-xs font-bold uppercase tracking-widest text-muted-foreground">运行状态</TableHead>
+                  <TableHead className="text-xs font-bold uppercase tracking-widest text-muted-foreground text-right">费用</TableHead>
+                  <TableHead className="w-[80px]"></TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {data?.orders.map((order) => (
+                  <TableRow key={order.orderNo} className="group hover:bg-muted/30 transition-colors">
+                    <TableCell>
+                      <div className="flex flex-col gap-0.5 text-left">
+                        <span className="font-bold text-sm tracking-tight">{order.productNameSnapshot}</span>
+                        <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-tighter">ID: {order.orderNo}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex flex-col gap-0.5 text-left">
+                        <span className="text-xs font-semibold">{order.aiModelNameSnapshot}</span>
+                        <span className="text-[10px] text-muted-foreground">{order.machineAliasSnapshot || "自动分配"}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="secondary" className={cn(
+                        "font-bold uppercase text-[10px] px-2 py-0.5",
+                        order.orderStatus === "RUNNING" ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" : "bg-muted text-muted-foreground"
+                      )}>
+                        {order.orderStatus === "RUNNING" && <span className="mr-1.5 h-1 w-1 rounded-full bg-emerald-500 animate-pulse" />}
+                        {order.orderStatus === "RUNNING" ? "运行中" : order.orderStatus === "PENDING_PAY" ? "待支付" : "已结算"}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-right font-black">
+                      <MoneyText value={order.orderAmount} />
+                    </TableCell>
+                    <TableCell>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-40">
+                          <DropdownMenuLabel className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">实例管理</DropdownMenuLabel>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem asChild>
+                            <Link href="/dashboard/orders" className="flex w-full items-center">
+                              <LayoutDashboard className="mr-2 h-4 w-4" /> 管理详情
+                            </Link>
+                          </DropdownMenuItem>
+                          {order.orderStatus === "RUNNING" && (
+                            <DropdownMenuItem className="text-primary font-bold">
+                              <Terminal className="mr-2 h-4 w-4" /> 控制台交互
+                            </DropdownMenuItem>
+                          )}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        )}
+      </div>
+
+      <div className="grid grid-cols-1 gap-5 xl:grid-cols-2 mt-12">
         <BentoCard title="最近资金流水" description="展示最新 5 条钱包流水">
           <DataTable columns={transactionColumns} data={data?.transactions ?? []} rowKey={(row) => row.txNo} loading={loading} emptyText="暂无资金流水。" />
         </BentoCard>
+        <BentoCard title="最新通知" description="系统、订单与财务动态">
+          <div className="space-y-3">
+            {(data?.notifications ?? []).map((notice) => (
+              <Link key={notice.id} href="/dashboard/notifications" className="flex items-center justify-between rounded-lg border border-border/50 p-3 transition hover:bg-muted/50">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                    <Bell className="h-4 w-4 text-primary" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-bold text-foreground leading-none">{notice.title}</p>
+                    <p className="mt-1 truncate text-[10px] text-muted-foreground">{notice.content}</p>
+                  </div>
+                </div>
+                <span className="text-[9px] text-muted-foreground whitespace-nowrap ml-4"><DateTimeText value={notice.createdAt} /></span>
+              </Link>
+            ))}
+            {!loading && (data?.notifications.length ?? 0) === 0 ? (
+              <div className="p-4 text-xs text-center text-muted-foreground">暂无未读通知。</div>
+            ) : null}
+          </div>
+        </BentoCard>
       </div>
-
-      <BentoCard title="最新通知" description="系统、订单、财务、收益相关通知">
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-5">
-          {(data?.notifications ?? []).map((notice) => (
-            <Link key={notice.id} href="/dashboard/notifications" className="rounded-lg border border-gray-100 bg-white p-4 transition hover:border-gray-200 hover:bg-gray-50 dark:border-white/10 dark:bg-white/[0.03] dark:hover:border-white/20 dark:hover:bg-white/[0.05]">
-              <div className="flex items-center justify-between gap-2">
-                <span className="truncate text-sm font-medium text-slate-900 dark:text-zinc-100">{notice.title}</span>
-                <Bell className="h-4 w-4 shrink-0 text-blue-600 dark:text-[#9aa2ff]" />
-              </div>
-              <p className="mt-2 line-clamp-2 text-xs leading-5 text-slate-500 dark:text-zinc-500">{notice.content}</p>
-              <div className="mt-3"><DateTimeText value={notice.createdAt} /></div>
-            </Link>
-          ))}
-          {!loading && (data?.notifications.length ?? 0) === 0 ? (
-            <div className="col-span-full rounded-lg border border-white/10 bg-white/[0.03] p-6 text-sm text-zinc-500">暂无通知。</div>
-          ) : null}
-        </div>
-      </BentoCard>
     </div>
   );
 }

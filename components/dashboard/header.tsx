@@ -1,32 +1,27 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Bell, KeyRound, Moon, Search, Sun, Wallet, LogOut } from "lucide-react";
+import { useRouter, usePathname } from "next/navigation";
+import { Bell, KeyRound, Moon, Search, Sun, Wallet, LogOut, Settings, CreditCard, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getCurrentUser, type UserMeResponse } from "@/api/user";
 import { UserAvatar } from "@/components/shared/UserAvatar";
 import { getAvatarUrl } from "@/lib/avatars";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export function Header() {
   const [user, setUser] = useState<UserMeResponse | null>(null);
   const [theme, setTheme] = useState<string>("dark");
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setDropdownOpen(false);
-      }
-    };
-    if (dropdownOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [dropdownOpen]);
+  const pathname = usePathname();
 
   useEffect(() => {
     let mounted = true;
@@ -38,7 +33,6 @@ export function Header() {
         if (mounted) setUser(null);
       });
 
-    // Initialize theme state
     const currentTheme = document.documentElement.dataset.theme || "dark";
     setTheme(currentTheme);
 
@@ -61,14 +55,28 @@ export function Header() {
     router.push("/login");
   };
 
+  // Get dynamic title based on path
+  const getPageTitle = () => {
+    if (pathname === "/dashboard") return "概览";
+    if (pathname.includes("/settings")) return "个人设置";
+    if (pathname.includes("/orders")) return "我的实例";
+    if (pathname.includes("/wallet")) return "我的钱包";
+    if (pathname.includes("/api")) return "API 管理";
+    return "控制台";
+  };
+
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-gray-200 bg-white/80 px-8 backdrop-blur-xl transition-all duration-300 dark:border-white/10 dark:bg-[#08090a]/80">
-      <div className="relative w-full max-w-md">
-        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 dark:text-zinc-600" />
-        <input
-          className="h-10 w-full rounded-lg border border-gray-200 bg-gray-50 pl-9 pr-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#5e6ad2]/60 dark:border-white/10 dark:bg-white/[0.03] dark:text-zinc-100 dark:placeholder:text-zinc-600"
-          placeholder="搜索订单号、API 凭证或资金流水"
-        />
+    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-background px-8">
+      <div className="flex items-center gap-4">
+        <h1 className="text-lg font-semibold tracking-tight">{getPageTitle()}</h1>
+        <div className="hidden h-8 w-px bg-border/50 md:block" />
+        <div className="relative hidden w-64 md:block">
+          <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+          <input
+            className="h-9 w-full rounded-md border border-border bg-transparent pl-8 pr-3 text-xs outline-none transition-colors focus:border-primary/50 focus:bg-muted/30"
+            placeholder="快速搜索..."
+          />
+        </div>
       </div>
 
       <div className="flex items-center gap-2">
@@ -76,55 +84,62 @@ export function Header() {
           variant="ghost"
           size="icon"
           onClick={toggleTheme}
-          className="text-slate-500 hover:bg-gray-100 dark:text-zinc-400 dark:hover:bg-white/5 dark:hover:text-zinc-100"
+          className="h-9 w-9 text-muted-foreground hover:text-foreground"
         >
           {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
         </Button>
 
-        <Button asChild variant="ghost" size="sm" className="text-slate-600 hover:bg-gray-100 hover:text-slate-900 dark:text-zinc-400 dark:hover:bg-white/5 dark:hover:text-zinc-100">
-          <Link href="/dashboard/wallet">
-            <Wallet className="h-4 w-4" />
-            钱包
-          </Link>
-        </Button>
-        <Button asChild variant="ghost" size="sm" className="text-slate-600 hover:bg-gray-100 hover:text-slate-900 dark:text-zinc-400 dark:hover:bg-white/5 dark:hover:text-zinc-100">
-          <Link href="/dashboard/api">
-            <KeyRound className="h-4 w-4" />
-            API
-          </Link>
-        </Button>
-        <Button asChild variant="ghost" size="icon" className="relative text-slate-500 hover:bg-gray-100 hover:text-slate-900 dark:text-zinc-400 dark:hover:bg-white/5 dark:hover:text-zinc-100">
+        <Button asChild variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-foreground">
           <Link href="/dashboard/notifications">
             <Bell className="h-4 w-4" />
-            <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-[#5e6ad2]" />
           </Link>
         </Button>
-        <div className="relative ml-3" ref={dropdownRef}>
-          <button
-            type="button"
-            className="flex h-9 items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-3 transition-colors hover:bg-gray-100 dark:border-white/10 dark:bg-white/[0.03] dark:hover:bg-white/5"
-            onClick={() => setDropdownOpen((prev) => !prev)}
-          >
-            <UserAvatar 
-              src={getAvatarUrl(user?.avatarKey)}
-              name={user?.userName || user?.email || "U"}
-              className="h-8 w-8"
-            />
-            <span className="max-w-32 truncate text-sm font-medium text-slate-700 dark:text-muted-foreground">{user?.userName || user?.email || "当前用户"}</span>
-          </button>
-          
-          {dropdownOpen ? (
-            <div className="absolute right-0 top-full mt-1.5 w-32 overflow-hidden rounded-lg border border-gray-200 bg-white py-1 shadow-lg dark:border-white/10 dark:bg-[#0f1011]">
-              <button
-                type="button"
-                className="flex w-full items-center gap-2 px-3 py-2 text-sm text-rose-500 transition-colors hover:bg-rose-50 dark:hover:bg-rose-500/10"
-                onClick={handleLogout}
-              >
-                <LogOut className="h-4 w-4" />
+
+        <div className="ml-2 flex items-center">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="flex h-9 items-center gap-2 rounded-full px-1.5 py-1.5 hover:bg-muted">
+                <UserAvatar 
+                  src={getAvatarUrl(user?.avatarKey)}
+                  name={user?.userName || user?.email || "U"}
+                  className="h-7 w-7 ring-1 ring-border"
+                />
+                <span className="max-w-[100px] truncate text-xs font-bold text-foreground">
+                  {user?.userName || "账户"}
+                </span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56 mt-2">
+              <DropdownMenuLabel className="flex flex-col gap-1 px-3 py-2">
+                <span className="text-xs font-bold">{user?.userName}</span>
+                <span className="text-[10px] font-medium text-muted-foreground">{user?.email}</span>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild className="cursor-pointer">
+                <Link href="/dashboard/settings" className="flex w-full items-center">
+                  <Settings className="mr-2 h-4 w-4" />
+                  个人中心
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild className="cursor-pointer">
+                <Link href="/dashboard/billing" className="flex w-full items-center">
+                  <CreditCard className="mr-2 h-4 w-4" />
+                  账单记录
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild className="cursor-pointer">
+                <Link href="/dashboard/wallet" className="flex w-full items-center">
+                  <Wallet className="mr-2 h-4 w-4" />
+                  我的钱包
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-destructive focus:bg-destructive/10 focus:text-destructive">
+                <LogOut className="mr-2 h-4 w-4" />
                 退出登录
-              </button>
-            </div>
-          ) : null}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>

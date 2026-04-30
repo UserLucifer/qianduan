@@ -3,77 +3,94 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  Bell,
-  BookOpenText,
-  CircleDollarSign,
-  ClipboardList,
-  Cpu,
-  Database,
-  FileClock,
-  Gauge,
-  GitBranch,
-  Globe,
-  KeyRound,
-  Layers,
-  ListChecks,
-  ReceiptText,
-  Settings,
   ShieldCheck,
-  SlidersHorizontal,
-  TrendingUp,
+  LayoutDashboard,
   Users,
   Wallet,
+  CircleDollarSign,
+  ClipboardList,
+  TrendingUp,
+  ReceiptText,
+  ListChecks,
+  Cpu,
   Zap,
+  Layers,
+  Globe,
+  FileClock,
+  Bell,
+  BookOpenText,
+  Settings,
+  SlidersHorizontal,
+  Database,
+  KeyRound,
+  GitBranch,
+  type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const adminMenuGroups = [
+/**
+ * 管理后台导航配置强类型
+ */
+export type NavItem = {
+  title: string;
+  href: string;
+  icon: LucideIcon;
+};
+
+export type NavGroup = {
+  label: string;
+  items: NavItem[];
+};
+
+/**
+ * 系统管理后台菜单配置
+ */
+export const ADMIN_NAV_ITEMS: NavGroup[] = [
   {
-    group: "运营中枢",
+    label: "运营大盘",
     items: [
-      { name: "数据总览", icon: Gauge, href: "/admins/dashboard" },
-      { name: "钱包管理", icon: Wallet, href: "/admins/wallets" },
-      { name: "操作日志", icon: Database, href: "/admins/logs" },
+      { title: "数据概览", icon: LayoutDashboard, href: "/admins/dashboard" },
+      { title: "资产管理", icon: Wallet, href: "/admins/wallets" },
+      { title: "操作审计", icon: Database, href: "/admins/logs" },
     ],
   },
   {
-    group: "用户管理",
+    label: "用户体系",
     items: [
-      { name: "客户列表", icon: Users, href: "/admins/users" },
+      { title: "客户名单", icon: Users, href: "/admins/users" },
+      { title: "团队拓扑", icon: GitBranch, href: "/admins/team" },
     ],
   },
   {
-    group: "财务审核",
+    label: "财务结算",
     items: [
-      { name: "充值审核", icon: CircleDollarSign, href: "/admins/recharge" },
-      { name: "充值渠道", icon: Database, href: "/admins/recharge-channels" },
-      { name: "提现审核", icon: Wallet, href: "/admins/withdraw" },
-      { name: "收益记录", icon: TrendingUp, href: "/admins/profits" },
-      { name: "佣金记录", icon: ReceiptText, href: "/admins/commissions" },
-      { name: "结算订单", icon: ListChecks, href: "/admins/settlements" },
+      { title: "充值审核", icon: CircleDollarSign, href: "/admins/recharge" },
+      { title: "提现审核", icon: Wallet, href: "/admins/withdraw" },
+      { title: "收益对账", icon: TrendingUp, href: "/admins/profits" },
+      { title: "佣金明细", icon: ReceiptText, href: "/admins/commissions" },
+      { title: "结算工单", icon: ListChecks, href: "/admins/settlements" },
     ],
   },
   {
-    group: "算力业务",
+    label: "算力调度",
     items: [
-      { name: "租赁订单", icon: ClipboardList, href: "/admins/orders" },
-      { name: "API 凭证", icon: KeyRound, href: "/admins/api" },
-      { name: "团队关系", icon: GitBranch, href: "/admins/team" },
-      { name: "产品目录", icon: Cpu, href: "/admins/products" },
-      { name: "AI 模型", icon: Zap, href: "/admins/models" },
-      { name: "GPU 型号", icon: Layers, href: "/admins/gpu" },
-      { name: "机房地区", icon: Globe, href: "/admins/regions" },
-      { name: "周期规则", icon: FileClock, href: "/admins/rules" },
+      { title: "租赁订单", icon: ClipboardList, href: "/admins/orders" },
+      { title: "API 凭证", icon: KeyRound, href: "/admins/api" },
+      { title: "产品库", icon: Cpu, href: "/admins/products" },
+      { title: "模型参数", icon: Zap, href: "/admins/models" },
+      { title: "GPU 型号", icon: Layers, href: "/admins/gpu" },
+      { title: "节点区域", icon: Globe, href: "/admins/regions" },
+      { title: "周期策略", icon: FileClock, href: "/admins/rules" },
     ],
   },
   {
-    group: "系统设置",
+    label: "系统基座",
     items: [
-      { name: "管理员设置", icon: ShieldCheck, href: "/admins/management" },
-      { name: "通知管理", icon: Bell, href: "/admins/notifications" },
-      { name: "内容管理", icon: BookOpenText, href: "/admins/content" },
-      { name: "系统配置", icon: Settings, href: "/admins/config" },
-      { name: "调度任务", icon: SlidersHorizontal, href: "/admins/scheduler" },
+      { title: "管理权限", icon: ShieldCheck, href: "/admins/management" },
+      { title: "全局公告", icon: Bell, href: "/admins/notifications" },
+      { title: "内容发布", icon: BookOpenText, href: "/admins/content" },
+      { title: "系统参数", icon: Settings, href: "/admins/config" },
+      { title: "异步调度", icon: SlidersHorizontal, href: "/admins/scheduler" },
     ],
   },
 ];
@@ -82,44 +99,61 @@ export function AdminSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="admin-sidebar fixed left-0 top-0 z-40 h-screen w-64 overflow-hidden border-r backdrop-blur-xl">
-      <div className="flex h-full flex-col px-3 py-6">
-        <Link href="/admins/dashboard" className="mb-8 flex items-center gap-3 px-2">
-          <div className="admin-brand-card flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border">
-            <ShieldCheck className="h-[18px] w-[18px] text-white" />
-          </div>
-          <div className="min-w-0">
-            <div className="truncate text-sm font-medium text-[var(--admin-text)]">系统管理后台</div>
-            <div className="truncate text-[10px] leading-4 text-[var(--admin-muted)]">运营、审计与调度中心</div>
-          </div>
-        </Link>
-
-        <div className="scrollbar-none min-h-0 flex-1 overflow-y-auto space-y-7 pr-0.5">
-          {adminMenuGroups.map((group) => (
-            <div key={group.group}>
-              <div className="mb-3 px-2 text-[10px] font-medium uppercase tracking-[0.16em] text-[var(--admin-subtle)]">
-                {group.group}
-              </div>
-              <nav className="space-y-1">
-                {group.items.map((item) => {
-                  const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      data-active={isActive}
-                      className={cn(
-                        "admin-nav-item group flex h-9 items-center gap-3 rounded-md px-3 text-[13px] font-medium transition",
-                      )}
-                    >
-                      <item.icon className="admin-nav-icon h-3.5 w-3.5 shrink-0 transition" />
-                      <span className="truncate">{item.name}</span>
-                    </Link>
-                  );
-                })}
-              </nav>
+    <aside className="fixed left-0 top-0 z-40 hidden h-screen w-64 border-r border-border bg-background lg:block">
+      <div className="flex h-full flex-col">
+        {/* Brand Area */}
+        <div className="flex h-16 items-center px-6">
+          <Link href="/admins/dashboard" className="flex items-center gap-2.5 transition-opacity hover:opacity-80">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm">
+              <ShieldCheck className="h-5 w-5" />
             </div>
-          ))}
+            <div className="flex flex-col leading-none">
+              <span className="text-[13px] font-bold tracking-tight">管理后台</span>
+              <span className="text-[9px] text-muted-foreground font-medium uppercase mt-0.5 opacity-60">Admin Control Panel</span>
+            </div>
+          </Link>
+        </div>
+
+        {/* Nav Scroll Area */}
+        <nav className="flex-1 overflow-y-auto p-4 scrollbar-none">
+          <div className="space-y-7">
+            {ADMIN_NAV_ITEMS.map((group) => (
+              <div key={group.label} className="space-y-1.5">
+                <h4 className="px-2 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/50">
+                  {group.label}
+                </h4>
+                <div className="space-y-0.5">
+                  {group.items.map((item) => {
+                    const isActive = pathname === item.href || (item.href !== "/admins" && pathname.startsWith(item.href));
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className={cn(
+                          "group flex items-center gap-3 rounded-md px-3 py-2 text-[13px] font-medium transition-all",
+                          isActive
+                            ? "bg-secondary text-secondary-foreground"
+                            : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                        )}
+                      >
+                        <item.icon className={cn("h-4 w-4 shrink-0 transition-colors", isActive ? "text-primary" : "group-hover:text-foreground")} />
+                        <span className="truncate">{item.title}</span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+        </nav>
+
+        {/* Footer info */}
+        <div className="border-t border-border/40 p-4">
+          <div className="rounded-lg bg-muted/30 p-2 text-center">
+            <p className="text-[9px] text-muted-foreground font-mono uppercase opacity-40">
+              Admin Core Engine v1.0.4
+            </p>
+          </div>
         </div>
       </div>
     </aside>
