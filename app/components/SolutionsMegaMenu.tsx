@@ -71,11 +71,12 @@ const useCaseCategories = [
 ];
 
 const industryItems = [
-  { name: "AIGC 初创企业", icon: Rocket, href: "/industry/aigc-startups" },
-  { name: "科研与高校", icon: GraduationCap, href: "/industry/research" },
-  { name: "自动驾驶", icon: CarFront, href: "/industry/autonomous-driving" },
-  { name: "游戏与数字娱乐", icon: Gamepad2, href: "/industry/gaming" }
+  { name: "AIGC 初创企业", icon: Rocket, href: "/solutions/aigc-startups" },
+  { name: "科研与高校", icon: GraduationCap, href: "/solutions/research" },
+  { name: "自动驾驶", icon: CarFront, href: "/solutions/autonomous-driving" },
+  { name: "游戏与数字娱乐", icon: Gamepad2, href: "/solutions/gaming" }
 ];
+
 
 export default function SolutionsMegaMenu() {
   return (

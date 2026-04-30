@@ -29,10 +29,12 @@ export const CodeSnippetWindow: React.FC<CodeSnippetWindowProps> = ({ code }) =>
                 {/* Very basic color highlighting for demo */}
                 <span dangerouslySetInnerHTML={{ 
                   __html: line
-                    .replace(/("(.*?)")/g, '<span class="text-emerald-400">$1</span>')
-                    .replace(/\b(const|let|var|function|return|import|from|export|default|async|await|await|if|else|for|while)\b/g, '<span class="text-purple-400">$1</span>')
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"(.*?)"/g, '<span class="text-emerald-400">"$1"</span>')
+                    .replace(/\b(const|let|var|function|return|import|from|export|default|async|await|if|else|for|while)\b/g, '<span class="text-purple-400">$1</span>')
                     .replace(/\b(true|false|null|undefined)\b/g, '<span class="text-orange-400">$1</span>')
-                    .replace(/\b(\d+)\b/g, '<span class="text-blue-400">$1</span>')
                 }} />
               </div>
             ))}

@@ -15,14 +15,15 @@ export const metadata: Metadata = {
 
 const themeScript = `
   (function () {
-    const storageKey = "theme";
-    const storedTheme = window.localStorage.getItem(storageKey);
-    const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      ? storedTheme
-      : "light";
-
-    document.documentElement.dataset.theme = theme;
-    document.documentElement.style.colorScheme = theme;
+    try {
+      const storageKey = "theme";
+      const storedTheme = window.localStorage.getItem(storageKey);
+      const theme = storedTheme || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.dataset.theme = theme;
+      document.documentElement.style.colorScheme = theme;
+    } catch (e) {
+      console.error("Theme script failed", e);
+    }
   })();
 `;
 
@@ -40,14 +41,13 @@ export default function RootLayout({
       suppressHydrationWarning
       className={inter.variable}
     >
-      <head>
+      <head />
+      <body>
         <Script
-          id="theme-script"
+          id="theme-strategy"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: themeScript }}
         />
-      </head>
-      <body>
         {children}
         <CustomerService />
       </body>

@@ -11,19 +11,20 @@ import { ChevronRight, Cpu } from 'lucide-react';
 import Link from 'next/link';
 
 interface SolutionPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export async function generateStaticParams() {
-  return Object.keys(solutionsData).map((slug) => ({
+  const slugs = Object.keys(solutionsData);
+  return slugs.map((slug) => ({
     slug,
   }));
 }
 
 export default async function SolutionPage({ params }: SolutionPageProps) {
-  const { slug } = params;
+  const { slug } = await params;
   const data = solutionsData[slug];
 
   if (!data) {

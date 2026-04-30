@@ -33,7 +33,8 @@
     --ui-card-foreground: 0 0% 98%;
     --ui-popover: 240 10% 3.9%;
     --ui-popover-foreground: 0 0% 98%;
-    --ui-primary: 263.4 70% 50.4%; /* Purple #8b5cf6 */
+    --ui-primary: 263.4 70% 50.4%;
+    /* Purple #8b5cf6 */
     --ui-primary-foreground: 210 40% 98%;
     --ui-secondary: 240 3.7% 15.9%;
     --ui-secondary-foreground: 0 0% 98%;
@@ -95,12 +96,15 @@
 
 
 .scrollbar-none {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 .scrollbar-none::-webkit-scrollbar {
-  display: none; /* Chrome, Safari and Opera */
+  display: none;
+  /* Chrome, Safari and Opera */
 }
 
 * {
@@ -514,7 +518,7 @@ button {
   line-height: 1.8;
 }
 
-.blog-markdown > * + * {
+.blog-markdown>*+* {
   margin-top: 1.15rem;
 }
 
@@ -553,7 +557,7 @@ button {
   padding-left: 1.4rem;
 }
 
-.blog-markdown li + li {
+.blog-markdown li+li {
   margin-top: 0.45rem;
 }
 
