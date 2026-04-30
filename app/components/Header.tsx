@@ -2,12 +2,16 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import ThemeToggle from "./theme-toggle";
 import ProductMegaMenu from "./ProductMegaMenu";
 import UseCaseMegaMenu from "./UseCaseMegaMenu";
 import CompanyMegaMenu from "./CompanyMegaMenu";
 import SolutionsMegaMenu from "./SolutionsMegaMenu";
+import { getCurrentUser, type UserMeResponse } from "@/api/user";
+import { UserAvatar } from "@/lib/avatars";
+import { LogOut, LayoutDashboard, User } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const navigationItems = [
   { name: "博客", href: "/blog" },
@@ -15,8 +19,12 @@ const navigationItems = [
 
 export default function Header() {
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
+  const [user, setUser] = useState<UserMeResponse | null>(null);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const headerRef = useRef<HTMLDivElement>(null);
+  const userMenuRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const router = useRouter();
 
   // Handle outside click
   useEffect(() => {
@@ -24,10 +32,37 @@ export default function Header() {
       if (headerRef.current && !headerRef.current.contains(event.target as Node)) {
         setActiveMenu(null);
       }
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setUserMenuOpen(false);
+      }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  // Fetch user info on mount
+  useEffect(() => {
+    const token = localStorage.getItem("user_access_token") || localStorage.getItem("accessToken");
+    if (token) {
+      getCurrentUser()
+        .then((res) => {
+          if (res.code === 200 || res.code === 0) {
+            setUser(res.data);
+          }
+        })
+        .catch(() => {
+          setUser(null);
+        });
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("user_access_token");
+    localStorage.removeItem("accessToken");
+    setUser(null);
+    setUserMenuOpen(false);
+    router.push("/");
+  };
 
   const handleMouseEnter = (menuId: string) => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
@@ -139,9 +174,74 @@ export default function Header() {
 
         <div className="site-header__controls">
           <ThemeToggle />
-          <Link href="/login" className="auth-signup">
-            登录
-          </Link>
+          {user ? (
+            <div className="relative" ref={userMenuRef}>
+              <button
+                onClick={() => setUserMenuOpen(!userMenuOpen)}
+                className="flex items-center transition-transform hover:scale-105"
+              >
+                <UserAvatar 
+                  avatarKey={user.avatarKey} 
+                  userName={user.userName} 
+                  size="md"
+                  className="border border-border shadow-sm"
+                />
+              </button>
+
+              <AnimatePresence>
+                {userMenuOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute right-0 mt-2 w-48 overflow-hidden rounded-xl border border-border bg-background shadow-xl py-1 z-[110]"
+                  >
+                    <div className="px-4 py-3 border-b border-border/50 bg-muted/30">
+                      <p className="text-xs font-medium text-muted-foreground truncate">
+                        {user.email}
+                      </p>
+                      <p className="text-sm font-bold text-foreground truncate mt-0.5">
+                        {user.userName || "未命名用户"}
+                      </p>
+                    </div>
+                    
+                    <Link 
+                      href="/dashboard"
+                      className="flex items-center gap-2 px-4 py-2.5 text-sm text-foreground hover:bg-accent transition-colors"
+                      onClick={() => setUserMenuOpen(false)}
+                    >
+                      <LayoutDashboard className="w-4 h-4 text-muted-foreground" />
+                      控制面板
+                    </Link>
+                    
+                    <Link 
+                      href="/dashboard/settings"
+                      className="flex items-center gap-2 px-4 py-2.5 text-sm text-foreground hover:bg-accent transition-colors"
+                      onClick={() => setUserMenuOpen(false)}
+                    >
+                      <User className="w-4 h-4 text-muted-foreground" />
+                      账户设置
+                    </Link>
+
+                    <div className="h-px bg-border/50 my-1" />
+
+                    <button
+                      onClick={handleLogout}
+                      className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-rose-500 hover:bg-rose-500/10 transition-colors"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      退出登录
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          ) : (
+            <Link href="/login" className="auth-signup">
+              登录
+            </Link>
+          )}
         </div>
       </div>
     </header>

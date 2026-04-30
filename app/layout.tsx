@@ -42,9 +42,10 @@ export default function RootLayout({
       className={inter.variable}
     >
       <head>
-        <script
+        <Script
+          id="theme-script"
           dangerouslySetInnerHTML={{ __html: themeScript }}
-          suppressHydrationWarning
+          strategy="beforeInteractive"
         />
       </head>
       <body>

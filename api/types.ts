@@ -23,6 +23,7 @@ export interface UserProfile {
   userId: string;
   email: string;
   userName: string;
+  avatarKey?: string | null;
 }
 
 export interface UserMeResponse extends UserProfile {

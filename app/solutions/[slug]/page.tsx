@@ -6,7 +6,6 @@ import Footer from '@/app/components/Footer';
 import { solutionsData } from '@/lib/solutions-data';
 import { CodeSnippetWindow } from '@/app/components/solutions/CodeSnippetWindow';
 import { LineArtDiagram } from '@/app/components/solutions/LineArtDiagram';
-import { HeroBackground } from '@/app/components/solutions/HeroBackgrounds';
 import { Button } from '@/components/ui/button';
 import { ChevronRight, Cpu } from 'lucide-react';
 import Link from 'next/link';
@@ -39,7 +38,6 @@ export default async function SolutionPage({ params }: SolutionPageProps) {
       <main className="flex-grow relative">
         {/* Hero Section */}
         <section className="relative pt-32 pb-24 md:pt-48 md:pb-40 overflow-hidden">
-          <HeroBackground type={data.heroSvgPattern} />
 
           <div className="shell px-4">
             <div className="max-w-4xl">
