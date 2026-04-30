@@ -49,10 +49,17 @@ Authorization: Bearer <token>
     "email": "user@example.com",
     "userName": "demo",
     "avatarKey": "avatar_1",
-    "status": 1
+    "status": 1,
+    "createdAt": "2026-05-01 10:30:00"
   }
 }
 ```
+
+说明：
+
+- `createdAt` 是用户注册时间。
+- 时间格式按后端统一 JSON 配置返回：`yyyy-MM-dd HH:mm:ss`。
+- 前端如果要展示“注册时间”，直接读取 `data.createdAt`。
 
 ### 3. 修改当前用户头像
 

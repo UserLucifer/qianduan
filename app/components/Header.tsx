@@ -9,7 +9,8 @@ import UseCaseMegaMenu from "./UseCaseMegaMenu";
 import CompanyMegaMenu from "./CompanyMegaMenu";
 import SolutionsMegaMenu from "./SolutionsMegaMenu";
 import { getCurrentUser, type UserMeResponse } from "@/api/user";
-import { UserAvatar } from "@/lib/avatars";
+import { UserAvatar } from "@/components/shared/UserAvatar";
+import { getAvatarUrl } from "@/lib/avatars";
 import { LogOut, LayoutDashboard, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -181,10 +182,9 @@ export default function Header() {
                 className="flex items-center transition-transform hover:scale-105"
               >
                 <UserAvatar 
-                  avatarKey={user.avatarKey} 
-                  userName={user.userName} 
-                  size="md"
-                  className="border border-border shadow-sm"
+                  src={getAvatarUrl(user.avatarKey)}
+                  name={user.userName} 
+                  className="h-9 w-9 border border-border shadow-sm"
                 />
               </button>
 

@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 import { Bell, KeyRound, Moon, Search, Sun, Wallet, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getCurrentUser, type UserMeResponse } from "@/api/user";
-import { UserAvatar } from "@/lib/avatars";
+import { UserAvatar } from "@/components/shared/UserAvatar";
+import { getAvatarUrl } from "@/lib/avatars";
 
 export function Header() {
   const [user, setUser] = useState<UserMeResponse | null>(null);
@@ -105,9 +106,9 @@ export function Header() {
             onClick={() => setDropdownOpen((prev) => !prev)}
           >
             <UserAvatar 
-              avatarKey={user?.avatarKey} 
-              userName={user?.userName || user?.email} 
-              size="sm"
+              src={getAvatarUrl(user?.avatarKey)}
+              name={user?.userName || user?.email || "U"}
+              className="h-8 w-8"
             />
             <span className="max-w-32 truncate text-sm font-medium text-slate-700 dark:text-muted-foreground">{user?.userName || user?.email || "当前用户"}</span>
           </button>

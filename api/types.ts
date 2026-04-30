@@ -23,7 +23,9 @@ export interface UserProfile {
   userId: string;
   email: string;
   userName: string;
+  nickname?: string | null;
   avatarKey?: string | null;
+  createdAt: string;
 }
 
 export interface UserMeResponse extends UserProfile {
