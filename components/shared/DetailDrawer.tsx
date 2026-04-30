@@ -4,10 +4,12 @@ import { useEffect, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export interface DetailFieldDef<T> {
   label: string;
   render: (data: T) => ReactNode;
+  fullWidth?: boolean;
 }
 
 export interface DetailSectionDef<T> {
@@ -73,9 +75,13 @@ export function DetailDrawer<T>({
               <h3 className="mb-4 text-sm font-bold text-[var(--admin-text)]">{section.title}</h3>
               <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 {section.fields.map((field) => (
-                  <div key={field.label}>
-                    <dt className="text-[11px] font-medium uppercase tracking-wider text-[var(--admin-muted)]">{field.label}</dt>
-                    <dd className="mt-1.5 min-w-0 text-sm font-medium text-[var(--admin-text)]">{field.render(data)}</dd>
+                  <div key={field.label} className={field.fullWidth ? "sm:col-span-2" : ""}>
+                    {field.label && (
+                      <dt className="text-[11px] font-medium uppercase tracking-wider text-[var(--admin-muted)]">{field.label}</dt>
+                    )}
+                    <dd className={cn("min-w-0 text-sm font-medium text-[var(--admin-text)]", field.label ? "mt-1.5" : "mt-0")}>
+                      {field.render(data)}
+                    </dd>
                   </div>
                 ))}
               </dl>

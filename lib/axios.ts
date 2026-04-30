@@ -1,7 +1,11 @@
 import axios from "axios";
 
+const apiBaseURL =
+  process.env.NEXT_PUBLIC_API_BASE_URL ||
+  (typeof window === "undefined" ? process.env.API_BASE_URL || "http://127.0.0.1:8080" : "");
+
 const baseConfig = {
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "",
+  baseURL: apiBaseURL,
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",

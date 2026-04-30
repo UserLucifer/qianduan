@@ -30,6 +30,9 @@ export type {
 export const getRentalOrders = (params: RentalOrderQueryRequest = {}) =>
   apiGet<PageResult<RentalOrderSummaryResponse>>("/api/rental/orders", { params });
 
+export const getRentalApiManagement = (params: RentalOrderQueryRequest = {}) =>
+  apiGet<PageResult<ApiDeployInfoResponse>>("/api/rental/api-management", { params });
+
 export const getRentalOrderDetail = (orderNo: string) =>
   apiGet<RentalOrderDetailResponse>(`/api/rental/orders/${orderNo}`);
 

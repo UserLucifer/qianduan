@@ -11,16 +11,16 @@ import { DetailDrawer, type DetailSectionDef } from "@/components/shared/DetailD
 import { MoneyText } from "@/components/shared/MoneyText";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { StatusBadge } from "@/components/shared/StatusBadge";
-import { getRentalDeployInfo, getRentalOrders, payDeployFee } from "@/api/rental";
-import type { ApiDeployInfoResponse, PageResult, RentalOrderQueryRequest, RentalOrderSummaryResponse } from "@/api/types";
+import { getRentalApiManagement, getRentalDeployInfo, payDeployFee } from "@/api/rental";
+import type { ApiDeployInfoResponse, PageResult, RentalOrderQueryRequest } from "@/api/types";
 import { usePaginatedResource } from "@/hooks/usePaginatedResource";
 import { formatEmpty, toErrorMessage } from "@/lib/format";
 
 const initialParams: RentalOrderQueryRequest = { pageNo: 1, pageSize: 10 };
 
 export default function DashboardApiPage() {
-  const loader = useCallback(async (params: RentalOrderQueryRequest): Promise<PageResult<RentalOrderSummaryResponse>> => {
-    const res = await getRentalOrders(params);
+  const loader = useCallback(async (params: RentalOrderQueryRequest): Promise<PageResult<ApiDeployInfoResponse>> => {
+    const res = await getRentalApiManagement(params);
     return res.data;
   }, []);
   const { page, loading, error, changePage, reload } = usePaginatedResource(loader, initialParams);
@@ -51,7 +51,7 @@ export default function DashboardApiPage() {
     }
   };
 
-  const columns: DataTableColumn<RentalOrderSummaryResponse>[] = [
+  const columns: DataTableColumn<ApiDeployInfoResponse>[] = [
     { key: "orderNo", title: "关联订单", render: (row) => <span className="font-mono text-xs">{row.orderNo}</span> },
     {
       key: "productNameSnapshot",

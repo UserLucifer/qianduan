@@ -9,7 +9,7 @@ import UseCaseMegaMenu from "./UseCaseMegaMenu";
 import CompanyMegaMenu from "./CompanyMegaMenu";
 
 const navigationItems = [
-  { name: "博客", href: "#" },
+  { name: "博客", href: "/blog" },
   { name: "解决方案", href: "#" },
   { name: "行业", href: "#" },
 ];

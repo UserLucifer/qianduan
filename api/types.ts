@@ -201,12 +201,16 @@ export interface ApiDeployInfoResponse {
   credentialNo: string;
   tokenStatus: string;
   modelNameSnapshot: string;
+  productNameSnapshot?: string;
+  aiModelNameSnapshot?: string;
   deployFeeSnapshot: number;
   apiName: string;
   apiBaseUrl: string;
   tokenMasked: string;
   deployOrderStatus: string;
   paidAt?: string;
+  deployFeePaidAt?: string;
+  apiGeneratedAt?: string;
 }
 
 export interface ApiDeployOrderResponse {
