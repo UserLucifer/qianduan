@@ -19,100 +19,79 @@ import {
   Bell,
   Settings,
   Cpu,
+  type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-interface NavItem {
-  name: string;
-  icon: any;
-  href: string;
-}
-
-interface NavGroup {
+/**
+ * 侧边栏导航配置强类型定义
+ */
+export type NavItem = {
   title: string;
-  items: NavItem[];
-}
+  href: string;
+  icon: LucideIcon;
+};
 
-const navConfig: NavGroup[] = [
+export type NavGroup = {
+  label: string;
+  items: NavItem[];
+};
+
+/**
+ * 用户控制台菜单配置
+ */
+export const USER_NAV_ITEMS: NavGroup[] = [
   {
-    title: "概览",
+    label: "概览",
     items: [
-      { name: "控制台", icon: LayoutDashboard, href: "/dashboard" },
-      { name: "数据分析", icon: BarChart3, href: "/dashboard/analytics" },
+      { title: "控制台", icon: LayoutDashboard, href: "/dashboard" },
+      { title: "数据分析", icon: BarChart3, href: "/dashboard/analytics" },
     ],
   },
   {
-    title: "算力资源",
+    label: "算力资源",
     items: [
-      { name: "产品大厅", icon: ShoppingBag, href: "/dashboard/products" },
-      { name: "我的实例", icon: ListChecks, href: "/dashboard/orders" },
-      { name: "API 管理", icon: KeyRound, href: "/dashboard/api" },
+      { title: "产品大厅", icon: ShoppingBag, href: "/dashboard/products" },
+      { title: "我的实例", icon: ListChecks, href: "/dashboard/orders" },
+      { title: "API 管理", icon: KeyRound, href: "/dashboard/api" },
     ],
   },
   {
-    title: "财务中心",
+    label: "财务中心",
     items: [
-      { name: "我的钱包", icon: Wallet, href: "/dashboard/wallet" },
-      { name: "充值", icon: CreditCard, href: "/dashboard/recharge" },
-      { name: "提现", icon: Send, href: "/dashboard/withdraw" },
-      { name: "账单", icon: ReceiptText, href: "/dashboard/billing" },
+      { title: "我的钱包", icon: Wallet, href: "/dashboard/wallet" },
+      { title: "充值中心", icon: CreditCard, href: "/dashboard/recharge" },
+      { title: "提现申请", icon: Send, href: "/dashboard/withdraw" },
+      { title: "账单明细", icon: ReceiptText, href: "/dashboard/billing" },
     ],
   },
   {
-    title: "推广收益",
+    label: "推广收益",
     items: [
-      { name: "算力收益", icon: TrendingUp, href: "/dashboard/profits" },
-      { name: "我的团队", icon: Users, href: "/dashboard/team" },
-      { name: "佣金明细", icon: CircleDollarSign, href: "/dashboard/commissions" },
-      { name: "结算记录", icon: ClipboardList, href: "/dashboard/settlements" },
+      { title: "算力收益", icon: TrendingUp, href: "/dashboard/profits" },
+      { title: "我的团队", icon: Users, href: "/dashboard/team" },
+      { title: "佣金明细", icon: CircleDollarSign, href: "/dashboard/commissions" },
+      { title: "结算记录", icon: ClipboardList, href: "/dashboard/settlements" },
+    ],
+  },
+  {
+    label: "账户设置",
+    items: [
+      { title: "消息通知", icon: Bell, href: "/dashboard/notifications" },
+      { title: "个人设置", icon: Settings, href: "/dashboard/settings" },
     ],
   },
 ];
 
-const accountConfig: NavGroup = {
-  title: "账户设置",
-  items: [
-    { name: "消息通知", icon: Bell, href: "/dashboard/notifications" },
-    { name: "设置", icon: Settings, href: "/dashboard/settings" },
-  ],
-};
-
 export function Sidebar() {
   const pathname = usePathname();
 
-  const renderNavGroup = (group: NavGroup) => (
-    <div key={group.title} className="mb-6">
-      <h3 className="mb-2 px-3 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-        {group.title}
-      </h3>
-      <div className="space-y-1">
-        {group.items.map((item) => {
-          const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "group flex items-center px-3 py-2 text-sm transition-colors",
-                isActive
-                  ? "border-l-2 border-primary bg-accent/50 font-medium text-primary"
-                  : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-              )}
-            >
-              <item.icon className={cn("mr-3 h-4 w-4 shrink-0", isActive ? "text-primary" : "text-muted-foreground group-hover:text-accent-foreground")} />
-              {item.name}
-            </Link>
-          );
-        })}
-      </div>
-    </div>
-  );
-
   return (
-    <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r bg-background">
-      <div className="flex h-full flex-col py-6">
-        <div className="mb-8 px-6">
-          <Link href="/dashboard" className="flex items-center gap-2.5">
+    <aside className="fixed left-0 top-0 z-40 hidden h-screen w-64 border-r border-border bg-background lg:block">
+      <div className="flex h-full flex-col">
+        {/* Logo Area */}
+        <div className="flex h-16 items-center px-6">
+          <Link href="/dashboard" className="flex items-center gap-2.5 transition-opacity hover:opacity-80">
             <div className="flex h-8 w-8 items-center justify-center rounded bg-primary text-primary-foreground">
               <Cpu className="h-5 w-5" />
             </div>
@@ -120,12 +99,44 @@ export function Sidebar() {
           </Link>
         </div>
 
-        <nav className="flex-1 overflow-y-auto px-3 scrollbar-none">
-          {navConfig.map(renderNavGroup)}
+        {/* Navigation Area */}
+        <nav className="flex-1 overflow-y-auto p-4 scrollbar-none">
+          <div className="space-y-6">
+            {USER_NAV_ITEMS.map((group) => (
+              <div key={group.label} className="space-y-1">
+                <h4 className="px-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">
+                  {group.label}
+                </h4>
+                <div className="space-y-0.5 pt-1.5">
+                  {group.items.map((item) => {
+                    const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className={cn(
+                          "group flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-all",
+                          isActive
+                            ? "bg-secondary text-secondary-foreground"
+                            : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                        )}
+                      >
+                        <item.icon className={cn("h-4 w-4 shrink-0 transition-colors", isActive ? "text-primary" : "group-hover:text-foreground")} />
+                        {item.title}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
         </nav>
 
-        <div className="mt-auto px-3 pt-6">
-          {renderNavGroup(accountConfig)}
+        {/* Optional: Sidebar Footer / User Profile Summary can go here */}
+        <div className="border-t border-border/50 p-4">
+          <p className="text-[10px] text-center text-muted-foreground/40 font-medium uppercase tracking-tighter">
+            Cloud Compute Platform v0.1
+          </p>
         </div>
       </div>
     </aside>
