@@ -64,7 +64,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       <Header />
       <main className="relative min-h-screen bg-background pt-4 md:pt-6">
         {/* Geek Grid Background */}
-        <div className="absolute inset-0 z-0 h-[600px] w-full bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+        <div className="absolute inset-0 z-0 bg-[linear-gradient(to_right,hsl(var(--ui-foreground)/0.08)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--ui-foreground)/0.08)_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
 
         <div className="shell relative z-[1] pb-16 pt-12 md:pt-16">
           {/* Hero Section */}

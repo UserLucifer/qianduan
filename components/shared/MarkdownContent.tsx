@@ -19,10 +19,10 @@ const markdownComponents: Components = {
   ),
   pre({ children, className, ...props }) {
     return (
-      <div className="relative my-8 group/code">
+      <div className="relative my-10 group/code">
         <pre
           className={cn(
-            "overflow-x-auto rounded-xl border border-border bg-muted/50 p-5 text-sm leading-relaxed text-foreground shadow-sm",
+            "overflow-x-auto rounded-xl border border-border bg-[#090a0b]/90 dark:bg-[#050505] p-6 text-sm leading-relaxed text-foreground/90 shadow-2xl",
             className,
           )}
           {...props}
@@ -40,7 +40,7 @@ const markdownComponents: Components = {
         className={cn(
           isBlockCode
             ? "block font-mono text-sm text-inherit"
-            : "rounded-md border border-border bg-muted px-1.5 py-0.5 font-mono text-[0.85em] text-primary",
+            : "rounded-md bg-muted/50 px-1.5 py-0.5 font-mono text-[0.85em] text-foreground",
           className,
         )}
         {...props}
@@ -49,6 +49,7 @@ const markdownComponents: Components = {
       </code>
     );
   },
+
 };
 
 export function MarkdownContent({ content }: { content: string }) {

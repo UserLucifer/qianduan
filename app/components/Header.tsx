@@ -7,11 +7,10 @@ import ThemeToggle from "./theme-toggle";
 import ProductMegaMenu from "./ProductMegaMenu";
 import UseCaseMegaMenu from "./UseCaseMegaMenu";
 import CompanyMegaMenu from "./CompanyMegaMenu";
+import SolutionsMegaMenu from "./SolutionsMegaMenu";
 
 const navigationItems = [
   { name: "博客", href: "/blog" },
-  { name: "解决方案", href: "#" },
-  { name: "行业", href: "#" },
 ];
 
 export default function Header() {
@@ -70,6 +69,23 @@ export default function Header() {
             </AnimatePresence>
           </div>
 
+          {/* Solutions */}
+          <div 
+            className="nav-dropdown-wrapper nav-dropdown-wrapper--mega"
+            onMouseEnter={() => handleMouseEnter('solutions')}
+            onMouseLeave={handleMouseLeave}
+          >
+            <button 
+              className={`site-nav__link nav-dropdown-trigger ${activeMenu === 'solutions' ? 'is-active' : ''}`}
+              onClick={() => handleToggle('solutions')}
+            >
+              解决方案
+            </button>
+            <AnimatePresence>
+              {activeMenu === 'solutions' && <SolutionsMegaMenu />}
+            </AnimatePresence>
+          </div>
+
           {/* Use Cases */}
           <div 
             className="nav-dropdown-wrapper nav-dropdown-wrapper--mega"
@@ -119,6 +135,7 @@ export default function Header() {
             </Link>
           ))}
         </nav>
+
 
         <div className="site-header__controls">
           <ThemeToggle />

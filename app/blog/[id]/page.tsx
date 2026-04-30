@@ -6,8 +6,9 @@ import Footer from "@/app/components/Footer";
 import { getBlogPostBySlug } from "@/api/blog";
 import type { BlogPostResponse } from "@/api/blog";
 import { MarkdownContent } from "@/components/shared/MarkdownContent";
+import { ReadingProgressBar } from "@/components/shared/ReadingProgressBar";
 import { formatDate } from "@/lib/format";
-import { ArrowLeft, Calendar, Eye } from "lucide-react";
+import { ArrowLeft, Calendar, Eye, User } from "lucide-react";
 import { cache } from "react";
 
 export const revalidate = 3600; // Cache for 1 hour
@@ -59,11 +60,11 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
 
   return (
     <>
+      <ReadingProgressBar />
       <Header />
-      <main className="shell min-h-screen pb-16 pt-16 md:pt-20">
-
+      <main className="shell min-h-screen pb-16 pt-32 md:pt-40">
         {/* Navigation */}
-        <div className="mx-auto max-w-3xl mb-10">
+        <div className="mx-auto max-w-[700px] mb-12">
           <Link 
             href="/blog" 
             className="group inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
@@ -73,17 +74,21 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
           </Link>
         </div>
 
-        <article className="mx-auto max-w-3xl">
+        <article className="mx-auto max-w-[700px]">
           {/* Article Header */}
-          <header className="mb-12 text-center md:text-left">
-            <h1 className="mb-6 text-3xl font-bold leading-tight text-foreground md:text-5xl">
+          <header className="mb-12">
+            <h1 className="text-4xl font-extrabold tracking-tight text-foreground md:text-5xl lg:leading-[1.1]">
               {post.title}
             </h1>
             
-            <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-sm text-muted-foreground">
+            <div className="mt-8 flex flex-wrap items-center gap-6 text-sm text-muted-foreground">
               <div className="flex items-center gap-1.5">
                 <Calendar className="h-4 w-4" />
                 <span>{formatDate(publishedAt)}</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <User className="h-4 w-4" />
+                <span>官方团队</span>
               </div>
               {post.viewCount !== undefined && (
                 <div className="flex items-center gap-1.5">
@@ -92,7 +97,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                 </div>
               )}
               {post.categoryName && (
-                <span className="rounded-full bg-muted px-3 py-0.5 text-xs font-medium">
+                <span className="rounded-full bg-muted px-3 py-0.5 text-xs font-medium text-foreground">
                   {post.categoryName}
                 </span>
               )}
@@ -111,7 +116,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
           )}
 
           {/* Article Content */}
-          <div className="prose prose-slate dark:prose-invert prose-lg max-w-none">
+          <div className="prose prose-slate dark:prose-invert prose-lg max-w-none mt-10">
             {post.contentMarkdown ? (
               <MarkdownContent content={post.contentMarkdown} />
             ) : (
@@ -142,4 +147,5 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
     </>
   );
 }
+
 
