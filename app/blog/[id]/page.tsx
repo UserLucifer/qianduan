@@ -5,20 +5,17 @@ import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
 import { getBlogPostBySlug } from "@/api/blog";
 import type { BlogPostResponse } from "@/api/blog";
-import { Badge } from "@/components/ui/badge";
 import { MarkdownContent } from "@/components/shared/MarkdownContent";
 import { formatDate } from "@/lib/format";
-import { ArrowLeft, Clock, Eye } from "lucide-react";
+import { ArrowLeft, Calendar, Eye } from "lucide-react";
 import { cache } from "react";
 
-// export const dynamic = "force-dynamic";
 export const revalidate = 3600; // Cache for 1 hour
 
 type BlogDetailPageProps = {
   params: Promise<{ id: string }>;
 };
 
-// Use React cache to deduplicate data fetching across generateMetadata and the page component
 const loadPost = cache(async (id: string): Promise<BlogPostResponse | null> => {
   try {
     const response = await getBlogPostBySlug(id);
@@ -63,80 +60,75 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
   return (
     <>
       <Header />
-      <main className="shell min-h-screen py-16">
-        {/* Navigation / Breadcrumb */}
-        <div className="mb-12">
+      <main className="shell min-h-screen pb-16 pt-16 md:pt-20">
+
+        {/* Navigation */}
+        <div className="mx-auto max-w-3xl mb-10">
           <Link 
             href="/blog" 
-            className="group inline-flex items-center gap-2 text-sm font-medium text-[var(--muted)] transition-colors hover:text-[var(--foreground)]"
+            className="group inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
             <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
-            Back to Insights
+            返回列表
           </Link>
         </div>
 
         <article className="mx-auto max-w-3xl">
           {/* Article Header */}
-          <header className="mb-12">
-            <div className="mb-6 flex flex-wrap items-center gap-4 text-xs font-medium text-[var(--muted)]">
+          <header className="mb-12 text-center md:text-left">
+            <h1 className="mb-6 text-3xl font-bold leading-tight text-foreground md:text-5xl">
+              {post.title}
+            </h1>
+            
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-sm text-muted-foreground">
               <div className="flex items-center gap-1.5">
-                <Clock className="h-3.5 w-3.5" />
+                <Calendar className="h-4 w-4" />
                 <span>{formatDate(publishedAt)}</span>
               </div>
               {post.viewCount !== undefined && (
                 <div className="flex items-center gap-1.5">
-                  <Eye className="h-3.5 w-3.5" />
-                  <span>{post.viewCount} views</span>
+                  <Eye className="h-4 w-4" />
+                  <span>{post.viewCount} 次阅读</span>
                 </div>
               )}
               {post.categoryName && (
-                <Badge variant="outline" className="border-white/10 bg-white/[0.03] text-[#9aa2ff]">
+                <span className="rounded-full bg-muted px-3 py-0.5 text-xs font-medium">
                   {post.categoryName}
-                </Badge>
+                </span>
               )}
             </div>
-
-            <h1 className="mb-8 text-4xl font-bold tracking-tight text-[var(--foreground)] md:text-5xl lg:text-6xl">
-              {post.title}
-            </h1>
-
-            {post.summary && (
-              <p className="text-xl leading-relaxed text-[var(--muted)]">
-                {post.summary}
-              </p>
-            )}
           </header>
 
           {/* Featured Image */}
           {post.coverImageUrl && (
-            <div className="mb-16 overflow-hidden rounded-3xl border border-white/10 bg-white/[0.02]">
+            <div className="mb-12 overflow-hidden rounded-2xl">
               <img
                 src={post.coverImageUrl}
                 alt={post.title}
-                className="aspect-[16/9] w-full object-cover"
+                className="aspect-[21/9] w-full object-cover"
               />
             </div>
           )}
 
           {/* Article Content */}
-          <div className="prose-wrapper">
+          <div className="prose prose-slate dark:prose-invert prose-lg max-w-none">
             {post.contentMarkdown ? (
               <MarkdownContent content={post.contentMarkdown} />
             ) : (
-              <div className="py-20 text-center text-[var(--muted)] italic">
-                This article has no content.
+              <div className="py-20 text-center text-muted-foreground italic">
+                暂无正文内容。
               </div>
             )}
           </div>
 
           {/* Article Footer: Tags */}
           {post.tagNames && post.tagNames.length > 0 && (
-            <footer className="mt-20 border-t border-white/10 pt-10">
+            <footer className="mt-16 border-t border-border pt-8">
               <div className="flex flex-wrap gap-2">
                 {post.tagNames.map((tag) => (
                   <span 
                     key={tag} 
-                    className="rounded-full border border-white/5 bg-white/[0.02] px-3 py-1 text-xs text-[var(--muted)]"
+                    className="rounded-full bg-muted px-3 py-1 text-xs text-muted-foreground"
                   >
                     #{tag}
                   </span>
@@ -150,3 +142,4 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
     </>
   );
 }
+
