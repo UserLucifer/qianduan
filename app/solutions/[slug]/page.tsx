@@ -34,12 +34,12 @@ export default async function SolutionPage({ params }: SolutionPageProps) {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Header />
-      
+
       <main className="flex-grow relative">
         {/* Hero Section */}
         <section className="relative pt-32 pb-24 md:pt-48 md:pb-40 overflow-hidden">
           <HeroBackground type={data.heroSvgPattern} />
-          
+
           <div className="shell px-4">
             <div className="max-w-4xl">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold uppercase tracking-wider mb-8">
@@ -82,7 +82,7 @@ export default async function SolutionPage({ params }: SolutionPageProps) {
                     我们提供全栈优化的算力环境，从裸金属硬件层到容器虚拟化调度，每一层都为高性能计算量身打造。
                   </p>
                 </div>
-                
+
                 <div className="space-y-10">
                   {data.features.slice(0, 2).map((feature, i) => (
                     <div key={i} className="flex gap-6 group">
@@ -99,7 +99,7 @@ export default async function SolutionPage({ params }: SolutionPageProps) {
                   ))}
                 </div>
               </div>
-              
+
               <div className="flex-1 w-full max-w-3xl order-1 lg:order-2">
                 <div className="relative">
                   <div className="absolute -inset-4 bg-primary/5 rounded-3xl blur-2xl -z-10" />
@@ -140,7 +140,7 @@ export default async function SolutionPage({ params }: SolutionPageProps) {
             <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight">推荐算力规格</h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">针对当前业务场景，我们精选了以下机型，旨在提供最佳的性能功耗比。</p>
           </div>
-          
+
           <div className="shell px-4 grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             {data.recommendedGpus.map((gpu, i) => (
               <div key={i} className="group relative p-10 rounded-3xl border border-border/60 bg-background transition-all hover:border-primary/40 hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)] overflow-hidden">
@@ -155,7 +155,7 @@ export default async function SolutionPage({ params }: SolutionPageProps) {
                   <p className="text-muted-foreground leading-relaxed mb-10 text-sm">{gpu.specs}</p>
                   <div className="mt-auto pt-8 border-t border-border/30 flex items-center justify-between">
                     <Link href={`/rental?model=${encodeURIComponent(gpu.model)}`} className="text-sm font-bold text-primary flex items-center gap-1 group/link">
-                      查看实时库存 
+                      查看实时库存
                       <ChevronRight className="w-4 h-4 transition-transform group-hover/link:translate-x-1" />
                     </Link>
                     <span className="text-[10px] font-mono text-muted-foreground/30 uppercase tracking-widest">Available Now</span>
@@ -195,7 +195,7 @@ export default async function SolutionPage({ params }: SolutionPageProps) {
           </div>
         </section>
       </main>
-      
+
       <Footer />
     </div>
   );

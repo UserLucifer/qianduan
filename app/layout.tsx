@@ -41,13 +41,13 @@ export default function RootLayout({
       suppressHydrationWarning
       className={inter.variable}
     >
-      <head />
-      <body>
-        <Script
-          id="theme-strategy"
-          strategy="beforeInteractive"
+      <head>
+        <script
           dangerouslySetInnerHTML={{ __html: themeScript }}
+          suppressHydrationWarning
         />
+      </head>
+      <body>
         {children}
         <CustomerService />
       </body>
