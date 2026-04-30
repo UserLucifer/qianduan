@@ -28,6 +28,7 @@ const themeScript = `
 `;
 
 import { CustomerService } from "@/components/CustomerService";
+import { Toaster } from "@/components/ui/sonner";
 
 export default function RootLayout({
   children,
@@ -51,6 +52,7 @@ export default function RootLayout({
       <body>
         {children}
         <CustomerService />
+        <Toaster richColors position="top-right" />
       </body>
     </html>
   );
