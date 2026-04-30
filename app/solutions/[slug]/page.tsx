@@ -1,5 +1,6 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
+import Image from 'next/image';
 import Header from '@/app/components/Header';
 import Footer from '@/app/components/Footer';
 import { solutionsData } from '@/lib/solutions-data';
@@ -170,7 +171,8 @@ export default async function SolutionPage({ params }: SolutionPageProps) {
         <section className="px-4 pb-32">
           <div className="shell">
             <div className="bg-foreground rounded-[3rem] p-12 md:p-24 text-center relative overflow-hidden">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(var(--ui-primary),0.15),transparent)] pointer-events-none" />
+              <Image src="/images/graph.avif" alt="" fill className="object-cover opacity-40 pointer-events-none" />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,hsl(var(--ui-primary)_/_0.15),transparent)] pointer-events-none" />
               <div className="relative z-10 space-y-10">
                 <h2 className="text-3xl md:text-6xl font-bold tracking-tighter text-background leading-[1.1]">
                   立即开启您的<br className="hidden md:block" />高性能计算之旅
@@ -180,12 +182,12 @@ export default async function SolutionPage({ params }: SolutionPageProps) {
                 </p>
                 <div className="flex flex-wrap justify-center gap-4 pt-6">
                   <Link href="/rental">
-                    <Button size="lg" variant="secondary" className="rounded-full h-14 px-12 text-base font-bold">
+                    <Button size="lg" className="rounded-full h-14 px-12 text-base font-bold bg-background text-foreground hover:bg-background/90 transition-all">
                       立即开始
                     </Button>
                   </Link>
                   <Link href="/contact">
-                    <Button variant="outline" size="lg" className="rounded-full h-14 px-12 text-base font-bold border-background/20 hover:bg-background/10 text-background">
+                    <Button variant="outline" size="lg" className="rounded-full h-14 px-12 text-base font-bold border-background/20 hover:bg-background/10 text-background bg-transparent hover:text-background">
                       预约技术演示
                     </Button>
                   </Link>
