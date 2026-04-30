@@ -3,12 +3,12 @@
 import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { 
-  BrainCircuit, 
-  Cpu, 
-  Layers, 
-  Zap, 
-  Video, 
+import {
+  BrainCircuit,
+  Cpu,
+  Layers,
+  Zap,
+  Video,
   FlaskConical,
   Rocket,
   GraduationCap,
@@ -151,14 +151,14 @@ export default function SolutionsMegaMenu() {
             </Link>
           ))}
         </div>
-        
+
         <div className="mt-auto pt-8">
           <div className="rounded-xl border border-border/50 bg-background/50 p-4">
             <p className="text-xs leading-relaxed text-muted-foreground">
               探索专为您行业定制的算力加速方案，助力业务快速增长。
             </p>
-            <Link 
-              href="/contact" 
+            <Link
+              href="/contact"
               prefetch={false}
               className="mt-3 inline-flex items-center text-xs font-semibold text-primary hover:underline"
             >
