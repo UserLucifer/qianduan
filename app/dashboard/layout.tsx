@@ -20,9 +20,9 @@ export default function DashboardLayout({
   return (
     <div className="flex min-h-screen bg-background text-foreground transition-colors duration-300">
       <Sidebar />
-      <div className="flex-1 pl-64">
+      <div className="flex-1 lg:pl-64">
         <Header />
-        <main className="min-h-[calc(100vh-64px)] p-8">
+        <main className="min-h-[calc(100vh-64px)] p-4 sm:p-6 lg:p-8">
           {children}
         </main>
       </div>

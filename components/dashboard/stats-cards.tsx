@@ -46,11 +46,11 @@ export function StatsCards() {
       {stats.map((stat) => (
         <Card 
           key={stat.title} 
-          className="border-white/10 bg-[#18181b] transition-all duration-200 hover:border-primary/50 hover:bg-[#1c1c1f]"
+          className="transition-all duration-200 hover:border-primary/50 hover:bg-muted/40"
         >
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
-              <div className={cn("rounded-lg bg-white/5 p-2", stat.color)}>
+              <div className={cn("rounded-lg bg-muted p-2", stat.color)}>
                 <stat.icon className="h-5 w-5" />
               </div>
               <div className={cn(
@@ -63,7 +63,7 @@ export function StatsCards() {
             </div>
             <div className="mt-4">
               <p className="text-sm font-medium text-muted-foreground">{stat.title}</p>
-              <h3 className="text-2xl font-bold tracking-tight text-white mt-1">{stat.value}</h3>
+              <h3 className="mt-1 text-2xl font-bold tracking-tight text-foreground">{stat.value}</h3>
             </div>
           </CardContent>
         </Card>

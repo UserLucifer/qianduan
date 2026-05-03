@@ -8,6 +8,7 @@ import { Check, Eye, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SearchPanel } from "@/components/shared/SearchPanel";
@@ -133,7 +134,7 @@ export default function AdminRechargePage() {
       title: "操作",
       render: (row) => (
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" className="font-medium text-[var(--admin-text)] hover:bg-[var(--admin-hover)]" onClick={() => void openDetail(row.rechargeNo)}>
+          <Button variant="ghost" size="sm" className="font-medium" onClick={() => void openDetail(row.rechargeNo)}>
             <Eye className="h-4 w-4" />
             详情
           </Button>
@@ -319,9 +320,9 @@ export default function AdminRechargePage() {
                     </Button>
                   ))}
                 </div>
-                <textarea
+                <Textarea
                   id="rejectRemark"
-                  className="flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                  className="min-h-[80px]"
                   placeholder="必填，输入拒绝原因..."
                   value={reviewRemark}
                   onChange={(e) => setReviewRemark(e.target.value)}

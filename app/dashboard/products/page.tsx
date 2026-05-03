@@ -101,6 +101,7 @@ export default function UserProductsPage() {
     overscan: 3,
     scrollMargin: containerRef.current?.offsetTop ?? 0,
   });
+  const virtualItems = virtualizer.getVirtualItems();
 
   /* ─── Effect 1: Init — load regions + static data (runs once) ─── */
   useEffect(() => {
@@ -268,13 +269,12 @@ export default function UserProductsPage() {
 
   /* ─── Scroll Loader Effect ─── */
   useEffect(() => {
-    const virtualItems = virtualizer.getVirtualItems();
     if (virtualItems.length === 0) return;
     const last = virtualItems[virtualItems.length - 1];
     if (last && last.index >= rows.length && hasMore && !isFetchingMore && !productsLoading) {
       void loadMore();
     }
-  }, [virtualizer.getVirtualItems(), rows.length, hasMore, isFetchingMore, productsLoading, loadMore]);
+  }, [virtualItems, rows.length, hasMore, isFetchingMore, productsLoading, loadMore]);
 
   /* ─── Render List ─── */
   const renderList = () => (
@@ -285,7 +285,7 @@ export default function UserProductsPage() {
       className="space-y-6"
     >
       {/* Matrix Filters */}
-      <div className="space-y-6 rounded-2xl border border-border bg-white/50 p-8 dark:bg-white/[0.02]">
+      <div className="space-y-6 rounded-2xl border border-border bg-card p-8 text-card-foreground">
         {/* Region Matrix */}
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
@@ -302,7 +302,7 @@ export default function UserProductsPage() {
                 className={cn(
                   "h-9 rounded-full px-5 text-xs font-medium transition-all duration-200",
                   selectedRegionId === r.id
-                    ? "bg-[#5e6ad2] text-white hover:bg-[#7170ff] shadow-lg shadow-[#5e6ad2]/20"
+                    ? "shadow-lg shadow-primary/20"
                     : "hover:bg-muted/50"
                 )}
               >
@@ -337,7 +337,7 @@ export default function UserProductsPage() {
                     className={cn(
                       "h-9 rounded-full px-5 text-xs font-medium transition-all duration-200",
                       selectedGpuModelId === g.id
-                        ? "bg-[#5e6ad2] text-white hover:bg-[#7170ff] shadow-lg shadow-[#5e6ad2]/20"
+                        ? "shadow-lg shadow-primary/20"
                         : "hover:bg-muted/50"
                     )}
                   >
@@ -369,7 +369,7 @@ export default function UserProductsPage() {
           className="relative w-full"
           style={{ height: virtualizer.getTotalSize() }}
         >
-          {virtualizer.getVirtualItems().map((virtualRow) => {
+          {virtualItems.map((virtualRow) => {
             const isLoaderRow = virtualRow.index >= rows.length;
             const rowItems = rows[virtualRow.index];
             const localY = virtualRow.start - virtualizer.options.scrollMargin;
@@ -385,7 +385,7 @@ export default function UserProductsPage() {
                 <div className="pb-6">
                   {isLoaderRow ? (
                     <div className="flex w-full items-center justify-center py-12">
-                      <Loader2 className="h-8 w-8 animate-spin text-[#5e6ad2]" />
+                      <Loader2 className="h-8 w-8 animate-spin text-primary" />
                     </div>
                   ) : (
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
@@ -424,12 +424,12 @@ export default function UserProductsPage() {
                           <div className="mt-9 flex items-end justify-between border-t border-border/50 pt-5">
                             <div className="space-y-1">
                               <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70">起步单价</div>
-                              <MoneyText value={p.rentPrice} className="text-xl font-black text-[#5e6ad2]" />
+                              <MoneyText value={p.rentPrice} className="text-xl font-black text-primary" />
                             </div>
                             <Button
                               onClick={() => handleStartRent(p)}
                               disabled={(p.availableStock ?? 0) <= 0}
-                              className="h-11 rounded-xl bg-[#5e6ad2] px-6 text-xs font-bold text-white transition-all hover:bg-[#7170ff] hover:shadow-lg hover:shadow-[#5e6ad2]/30 dark:bg-[#5e6ad2]"
+                              className="h-11 rounded-xl px-6 text-xs font-bold transition-all hover:shadow-lg hover:shadow-primary/30"
                             >
                               开始租赁
                             </Button>
@@ -480,7 +480,7 @@ export default function UserProductsPage() {
                     key={s}
                     className={cn(
                       "h-1.5 w-8 rounded-full transition-all duration-300",
-                      configStep === s ? "bg-[#5e6ad2] w-12" : "bg-muted"
+                      configStep === s ? "w-12 bg-primary" : "bg-muted"
                     )}
                   />
                 ))}
@@ -524,7 +524,7 @@ export default function UserProductsPage() {
                     </div>
                   </div>
                   <div className="flex justify-end pt-4">
-                    <Button onClick={() => setConfigStep(1)} className="group h-12 px-8 bg-[#5e6ad2] hover:bg-[#7170ff] text-white">
+                    <Button onClick={() => setConfigStep(1)} className="group h-12 px-8">
                       选择 AI 模型 <ChevronRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </Button>
                   </div>
@@ -544,16 +544,18 @@ export default function UserProductsPage() {
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {aiModels.map((m) => (
-                      <button
+                      <Button
+                        type="button"
+                        variant={aiModelId === m.id ? "default" : "outline"}
                         key={m.id}
                         onClick={() => setAiModelId(m.id)}
                         className={cn(
-                          "flex items-center justify-between p-4 rounded-xl border text-left transition-all",
-                          aiModelId === m.id ? "border-[#5e6ad2] bg-[#5e6ad2]/5 ring-1 ring-[#5e6ad2]" : "border-border bg-background hover:bg-muted/50"
+                          "h-auto justify-between rounded-xl p-4 text-left transition-all",
+                          aiModelId !== m.id && "bg-background hover:bg-muted/50"
                         )}
                       >
                         <div className="flex items-center gap-4">
-                          <div className={cn("flex h-10 w-10 items-center justify-center rounded-lg", aiModelId === m.id ? "bg-[#5e6ad2] text-white" : "bg-muted text-muted-foreground")}>
+                          <div className={cn("flex h-10 w-10 items-center justify-center rounded-lg", aiModelId === m.id ? "bg-primary-foreground/15 text-primary-foreground" : "bg-muted text-muted-foreground")}>
                             <Cpu className="h-5 w-5" />
                           </div>
                           <div>
@@ -561,13 +563,13 @@ export default function UserProductsPage() {
                             <div className="text-xs text-muted-foreground truncate max-w-[200px]">{m.modelCode}</div>
                           </div>
                         </div>
-                        {aiModelId === m.id && <CheckCircle2 className="h-5 w-5 text-[#5e6ad2]" />}
-                      </button>
+                        {aiModelId === m.id && <CheckCircle2 className="h-5 w-5" />}
+                      </Button>
                     ))}
                   </div>
                   <div className="flex items-center justify-between pt-6">
                     <Button variant="ghost" onClick={() => setConfigStep(0)} className="text-muted-foreground"><ChevronLeft className="mr-2 h-4 w-4" /> 返回上一步</Button>
-                    <Button onClick={() => setConfigStep(2)} disabled={!aiModelId} className="group h-12 px-8 bg-[#5e6ad2] hover:bg-[#7170ff] text-white">下一步: 选择租赁周期 <ChevronRight className="ml-2 h-4 w-4" /></Button>
+                    <Button onClick={() => setConfigStep(2)} disabled={!aiModelId} className="group h-12 px-8">下一步: 选择租赁周期 <ChevronRight className="ml-2 h-4 w-4" /></Button>
                   </div>
                 </motion.div>
               )}
@@ -584,18 +586,20 @@ export default function UserProductsPage() {
                     <h3 className="text-lg font-bold">租赁周期选项</h3>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       {cycleRules.map((rule) => (
-                        <button
+                        <Button
+                          type="button"
+                          variant={cycleRuleId === rule.id ? "default" : "outline"}
                           key={rule.id}
                           onClick={() => void handleEstimate(rule.id)}
-                          className={cn("p-4 rounded-xl border text-center transition-all", cycleRuleId === rule.id ? "border-[#5e6ad2] bg-[#5e6ad2]/5 ring-1 ring-[#5e6ad2]" : "border-border bg-background hover:bg-muted/50")}
+                          className={cn("h-auto rounded-xl p-4 text-center transition-all", cycleRuleId !== rule.id && "bg-background hover:bg-muted/50")}
                         >
                           <div className="text-sm font-bold">{rule.cycleName}</div>
                           <div className="text-xs text-muted-foreground mt-1">{rule.cycleDays} 天</div>
-                        </button>
+                        </Button>
                       ))}
                     </div>
                   </div>
-                  <div className="min-h-[140px] rounded-2xl bg-[#10b981]/5 border border-[#10b981]/20 p-8 flex flex-col items-center justify-center text-center">
+                  <div className="flex min-h-[140px] flex-col items-center justify-center rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-8 text-center">
                     {estimate ? (
                       <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="space-y-2">
                         <div className="text-sm font-medium text-emerald-600/80 dark:text-emerald-400/80 uppercase tracking-widest">预估总收益</div>
@@ -610,7 +614,7 @@ export default function UserProductsPage() {
                   </div>
                   <div className="flex items-center justify-between pt-2">
                     <Button variant="ghost" onClick={() => setConfigStep(1)} className="text-muted-foreground"><ChevronLeft className="mr-2 h-4 w-4" /> 返回上一步</Button>
-                    <Button onClick={() => void handleFinalSubmit()} disabled={!cycleRuleId || submitting} className="group h-12 px-10 bg-[#5e6ad2] hover:bg-[#7170ff] text-white shadow-lg shadow-[#5e6ad2]/20">
+                    <Button onClick={() => void handleFinalSubmit()} disabled={!cycleRuleId || submitting} className="group h-12 px-10 shadow-lg shadow-primary/20">
                       {submitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <CheckCircle2 className="mr-2 h-4 w-4" />}
                       确认下单并支付
                     </Button>

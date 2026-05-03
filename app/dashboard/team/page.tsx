@@ -64,11 +64,11 @@ export default function TeamPage() {
         <StatsCard title="三级成员" value={summary.data?.level3TeamCount ?? 0} description="3 级成员" icon={Users} loading={summary.loading} />
         <StatsCard title="更深层级" value={summary.data?.deeperTeamCount ?? 0} description="接口返回统计" icon={Users} loading={summary.loading} />
       </div>
-      <div className="rounded-lg border border-white/10 bg-white/[0.03] p-4">
-        <div className="mb-2 text-sm font-medium text-zinc-100">邀请链接</div>
+      <div className="rounded-lg border border-border bg-card p-4 text-card-foreground">
+        <div className="mb-2 text-sm font-medium text-foreground">邀请链接</div>
         <div className="flex gap-2">
-          <Input readOnly value={inviteLink || "当前用户信息加载后显示"} className="border-white/10 bg-white/[0.03] text-zinc-100" />
-          <Button onClick={() => void copyInviteLink()} disabled={!inviteLink} className="bg-[#5e6ad2] text-white hover:bg-[#7170ff]">
+          <Input readOnly value={inviteLink || "当前用户信息加载后显示"} />
+          <Button onClick={() => void copyInviteLink()} disabled={!inviteLink}>
             <Copy className="h-4 w-4" />
             复制
           </Button>

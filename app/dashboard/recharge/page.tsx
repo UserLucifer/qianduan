@@ -138,7 +138,7 @@ export default function RechargePage() {
       className: "text-right",
       render: (row) => (
         <div className="flex justify-end gap-2">
-          <Button variant="ghost" size="sm" className="text-slate-600 hover:bg-gray-100 dark:text-muted-foreground dark:hover:bg-white/5" onClick={() => void openDetail(row.rechargeNo)}>
+          <Button variant="ghost" size="sm" className="text-muted-foreground hover:bg-muted" onClick={() => void openDetail(row.rechargeNo)}>
             <Eye className="h-3.5 w-3.5" />详情
           </Button>
           {row.status === "SUBMITTED" ? (
@@ -234,7 +234,7 @@ export default function RechargePage() {
 
       {/* ═══════ 成功状态视图 / 收银台 ═══════ */}
       {successState ? (
-        <div className="flex flex-col items-center rounded-xl border border-gray-100 bg-white px-6 py-16 shadow-sm dark:border-white/10 dark:bg-white/[0.03] dark:shadow-none">
+        <div className="flex flex-col items-center rounded-xl border border-border bg-card px-6 py-16 text-card-foreground shadow-sm">
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10">
             <CheckCircle2 className="h-9 w-9 text-emerald-500" />
           </div>
@@ -243,7 +243,7 @@ export default function RechargePage() {
             您的充值订单已经进入系统，财务人员将会在 10&nbsp;–&nbsp;30 分钟内完成审核与入账。请耐心等待。
           </p>
           <div className="mt-8 flex items-center gap-3">
-            <Button asChild className="bg-[#5e6ad2] text-white hover:bg-[#7170ff]">
+            <Button asChild>
               <Link href="/dashboard/recharge/history">查看充值记录</Link>
             </Button>
             <Button variant="outline" onClick={resetForm}>
@@ -256,30 +256,29 @@ export default function RechargePage() {
           {/* ── 左侧: 金额 + 渠道 ── */}
           <div className="space-y-5 xl:col-span-2">
             {/* 区域 A: 充值金额输入 */}
-            <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-white/[0.03] dark:shadow-none">
+            <div className="rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm">
               <h2 className="flex items-center gap-2 text-sm font-semibold text-foreground">
-                <Wallet className="h-4 w-4 text-[#5e6ad2]" />
+                <Wallet className="h-4 w-4 text-primary" />
                 充值金额
               </h2>
               <p className="mt-1 text-xs text-muted-foreground">选择快捷金额或输入自定义金额</p>
               <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
                 {QUICK_AMOUNTS.map((val) => (
-                  <button
+                  <Button
                     key={val}
                     type="button"
+                    variant={amount === String(val) ? "default" : "outline"}
                     onClick={() => setAmount(String(val))}
                     className={cn(
-                      "relative rounded-lg border px-4 py-3 text-center text-sm font-medium transition-all duration-150",
-                      "hover:border-[#5e6ad2]/50 hover:bg-[#5e6ad2]/5",
-                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5e6ad2]/50",
+                      "relative h-auto rounded-lg px-4 py-3 text-center text-sm font-medium transition-all duration-150",
                       amount === String(val)
-                        ? "border-[#5e6ad2] bg-[#5e6ad2]/10 text-[#5e6ad2] ring-1 ring-[#5e6ad2]/30 dark:bg-[#5e6ad2]/15"
-                        : "border-gray-200 bg-gray-50 text-foreground dark:border-white/10 dark:bg-white/[0.04]",
+                        ? "ring-1 ring-primary/30"
+                        : "bg-background hover:bg-muted/50",
                     )}
                   >
                     <span className="text-base font-semibold tabular-nums">{val}</span>
-                    <span className="ml-1 text-xs text-muted-foreground">USDT</span>
-                  </button>
+                    <span className={cn("ml-1 text-xs", amount === String(val) ? "text-primary-foreground/80" : "text-muted-foreground")}>USDT</span>
+                  </Button>
                 ))}
               </div>
               <div className="relative mt-4">
@@ -297,9 +296,9 @@ export default function RechargePage() {
             </div>
 
             {/* 区域 B: 渠道选择 */}
-            <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-white/[0.03] dark:shadow-none">
+            <div className="rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm">
               <h2 className="flex items-center gap-2 text-sm font-semibold text-foreground">
-                <Copy className="h-4 w-4 text-[#5e6ad2]" />
+                <Copy className="h-4 w-4 text-primary" />
                 选择充值渠道
               </h2>
               <p className="mt-1 text-xs text-muted-foreground">点击选择支付渠道，不同渠道手续费可能不同</p>
@@ -309,7 +308,7 @@ export default function RechargePage() {
                   <span className="ml-2 text-sm text-muted-foreground">加载渠道中…</span>
                 </div>
               ) : channels.length === 0 ? (
-                <div className="mt-4 rounded-lg border border-dashed border-gray-200 py-8 text-center text-sm text-muted-foreground dark:border-white/10">
+                <div className="mt-4 rounded-lg border border-dashed border-border py-8 text-center text-sm text-muted-foreground">
                   暂无可用充值渠道
                 </div>
               ) : (
@@ -317,37 +316,38 @@ export default function RechargePage() {
                   {channels.map((ch) => {
                     const isSelected = ch.channelId === selectedChannelId;
                     return (
-                      <button
+                      <Button
                         key={ch.channelId}
                         type="button"
+                        variant={isSelected ? "default" : "outline"}
                         onClick={() => setSelectedChannelId(ch.channelId)}
                         className={cn(
-                          "relative rounded-xl border p-4 text-left transition-all duration-150",
-                          "hover:border-[#5e6ad2]/50 hover:shadow-sm",
-                          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5e6ad2]/50",
+                          "relative h-auto justify-start rounded-xl p-4 text-left transition-all duration-150",
                           isSelected
-                            ? "border-[#5e6ad2] bg-[#5e6ad2]/5 ring-2 ring-[#5e6ad2]/30 dark:bg-[#5e6ad2]/10"
-                            : "border-gray-200 bg-gray-50/50 dark:border-white/10 dark:bg-white/[0.02]",
+                            ? "ring-2 ring-primary/30"
+                            : "bg-background hover:bg-muted/50",
                         )}
                       >
-                        {isSelected && <CheckCircle2 className="absolute right-3 top-3 h-5 w-5 text-[#5e6ad2]" />}
-                        <div className="text-sm font-semibold text-foreground">{ch.channelName}</div>
-                        <div className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
-                          <span className="rounded bg-gray-100 px-1.5 py-0.5 font-mono text-[10px] dark:bg-white/10">{ch.channelCode}</span>
-                          <span>·</span>
-                          <span>{ch.network}</span>
+                        {isSelected && <CheckCircle2 className="absolute right-3 top-3 h-5 w-5" />}
+                        <div className="w-full pr-7">
+                          <div className="text-sm font-semibold">{ch.channelName}</div>
+                          <div className="mt-1 flex items-center gap-2 text-xs opacity-80">
+                            <span className="rounded bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">{ch.channelCode}</span>
+                            <span>·</span>
+                            <span>{ch.network}</span>
+                          </div>
+                          <div className="mt-2 flex items-center justify-between gap-3 text-xs opacity-80">
+                            <span>手续费 {(ch.feeRate * 100).toFixed(2)}%</span>
+                            <span>限额 {ch.minAmount}–{ch.maxAmount > 0 ? ch.maxAmount : "∞"} USDT</span>
+                          </div>
                         </div>
-                        <div className="mt-2 flex items-center justify-between text-xs">
-                          <span className="text-muted-foreground">手续费 {(ch.feeRate * 100).toFixed(2)}%</span>
-                          <span className="text-muted-foreground">限额 {ch.minAmount}–{ch.maxAmount > 0 ? ch.maxAmount : "∞"} USDT</span>
-                        </div>
-                      </button>
+                      </Button>
                     );
                   })}
                 </div>
               )}
               {selectedChannel && (
-                <div className="mt-4 rounded-lg border border-gray-100 bg-gray-50 p-3 dark:border-white/10 dark:bg-black/20">
+                <div className="mt-4 rounded-lg border border-border bg-muted/40 p-3">
                   <div className="mb-1.5 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">收款地址</div>
                   <CopyableSecret value={selectedChannel.accountNo} canReveal={false} className="max-w-full" />
                 </div>
@@ -358,7 +358,7 @@ export default function RechargePage() {
           {/* ── 右侧: 结算摘要 + 提交 ── */}
           <div className="xl:col-span-1">
             <div className="sticky top-6 space-y-5">
-              <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-white/[0.03] dark:shadow-none">
+              <div className="rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm">
                 <h2 className="text-sm font-semibold text-foreground">订单摘要</h2>
                 <div className="mt-4 space-y-3">
                   <div className="flex items-center justify-between text-sm">
@@ -369,21 +369,21 @@ export default function RechargePage() {
                     <span className="text-muted-foreground">手续费{feeRate > 0 ? ` (${(feeRate * 100).toFixed(2)}%)` : ""}</span>
                     <span className="tabular-nums text-foreground">{validAmount > 0 ? `${feeAmount.toFixed(2)} USDT` : "—"}</span>
                   </div>
-                  <div className="border-t border-gray-100 pt-3 dark:border-white/10">
+                  <div className="border-t border-border pt-3">
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium text-foreground">实际支付</span>
-                      <span className="text-lg font-bold tabular-nums text-[#5e6ad2]">{validAmount > 0 ? `${totalPay.toFixed(2)} USDT` : "—"}</span>
+                      <span className="text-lg font-bold tabular-nums text-primary">{validAmount > 0 ? `${totalPay.toFixed(2)} USDT` : "—"}</span>
                     </div>
                   </div>
                 </div>
                 {selectedChannel && (
-                  <div className="mt-4 rounded-lg bg-gray-50 px-3 py-2 text-xs text-muted-foreground dark:bg-white/[0.04]">
+                  <div className="mt-4 rounded-lg bg-muted px-3 py-2 text-xs text-muted-foreground">
                     渠道：{selectedChannel.channelName} · {selectedChannel.network}
                   </div>
                 )}
               </div>
 
-              <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-white/[0.03] dark:shadow-none">
+              <div className="rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm">
                 <h2 className="text-sm font-semibold text-foreground">支付凭证</h2>
                 <p className="mt-1 text-xs text-muted-foreground">提交链上交易哈希或付款截图以加速审核</p>
                 <div className="mt-3 space-y-3">
@@ -395,7 +395,7 @@ export default function RechargePage() {
               <Button
                 onClick={() => void submitRecharge()}
                 disabled={submitting || !selectedChannel || validAmount <= 0}
-                className="h-12 w-full bg-[#5e6ad2] text-base font-semibold text-white shadow-md hover:bg-[#7170ff] disabled:opacity-50"
+                className="h-12 w-full text-base font-semibold shadow-md disabled:opacity-50"
               >
                 {submitting ? (<><Loader2 className="mr-2 h-4 w-4 animate-spin" />提交中…</>) : "确认充值"}
               </Button>
@@ -443,8 +443,8 @@ export default function RechargePage() {
 
       {/* ═══════ 详情抽屉 ═══════ */}
       <DetailDrawer data={detail} open={Boolean(detail)} title="充值订单详情" subtitle={(data) => data.rechargeNo} sections={detailSections} onClose={() => setDetail(null)}>
-        {(data) => (
-          <div className="flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50/50 px-4 py-3 text-xs text-muted-foreground dark:border-white/10 dark:bg-white/[0.04]">
+        {() => (
+          <div className="flex items-center gap-2 rounded-lg border border-border bg-muted/40 px-4 py-3 text-xs text-muted-foreground">
             <ShieldCheck className="h-4 w-4 shrink-0 text-emerald-500" />
             <span>平台采用冷热钱包隔离技术，保障您的资金安全。</span>
           </div>

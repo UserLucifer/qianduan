@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Edit2, Trash2, CheckCircle2, XCircle } from "lucide-react";
+import { Plus, Edit2, CheckCircle2, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -75,23 +75,23 @@ export function CategoryManager({ items, onRefresh }: CategoryManagerProps) {
           onChange={(e) => setName(e.target.value)}
           className="h-8 text-sm"
         />
-        <Button size="sm" onClick={handleAdd} disabled={loading} className="h-8 bg-blue-600 hover:bg-blue-700">
+        <Button size="sm" onClick={handleAdd} disabled={loading} className="h-8">
           <Plus className="h-4 w-4" />
         </Button>
       </div>
       <div className="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
         {items.map((item) => (
-          <div key={item.id} className="flex items-center justify-between p-2 rounded bg-[var(--admin-panel-strong)] border border-[var(--admin-border)]">
-            <span className={`text-sm ${item.status === 0 ? "text-zinc-500 line-through" : "text-zinc-200"}`}>
+          <div key={item.id} className="flex items-center justify-between rounded border border-border bg-card p-2 text-card-foreground">
+            <span className={`text-sm ${item.status === 0 ? "text-muted-foreground line-through" : "text-foreground"}`}>
               {item.categoryName}
             </span>
             <div className="flex items-center gap-1">
-              <button onClick={() => toggleStatus(item)} className="p-1 hover:bg-white/5 rounded">
-                {item.status === 1 ? <CheckCircle2 className="h-3 w-3 text-green-500" /> : <XCircle className="h-3 w-3 text-zinc-500" />}
-              </button>
-              <button onClick={() => handleUpdate(item.id, item.categoryName)} className="p-1 hover:bg-white/5 rounded">
-                <Edit2 className="h-3 w-3 text-blue-400" />
-              </button>
+              <Button type="button" variant="ghost" size="icon" className="h-7 w-7" onClick={() => toggleStatus(item)}>
+                {item.status === 1 ? <CheckCircle2 className="h-3 w-3 text-emerald-500" /> : <XCircle className="h-3 w-3 text-muted-foreground" />}
+              </Button>
+              <Button type="button" variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleUpdate(item.id, item.categoryName)}>
+                <Edit2 className="h-3 w-3 text-primary" />
+              </Button>
             </div>
           </div>
         ))}
@@ -156,23 +156,23 @@ export function TagManager({ items, onRefresh }: TagManagerProps) {
           onChange={(e) => setName(e.target.value)}
           className="h-8 text-sm"
         />
-        <Button size="sm" onClick={handleAdd} disabled={loading} className="h-8 bg-purple-600 hover:bg-purple-700">
+        <Button size="sm" onClick={handleAdd} disabled={loading} className="h-8">
           <Plus className="h-4 w-4" />
         </Button>
       </div>
       <div className="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
         {items.map((item) => (
-          <div key={item.id} className="flex items-center justify-between p-2 rounded bg-[var(--admin-panel-strong)] border border-[var(--admin-border)]">
-            <span className={`text-sm ${item.status === 0 ? "text-zinc-500 line-through" : "text-zinc-200"}`}>
+          <div key={item.id} className="flex items-center justify-between rounded border border-border bg-card p-2 text-card-foreground">
+            <span className={`text-sm ${item.status === 0 ? "text-muted-foreground line-through" : "text-foreground"}`}>
               {item.tagName}
             </span>
             <div className="flex items-center gap-1">
-              <button onClick={() => toggleStatus(item)} className="p-1 hover:bg-white/5 rounded">
-                {item.status === 1 ? <CheckCircle2 className="h-3 w-3 text-green-500" /> : <XCircle className="h-3 w-3 text-zinc-500" />}
-              </button>
-              <button onClick={() => handleUpdate(item.id, item.tagName)} className="p-1 hover:bg-white/5 rounded">
-                <Edit2 className="h-3 w-3 text-blue-400" />
-              </button>
+              <Button type="button" variant="ghost" size="icon" className="h-7 w-7" onClick={() => toggleStatus(item)}>
+                {item.status === 1 ? <CheckCircle2 className="h-3 w-3 text-emerald-500" /> : <XCircle className="h-3 w-3 text-muted-foreground" />}
+              </Button>
+              <Button type="button" variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleUpdate(item.id, item.tagName)}>
+                <Edit2 className="h-3 w-3 text-primary" />
+              </Button>
             </div>
           </div>
         ))}

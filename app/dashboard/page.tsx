@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import {
   Bell,
@@ -103,6 +103,7 @@ function buildProfitTrend(records: ProfitRecordResponse[]): TrendPoint[] {
 }
 
 export default function DashboardPage() {
+  const [chartReady, setChartReady] = useState(false);
   const loader = useCallback(async (): Promise<DashboardData> => {
     const [
       wallet,
@@ -141,6 +142,10 @@ export default function DashboardPage() {
   const runningOrders = data?.orders.filter((order) => order.orderStatus === "RUNNING").length ?? 0;
   const pendingPayOrders = data?.orders.filter((order) => order.orderStatus === "PENDING_PAY" || order.orderStatus === "PENDING_PAYMENT").length ?? 0;
 
+  useEffect(() => {
+    setChartReady(true);
+  }, []);
+
   return (
     <div className="space-y-8">
       <PageHeader
@@ -148,16 +153,16 @@ export default function DashboardPage() {
         title="算力与资产控制台"
         description="聚合钱包余额、租赁订单、API 激活、收益、佣金、团队和最近通知，优先呈现可执行事项。"
         actions={
-          <Button onClick={() => void reload()} variant="outline" className="border-gray-200 bg-white text-slate-600 hover:bg-gray-50 hover:text-slate-900 dark:border-white/10 dark:bg-white/[0.03] dark:text-muted-foreground dark:hover:bg-white/[0.06]">
+          <Button onClick={() => void reload()} variant="outline">
             刷新数据
           </Button>
         }
       />
 
       {error ? (
-        <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-200">
+        <div className="rounded-lg border border-destructive/20 bg-destructive/10 p-4 text-sm text-destructive">
           {error}
-          <Button className="ml-3 h-8 bg-rose-400 text-black hover:bg-rose-300" onClick={() => void reload()}>
+          <Button variant="destructive" className="ml-3 h-8" onClick={() => void reload()}>
             重试
           </Button>
         </div>
@@ -245,60 +250,62 @@ export default function DashboardPage() {
 
         <BentoCard title="资产中心" description="余额、冻结金额与资金流向" className="lg:col-span-4" contentClassName="space-y-4">
           <div className="grid grid-cols-2 gap-3">
-            <div className="rounded-lg border border-gray-100 bg-gray-50 p-4 dark:border-white/10 dark:bg-white/[0.03]">
-              <div className="text-xs text-slate-500 dark:text-zinc-500">可用余额</div>
-              <div className="mt-2 text-xl font-medium text-slate-900 dark:text-zinc-50"><MoneyText value={data?.wallet.availableBalance} /></div>
+            <div className="rounded-lg border border-border bg-muted/40 p-4">
+              <div className="text-xs text-muted-foreground">可用余额</div>
+              <div className="mt-2 text-xl font-medium text-foreground"><MoneyText value={data?.wallet.availableBalance} /></div>
             </div>
-            <div className="rounded-lg border border-gray-100 bg-gray-50 p-4 dark:border-white/10 dark:bg-white/[0.03]">
-              <div className="text-xs text-slate-500 dark:text-zinc-500">冻结金额</div>
-              <div className="mt-2 text-xl font-medium text-slate-900 dark:text-zinc-50"><MoneyText value={data?.wallet.frozenBalance} /></div>
+            <div className="rounded-lg border border-border bg-muted/40 p-4">
+              <div className="text-xs text-muted-foreground">冻结金额</div>
+              <div className="mt-2 text-xl font-medium text-foreground"><MoneyText value={data?.wallet.frozenBalance} /></div>
             </div>
-            <div className="rounded-lg border border-gray-100 bg-gray-50 p-4 dark:border-white/10 dark:bg-white/[0.03]">
-              <div className="text-xs text-slate-500 dark:text-zinc-500">累计充值</div>
-              <div className="mt-2 text-sm font-medium text-slate-700 dark:text-zinc-200"><MoneyText value={data?.wallet.totalRecharge} /></div>
+            <div className="rounded-lg border border-border bg-muted/40 p-4">
+              <div className="text-xs text-muted-foreground">累计充值</div>
+              <div className="mt-2 text-sm font-medium text-foreground"><MoneyText value={data?.wallet.totalRecharge} /></div>
             </div>
-            <div className="rounded-lg border border-gray-100 bg-gray-50 p-4 dark:border-white/10 dark:bg-white/[0.03]">
-              <div className="text-xs text-slate-500 dark:text-zinc-500">累计提现</div>
-              <div className="mt-2 text-sm font-medium text-slate-700 dark:text-zinc-200"><MoneyText value={data?.wallet.totalWithdraw} /></div>
+            <div className="rounded-lg border border-border bg-muted/40 p-4">
+              <div className="text-xs text-muted-foreground">累计提现</div>
+              <div className="mt-2 text-sm font-medium text-foreground"><MoneyText value={data?.wallet.totalWithdraw} /></div>
             </div>
           </div>
           <div className="flex flex-wrap gap-2">
-            <Button asChild className="bg-[#5e6ad2] text-white hover:bg-[#7170ff] dark:bg-[#5e6ad2] dark:hover:bg-[#7170ff]"><Link href="/dashboard/recharge"><CreditCard className="h-4 w-4" />充值</Link></Button>
-            <Button asChild variant="outline" className="border-gray-200 bg-white text-slate-600 hover:bg-gray-50 hover:text-slate-900 dark:border-white/10 dark:bg-white/[0.03] dark:text-muted-foreground dark:hover:bg-white/[0.06]"><Link href="/dashboard/withdraw"><Send className="h-4 w-4" />提现</Link></Button>
-            <Button asChild variant="outline" className="border-gray-200 bg-white text-slate-600 hover:bg-gray-50 hover:text-slate-900 dark:border-white/10 dark:bg-white/[0.03] dark:text-muted-foreground dark:hover:bg-white/[0.06]"><Link href="/dashboard/wallet"><ReceiptText className="h-4 w-4" />流水</Link></Button>
+            <Button asChild><Link href="/dashboard/recharge"><CreditCard className="h-4 w-4" />充值</Link></Button>
+            <Button asChild variant="outline"><Link href="/dashboard/withdraw"><Send className="h-4 w-4" />提现</Link></Button>
+            <Button asChild variant="outline"><Link href="/dashboard/wallet"><ReceiptText className="h-4 w-4" />流水</Link></Button>
           </div>
         </BentoCard>
 
         <BentoCard title="API 状态" description="凭证与部署入口" className="lg:col-span-3" contentClassName="space-y-5">
           <StatusIndicator status={runningOrders > 0 ? "ACTIVE" : "INACTIVE"} label={runningOrders > 0 ? "存在可激活订单" : "暂无运行中订单"} pulse={runningOrders > 0} />
-          <div className="rounded-lg border border-gray-100 bg-gray-50 p-4 dark:border-white/10 dark:bg-white/[0.03]">
-            <div className="text-xs text-slate-500 dark:text-zinc-500">建议操作</div>
-            <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-muted-foreground">
+          <div className="rounded-lg border border-border bg-muted/40 p-4">
+            <div className="text-xs text-muted-foreground">建议操作</div>
+            <p className="mt-2 text-sm leading-6 text-muted-foreground">
               进入 API 管理页查看订单关联凭证、部署状态和 Token 到期时间。敏感字段默认脱敏。
             </p>
           </div>
-          <Button asChild className="w-full bg-white text-black hover:bg-zinc-200">
+          <Button asChild className="w-full">
             <Link href="/dashboard/api"><KeyRound className="h-4 w-4" />查看 API 凭证</Link>
           </Button>
         </BentoCard>
 
         <BentoCard title="收益趋势" description="基于收益记录按日期聚合" className="lg:col-span-5">
           <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={trend}>
-                <defs>
-                  <linearGradient id="profitFill" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#5e6ad2" stopOpacity={0.35} />
-                    <stop offset="95%" stopColor="#5e6ad2" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid stroke="rgba(255,255,255,0.06)" vertical={false} />
-                <XAxis dataKey="date" tick={{ fill: "#8a8f98", fontSize: 11 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: "#8a8f98", fontSize: 11 }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{ background: "#18181b", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8 }} />
-                <Area type="monotone" dataKey="profit" stroke="#9aa2ff" fill="url(#profitFill)" strokeWidth={2} />
-              </AreaChart>
-            </ResponsiveContainer>
+            {chartReady ? (
+              <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
+                <AreaChart data={trend}>
+                  <defs>
+                    <linearGradient id="profitFill" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="hsl(var(--ui-primary))" stopOpacity={0.35} />
+                      <stop offset="95%" stopColor="hsl(var(--ui-primary))" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid stroke="hsl(var(--ui-border))" vertical={false} />
+                  <XAxis dataKey="date" tick={{ fill: "hsl(var(--ui-muted-foreground))", fontSize: 11 }} axisLine={false} tickLine={false} />
+                  <YAxis tick={{ fill: "hsl(var(--ui-muted-foreground))", fontSize: 11 }} axisLine={false} tickLine={false} />
+                  <Tooltip contentStyle={{ background: "hsl(var(--ui-popover))", border: "1px solid hsl(var(--ui-border))", borderRadius: 8 }} />
+                  <Area type="monotone" dataKey="profit" stroke="hsl(var(--ui-primary))" fill="url(#profitFill)" strokeWidth={2} />
+                </AreaChart>
+              </ResponsiveContainer>
+            ) : null}
           </div>
         </BentoCard>
 
@@ -312,7 +319,7 @@ export default function DashboardPage() {
               { label: "收益", href: "/dashboard/profits", icon: TrendingUp },
               { label: "团队", href: "/dashboard/team", icon: Users },
             ].map((item) => (
-              <Button key={item.href} asChild variant="outline" className="h-12 justify-start border-gray-200 bg-white text-slate-600 hover:bg-gray-50 hover:text-slate-900 dark:border-white/10 dark:bg-white/[0.03] dark:text-muted-foreground dark:hover:bg-white/[0.06]">
+              <Button key={item.href} asChild variant="outline" className="h-12 justify-start bg-muted/40">
                 <Link href={item.href}><item.icon className="h-4 w-4" />{item.label}</Link>
               </Button>
             ))}

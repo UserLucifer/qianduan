@@ -62,12 +62,12 @@ function CreateAdminDialog({ onSuccess }: { onSuccess: () => void }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-[#5e6ad2] font-semibold text-white hover:bg-[#7170ff]">
+        <Button className="font-semibold">
           <Plus className="mr-2 h-4 w-4" />
           新增管理员
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] border-[var(--admin-border)] bg-[var(--admin-panel-strong)] text-[var(--admin-text)] flex flex-col items-stretch">
+      <DialogContent className="flex flex-col items-stretch sm:max-w-[425px]">
         <DialogHeader className="pt-2">
           <DialogTitle className="text-xl font-semibold">新增系统管理员</DialogTitle>
         </DialogHeader>

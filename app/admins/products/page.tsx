@@ -125,7 +125,7 @@ export default function AdminProductsPage() {
       title: "操作",
       render: (row) => (
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" className="font-medium text-[var(--admin-text)] hover:bg-[var(--admin-hover)]" onClick={() => void openDetail(row.productCode)}>
+          <Button variant="ghost" size="sm" className="font-medium" onClick={() => void openDetail(row.productCode)}>
             <Eye className="h-4 w-4" />
             详情
           </Button>
@@ -251,7 +251,7 @@ export default function AdminProductsPage() {
       <DetailDrawer data={detail} open={detailOpen} title="算力产品详情" subtitle={(data) => data.productCode} sections={detailSections} onClose={() => setDetailOpen(false)} />
 
       <Dialog open={formOpen} onOpenChange={setFormOpen}>
-        <DialogContent className="max-w-xl border-[var(--admin-border)] bg-[var(--admin-panel-strong)] text-[var(--admin-text)] flex flex-col items-stretch">
+        <DialogContent className="flex max-w-xl flex-col items-stretch">
           <DialogTitle className="sr-only">编辑算力产品</DialogTitle>
           <ProductForm
             initialData={editingRow}

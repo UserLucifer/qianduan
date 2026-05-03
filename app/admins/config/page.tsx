@@ -232,18 +232,19 @@ export default function AdminConfigPage() {
       {/* Group Tabs */}
       <div className="flex items-center gap-2 flex-wrap">
         {CONFIG_GROUPS.map((group) => (
-          <button
+          <Button
+            type="button"
+            variant={activeGroup === group.key ? "default" : "outline"}
+            size="sm"
             key={group.key}
             onClick={() => applyGroup(group.key)}
             className={cn(
-              "px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors border",
-              activeGroup === group.key
-                ? "bg-[#5e6ad2] text-white border-[#5e6ad2] shadow-sm shadow-indigo-500/20"
-                : "border-border text-muted-foreground hover:text-foreground hover:border-foreground/30 bg-card"
+              "rounded-full",
+              activeGroup !== group.key && "text-muted-foreground"
             )}
           >
             {group.label}
-          </button>
+          </Button>
         ))}
       </div>
 

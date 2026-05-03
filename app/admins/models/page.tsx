@@ -146,7 +146,7 @@ export default function AdminModelsPage() {
       <DataTable columns={columns} data={page.records} rowKey={(row) => row.modelCode} loading={loading} emptyText="暂无 AI 模型" pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
 
       <Dialog open={formOpen} onOpenChange={setFormOpen}>
-        <DialogContent className="max-w-xl border-[var(--admin-border)] bg-[var(--admin-panel-strong)] text-[var(--admin-text)] flex flex-col items-stretch">
+        <DialogContent className="flex max-w-xl flex-col items-stretch">
           <DialogTitle className="sr-only">编辑 AI 模型</DialogTitle>
           <AiModelForm
             initialData={editingRow}

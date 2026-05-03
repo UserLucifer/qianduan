@@ -1,10 +1,18 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Bell, LayoutGrid, LogOut, Moon, Search, Settings, Sun } from "lucide-react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import { adminLogout, getAdminMe, type AdminMeResponse } from "@/api/admin";
 
 type AdminTheme = "light" | "dark";
@@ -82,7 +90,7 @@ function AdminThemeToggle() {
       type="button"
       variant="ghost"
       size="icon"
-      className="admin-icon-button relative h-9 w-9 overflow-hidden"
+      className="relative h-9 w-9 overflow-hidden text-muted-foreground hover:text-foreground"
       aria-label={`切换到${nextTheme === "dark" ? "暗色" : "明亮"}主题`}
       title={`切换到${nextTheme === "dark" ? "暗色" : "明亮"}主题`}
       onClick={handleToggle}
@@ -103,25 +111,11 @@ export function AdminHeader() {
   const router = useRouter();
   const [admin, setAdmin] = useState<AdminMeResponse | null>(null);
   const pathSegments = pathname.split("/").filter(Boolean);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setDropdownOpen(false);
-      }
-    };
-    if (dropdownOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [dropdownOpen]);
 
   const handleLogout = async () => {
     try {
       await adminLogout();
-    } catch (e) {
+    } catch {
       // ignore
     } finally {
       localStorage.removeItem("admin_access_token");
@@ -145,16 +139,16 @@ export function AdminHeader() {
   }, []);
 
   return (
-    <header className="admin-header sticky top-0 z-30 flex h-16 items-center justify-between border-b px-8 backdrop-blur-xl">
+    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-background/95 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/75 sm:px-6 lg:px-8">
       <div className="flex min-w-0 items-center gap-3">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--admin-border)] bg-[var(--admin-panel-soft)]">
-          <LayoutGrid className="h-4 w-4 text-[var(--admin-brand-soft)]" />
+        <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-muted text-primary">
+          <LayoutGrid className="h-4 w-4" />
         </div>
-        <div className="flex min-w-0 items-center gap-2 text-sm">
+        <div className="hidden min-w-0 items-center gap-2 text-sm sm:flex">
           {pathSegments.map((segment, index) => (
             <span key={`${segment}-${index}`} className="flex items-center gap-2">
-              {index > 0 ? <span className="admin-subtle">/</span> : null}
-              <span className={index === pathSegments.length - 1 ? "text-[var(--admin-text)]" : "admin-muted"}>
+              {index > 0 ? <span className="text-muted-foreground">/</span> : null}
+              <span className={index === pathSegments.length - 1 ? "text-foreground" : "text-muted-foreground"}>
                 {breadcrumbLabels[segment] ?? segment}
               </span>
             </span>
@@ -164,51 +158,48 @@ export function AdminHeader() {
 
       <div className="flex items-center gap-2">
         <div className="relative hidden w-72 lg:block">
-          <Search className="admin-subtle absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2" />
-          <input
-            className="admin-search h-10 w-full rounded-lg border pl-9 pr-3 text-sm outline-none transition"
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            className="h-10 rounded-lg bg-muted/40 pl-9"
             placeholder="搜索用户、订单、流水或配置"
           />
         </div>
         <AdminThemeToggle />
-        <Button asChild variant="ghost" size="icon" className="admin-icon-button relative">
+        <Button asChild variant="ghost" size="icon" className="relative text-muted-foreground hover:text-foreground">
           <Link href="/admins/notifications">
             <Bell className="h-4 w-4" />
-            <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-[#5e6ad2]" />
+            <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-primary" />
           </Link>
         </Button>
-        <Button asChild variant="ghost" size="icon" className="admin-icon-button">
+        <Button asChild variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
           <Link href="/admins/config">
             <Settings className="h-4 w-4" />
           </Link>
         </Button>
-        <div className="relative" ref={dropdownRef}>
-          <button
-            type="button"
-            className="admin-user-chip ml-3 flex h-9 items-center gap-2 rounded-lg border px-3 transition-colors hover:bg-[var(--admin-hover)]"
-            onClick={() => setDropdownOpen((prev) => !prev)}
-          >
-            <div className="flex h-6 w-6 items-center justify-center rounded-md bg-[#5e6ad2]/20 text-xs font-medium text-[var(--admin-brand-soft)]">
-              {(admin?.userName || "A").slice(0, 1).toUpperCase()}
-            </div>
-            <span className="max-w-32 truncate text-sm text-[var(--admin-muted)]">
-              {admin?.userName || "管理员"}
-            </span>
-          </button>
-          
-          {dropdownOpen ? (
-            <div className="absolute right-0 top-full mt-1.5 w-32 overflow-hidden rounded-lg border border-[var(--admin-border)] bg-[var(--admin-panel-strong)] py-1 shadow-lg backdrop-blur-xl">
-              <button
-                type="button"
-                className="flex w-full items-center gap-2 px-3 py-2 text-sm text-rose-500 transition-colors hover:bg-rose-500/10"
-                onClick={handleLogout}
-              >
-                <LogOut className="h-4 w-4" />
-                退出登录
-              </button>
-            </div>
-          ) : null}
-        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              type="button"
+              variant="outline"
+              className="ml-1 h-9 gap-2 rounded-lg px-2 sm:px-3"
+            >
+              <Avatar className="h-6 w-6 rounded-md">
+                <AvatarFallback className="rounded-md bg-primary/10 text-xs font-medium text-primary">
+                  {(admin?.userName || "A").slice(0, 1).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              <span className="hidden max-w-32 truncate text-sm text-muted-foreground sm:inline">
+                {admin?.userName || "管理员"}
+              </span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-36">
+            <DropdownMenuItem className="gap-2 text-destructive focus:text-destructive" onClick={handleLogout}>
+              <LogOut className="h-4 w-4" />
+              退出登录
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
   );

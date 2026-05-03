@@ -98,7 +98,7 @@ export default function WithdrawPage() {
       className: "text-right",
       render: (row) => (
         <div className="flex justify-end gap-2">
-          <Button variant="ghost" size="sm" className="text-muted-foreground hover:bg-white/5" onClick={() => void openDetail(row.withdrawNo)}>
+          <Button variant="ghost" size="sm" className="text-muted-foreground hover:bg-muted" onClick={() => void openDetail(row.withdrawNo)}>
             <Eye className="h-3.5 w-3.5" />详情
           </Button>
           {row.status === "PENDING_REVIEW" ? (
@@ -146,7 +146,7 @@ export default function WithdrawPage() {
         <StatsCard title="累计提现" value={<MoneyText value={wallet.data?.totalWithdraw} />} description="历史提现金额" icon={Send} loading={wallet.loading} />
       </div>
 
-      <div className="rounded-lg border border-white/10 bg-white/[0.03] p-5">
+      <div className="rounded-lg border border-border bg-card p-5 text-card-foreground">
         <div className="grid grid-cols-1 gap-3 lg:grid-cols-5">
           <Select value={network} onValueChange={setNetwork}>
             <SelectTrigger className="h-9 w-full bg-background text-foreground">
@@ -160,7 +160,7 @@ export default function WithdrawPage() {
           <Input value={accountNo} onChange={(event) => setAccountNo(event.target.value)} placeholder="收款地址" className="h-9 bg-background text-foreground lg:col-span-2" />
           <Input value={amount} onChange={(event) => setAmount(event.target.value)} placeholder="提现金额 USDT" className="h-9 bg-background text-foreground" />
         </div>
-        <Button onClick={() => void submitWithdraw()} className="mt-4 bg-[#5e6ad2] text-white hover:bg-[#7170ff]">提交提现申请</Button>
+        <Button onClick={() => void submitWithdraw()} className="mt-4">提交提现申请</Button>
       </div>
 
       <SearchPanel

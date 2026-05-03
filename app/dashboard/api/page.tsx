@@ -72,7 +72,7 @@ export default function DashboardApiPage() {
       className: "text-right",
       render: (row) => (
         <div className="flex justify-end gap-2">
-          <Button variant="ghost" size="sm" className="text-muted-foreground hover:bg-white/5" onClick={() => void openDeployInfo(row.orderNo)}>
+          <Button variant="ghost" size="sm" className="text-muted-foreground hover:bg-muted" onClick={() => void openDeployInfo(row.orderNo)}>
             <Eye className="h-3.5 w-3.5" />
             查看
           </Button>
@@ -115,7 +115,7 @@ export default function DashboardApiPage() {
       <PageHeader eyebrow="API 管理" title="API 凭证与部署" description="从租赁订单进入 API 凭证、部署状态和部署费用支付。敏感字段默认脱敏。" />
       {error || actionError ? <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-200">{error ?? actionError}</div> : null}
       <DataTable columns={columns} data={page.records} rowKey={(row) => row.orderNo} loading={loading} emptyText="暂无可关联的租赁订单。" pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
-      <div className="rounded-lg border border-white/10 bg-white/[0.03] p-4 text-sm leading-6 text-zinc-400">
+      <div className="rounded-lg border border-border bg-muted/40 p-4 text-sm leading-6 text-muted-foreground">
         API 调用说明由后端凭证详情返回的 API Base URL 和 Token 组成。前端不明文暴露未脱敏 Token，复制操作仅对后端已返回字段生效。
       </div>
       <DetailDrawer data={detail} open={Boolean(detail)} title="API 部署详情" subtitle={(data) => data.orderNo} sections={detailSections} onClose={() => setDetail(null)} />

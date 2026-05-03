@@ -175,8 +175,8 @@ export function ProductForm({ initialData, regions, gpuModels, onSuccess, onCanc
         <div className="max-h-[60vh] overflow-y-auto px-1 space-y-8 custom-scrollbar">
           {/* 基础信息 */}
           <section>
-            <h3 className="text-sm font-bold text-[var(--admin-muted)] mb-4 flex items-center gap-2">
-              <span className="w-1 h-3 bg-[#5e6ad2] rounded-full"></span>
+            <h3 className="mb-4 flex items-center gap-2 text-sm font-bold text-muted-foreground">
+              <span className="h-3 w-1 rounded-full bg-primary"></span>
               基础信息
             </h3>
             <div className="grid grid-cols-2 gap-4">
@@ -236,8 +236,8 @@ export function ProductForm({ initialData, regions, gpuModels, onSuccess, onCanc
 
           {/* GPU 与 硬件规格 */}
           <section>
-            <h3 className="text-sm font-bold text-[var(--admin-muted)] mb-4 flex items-center gap-2">
-              <span className="w-1 h-3 bg-[#5e6ad2] rounded-full"></span>
+            <h3 className="mb-4 flex items-center gap-2 text-sm font-bold text-muted-foreground">
+              <span className="h-3 w-1 rounded-full bg-primary"></span>
               硬件规格
             </h3>
             <div className="grid grid-cols-2 gap-4">
@@ -297,8 +297,8 @@ export function ProductForm({ initialData, regions, gpuModels, onSuccess, onCanc
 
           {/* 存储与软件 */}
           <section>
-            <h3 className="text-sm font-bold text-[var(--admin-muted)] mb-4 flex items-center gap-2">
-              <span className="w-1 h-3 bg-[#5e6ad2] rounded-full"></span>
+            <h3 className="mb-4 flex items-center gap-2 text-sm font-bold text-muted-foreground">
+              <span className="h-3 w-1 rounded-full bg-primary"></span>
               存储与环境
             </h3>
             <div className="grid grid-cols-2 gap-4">
@@ -363,8 +363,8 @@ export function ProductForm({ initialData, regions, gpuModels, onSuccess, onCanc
 
           {/* 库存与能力 */}
           <section>
-            <h3 className="text-sm font-bold text-[var(--admin-muted)] mb-4 flex items-center gap-2">
-              <span className="w-1 h-3 bg-[#5e6ad2] rounded-full"></span>
+            <h3 className="mb-4 flex items-center gap-2 text-sm font-bold text-muted-foreground">
+              <span className="h-3 w-1 rounded-full bg-primary"></span>
               库存与处理能力
             </h3>
             <div className="grid grid-cols-2 gap-4">
@@ -400,14 +400,14 @@ export function ProductForm({ initialData, regions, gpuModels, onSuccess, onCanc
           </section>
         </div>
 
-        <div className="flex justify-end gap-3 pt-4 border-t border-[var(--admin-border)]">
+        <div className="flex justify-end gap-3 border-t border-border pt-4">
           <Button type="button" variant="ghost" onClick={onCancel}>
             取消
           </Button>
           <Button 
             type="submit" 
             disabled={loading}
-            className="bg-[#5e6ad2] hover:bg-[#7170ff] text-white font-semibold min-w-[120px]"
+            className="min-w-[120px] font-semibold"
           >
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             {initialData ? "更新产品" : "创建产品"}
@@ -496,7 +496,7 @@ export function AiModelForm({ initialData, onSuccess, onCancel }: BaseFormProps<
         </div>
         <div className="flex justify-center gap-3 pt-4 border-t mt-6">
           <Button type="button" variant="outline" onClick={onCancel} >取消</Button>
-          <Button type="submit" className=" bg-[#5e6ad2] text-white hover:bg-[#7170ff] drop-shadow-md transition-all hover:scale-[1.02] active:scale-[0.98]" disabled={loading}>
+          <Button type="submit" disabled={loading}>
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             保存模型
           </Button>
@@ -554,7 +554,7 @@ export function GpuModelForm({ initialData, onSuccess, onCancel }: BaseFormProps
         </div>
         <div className="flex justify-center gap-3 pt-4 border-t mt-6">
           <Button type="button" variant="outline" onClick={onCancel} >取消</Button>
-          <Button type="submit" className=" bg-[#5e6ad2] text-white hover:bg-[#7170ff] drop-shadow-md transition-all hover:scale-[1.02] active:scale-[0.98]" disabled={loading}>
+          <Button type="submit" disabled={loading}>
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             保存型号
           </Button>
@@ -612,7 +612,7 @@ export function RegionForm({ initialData, onSuccess, onCancel }: BaseFormProps<R
         </div>
         <div className="flex justify-center gap-3 pt-4 border-t mt-6">
           <Button type="button" variant="outline" onClick={onCancel} >取消</Button>
-          <Button type="submit" className=" bg-[#5e6ad2] text-white hover:bg-[#7170ff] drop-shadow-md transition-all hover:scale-[1.02] active:scale-[0.98]" disabled={loading}>
+          <Button type="submit" disabled={loading}>
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             保存地区
           </Button>
@@ -692,7 +692,7 @@ export function CycleRuleForm({ initialData, onSuccess, onCancel }: BaseFormProp
         </div>
         <div className="flex justify-center gap-3 pt-4 border-t mt-6">
           <Button type="button" variant="outline" onClick={onCancel} >取消</Button>
-          <Button type="submit" className=" bg-[#5e6ad2] text-white hover:bg-[#7170ff] drop-shadow-md transition-all hover:scale-[1.02] active:scale-[0.98]" disabled={loading}>
+          <Button type="submit" disabled={loading}>
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             保存规则
           </Button>

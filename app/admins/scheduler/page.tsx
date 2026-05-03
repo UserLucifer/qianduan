@@ -12,6 +12,7 @@ import { formatEmpty, formatNumber, toErrorMessage } from "@/lib/format";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogAction } from "@/components/ui/alert-dialog";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } from "@/components/ui/drawer";
@@ -84,7 +85,7 @@ export default function AdminSchedulerPage() {
           const Icon = task.icon;
           const result = results[task.key];
           return (
-            <Card key={task.key} className="border-[var(--admin-border)] bg-[var(--admin-panel-strong)] text-[var(--admin-text)] flex flex-col">
+            <Card key={task.key} className="flex flex-col">
               <CardHeader className="flex flex-row items-start justify-between gap-4 shrink-0">
                 <div>
                   <CardTitle className="flex items-center gap-2 text-sm font-medium">
@@ -142,12 +143,12 @@ export default function AdminSchedulerPage() {
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
               <Label htmlFor="params">执行参数 (JSON)</Label>
-              <textarea
+              <Textarea
                 id="params"
                 value={triggerParams}
                 onChange={(e) => setTriggerParams(e.target.value)}
                 placeholder='{"date": "2024-01-01"}'
-                className="flex min-h-[150px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm font-mono placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                className="min-h-[150px] font-mono"
               />
             </div>
             {error && (
@@ -166,13 +167,13 @@ export default function AdminSchedulerPage() {
       </Dialog>
 
       <AlertDialog open={!!alertData} onOpenChange={(open: boolean) => !open && setAlertData(null)}>
-        <AlertDialogContent className="border-[var(--admin-border)] bg-[var(--admin-panel-strong)] text-[var(--admin-text)]">
+        <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle className="flex items-center gap-2">
               <CheckCircle2 className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
               {alertData?.title}
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-[var(--admin-muted)]">
+            <AlertDialogDescription>
               {alertData?.description}
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -261,10 +262,10 @@ function SchedulerLogsDrawer({ taskKey, open, onClose }: { taskKey: string | nul
 
   return (
     <Drawer open={open} onOpenChange={(val) => !val && onClose()}>
-      <DrawerContent className="h-[90vh] bg-[var(--admin-panel-strong)] border-t border-[var(--admin-border)] text-[var(--admin-text)] flex flex-col">
-        <DrawerHeader className="flex-shrink-0 border-b border-[var(--admin-border)] pb-4 max-w-6xl mx-auto w-full px-4 sm:px-6">
+      <DrawerContent className="flex h-[90vh] flex-col">
+        <DrawerHeader className="mx-auto w-full max-w-6xl flex-shrink-0 border-b border-border px-4 pb-4 sm:px-6">
           <DrawerTitle className="text-xl">执行历史 - {taskKey}</DrawerTitle>
-          <DrawerDescription className="text-[var(--admin-muted)]">调度任务的历史执行记录</DrawerDescription>
+          <DrawerDescription>调度任务的历史执行记录</DrawerDescription>
         </DrawerHeader>
         <div className="flex-1 overflow-auto p-4 sm:p-6 w-full max-w-6xl mx-auto">
           <DataTable

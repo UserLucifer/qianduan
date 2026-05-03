@@ -188,7 +188,7 @@ export default function RechargeChannelsPage() {
       />
 
       <Dialog open={formOpen} onOpenChange={setFormOpen}>
-        <DialogContent className="max-w-2xl border-[var(--admin-border)] bg-[var(--admin-panel-strong)] text-[var(--admin-text)] flex flex-col items-stretch">
+        <DialogContent className="flex max-w-2xl flex-col items-stretch">
           <DialogTitle className="text-xl font-semibold mb-2">
             {editingRow ? "编辑充值渠道" : "新增充值渠道"}
           </DialogTitle>

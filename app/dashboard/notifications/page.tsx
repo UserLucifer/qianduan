@@ -63,7 +63,7 @@ export default function NotificationsPage() {
         title="系统通知"
         description="查看系统、订单、财务、收益相关通知，支持标记已读。"
         actions={
-          <Button onClick={() => void readAll()} className="bg-[#5e6ad2] text-white hover:bg-[#7170ff]">
+          <Button onClick={() => void readAll()}>
             <CheckCheck className="h-4 w-4 mr-2" />
             全部已读
           </Button>
@@ -169,7 +169,7 @@ export default function NotificationsPage() {
       </div>
       
       {page.total > 0 && (
-        <div className="flex items-center justify-between border border-gray-100 rounded-xl px-4 py-4 text-xs text-slate-500 bg-white shadow-sm dark:border-white/5 dark:text-zinc-500 dark:bg-zinc-950 dark:shadow-none mt-6">
+        <div className="mt-6 flex items-center justify-between rounded-xl border border-border bg-card px-4 py-4 text-xs text-muted-foreground shadow-sm">
           <span className="font-medium">
             第 {page.pageNo} / {Math.max(1, Math.ceil(page.total / page.pageSize))} 页，共 {page.total} 条数据
           </span>
@@ -177,7 +177,7 @@ export default function NotificationsPage() {
             <Button
               variant="outline"
               size="sm"
-              className="h-8 border-gray-200 bg-white font-medium text-slate-700 hover:bg-gray-50 dark:border-white/10 dark:bg-white/[0.03] dark:text-muted-foreground dark:hover:bg-white/[0.06]"
+              className="h-8 font-medium"
               disabled={page.pageNo <= 1}
               onClick={() => changePage(page.pageNo - 1)}
             >
@@ -186,7 +186,7 @@ export default function NotificationsPage() {
             <Button
               variant="outline"
               size="sm"
-              className="h-8 border-gray-200 bg-white font-medium text-slate-700 hover:bg-gray-50 dark:border-white/10 dark:bg-white/[0.03] dark:text-muted-foreground dark:hover:bg-white/[0.06]"
+              className="h-8 font-medium"
               disabled={page.pageNo >= Math.ceil(page.total / page.pageSize)}
               onClick={() => changePage(page.pageNo + 1)}
             >

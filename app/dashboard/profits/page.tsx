@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { TrendingUp } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { Input } from "@/components/ui/input";
@@ -48,6 +48,7 @@ function buildTrend(records: ProfitRecordResponse[]): TrendPoint[] {
 }
 
 export default function ProfitsPage() {
+  const [chartReady, setChartReady] = useState(false);
   const summaryLoader = useCallback(async (): Promise<ProfitSummaryResponse> => {
     const res = await getProfitSummary();
     return res.data;
@@ -61,6 +62,10 @@ export default function ProfitsPage() {
   const [filters, setFilters] = useState<ProfitRecordQueryRequest>(initialParams);
   const trend = buildTrend(records.page.records);
 
+  useEffect(() => {
+    setChartReady(true);
+  }, []);
+
   return (
     <div className="space-y-6">
       <PageHeader eyebrow="收益中心" title="收益记录与趋势" description="查看今日收益、累计收益、待结算收益及订单维度收益记录。" />
@@ -72,21 +77,23 @@ export default function ProfitsPage() {
       </div>
       <BentoCard title="收益趋势">
         <div className="h-64">
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={trend}>
-              <defs>
-                <linearGradient id="profitTrendFill" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#5e6ad2" stopOpacity={0.35} />
-                  <stop offset="95%" stopColor="#5e6ad2" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid stroke="rgba(255,255,255,0.06)" vertical={false} />
-              <XAxis dataKey="date" tick={{ fill: "#8a8f98", fontSize: 11 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: "#8a8f98", fontSize: 11 }} axisLine={false} tickLine={false} />
-              <Tooltip contentStyle={{ background: "#18181b", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8 }} />
-              <Area type="monotone" dataKey="amount" stroke="#9aa2ff" fill="url(#profitTrendFill)" strokeWidth={2} />
-            </AreaChart>
-          </ResponsiveContainer>
+          {chartReady ? (
+            <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
+              <AreaChart data={trend}>
+                <defs>
+                  <linearGradient id="profitTrendFill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="hsl(var(--ui-primary))" stopOpacity={0.35} />
+                    <stop offset="95%" stopColor="hsl(var(--ui-primary))" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid stroke="hsl(var(--ui-border))" vertical={false} />
+                <XAxis dataKey="date" tick={{ fill: "hsl(var(--ui-muted-foreground))", fontSize: 11 }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fill: "hsl(var(--ui-muted-foreground))", fontSize: 11 }} axisLine={false} tickLine={false} />
+                <Tooltip contentStyle={{ background: "hsl(var(--ui-popover))", border: "1px solid hsl(var(--ui-border))", borderRadius: 8 }} />
+                <Area type="monotone" dataKey="amount" stroke="hsl(var(--ui-primary))" fill="url(#profitTrendFill)" strokeWidth={2} />
+              </AreaChart>
+            </ResponsiveContainer>
+          ) : null}
         </div>
       </BentoCard>
       <SearchPanel

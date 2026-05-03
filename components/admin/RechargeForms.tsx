@@ -109,7 +109,7 @@ export function RechargeChannelForm({ initialData, onSuccess, onCancel }: Rechar
           <Input
             {...register("channelCode")}
             placeholder="如: USDT_TRC20"
-            className="h-10 bg-[var(--admin-input-bg)] border-[var(--admin-border)]"
+            className="h-10"
           />
           {errors.channelCode && <p className="text-xs text-rose-500">{errors.channelCode.message}</p>}
         </div>
@@ -118,7 +118,7 @@ export function RechargeChannelForm({ initialData, onSuccess, onCancel }: Rechar
           <Input
             {...register("channelName")}
             placeholder="如: USDT (TRC20)"
-            className="h-10 bg-[var(--admin-input-bg)] border-[var(--admin-border)]"
+            className="h-10"
           />
           {errors.channelName && <p className="text-xs text-rose-500">{errors.channelName.message}</p>}
         </div>
@@ -130,7 +130,7 @@ export function RechargeChannelForm({ initialData, onSuccess, onCancel }: Rechar
           <Input
             {...register("network")}
             placeholder="如: TRC20, ERC20"
-            className="h-10 bg-[var(--admin-input-bg)] border-[var(--admin-border)]"
+            className="h-10"
           />
         </div>
         <div className="space-y-2">
@@ -138,7 +138,7 @@ export function RechargeChannelForm({ initialData, onSuccess, onCancel }: Rechar
           <Input
             {...register("displayUrl")}
             placeholder="图标链接"
-            className="h-10 bg-[var(--admin-input-bg)] border-[var(--admin-border)]"
+            className="h-10"
           />
         </div>
       </div>
@@ -149,7 +149,7 @@ export function RechargeChannelForm({ initialData, onSuccess, onCancel }: Rechar
           <Input
             {...register("accountName")}
             placeholder="显示给用户的账户名"
-            className="h-10 bg-[var(--admin-input-bg)] border-[var(--admin-border)]"
+            className="h-10"
           />
         </div>
         <div className="space-y-2">
@@ -157,7 +157,7 @@ export function RechargeChannelForm({ initialData, onSuccess, onCancel }: Rechar
           <Input
             {...register("accountNo")}
             placeholder="收币地址"
-            className="h-10 bg-[var(--admin-input-bg)] border-[var(--admin-border)]"
+            className="h-10"
           />
         </div>
       </div>
@@ -169,7 +169,7 @@ export function RechargeChannelForm({ initialData, onSuccess, onCancel }: Rechar
             type="number"
             step="0.01"
             {...register("minAmount", { valueAsNumber: true })}
-            className="h-10 bg-[var(--admin-input-bg)] border-[var(--admin-border)]"
+            className="h-10"
           />
         </div>
         <div className="space-y-2">
@@ -178,7 +178,7 @@ export function RechargeChannelForm({ initialData, onSuccess, onCancel }: Rechar
             type="number"
             step="0.01"
             {...register("maxAmount", { valueAsNumber: true })}
-            className="h-10 bg-[var(--admin-input-bg)] border-[var(--admin-border)]"
+            className="h-10"
           />
         </div>
         <div className="space-y-2">
@@ -187,7 +187,7 @@ export function RechargeChannelForm({ initialData, onSuccess, onCancel }: Rechar
             type="number"
             step="0.0001"
             {...register("feeRate", { valueAsNumber: true })}
-            className="h-10 bg-[var(--admin-input-bg)] border-[var(--admin-border)]"
+            className="h-10"
           />
         </div>
       </div>
@@ -198,7 +198,7 @@ export function RechargeChannelForm({ initialData, onSuccess, onCancel }: Rechar
           <Input
             type="number"
             {...register("sortNo", { valueAsNumber: true })}
-            className="h-10 bg-[var(--admin-input-bg)] border-[var(--admin-border)]"
+            className="h-10"
           />
         </div>
         <div className="space-y-2">
@@ -207,10 +207,10 @@ export function RechargeChannelForm({ initialData, onSuccess, onCancel }: Rechar
             value={String(status)}
             onValueChange={(val) => setValue("status", Number(val))}
           >
-            <SelectTrigger className="h-10 bg-[var(--admin-input-bg)] border-[var(--admin-border)]">
+            <SelectTrigger className="h-10">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className="bg-[var(--admin-panel-strong)] border-[var(--admin-border)]">
+            <SelectContent>
               <SelectItem value="1">启用</SelectItem>
               <SelectItem value="0">禁用</SelectItem>
             </SelectContent>
@@ -225,14 +225,14 @@ export function RechargeChannelForm({ initialData, onSuccess, onCancel }: Rechar
           type="button"
           variant="ghost"
           onClick={onCancel}
-          className="text-[var(--admin-text)] hover:bg-white/5"
+          className="text-muted-foreground hover:text-foreground"
         >
           取消
         </Button>
         <Button
           type="submit"
           disabled={isLoading}
-          className="bg-[#5e6ad2] text-white hover:bg-[#7170ff] min-w-[80px]"
+          className="min-w-[80px]"
         >
           {isLoading ? "保存中..." : "保存"}
         </Button>

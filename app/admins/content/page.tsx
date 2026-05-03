@@ -112,16 +112,16 @@ export default function AdminContentPage() {
   };
 
   const columns: DataTableColumn<AdminBlogPost>[] = [
-    { key: "id", title: "ID", render: (row) => <span className="font-mono text-xs text-[var(--admin-muted)]">{formatEmpty(row.id)}</span> },
+    { key: "id", title: "ID", render: (row) => <span className="font-mono text-xs text-muted-foreground">{formatEmpty(row.id)}</span> },
     {
       key: "title", title: "标题", render: (row) => (
         <div className="flex items-center gap-2">
           {Number(row.isTop) === 1 && <ArrowUpCircle className="h-4 w-4 text-amber-500 shrink-0" />}
-          <span className="line-clamp-1 max-w-[300px] font-medium text-[var(--admin-text)]">{((row.title) || "-").toString()}</span>
+          <span className="line-clamp-1 max-w-[300px] font-medium text-foreground">{((row.title) || "-").toString()}</span>
         </div>
       )
     },
-    { key: "categoryName", title: "分类", render: (row) => <Badge variant="outline" className="font-normal text-[var(--admin-muted)] border-[var(--admin-border)]">{((row.categoryName) || "-").toString()}</Badge> },
+    { key: "categoryName", title: "分类", render: (row) => <Badge variant="outline" className="font-normal text-muted-foreground">{((row.categoryName) || "-").toString()}</Badge> },
     {
       key: "isTop", title: "置顶", render: (row) => (
         <Switch
@@ -149,10 +149,10 @@ export default function AdminContentPage() {
       title: "操作",
       render: (row) => (
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" className="text-[var(--admin-text)] hover:bg-[var(--admin-hover)]" onClick={() => { setEditingPost(row); setFormOpen(true); }}>
+          <Button variant="ghost" size="sm" onClick={() => { setEditingPost(row); setFormOpen(true); }}>
             编辑
           </Button>
-          <Button variant="ghost" size="sm" className="text-[var(--admin-text)] hover:bg-[var(--admin-hover)]" onClick={() => { setDetail(row); setDetailOpen(true); }}>
+          <Button variant="ghost" size="sm" onClick={() => { setDetail(row); setDetailOpen(true); }}>
             详情
           </Button>
           <ConfirmActionButton title="删除文章" description="确定要删除这篇文章吗？此操作不可撤销。" onConfirm={() => handleDelete(Number(row.id)!)}>
@@ -189,13 +189,13 @@ export default function AdminContentPage() {
         description="管理帮助中心、公告、博客或规则说明文档。支持分类与标签的灵活组织。"
         actions={
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={() => setCategoryMgrOpen(true)} className="border-[var(--admin-border)] text-[var(--admin-text)]">
+            <Button variant="outline" size="sm" onClick={() => setCategoryMgrOpen(true)}>
               <Layers className="mr-2 h-4 w-4" /> 分类管理
             </Button>
-            <Button variant="outline" size="sm" onClick={() => setTagMgrOpen(true)} className="border-[var(--admin-border)] text-[var(--admin-text)]">
+            <Button variant="outline" size="sm" onClick={() => setTagMgrOpen(true)}>
               <Tags className="mr-2 h-4 w-4" /> 标签管理
             </Button>
-            <Button size="sm" onClick={() => { setEditingPost(null); setFormOpen(true); }} className="bg-[#5e6ad2] text-white hover:bg-[#7170ff]">
+            <Button size="sm" onClick={() => { setEditingPost(null); setFormOpen(true); }}>
               <Plus className="mr-2 h-4 w-4" /> 新建文章
             </Button>
           </div>
@@ -247,7 +247,7 @@ export default function AdminContentPage() {
 
       {/* Post Form Dialog */}
       <Dialog open={formOpen} onOpenChange={setFormOpen}>
-        <DialogContent className="max-w-4xl border-[var(--admin-border)] bg-[var(--admin-panel-strong)] text-[var(--admin-text)] overflow-y-auto max-h-[90vh] flex flex-col items-stretch">
+        <DialogContent className="flex max-h-[90vh] max-w-4xl flex-col items-stretch overflow-y-auto">
           <DialogTitle className="sr-only">编辑文章</DialogTitle>
           <BlogPostForm
             initialData={editingPost}
@@ -261,7 +261,7 @@ export default function AdminContentPage() {
 
       {/* Category Manager Dialog */}
       <Dialog open={categoryMgrOpen} onOpenChange={setCategoryMgrOpen}>
-        <DialogContent className="sm:max-w-[400px] border-[var(--admin-border)] bg-[var(--admin-panel-strong)] text-[var(--admin-text)] flex flex-col items-stretch">
+        <DialogContent className="flex flex-col items-stretch sm:max-w-[400px]">
           <DialogTitle className="sr-only">分类管理</DialogTitle>
           <CategoryManager items={categories} onRefresh={() => { refreshDictionaries(); reload(); }} />
         </DialogContent>
@@ -269,7 +269,7 @@ export default function AdminContentPage() {
 
       {/* Tag Manager Dialog */}
       <Dialog open={tagMgrOpen} onOpenChange={setTagMgrOpen}>
-        <DialogContent className="sm:max-w-[400px] border-[var(--admin-border)] bg-[var(--admin-panel-strong)] text-[var(--admin-text)] flex flex-col items-stretch">
+        <DialogContent className="flex flex-col items-stretch sm:max-w-[400px]">
           <DialogTitle className="sr-only">标签管理</DialogTitle>
           <TagManager items={tags} onRefresh={() => { refreshDictionaries(); reload(); }} />
         </DialogContent>

@@ -90,7 +90,7 @@ export default function AdminWalletsPage() {
       key: "actions",
       title: "操作",
       render: (row) => (
-        <Button variant="ghost" size="sm" className="font-medium text-[var(--admin-text)] hover:bg-[var(--admin-hover)]" onClick={() => void openWalletDetail(row)}>
+        <Button variant="ghost" size="sm" className="font-medium" onClick={() => void openWalletDetail(row)}>
           <Eye className="h-4 w-4" />
           详情
         </Button>
@@ -147,7 +147,7 @@ export default function AdminWalletsPage() {
       ) : null}
 
       <Tabs defaultValue="wallets" className="space-y-4">
-        <TabsList className="border border-[var(--admin-border)] bg-[var(--admin-panel-soft)]">
+        <TabsList className="border border-border bg-muted/40">
           <TabsTrigger value="wallets">用户钱包</TabsTrigger>
           <TabsTrigger value="transactions">资金流水</TabsTrigger>
         </TabsList>

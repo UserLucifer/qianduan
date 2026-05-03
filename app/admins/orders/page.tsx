@@ -90,7 +90,7 @@ export default function AdminOrdersPage() {
       key: "actions",
       title: "操作",
       render: (row) => (
-        <Button variant="ghost" size="sm" className="font-medium text-[var(--admin-text)] hover:bg-[var(--admin-hover)]" onClick={() => void openDetail(row.orderNo)}>
+        <Button variant="ghost" size="sm" className="font-medium" onClick={() => void openDetail(row.orderNo)}>
           <Eye className="h-4 w-4" />
           详情
         </Button>

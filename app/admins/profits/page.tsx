@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Eye } from "lucide-react";
 import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { Button } from "@/components/ui/button";
@@ -34,6 +34,7 @@ const initialFilters: ProfitFilters = { userId: "", orderNo: "", status: "", pro
 const initialQuery: AdminProfitRecordQuery = { pageNo: 1, pageSize: 10 };
 
 export default function AdminProfitsPage() {
+  const [chartReady, setChartReady] = useState(false);
   const [filters, setFilters] = useState<ProfitFilters>(initialFilters);
   const [detail, setDetail] = useState<ProfitRecordResponse | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
@@ -122,7 +123,11 @@ export default function AdminProfitsPage() {
             { label: "结算时间", render: (detail) => <DateTimeText value={detail.settledAt} /> },
           ],
         },
-      ];
+  ];
+
+  useEffect(() => {
+    setChartReady(true);
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -132,19 +137,21 @@ export default function AdminProfitsPage() {
           {actionError ?? error}
         </div>
       ) : null}
-      <Card className="border-[var(--admin-border)] bg-[var(--admin-panel-strong)] text-[var(--admin-text)]">
+      <Card>
         <CardHeader>
           <CardTitle className="text-sm font-medium">收益分布</CardTitle>
         </CardHeader>
         <CardContent className="h-64">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={trendData}>
-              <XAxis dataKey="date" stroke="#71717a" fontSize={12} tickLine={false} axisLine={false} />
-              <YAxis stroke="#71717a" fontSize={12} tickLine={false} axisLine={false} />
-              <Tooltip contentStyle={{ background: "#0f1011", border: "1px solid rgba(255,255,255,.1)", borderRadius: 8 }} />
-              <Line type="monotone" dataKey="amount" stroke="#5e6ad2" strokeWidth={2} dot={false} />
-            </LineChart>
-          </ResponsiveContainer>
+          {chartReady ? (
+            <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
+              <LineChart data={trendData}>
+                <XAxis dataKey="date" stroke="hsl(var(--ui-muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
+                <YAxis stroke="hsl(var(--ui-muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
+                <Tooltip contentStyle={{ background: "hsl(var(--ui-popover))", border: "1px solid hsl(var(--ui-border))", borderRadius: 8 }} />
+                <Line type="monotone" dataKey="amount" stroke="hsl(var(--ui-primary))" strokeWidth={2} dot={false} />
+              </LineChart>
+            </ResponsiveContainer>
+          ) : null}
         </CardContent>
       </Card>
       <SearchPanel

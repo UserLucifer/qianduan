@@ -142,7 +142,7 @@ export default function AdminRulesPage() {
       <DataTable columns={columns} data={page.records} rowKey={(row) => row.cycleCode} loading={loading} emptyText="暂无租赁周期规则" pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
 
       <Dialog open={formOpen} onOpenChange={setFormOpen}>
-        <DialogContent className="max-w-xl border-[var(--admin-border)] bg-[var(--admin-panel-strong)] text-[var(--admin-text)] flex flex-col items-stretch">
+        <DialogContent className="flex max-w-xl flex-col items-stretch">
           <DialogTitle className="sr-only">编辑周期规则</DialogTitle>
           <CycleRuleForm
             initialData={editingRow}

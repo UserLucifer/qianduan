@@ -1,177 +1,249 @@
 # AGENTS.md
 
-## Mission
+## 使命
 
-Make the smallest correct change that solves the user's request.
+用最小且正确的改动解决用户的请求。
 
-Optimize for:
-1. correctness
-2. minimal diffs
-3. preserving existing patterns
-4. low maintenance cost
-5. clear validation
+优先级：
+1. 正确性
+2. 最小变更
+3. 保持现有模式
+4. 低维护成本
+5. 清晰验证
 
-Do not optimize for cleverness.
-
----
-
-## Default operating mode
-
-Before making changes:
-
-- Read the relevant files first.
-- Trace the actual execution path and nearby call sites.
-- Understand the existing abstraction before adding a new one.
-- Prefer extending current code over introducing parallel patterns.
-
-When changing code:
-
-- Fix the root cause, not just the symptom.
-- Prefer the smallest viable patch.
-- Keep behavior unchanged unless the user explicitly asks for behavior changes.
-- Match local style and conventions.
-- Reuse existing utilities, helpers, and components where possible.
-- Avoid speculative refactors.
-
-Avoid:
-
-- unnecessary renames
-- unnecessary file moves
-- drive-by formatting changes
-- introducing new dependencies without strong justification
-- adding abstractions “for future flexibility”
-- rewriting working code without a concrete payoff
+不要为了炫技而实现复杂方案。
 
 ---
 
-## Simplicity rules
+## 项目技术栈
 
-Choose the simplest solution that fully solves the problem.
+本仓库是算力租赁前端项目，技术栈如下：
 
-Prefer:
+- Next.js App Router
+- React 19
+- TypeScript
+- Tailwind CSS
+- shadcn/ui，配置文件为 `components.json`
+- shadcn/ui 底层使用 Radix UI primitives
+- `lucide-react` 用于图标
+- `react-hook-form` 和 `zod` 用于表单和校验
+- `axios` 用于 API 请求
+- `sonner` 用于 toast 通知
+- `recharts` 用于图表
 
-- direct logic over indirection
-- existing patterns over new frameworks
-- explicit code over premature generalization
-- fewer moving parts over architectural novelty
-
-Add a new abstraction only when at least one of these is true:
-
-- the pattern already repeats in multiple places
-- it meaningfully reduces complexity
-- it is required by the existing architecture
-- it makes testing or correctness materially better
-
-Do not create “helper” layers unless they clearly earn their keep.
+开发时优先遵循以上技术栈。除非用户明确同意且有充分技术理由，不要引入新的 UI 框架、组件库、样式系统、表单库、图表库或请求客户端。
 
 ---
 
-## Change scope discipline
+## UI 组件规范
 
-Keep edits tightly scoped to the task.
+所有页面 UI 在有对应组件时，必须使用 shadcn/ui 组件实现。
 
-Do not touch unrelated files unless required for correctness.
-Do not bundle opportunistic cleanups into the same change.
-Do not silently change public interfaces, data formats, or user-visible behavior without calling it out.
+默认要求：
 
-When broader cleanup is clearly beneficial, mention it separately instead of folding it into the main patch.
+- 按钮、输入框、下拉选择、复选框、开关、文本域、卡片、表格、标签页、弹窗、抽屉、下拉菜单、提示、徽标、头像、骨架屏、表单和标签等，优先使用 `components/ui/*` 中的组件。
+- 可见的页面操作按钮使用 `Button`，不要手写 `<button>`。
+- 表单控件使用 `Input`、`Textarea`、`Select`、`Checkbox`、`Switch`，不要手写原生控件。
+- 卡片式面板使用 shadcn `Card`。
+- 表格数据使用 shadcn `Table`。
+- 覆盖层和菜单使用 shadcn `Dialog`、`AlertDialog`、`Drawer`、`DropdownMenu`。
+- 需要图标时，按钮和导航优先使用 `lucide-react`。
+- 在 shadcn 组件上使用 Tailwind 工具类和设计 token，不要写一次性的 CSS。
 
----
+允许的自定义代码：
 
-## Debugging discipline
+- 数据映射、API 调用、状态管理、权限判断和业务逻辑。
+- 当同一模式在多个页面重复出现时，可以基于 shadcn/ui 封装薄的共享组件，例如 `DataTable`、`SearchPanel`、`PageHeader`、`StatusBadge`、`DetailDrawer`。
+- 当页面需要特定网格、侧边栏、顶部栏或响应式结构时，可以在 shadcn 组件外做布局组合。
 
-When debugging:
+避免：
 
-- reproduce the issue where possible
-- identify the failure point
-- verify the cause before patching
-- confirm the fix with the narrowest effective validation
+- 手写 shadcn/ui 已经提供的 UI 原语。
+- 页面文件里重复实现已有共享组件的模式。
+- 在可以使用现有 token 或 shadcn 语义类表达时，硬编码 `bg-[#...]`、`text-[#...]`、`border-[#...]` 等颜色。
+- 为后台或用户控制台 UI 创建一次性 CSS 文件，除非该组件无法合理用 Tailwind 和 shadcn 表达。
+- 在同一个页面混用多套视觉体系。
 
-Do not guess when the code can be inspected.
-Do not present a hypothesis as a fact.
-Call out uncertainty explicitly.
-
----
-
-## Validation
-
-Always validate changes to the extent the repo supports.
-
-Prefer this order:
-
-1. targeted test for the changed logic
-2. nearest relevant test suite
-3. typecheck / lint for touched areas
-4. broader project validation only when needed
-
-In your final response, report:
-
-- what changed
-- why it changed
-- exactly what you ran to validate it
-- the result of that validation
-- any remaining risk or unverified areas
-
-Never claim tests passed unless you actually ran them.
-If validation could not be run, say so plainly and explain why.
+如果缺少需要的 shadcn 组件，应按标准方式添加到 `components/ui` 目录，并保持与现有 shadcn 风格一致。
 
 ---
 
-## Communication
+## 用户后台和系统后台 UI 方向
 
-Be concise, concrete, and technical.
+优先统一用户后台和系统管理后台：
 
-When the task is non-trivial, first provide a short plan with the likely touch points.
-While working, surface important findings early, especially:
+- 用户后台路由位于 `app/dashboard`。
+- 系统管理后台路由位于 `app/admins`。
+- 用户后台组件位于 `components/dashboard`。
+- 系统管理后台组件位于 `components/admin`。
+- 后台产品通用共享组件位于 `components/shared`。
 
-- wrong assumptions in the request
-- hidden constraints
-- root cause discoveries
-- tradeoffs that affect the implementation
+这些区域需要遵守：
 
-At the end, give a crisp summary, not a long narrative.
-
----
-
-## Repo conventions
-
-Follow the existing repository conventions first.
-
-Priority order:
-
-1. instructions in this file
-2. DESIGN.md in this file
-3. existing codebase patterns
-4. general language/framework conventions
-
-When conventions conflict, prefer the more local convention.
+- 优先使用共享组件，避免页面级重复 markup。
+- 侧边栏、顶部栏、页面标题、搜索筛选区、表格、分页、空状态、加载态、弹窗和状态徽标需要保持视觉一致。
+- 除非用户明确要求改变行为，否则保持路由行为、认证行为、API 契约和数据格式不变。
+- 触碰菜单、顶部栏或页面组件时，如果发现乱码或错误 UI 文案，应一并修正。
 
 ---
 
-## Files and structure
+## 默认工作模式
 
-Prefer modifying an existing file over creating a new one.
+修改前：
 
-Create a new file only when it is clearly warranted, such as:
+- 先阅读相关文件。
+- 追踪真实执行路径和附近调用点。
+- 在新增抽象前，先理解现有抽象。
+- 优先扩展当前代码，而不是引入平行的新模式。
 
-- a new module with distinct responsibility
-- a required test file
-- a necessary config or migration
-- a user-requested document
+修改代码时：
 
-Do not create documentation files unless:
-- behavior changed materially
-- setup changed materially
-- the user asked for docs
+- 修根因，不只修表象。
+- 选择最小可行补丁。
+- 除非用户明确要求，否则不改变现有行为。
+- 匹配本地代码风格和约定。
+- 尽可能复用已有工具、辅助函数和组件。
+- 避免猜测性的重构。
+
+避免：
+
+- 不必要的重命名
+- 不必要的文件移动
+- 顺手格式化无关代码
+- 没有充分理由就引入新依赖
+- 为了“未来扩展性”增加抽象
+- 在没有明确收益时重写可工作的代码
 
 ---
 
-## Final quality bar
+## 简单性规则
 
-A change is not done until it is:
+选择能完整解决问题的最简单方案。
 
-- correct
-- minimal
-- understandable
-- validated as far as practical
-- consistent with the existing codebase
+优先：
+
+- 直接逻辑，而不是间接封装
+- 现有模式，而不是新框架
+- 明确代码，而不是过早泛化
+- 更少的移动部件，而不是架构新奇性
+
+只有满足以下至少一个条件时，才新增抽象：
+
+- 该模式已经在多个地方重复出现
+- 能明显降低复杂度
+- 是现有架构要求的
+- 能实质性提高测试或正确性
+
+不要创建没有明确价值的“helper”层。
+
+---
+
+## 变更范围纪律
+
+改动应紧密围绕当前任务。
+
+除非正确性需要，不要修改无关文件。
+不要把顺手清理混进同一次变更。
+不要在不说明的情况下改变公共接口、数据格式或用户可见行为。
+
+如果更大范围的清理确实有价值，应单独说明，不要直接合并进当前补丁。
+
+---
+
+## 调试纪律
+
+调试时：
+
+- 尽可能复现问题
+- 找到失败点
+- 先确认原因，再打补丁
+- 用最窄的有效验证确认修复
+
+代码可以检查时，不要猜。
+不要把假设说成事实。
+不确定时明确说明。
+
+---
+
+## 验证
+
+始终按仓库支持的程度验证改动。
+
+优先顺序：
+
+1. 针对改动逻辑的定向测试
+2. 最近的相关测试套件
+3. 受影响区域的类型检查或 lint
+4. 只有需要时才做更广范围的项目验证
+
+最终回复中必须报告：
+
+- 改了什么
+- 为什么改
+- 实际运行了哪些验证命令
+- 验证结果
+- 剩余风险或未验证区域
+
+没有实际运行测试，就不要声称测试通过。
+如果无法运行验证，应直接说明原因。
+
+---
+
+## 沟通
+
+保持简洁、具体、技术化。
+
+任务不简单时，先给出简短计划和可能触及的文件。
+工作过程中尽早说明重要发现，尤其是：
+
+- 请求中的错误假设
+- 隐藏约束
+- 根因发现
+- 会影响实现的取舍
+
+结束时给出清晰摘要，不要写长篇叙述。
+
+---
+
+## 仓库约定
+
+优先遵守现有仓库约定。
+
+优先级：
+
+1. 本文件中的说明
+2. 同目录下的 `DESIGN.md`
+3. 现有代码库模式
+4. 通用语言或框架约定
+
+当约定冲突时，优先遵守更局部的约定。
+
+---
+
+## 文件和结构
+
+优先修改现有文件，而不是创建新文件。
+
+只有在明确有必要时才创建新文件，例如：
+
+- 具有独立职责的新模块
+- 必需的测试文件
+- 必需的配置或迁移
+- 用户要求的文档
+
+不要创建文档文件，除非：
+- 行为发生了实质变化
+- 设置方式发生了实质变化
+- 用户明确要求文档
+
+---
+
+## 最终质量标准
+
+变更完成必须满足：
+
+- 正确
+- 最小
+- 易理解
+- 在实际可行范围内完成验证
+- 与现有代码库一致

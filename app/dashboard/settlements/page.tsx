@@ -3,7 +3,6 @@
 import { useCallback, useState } from "react";
 import { Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DataTable, type DataTableColumn } from "@/components/shared/DataTable";
@@ -48,7 +47,7 @@ export default function SettlementsPage() {
     { key: "actualSettleAmount", title: "结算金额", render: (row) => <MoneyText value={row.actualSettleAmount} signed /> },
     { key: "status", title: "状态", render: (row) => <StatusBadge status={row.status} /> },
     { key: "createdAt", title: "时间", render: (row) => <DateTimeText value={row.createdAt} /> },
-    { key: "actions", title: "操作", className: "text-right", render: (row) => <Button variant="ghost" size="sm" className="text-muted-foreground hover:bg-white/5" onClick={() => void openDetail(row.settlementNo)}><Eye className="h-3.5 w-3.5" />详情</Button> },
+    { key: "actions", title: "操作", className: "text-right", render: (row) => <Button variant="ghost" size="sm" className="text-muted-foreground hover:bg-muted" onClick={() => void openDetail(row.settlementNo)}><Eye className="h-3.5 w-3.5" />详情</Button> },
   ];
 
   const sections: DetailSectionDef<SettlementOrderResponse>[] = [

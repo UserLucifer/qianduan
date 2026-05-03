@@ -157,36 +157,36 @@ export function NotificationForm({ isBroadcast = false, onSuccess, onCancel }: N
         </div>
 
         {/* 预览区域 */}
-        <div className="mt-2 rounded-lg border border-[var(--admin-border)] bg-[var(--admin-panel-soft)] p-4">
-          <div className="mb-3 text-xs font-medium text-[var(--admin-subtle)] uppercase tracking-wider">
+        <div className="mt-2 rounded-lg border border-border bg-muted/40 p-4">
+          <div className="mb-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">
             实时预览 (模拟展示)
           </div>
           <div className="flex gap-3 items-start">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#5e6ad2]/10 text-[#5e6ad2]">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
               <Bell className="h-4 w-4" />
             </div>
             <div className="min-w-0 flex-1 space-y-1">
               <div className="flex items-center justify-between gap-2">
-                <p className="text-sm font-medium text-[var(--admin-text)] truncate">
+                <p className="truncate text-sm font-medium text-foreground">
                   {form.watch("title") || "在此输入标题..."}
                 </p>
-                <span className="text-[10px] text-[var(--admin-muted)] whitespace-nowrap">刚刚</span>
+                <span className="whitespace-nowrap text-[10px] text-muted-foreground">刚刚</span>
               </div>
-              <p className="text-xs text-[var(--admin-muted)] break-words whitespace-pre-wrap">
+              <p className="whitespace-pre-wrap break-words text-xs text-muted-foreground">
                 {form.watch("content") || "通知内容将展示在这里。"}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="flex justify-end gap-3 pt-4 border-t border-[var(--admin-border)]">
+        <div className="flex justify-end gap-3 border-t border-border pt-4">
           <Button type="button" variant="ghost" onClick={onCancel}>
             取消
           </Button>
           <Button 
             type="submit" 
             disabled={loading}
-            className="bg-[#5e6ad2] hover:bg-[#7170ff] text-white font-semibold min-w-[100px]"
+            className="min-w-[100px] font-semibold"
           >
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             {isBroadcast ? "发布广播" : "发送通知"}

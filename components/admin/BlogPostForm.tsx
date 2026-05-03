@@ -131,10 +131,10 @@ export function BlogPostForm({ initialData, categories, tags, onSuccess, onCance
           {form.formState.errors.contentMarkdown && <p className="text-xs text-red-500">{form.formState.errors.contentMarkdown.message}</p>}
         </div>
 
-        <div className="flex items-center justify-between p-3 rounded-lg border bg-[var(--admin-panel-strong)] border-[var(--admin-border)]">
+        <div className="flex items-center justify-between rounded-lg border bg-card p-3 text-card-foreground">
           <div className="space-y-0.5">
             <Label>立即发布</Label>
-            <p className="text-[10px] text-[var(--admin-muted)]">开启后直接进入已发布状态</p>
+            <p className="text-[10px] text-muted-foreground">开启后直接进入已发布状态</p>
           </div>
           <Switch
             checked={form.watch("publishStatus") === 1}
@@ -142,10 +142,10 @@ export function BlogPostForm({ initialData, categories, tags, onSuccess, onCance
           />
         </div>
 
-        <div className="flex items-center justify-between p-3 rounded-lg border bg-[var(--admin-panel-strong)] border-[var(--admin-border)]">
+        <div className="flex items-center justify-between rounded-lg border bg-card p-3 text-card-foreground">
           <div className="space-y-0.5">
             <Label>置顶文章</Label>
-            <p className="text-[10px] text-[var(--admin-muted)]">置顶文章将显示在列表顶部</p>
+            <p className="text-[10px] text-muted-foreground">置顶文章将显示在列表顶部</p>
           </div>
           <Switch
             checked={form.watch("isTop") === 1}
@@ -154,9 +154,9 @@ export function BlogPostForm({ initialData, categories, tags, onSuccess, onCance
         </div>
       </div>
 
-      <div className="flex justify-end gap-3 pt-4 border-t border-[var(--admin-border)]">
+      <div className="flex justify-end gap-3 border-t border-border pt-4">
         <Button type="button" variant="ghost" onClick={onCancel}>取消</Button>
-        <Button type="submit" disabled={loading} className="bg-[#5e6ad2] hover:bg-[#7170ff] text-white">
+        <Button type="submit" disabled={loading}>
           {loading ? "保存中..." : "保存文章"}
         </Button>
       </div>

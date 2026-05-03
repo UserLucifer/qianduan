@@ -133,7 +133,7 @@ export default function CustomersPage() {
       title: "操作",
       render: (row) => (
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" className="font-medium text-[var(--admin-text)] hover:bg-[var(--admin-hover)]" onClick={() => void showDetail(row)}>
+          <Button variant="ghost" size="sm" className="font-medium" onClick={() => void showDetail(row)}>
             <Eye className="h-4 w-4" />
             详情
           </Button>
