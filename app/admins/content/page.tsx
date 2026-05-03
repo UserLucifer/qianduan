@@ -163,7 +163,7 @@ export default function AdminContentPage() {
     },
   ];
 
-  const detailSections: DetailSectionDef<any>[] = [
+  const detailSections: DetailSectionDef<AdminBlogPost>[] = [
       {
         title: "文章基本信息",
         fields: [

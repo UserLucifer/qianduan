@@ -86,7 +86,7 @@ export default function DashboardApiPage() {
     },
   ];
 
-  const detailSections: DetailSectionDef<any>[] = [
+  const detailSections: DetailSectionDef<ApiDeployInfoResponse>[] = [
     {
       title: "凭证信息",
       fields: [

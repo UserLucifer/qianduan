@@ -2,12 +2,14 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
-import { Bell, KeyRound, Moon, Search, Sun, Wallet, LogOut, Settings, CreditCard, User } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { Bell, CreditCard, LogOut, Moon, Search, Settings, Sun, Wallet } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { getCurrentUser, type UserMeResponse } from "@/api/user";
 import { UserAvatar } from "@/components/shared/UserAvatar";
 import { getAvatarUrl } from "@/lib/avatars";
+import { USER_NAV_ITEMS } from "@/components/dashboard/sidebar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -55,14 +57,13 @@ export function Header() {
     router.push("/login");
   };
 
-  // Get dynamic title based on path
   const getPageTitle = () => {
-    if (pathname === "/dashboard") return "概览";
-    if (pathname.includes("/settings")) return "个人设置";
-    if (pathname.includes("/orders")) return "我的实例";
-    if (pathname.includes("/wallet")) return "我的钱包";
-    if (pathname.includes("/api")) return "API 管理";
-    return "控制台";
+    const items = USER_NAV_ITEMS.flatMap((group) => group.items);
+    const matched = items
+      .filter((item) => pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href)))
+      .sort((a, b) => b.href.length - a.href.length)[0];
+
+    return matched?.title ?? "控制台";
   };
 
   return (
@@ -72,10 +73,7 @@ export function Header() {
         <div className="hidden h-8 w-px bg-border/50 md:block" />
         <div className="relative hidden w-64 md:block">
           <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
-          <input
-            className="h-9 w-full rounded-md border border-border bg-transparent pl-8 pr-3 text-xs outline-none transition-colors focus:border-primary/50 focus:bg-muted/30"
-            placeholder="快速搜索..."
-          />
+          <Input className="h-9 pl-8 pr-3 text-xs shadow-none focus-visible:ring-1" placeholder="快速搜索..." />
         </div>
       </div>
 
@@ -99,7 +97,7 @@ export function Header() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="flex h-9 items-center gap-2 rounded-full px-1.5 py-1.5 hover:bg-muted">
-                <UserAvatar 
+                <UserAvatar
                   src={getAvatarUrl(user?.avatarKey)}
                   name={user?.userName || user?.email || "U"}
                   className="h-7 w-7 ring-1 ring-border"
@@ -109,7 +107,7 @@ export function Header() {
                 </span>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56 mt-2">
+            <DropdownMenuContent align="end" className="mt-2 w-56">
               <DropdownMenuLabel className="flex flex-col gap-1 px-3 py-2">
                 <span className="text-xs font-bold">{user?.userName}</span>
                 <span className="text-[10px] font-medium text-muted-foreground">{user?.email}</span>

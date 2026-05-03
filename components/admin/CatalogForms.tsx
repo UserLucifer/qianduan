@@ -19,7 +19,7 @@ import { Switch } from "@/components/ui/switch";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toErrorMessage } from "@/lib/format";
-import type { RegionResponse, GpuModelResponse } from "@/api/types";
+import type { AdminProductRequest, AiModelResponse, GpuModelResponse, ProductResponse, RegionResponse, RentalCycleRuleResponse } from "@/api/types";
 
 // --- Schemas ---
 
@@ -44,7 +44,7 @@ const productSchema = z.object({
   maxExpandDiskGb: z.coerce.number().min(0),
   driverVersion: z.string(),
   cudaVersion: z.string(),
-  hasCacheOptimization: z.boolean().transform(v => v ? 1 : 0),
+  hasCacheOptimization: z.boolean(),
   status: z.coerce.number(),
   rentableUntil: z.string(),
   tokenOutputPerMinute: z.coerce.number().min(0),
@@ -95,7 +95,13 @@ interface BaseFormProps<T> {
   onCancel: () => void;
 }
 
-interface ProductFormProps extends BaseFormProps<any> {
+type ProductFormValues = z.input<typeof productSchema>;
+type AiModelFormValues = z.infer<typeof aiModelSchema>;
+type GpuModelFormValues = z.infer<typeof gpuModelSchema>;
+type RegionFormValues = z.infer<typeof regionSchema>;
+type CycleRuleFormValues = z.infer<typeof cycleRuleSchema>;
+
+interface ProductFormProps extends BaseFormProps<ProductResponse> {
   regions: RegionResponse[];
   gpuModels: GpuModelResponse[];
 }
@@ -103,8 +109,9 @@ interface ProductFormProps extends BaseFormProps<any> {
 export function ProductForm({ initialData, regions, gpuModels, onSuccess, onCancel }: ProductFormProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [defaultRentableUntil] = useState(() => new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString());
 
-  const form = useForm({
+  const form = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
     defaultValues: initialData ? {
       ...initialData,
@@ -132,21 +139,25 @@ export function ProductForm({ initialData, regions, gpuModels, onSuccess, onCanc
       cudaVersion: "12.2",
       hasCacheOptimization: false,
       status: 1,
-      rentableUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+      rentableUntil: defaultRentableUntil,
       tokenOutputPerMinute: 0,
       tokenOutputPerDay: 0,
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof productSchema>) => {
+  const onSubmit = async (values: ProductFormValues) => {
     setLoading(true);
     setError(null);
     try {
       const { createAdminProduct, updateAdminProduct } = await import("@/api/admin");
+      const payload: AdminProductRequest = {
+        ...values,
+        hasCacheOptimization: values.hasCacheOptimization ? 1 : 0,
+      };
       if (initialData) {
-        await updateAdminProduct(initialData.productCode, values as any);
+        await updateAdminProduct(initialData.productCode, payload);
       } else {
-        await createAdminProduct(values as any);
+        await createAdminProduct(payload);
       }
       onSuccess();
     } catch (err) {
@@ -407,11 +418,11 @@ export function ProductForm({ initialData, regions, gpuModels, onSuccess, onCanc
   );
 }
 
-export function AiModelForm({ initialData, onSuccess, onCancel }: BaseFormProps<any>) {
+export function AiModelForm({ initialData, onSuccess, onCancel }: BaseFormProps<AiModelResponse>) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const form = useForm({
+  const form = useForm<AiModelFormValues>({
     resolver: zodResolver(aiModelSchema),
     defaultValues: initialData || {
       modelCode: "",
@@ -425,14 +436,14 @@ export function AiModelForm({ initialData, onSuccess, onCancel }: BaseFormProps<
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof aiModelSchema>) => {
+  const onSubmit = async (values: AiModelFormValues) => {
     setLoading(true);
     try {
       const { createAdminAiModel, updateAdminAiModel } = await import("@/api/admin");
       if (initialData) {
-        await updateAdminAiModel(initialData.modelCode, values as any);
+        await updateAdminAiModel(initialData.modelCode, values);
       } else {
-        await createAdminAiModel(values as any);
+        await createAdminAiModel(values);
       }
       onSuccess();
     } catch (err) {
@@ -447,35 +458,35 @@ export function AiModelForm({ initialData, onSuccess, onCancel }: BaseFormProps<
       <form onSubmit={form.handleSubmit(onSubmit)}>
         {error && <div className="mb-4 text-sm font-medium text-destructive">{error}</div>}
         <div className="grid grid-cols-2 gap-x-6 gap-y-4 py-4 w-full">
-          <FormField control={form.control} name="modelCode" render={({ field }: { field: any }) => (
+          <FormField control={form.control} name="modelCode" render={({ field }) => (
             <FormItem className="w-full">
               <FormLabel>模型编码</FormLabel>
               <FormControl><Input {...field} disabled={!!initialData} placeholder="gpt-4o" /></FormControl>
               <FormMessage />
             </FormItem>
           )} />
-          <FormField control={form.control} name="modelName" render={({ field }: { field: any }) => (
+          <FormField control={form.control} name="modelName" render={({ field }) => (
             <FormItem className="w-full">
               <FormLabel>模型名称</FormLabel>
               <FormControl><Input {...field} placeholder="GPT-4 Omni" /></FormControl>
               <FormMessage />
             </FormItem>
           )} />
-          <FormField control={form.control} name="vendorName" render={({ field }: { field: any }) => (
+          <FormField control={form.control} name="vendorName" render={({ field }) => (
             <FormItem className="w-full">
               <FormLabel>厂商</FormLabel>
               <FormControl><Input {...field} placeholder="OpenAI" /></FormControl>
               <FormMessage />
             </FormItem>
           )} />
-          <FormField control={form.control} name="tokenUnitPrice" render={({ field }: { field: any }) => (
+          <FormField control={form.control} name="tokenUnitPrice" render={({ field }) => (
             <FormItem className="w-full">
               <FormLabel>Token 单价 (USDT/M)</FormLabel>
               <FormControl><Input type="number" step="0.0001" {...field} /></FormControl>
               <FormMessage />
             </FormItem>
           )} />
-          <FormField control={form.control} name="logoUrl" render={({ field }: { field: any }) => (
+          <FormField control={form.control} name="logoUrl" render={({ field }) => (
             <FormItem className="">
               <FormLabel>Logo URL</FormLabel>
               <FormControl><Input {...field} placeholder="https://example.com/logo.png" /></FormControl>
@@ -495,23 +506,23 @@ export function AiModelForm({ initialData, onSuccess, onCancel }: BaseFormProps<
   );
 }
 
-export function GpuModelForm({ initialData, onSuccess, onCancel }: BaseFormProps<any>) {
+export function GpuModelForm({ initialData, onSuccess, onCancel }: BaseFormProps<GpuModelResponse>) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const form = useForm({
+  const form = useForm<GpuModelFormValues>({
     resolver: zodResolver(gpuModelSchema),
     defaultValues: initialData || { modelCode: "", modelName: "", status: 1, sortNo: 0 },
   });
 
-  const onSubmit = async (values: z.infer<typeof gpuModelSchema>) => {
+  const onSubmit = async (values: GpuModelFormValues) => {
     setLoading(true);
     try {
       const { createAdminGpuModel, updateAdminGpuModel } = await import("@/api/admin");
       if (initialData) {
-        await updateAdminGpuModel(initialData.id, values as any);
+        await updateAdminGpuModel(initialData.id, values);
       } else {
-        await createAdminGpuModel(values as any);
+        await createAdminGpuModel(values);
       }
       onSuccess();
     } catch (err) {
@@ -526,14 +537,14 @@ export function GpuModelForm({ initialData, onSuccess, onCancel }: BaseFormProps
       <form onSubmit={form.handleSubmit(onSubmit)}>
         {error && <div className="mb-4 text-sm font-medium text-destructive">{error}</div>}
         <div className="grid grid-cols-2 gap-x-6 gap-y-4 py-4 w-full">
-          <FormField control={form.control} name="modelCode" render={({ field }: { field: any }) => (
+          <FormField control={form.control} name="modelCode" render={({ field }) => (
             <FormItem className="w-full">
               <FormLabel>型号编码</FormLabel>
               <FormControl><Input {...field} placeholder="H100-NVLINK" /></FormControl>
               <FormMessage />
             </FormItem>
           )} />
-          <FormField control={form.control} name="modelName" render={({ field }: { field: any }) => (
+          <FormField control={form.control} name="modelName" render={({ field }) => (
             <FormItem className="w-full">
               <FormLabel>型号名称</FormLabel>
               <FormControl><Input {...field} placeholder="NVIDIA H100 (80GB)" /></FormControl>
@@ -553,23 +564,23 @@ export function GpuModelForm({ initialData, onSuccess, onCancel }: BaseFormProps
   );
 }
 
-export function RegionForm({ initialData, onSuccess, onCancel }: BaseFormProps<any>) {
+export function RegionForm({ initialData, onSuccess, onCancel }: BaseFormProps<RegionResponse>) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const form = useForm({
+  const form = useForm<RegionFormValues>({
     resolver: zodResolver(regionSchema),
     defaultValues: initialData || { regionCode: "", regionName: "", status: 1, sortNo: 0 },
   });
 
-  const onSubmit = async (values: z.infer<typeof regionSchema>) => {
+  const onSubmit = async (values: RegionFormValues) => {
     setLoading(true);
     try {
       const { createAdminRegion, updateAdminRegion } = await import("@/api/admin");
       if (initialData) {
-        await updateAdminRegion(initialData.id, values as any);
+        await updateAdminRegion(initialData.id, values);
       } else {
-        await createAdminRegion(values as any);
+        await createAdminRegion(values);
       }
       onSuccess();
     } catch (err) {
@@ -584,14 +595,14 @@ export function RegionForm({ initialData, onSuccess, onCancel }: BaseFormProps<a
       <form onSubmit={form.handleSubmit(onSubmit)}>
         {error && <div className="mb-4 text-sm font-medium text-destructive">{error}</div>}
         <div className="grid grid-cols-2 gap-x-6 gap-y-4 py-4 w-full">
-          <FormField control={form.control} name="regionCode" render={({ field }: { field: any }) => (
+          <FormField control={form.control} name="regionCode" render={({ field }) => (
             <FormItem className="w-full">
               <FormLabel>地区编码</FormLabel>
               <FormControl><Input {...field} placeholder="us-east-1" /></FormControl>
               <FormMessage />
             </FormItem>
           )} />
-          <FormField control={form.control} name="regionName" render={({ field }: { field: any }) => (
+          <FormField control={form.control} name="regionName" render={({ field }) => (
             <FormItem className="w-full">
               <FormLabel>地区名称</FormLabel>
               <FormControl><Input {...field} placeholder="弗吉尼亚 (美国东部)" /></FormControl>
@@ -611,11 +622,11 @@ export function RegionForm({ initialData, onSuccess, onCancel }: BaseFormProps<a
   );
 }
 
-export function CycleRuleForm({ initialData, onSuccess, onCancel }: BaseFormProps<any>) {
+export function CycleRuleForm({ initialData, onSuccess, onCancel }: BaseFormProps<RentalCycleRuleResponse>) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const form = useForm({
+  const form = useForm<CycleRuleFormValues>({
     resolver: zodResolver(cycleRuleSchema),
     defaultValues: initialData || {
       cycleCode: "",
@@ -628,14 +639,14 @@ export function CycleRuleForm({ initialData, onSuccess, onCancel }: BaseFormProp
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof cycleRuleSchema>) => {
+  const onSubmit = async (values: CycleRuleFormValues) => {
     setLoading(true);
     try {
       const { createAdminCycleRule, updateAdminCycleRule } = await import("@/api/admin");
       if (initialData) {
-        await updateAdminCycleRule(initialData.cycleCode, values as any);
+        await updateAdminCycleRule(initialData.cycleCode, values);
       } else {
-        await createAdminCycleRule(values as any);
+        await createAdminCycleRule(values);
       }
       onSuccess();
     } catch (err) {
@@ -650,28 +661,28 @@ export function CycleRuleForm({ initialData, onSuccess, onCancel }: BaseFormProp
       <form onSubmit={form.handleSubmit(onSubmit)}>
         {error && <div className="mb-4 text-sm font-medium text-destructive">{error}</div>}
         <div className="grid grid-cols-2 gap-x-6 gap-y-4 py-4 w-full">
-          <FormField control={form.control} name="cycleCode" render={({ field }: { field: any }) => (
+          <FormField control={form.control} name="cycleCode" render={({ field }) => (
             <FormItem className="w-full">
               <FormLabel>周期编码</FormLabel>
               <FormControl><Input {...field} disabled={!!initialData} placeholder="daily-01" /></FormControl>
               <FormMessage />
             </FormItem>
           )} />
-          <FormField control={form.control} name="cycleName" render={({ field }: { field: any }) => (
+          <FormField control={form.control} name="cycleName" render={({ field }) => (
             <FormItem className="w-full">
               <FormLabel>周期名称</FormLabel>
               <FormControl><Input {...field} placeholder="按日结算 (低费率)" /></FormControl>
               <FormMessage />
             </FormItem>
           )} />
-          <FormField control={form.control} name="cycleDays" render={({ field }: { field: any }) => (
+          <FormField control={form.control} name="cycleDays" render={({ field }) => (
             <FormItem className="w-full">
               <FormLabel>天数</FormLabel>
               <FormControl><Input type="number" {...field} /></FormControl>
               <FormMessage />
             </FormItem>
           )} />
-          <FormField control={form.control} name="yieldMultiplier" render={({ field }: { field: any }) => (
+          <FormField control={form.control} name="yieldMultiplier" render={({ field }) => (
             <FormItem className="w-full">
               <FormLabel>收益倍率</FormLabel>
               <FormControl><Input type="number" step="0.1" {...field} /></FormControl>

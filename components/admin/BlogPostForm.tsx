@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { MultiSelect } from "@/components/ui/multi-select";
 import { Switch } from "@/components/ui/switch";
 import { createAdminBlogPost, updateAdminBlogPost } from "@/api/admin";
-import { BlogCategory, BlogTag, AdminBlogPost } from "@/api/types";
+import type { AdminBlogPost, BlogCategory, BlogTag } from "@/api/types";
 import { toErrorMessage } from "@/lib/format";
 
 const formSchema = z.object({
@@ -58,7 +58,7 @@ export function BlogPostForm({ initialData, categories, tags, onSuccess, onCance
   const onSubmit = async (values: FormValues) => {
     setLoading(true);
     try {
-      const payload: any = {
+      const payload: Partial<AdminBlogPost> = {
         ...values,
         categoryId: Number(values.categoryId),
         tagIds: values.tagIds.map(Number),

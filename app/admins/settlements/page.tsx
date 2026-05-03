@@ -84,7 +84,7 @@ export default function AdminSettlementsPage() {
     },
   ];
 
-  const detailSections: DetailSectionDef<any>[] = [
+  const detailSections: DetailSectionDef<SettlementOrderResponse>[] = [
         {
           title: "结算信息",
           fields: [

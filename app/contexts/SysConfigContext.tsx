@@ -29,8 +29,8 @@ export function SysConfigProvider({ children }: { children: ReactNode }) {
         map[c.configKey] = c.configValue;
       });
       setConfigs(map);
-    } catch (err: any) {
-      setError(err.message || "Failed to load system configurations");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to load system configurations");
     } finally {
       setLoading(false);
     }

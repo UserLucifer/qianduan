@@ -31,7 +31,7 @@ export function CopyableSecret({
   return (
     <span
       className={cn(
-        "inline-flex max-w-full items-center gap-1 rounded-md border border-gray-200 bg-gray-50/50 px-2 py-1 font-mono text-xs text-muted-foreground dark:border-white/10 dark:bg-white/[0.03]",
+        "inline-flex max-w-full items-center gap-1 rounded-md border bg-muted/50 px-2 py-1 font-mono text-xs text-muted-foreground",
         className,
       )}
     >
@@ -41,8 +41,9 @@ export function CopyableSecret({
           type="button"
           variant="ghost"
           size="icon"
-          className="h-6 w-6 shrink-0 text-zinc-500 hover:bg-white/5 hover:text-zinc-100"
+          className="h-6 w-6 shrink-0 text-muted-foreground hover:text-foreground"
           onClick={() => setVisible((current) => !current)}
+          aria-label={visible ? "隐藏内容" : "显示内容"}
         >
           {visible ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
         </Button>
@@ -51,11 +52,12 @@ export function CopyableSecret({
         type="button"
         variant="ghost"
         size="icon"
-        className="h-6 w-6 shrink-0 text-zinc-500 hover:bg-white/5 hover:text-zinc-100"
+        className="h-6 w-6 shrink-0 text-muted-foreground hover:text-foreground"
         onClick={copyValue}
         disabled={!value}
+        aria-label="复制内容"
       >
-        {copied ? <Check className="h-3.5 w-3.5 text-emerald-300" /> : <Copy className="h-3.5 w-3.5" />}
+        {copied ? <Check className="h-3.5 w-3.5 text-emerald-500" /> : <Copy className="h-3.5 w-3.5" />}
       </Button>
     </span>
   );

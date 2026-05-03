@@ -184,7 +184,7 @@ export default function AdminWithdrawPage() {
     },
   ];
 
-  const detailSections: DetailSectionDef<any>[] = [
+  const detailSections: DetailSectionDef<WithdrawOrderResponse>[] = [
         {
           title: "订单信息",
           fields: [

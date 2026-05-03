@@ -94,7 +94,7 @@ export default function AdminProfitsPage() {
     },
   ];
 
-  const detailSections: DetailSectionDef<any>[] = [
+  const detailSections: DetailSectionDef<ProfitRecordResponse>[] = [
         {
           title: "收益信息",
           fields: [

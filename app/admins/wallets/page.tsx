@@ -107,7 +107,7 @@ export default function AdminWalletsPage() {
     { key: "createdAt", title: "时间", render: (row) => <DateTimeText value={row.createdAt} /> },
   ];
 
-  const detailSections: DetailSectionDef<any>[] = [
+  const detailSections: DetailSectionDef<UserWallet>[] = [
     {
       title: "钱包信息",
       fields: [

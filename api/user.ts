@@ -3,6 +3,12 @@ import type { UserMeResponse } from "./types";
 
 export type { UserMeResponse };
 
+export interface UpdateUserPasswordRequest {
+  oldPassword?: string;
+  currentPassword?: string;
+  newPassword: string;
+}
+
 export const getCurrentUser = () =>
   apiGet<UserMeResponse>("/api/user/me");
 
@@ -12,5 +18,5 @@ export const updateUserAvatar = (data: { avatarKey: string }) =>
 export const updateUserProfile = (data: { nickname: string }) =>
   apiPut<UserMeResponse, { nickname: string }>("/api/user/profile", data);
 
-export const updateUserPassword = (data: any) =>
-  apiPut<void, any>("/api/user/password", data);
+export const updateUserPassword = (data: UpdateUserPasswordRequest) =>
+  apiPut<void, UpdateUserPasswordRequest>("/api/user/password", data);

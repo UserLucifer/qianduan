@@ -11,8 +11,7 @@ export function DateTimeText({
   className?: string;
 }) {
   return (
-
-    <span className={cn("text-xs tabular-nums text-[var(--admin-muted)]", className)}>
+    <span className={cn("text-xs tabular-nums text-muted-foreground", className)}>
       {formatDateTime(value)}
     </span>
   );

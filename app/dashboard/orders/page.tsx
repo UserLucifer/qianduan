@@ -138,7 +138,7 @@ export default function DashboardOrdersPage() {
     }
   };
 
-  const runAction = async (action: () => Promise<any>) => {
+  const runAction = async (action: () => Promise<unknown>) => {
     try {
       await action();
       reload();

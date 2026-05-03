@@ -127,16 +127,16 @@ export const getAdminMe = () =>
   adminApiGet<AdminMeResponse>("/api/admin/auth/me");
 
 export const getAdminOverviewMap = () =>
-  adminApiGet<any>("/api/admin/dashboard/overview");
+  adminApiGet<AdminDashboardOverview>("/api/admin/dashboard/overview");
 
 export const getAdminFinanceMap = () =>
-  adminApiGet<any>("/api/admin/dashboard/finance");
+  adminApiGet<AdminDashboardFinance>("/api/admin/dashboard/finance");
 
 export const getAdminOrdersMap = () =>
-  adminApiGet<any>("/api/admin/dashboard/orders");
+  adminApiGet<AdminDashboardOrders>("/api/admin/dashboard/orders");
 
 export const getAdminUsersMap = () =>
-  adminApiGet<any>("/api/admin/dashboard/users");
+  adminApiGet<AdminDashboardUsers>("/api/admin/dashboard/users");
 
 export const getAdminOverview = async () => {
   const [overview, finance, orders, users] = await Promise.all([
@@ -324,11 +324,11 @@ export const disableAdminProduct = (productCode: string) =>
 export const getAdminRegions = (params: AdminCatalogQuery = {}) =>
   adminApiGet<PageResult<RegionResponse>>("/api/admin/regions", { params });
 
-export const createAdminRegion = (data: RegionResponse) =>
-  adminApiPost<RegionResponse, RegionResponse>("/api/admin/regions", data);
+export const createAdminRegion = (data: Partial<RegionResponse>) =>
+  adminApiPost<RegionResponse, Partial<RegionResponse>>("/api/admin/regions", data);
 
-export const updateAdminRegion = (id: number, data: RegionResponse) =>
-  adminApiPut<RegionResponse, RegionResponse>(`/api/admin/regions/${id}`, data);
+export const updateAdminRegion = (id: number, data: Partial<RegionResponse>) =>
+  adminApiPut<RegionResponse, Partial<RegionResponse>>(`/api/admin/regions/${id}`, data);
 
 export const enableAdminRegion = (id: number) =>
   adminApiPost<RegionResponse>(`/api/admin/regions/${id}/enable`);
@@ -339,11 +339,11 @@ export const disableAdminRegion = (id: number) =>
 export const getAdminGpuModels = (params: AdminCatalogQuery = {}) =>
   adminApiGet<PageResult<GpuModelResponse>>("/api/admin/gpu-models", { params });
 
-export const createAdminGpuModel = (data: GpuModelResponse) =>
-  adminApiPost<GpuModelResponse, GpuModelResponse>("/api/admin/gpu-models", data);
+export const createAdminGpuModel = (data: Partial<GpuModelResponse>) =>
+  adminApiPost<GpuModelResponse, Partial<GpuModelResponse>>("/api/admin/gpu-models", data);
 
-export const updateAdminGpuModel = (id: number, data: GpuModelResponse) =>
-  adminApiPut<GpuModelResponse, GpuModelResponse>(`/api/admin/gpu-models/${id}`, data);
+export const updateAdminGpuModel = (id: number, data: Partial<GpuModelResponse>) =>
+  adminApiPut<GpuModelResponse, Partial<GpuModelResponse>>(`/api/admin/gpu-models/${id}`, data);
 
 export const enableAdminGpuModel = (id: number) =>
   adminApiPost<GpuModelResponse>(`/api/admin/gpu-models/${id}/enable`);
@@ -354,11 +354,11 @@ export const disableAdminGpuModel = (id: number) =>
 export const getAdminAiModels = (params: AdminCatalogQuery = {}) =>
   adminApiGet<PageResult<AiModelResponse>>("/api/admin/ai-models", { params });
 
-export const createAdminAiModel = (data: AiModelResponse) =>
-  adminApiPost<AiModelResponse, AiModelResponse>("/api/admin/ai-models", data);
+export const createAdminAiModel = (data: Partial<AiModelResponse>) =>
+  adminApiPost<AiModelResponse, Partial<AiModelResponse>>("/api/admin/ai-models", data);
 
-export const updateAdminAiModel = (modelCode: string, data: AiModelResponse) =>
-  adminApiPut<AiModelResponse, AiModelResponse>(`/api/admin/ai-models/${modelCode}`, data);
+export const updateAdminAiModel = (modelCode: string, data: Partial<AiModelResponse>) =>
+  adminApiPut<AiModelResponse, Partial<AiModelResponse>>(`/api/admin/ai-models/${modelCode}`, data);
 
 export const enableAdminAiModel = (modelCode: string) =>
   adminApiPost<AiModelResponse>(`/api/admin/ai-models/${modelCode}/enable`);
@@ -369,11 +369,11 @@ export const disableAdminAiModel = (modelCode: string) =>
 export const getAdminCycleRules = (params: AdminCatalogQuery = {}) =>
   adminApiGet<PageResult<RentalCycleRuleResponse>>("/api/admin/rental-cycle-rules", { params });
 
-export const createAdminCycleRule = (data: RentalCycleRuleResponse) =>
-  adminApiPost<RentalCycleRuleResponse, RentalCycleRuleResponse>("/api/admin/rental-cycle-rules", data);
+export const createAdminCycleRule = (data: Partial<RentalCycleRuleResponse>) =>
+  adminApiPost<RentalCycleRuleResponse, Partial<RentalCycleRuleResponse>>("/api/admin/rental-cycle-rules", data);
 
-export const updateAdminCycleRule = (cycleCode: string, data: RentalCycleRuleResponse) =>
-  adminApiPut<RentalCycleRuleResponse, RentalCycleRuleResponse>(
+export const updateAdminCycleRule = (cycleCode: string, data: Partial<RentalCycleRuleResponse>) =>
+  adminApiPut<RentalCycleRuleResponse, Partial<RentalCycleRuleResponse>>(
     `/api/admin/rental-cycle-rules/${cycleCode}`,
     data,
   );
@@ -417,8 +417,8 @@ export const getAdminLogs = (params: AdminLogQuery = {}) =>
 export const getAdminLogDetail = (id: number) =>
   adminApiGet<SysAdminLog>(`/api/admin/logs/${id}`);
 
-export const runScheduler = (task: string, data: Record<string, any> = {}) =>
-  adminApiPost<SchedulerRunResult, Record<string, any>>(`/api/admin/scheduler/${task}/run`, data);
+export const runScheduler = (task: string, data: Record<string, unknown> = {}) =>
+  adminApiPost<SchedulerRunResult, Record<string, unknown>>(`/api/admin/scheduler/${task}/run`, data);
 
 export const getAdminSchedulerLogs = (params: { taskName?: string } & PageQuery = {}) =>
   adminApiGet<PageResult<SchedulerLogResponse>>("/api/admin/scheduler/logs", { params });
@@ -450,14 +450,14 @@ export const disableAdminBlogCategory = (id: number) =>
 export const enableAdminBlogCategory = (id: number) =>
   adminApiPost<BlogCategory>(`/api/admin/blog/categories/${id}/enable`);
 
-export const createAdminBlogPost = (data: any) =>
-  adminApiPost<any>("/api/admin/blog/posts", data);
+export const createAdminBlogPost = (data: Partial<AdminBlogPost>) =>
+  adminApiPost<AdminBlogPost, Partial<AdminBlogPost>>("/api/admin/blog/posts", data);
 
 export const getAdminBlogPostDetail = (id: number) =>
   adminApiGet<AdminBlogPost>(`/api/admin/blog/posts/${id}`);
 
-export const updateAdminBlogPost = (id: number, data: any) =>
-  adminApiPut<any, any>(`/api/admin/blog/posts/${id}`, data);
+export const updateAdminBlogPost = (id: number, data: Partial<AdminBlogPost>) =>
+  adminApiPut<AdminBlogPost, Partial<AdminBlogPost>>(`/api/admin/blog/posts/${id}`, data);
 
 export const deleteAdminBlogPost = (id: number) =>
   adminApiPost<void>(`/api/admin/blog/posts/${id}/delete`);

@@ -281,7 +281,7 @@ export interface RentalOrderDetailResponse extends RentalOrderSummaryResponse {
   expiredAt?: string;
   canceledAt?: string;
   finishedAt?: string;
-  apiCredential?: any;
+  apiCredential?: unknown;
   credentialNo?: string;
   tokenStatus?: string;
   deployOrderStatus?: string;
@@ -615,9 +615,9 @@ export interface AdminUserRow {
   orderCount?: number;
   createdAt: string;
   updatedAt: string;
-  walletData?: any;
-  teamData?: any;
-  orderData?: any;
+  walletData?: UserWallet;
+  teamData?: TeamSummaryResponse;
+  orderData?: PageResult<RentalOrderDetailResponse>;
   teamCount?: number;
 }
 

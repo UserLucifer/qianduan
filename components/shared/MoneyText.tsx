@@ -20,7 +20,7 @@ export function MoneyText({
       ? "text-emerald-500 font-medium"
       : signed && amount < 0
         ? "text-rose-500 font-medium"
-        : "text-[var(--admin-text)] font-semibold";
+        : "text-foreground font-semibold";
 
   return (
     <span className={cn("tabular-nums", tone, className)}>

@@ -135,7 +135,7 @@ export default function AdminApiPage() {
     },
   ];
 
-  const credentialSections: DetailSectionDef<any>[] = [
+  const credentialSections: DetailSectionDef<AdminApiCredentialRow>[] = [
         {
           title: "凭证信息",
           fields: [
@@ -158,7 +158,7 @@ export default function AdminApiPage() {
         },
       ];
 
-  const deploySections: DetailSectionDef<any>[] = [
+  const deploySections: DetailSectionDef<ApiDeployOrderResponse>[] = [
         {
           title: "部署订单",
           fields: [

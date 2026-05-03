@@ -121,7 +121,7 @@ export default function AdminLogsPage() {
     },
   ];
 
-  const detailSections: DetailSectionDef<any>[] = [
+  const detailSections: DetailSectionDef<SysAdminLog>[] = [
         {
           title: "日志信息",
           fields: [

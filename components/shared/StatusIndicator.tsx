@@ -24,9 +24,8 @@ export function StatusIndicator({
             ? "bg-sky-300 shadow-[0_0_14px_rgba(125,211,252,0.38)]"
             : "bg-zinc-500";
 
-
   return (
-    <span className="inline-flex items-center gap-2 text-xs font-medium text-[var(--admin-text)]">
+    <span className="inline-flex items-center gap-2 text-xs font-medium text-foreground">
       <span className="relative flex h-2 w-2">
         {pulse ? (
           <span className={cn("absolute inline-flex h-full w-full animate-ping rounded-full opacity-60", dotClassName)} />

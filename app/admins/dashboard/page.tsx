@@ -17,6 +17,7 @@ import {
   Wallet,
   RefreshCw,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -232,7 +233,7 @@ function DashboardCard({
   title: string; 
   value: string | number | undefined; 
   subtitle?: ReactNode; 
-  icon: any; 
+  icon: LucideIcon;
   iconClassName?: string;
   loading?: boolean;
 }) {

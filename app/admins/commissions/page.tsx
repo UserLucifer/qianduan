@@ -83,7 +83,7 @@ export default function AdminCommissionsPage() {
     },
   ];
 
-  const detailSections: DetailSectionDef<any>[] = [
+  const detailSections: DetailSectionDef<CommissionRecordResponse>[] = [
         {
           title: "佣金信息",
           fields: [

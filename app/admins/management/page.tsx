@@ -17,6 +17,7 @@ import { DataTable, type DataTableColumn } from "@/components/shared/DataTable";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import { DateTimeText } from "@/components/shared/DateTimeText";
 import { usePaginatedResource } from "@/hooks/usePaginatedResource";
+import { toErrorMessage } from "@/lib/format";
 import {
   createAdminUser,
   getAdminList,
@@ -51,8 +52,8 @@ function CreateAdminDialog({ onSuccess }: { onSuccess: () => void }) {
       setOpen(false);
       form.reset();
       onSuccess();
-    } catch (err: any) {
-      alert(err.message || "创建失败");
+    } catch (err) {
+      alert(toErrorMessage(err));
     } finally {
       setSubmitting(false);
     }

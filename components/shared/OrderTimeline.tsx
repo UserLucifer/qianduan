@@ -11,6 +11,7 @@ import {
   AlertCircle,
   XCircle
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { RentalOrderDetailResponse } from "@/api/types";
 import { RentalOrderStatus } from "@/types/enums";
@@ -22,7 +23,7 @@ interface TimelineNode {
   title: string;
   time?: string;
   status: "completed" | "active" | "pending" | "warning" | "danger";
-  icon: any;
+  icon: LucideIcon;
   description?: React.ReactNode;
 }
 

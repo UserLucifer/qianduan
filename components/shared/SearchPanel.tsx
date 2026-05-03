@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { useState } from "react";
 import { ChevronDown, RotateCcw, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
 export function SearchPanel({
@@ -21,39 +22,51 @@ export function SearchPanel({
 
 
   return (
-    <div className="rounded-xl border border-input bg-background p-5 shadow-sm">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
-          <Search className="h-4 w-4 text-muted-foreground" />
-          筛选条件
-        </div>
-        <div className="flex items-center gap-2">
+    <Card>
+      <CardContent className="p-5">
+        <div className="flex flex-wrap items-center justify-between gap-4">
           <Button
             type="button"
-            variant="outline"
+            variant="ghost"
             size="sm"
-            className="h-9 font-medium"
-            onClick={onReset}
+            className="-ml-2 h-9 gap-2 px-2 text-sm font-semibold text-foreground"
+            onClick={() => setCollapsed((current) => !current)}
+            aria-expanded={!collapsed}
           >
-            <RotateCcw className="mr-2 h-3.5 w-3.5" />
-            重置
+            <Search className="h-4 w-4 text-muted-foreground" />
+            筛选条件
+            <ChevronDown className={cn("h-3.5 w-3.5 text-muted-foreground transition-transform", !collapsed && "rotate-180")} />
           </Button>
-          <Button
-            type="button"
-            size="sm"
-            className="h-9 bg-primary font-semibold text-primary-foreground hover:bg-primary/90"
-            onClick={onSearch}
-          >
-            <Search className="mr-2 h-3.5 w-3.5" />
-            查询
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="h-9 font-medium"
+              onClick={onReset}
+            >
+              <RotateCcw className="mr-2 h-3.5 w-3.5" />
+              重置
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              className="h-9 font-semibold"
+              onClick={onSearch}
+            >
+              <Search className="mr-2 h-3.5 w-3.5" />
+              查询
+            </Button>
+          </div>
         </div>
-      </div>
-      <div className="mt-5">
-        <div className="flex flex-wrap items-end gap-4">
-          {children}
+        <div className={cn("grid transition-[grid-template-rows,opacity] duration-200", collapsed ? "grid-rows-[0fr] opacity-0" : "mt-5 grid-rows-[1fr] opacity-100")}>
+          <div className="min-h-0 overflow-hidden">
+            <div className="flex flex-wrap items-end gap-4">
+              {children}
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

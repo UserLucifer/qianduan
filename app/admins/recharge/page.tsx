@@ -156,7 +156,7 @@ export default function AdminRechargePage() {
     },
   ];
 
-  const detailSections: DetailSectionDef<any>[] = [
+  const detailSections: DetailSectionDef<RechargeOrderResponse>[] = [
         {
           title: "订单信息",
           fields: [

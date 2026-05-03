@@ -111,7 +111,7 @@ export default function WithdrawPage() {
     },
   ];
 
-  const detailSections: DetailSectionDef<any>[] = [
+  const detailSections: DetailSectionDef<WithdrawOrderResponse>[] = [
     {
       title: "提现信息",
       fields: [

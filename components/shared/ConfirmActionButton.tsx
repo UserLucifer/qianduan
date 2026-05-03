@@ -47,26 +47,16 @@ export function ConfirmActionButton({
           {children}
         </Button>
       </DialogTrigger>
-      <DialogContent className="border-[var(--admin-border)] bg-[var(--admin-panel-strong)] text-[var(--admin-text)]">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
-          <DialogDescription className="text-[var(--admin-muted)]">{description}</DialogDescription>
+          <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button
-            type="button"
-            variant="outline"
-            className="border-[var(--admin-border)] bg-[var(--admin-panel-soft)] text-[var(--admin-muted)] hover:bg-[var(--admin-hover)]"
-            onClick={() => setOpen(false)}
-          >
+          <Button type="button" variant="outline" onClick={() => setOpen(false)}>
             取消
           </Button>
-          <Button
-            type="button"
-            className="bg-[#5e6ad2] text-white hover:bg-[#7170ff]"
-            onClick={confirm}
-            disabled={loading}
-          >
+          <Button type="button" className="gap-2" onClick={confirm} disabled={loading}>
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
             {confirmText}
           </Button>

@@ -21,11 +21,9 @@ import {
   Cpu,
   type LucideIcon,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-/**
- * 侧边栏导航配置强类型定义
- */
 export type NavItem = {
   title: string;
   href: string;
@@ -37,9 +35,6 @@ export type NavGroup = {
   items: NavItem[];
 };
 
-/**
- * 用户控制台菜单配置
- */
 export const USER_NAV_ITEMS: NavGroup[] = [
   {
     label: "概览",
@@ -89,7 +84,6 @@ export function Sidebar() {
   return (
     <aside className="fixed left-0 top-0 z-40 hidden h-screen w-64 border-r border-border bg-background lg:block">
       <div className="flex h-full flex-col">
-        {/* Logo Area */}
         <div className="flex h-16 items-center px-6">
           <Link href="/dashboard" className="flex items-center gap-2.5 transition-opacity hover:opacity-80">
             <div className="flex h-8 w-8 items-center justify-center rounded bg-primary text-primary-foreground">
@@ -99,7 +93,6 @@ export function Sidebar() {
           </Link>
         </div>
 
-        {/* Navigation Area */}
         <nav className="flex-1 overflow-y-auto p-4 scrollbar-none">
           <div className="space-y-6">
             {USER_NAV_ITEMS.map((group) => (
@@ -111,19 +104,21 @@ export function Sidebar() {
                   {group.items.map((item) => {
                     const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
                     return (
-                      <Link
+                      <Button
                         key={item.href}
-                        href={item.href}
+                        asChild
+                        variant={isActive ? "secondary" : "ghost"}
+                        size="sm"
                         className={cn(
-                          "group flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-all",
-                          isActive
-                            ? "bg-secondary text-secondary-foreground"
-                            : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                          "group h-9 w-full justify-start gap-3 px-3 font-medium",
+                          !isActive && "text-muted-foreground hover:text-foreground"
                         )}
                       >
-                        <item.icon className={cn("h-4 w-4 shrink-0 transition-colors", isActive ? "text-primary" : "group-hover:text-foreground")} />
-                        {item.title}
-                      </Link>
+                        <Link href={item.href}>
+                          <item.icon className={cn("h-4 w-4 shrink-0 transition-colors", isActive ? "text-primary" : "group-hover:text-foreground")} />
+                          <span>{item.title}</span>
+                        </Link>
+                      </Button>
                     );
                   })}
                 </div>
@@ -132,9 +127,8 @@ export function Sidebar() {
           </div>
         </nav>
 
-        {/* Optional: Sidebar Footer / User Profile Summary can go here */}
         <div className="border-t border-border/50 p-4">
-          <p className="text-[10px] text-center text-muted-foreground/40 font-medium uppercase tracking-tighter">
+          <p className="text-center text-[10px] font-medium uppercase tracking-tighter text-muted-foreground/40">
             Cloud Compute Platform v0.1
           </p>
         </div>

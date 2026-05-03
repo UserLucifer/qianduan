@@ -1,10 +1,16 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
-import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
 import { cn } from "@/lib/utils";
+import type { ReactNode } from "react";
 
 export interface DetailFieldDef<T> {
   label: string;
@@ -36,50 +42,54 @@ export function DetailDrawer<T>({
   children,
   onClose,
 }: DetailDrawerProps<T>) {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!open || !mounted || data == null) return null;
+  if (!open || data == null) return null;
 
   const displayTitle = typeof title === "function" ? title(data) : title;
   const displaySubtitle = typeof subtitle === "function" ? subtitle(data) : subtitle;
   const displayChildren = typeof children === "function" ? children(data) : children;
 
-  return createPortal(
-    <div className="fixed inset-0 z-50 flex justify-end bg-black/60 backdrop-blur-sm">
-      <button type="button" className="absolute inset-0 cursor-default" onClick={onClose} aria-label="关闭详情" />
-
-      <aside className="relative z-10 h-full w-full max-w-xl overflow-y-auto border-l border-[var(--admin-border)] bg-[var(--admin-panel-strong)] shadow-2xl">
-        <div className="sticky top-0 z-10 flex items-start justify-between border-b border-[var(--admin-border)] bg-[var(--admin-panel-strong)]/90 p-5 backdrop-blur-xl">
-          <div>
-            <h2 className="text-lg font-semibold text-[var(--admin-text)]">{displayTitle}</h2>
-            {displaySubtitle ? <div className="mt-1 text-xs text-[var(--admin-muted)]">{displaySubtitle}</div> : null}
+  return (
+    <Drawer
+      open={open}
+      onOpenChange={(nextOpen) => {
+        if (!nextOpen) onClose();
+      }}
+      direction="right"
+      shouldScaleBackground={false}
+    >
+      <DrawerContent className="!inset-y-0 !left-auto !right-0 !mt-0 h-full w-full max-w-xl rounded-none border-l border-border bg-background p-0 shadow-2xl [&>div:first-child]:hidden">
+        <DrawerHeader className="sticky top-0 z-10 flex-row items-start justify-between gap-4 border-b border-border bg-background/95 p-5 text-left backdrop-blur-xl">
+          <div className="min-w-0">
+            <DrawerTitle className="truncate text-lg font-semibold text-foreground">{displayTitle}</DrawerTitle>
+            {displaySubtitle ? (
+              <DrawerDescription asChild>
+                <div className="mt-1 text-xs text-muted-foreground">{displaySubtitle}</div>
+              </DrawerDescription>
+            ) : null}
           </div>
           <Button
             type="button"
             variant="ghost"
             size="icon"
-            className="text-[var(--admin-muted)] hover:bg-[var(--admin-hover)] hover:text-[var(--admin-text)]"
+            aria-label="关闭详情"
+            className="text-muted-foreground hover:text-foreground"
             onClick={onClose}
           >
             <X className="h-4 w-4" />
           </Button>
-        </div>
-        <div className="space-y-4 p-5">
+        </DrawerHeader>
+        <div className="space-y-4 overflow-y-auto p-5">
           {displayChildren}
           {sections?.map((section) => (
-            <section key={section.title} className="admin-card p-5">
-              <h3 className="mb-4 text-sm font-bold text-[var(--admin-text)]">{section.title}</h3>
+            <section key={section.title} className="rounded-xl border bg-card p-5 text-card-foreground shadow-sm">
+              <h3 className="mb-4 text-sm font-bold text-foreground">{section.title}</h3>
               <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 {section.fields.map((field) => (
                   <div key={field.label} className={field.fullWidth ? "sm:col-span-2" : ""}>
                     {field.label && (
-                      <dt className="text-[11px] font-medium uppercase tracking-wider text-[var(--admin-muted)]">{field.label}</dt>
+                      <dt className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">{field.label}</dt>
                     )}
-                    <dd className={cn("min-w-0 text-sm font-medium text-[var(--admin-text)]", field.label ? "mt-1.5" : "mt-0")}>
+                    <dd className={cn("min-w-0 text-sm font-medium text-foreground", field.label ? "mt-1.5" : "mt-0")}>
                       {field.render(data)}
                     </dd>
                   </div>
@@ -88,8 +98,7 @@ export function DetailDrawer<T>({
             </section>
           ))}
         </div>
-      </aside>
-    </div>,
-    document.body
+      </DrawerContent>
+    </Drawer>
   );
 }

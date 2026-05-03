@@ -19,9 +19,9 @@ const channelSchema = z.object({
   displayUrl: z.string().max(255).optional(),
   accountName: z.string().max(128).optional(),
   accountNo: z.string().max(255).optional(),
-  minAmount: z.string().transform((val) => (val === "" ? 0 : Number(val))),
-  maxAmount: z.string().transform((val) => (val === "" ? 0 : Number(val))),
-  feeRate: z.string().min(1, "请输入手续费率").transform(Number),
+  minAmount: z.coerce.number().min(0),
+  maxAmount: z.coerce.number().min(0),
+  feeRate: z.coerce.number().min(0, "请输入手续费率"),
   sortNo: z.number().int().default(0),
   status: z.number().int().min(0).max(1).default(1),
 });
@@ -54,9 +54,9 @@ export function RechargeChannelForm({ initialData, onSuccess, onCancel }: Rechar
           displayUrl: initialData.displayUrl || "",
           accountName: initialData.accountName || "",
           accountNo: initialData.accountNo || "",
-          minAmount: String(initialData.minAmount) as any,
-          maxAmount: String(initialData.maxAmount) as any,
-          feeRate: String(initialData.feeRate) as any,
+          minAmount: initialData.minAmount,
+          maxAmount: initialData.maxAmount,
+          feeRate: initialData.feeRate,
           sortNo: initialData.sortNo,
           status: initialData.status,
         }
@@ -67,9 +67,9 @@ export function RechargeChannelForm({ initialData, onSuccess, onCancel }: Rechar
           displayUrl: "",
           accountName: "",
           accountNo: "",
-          minAmount: "0" as any,
-          maxAmount: "0" as any,
-          feeRate: "0" as any,
+          minAmount: 0,
+          maxAmount: 0,
+          feeRate: 0,
           sortNo: 0,
           status: 1,
         },
@@ -168,7 +168,7 @@ export function RechargeChannelForm({ initialData, onSuccess, onCancel }: Rechar
           <Input
             type="number"
             step="0.01"
-            {...register("minAmount")}
+            {...register("minAmount", { valueAsNumber: true })}
             className="h-10 bg-[var(--admin-input-bg)] border-[var(--admin-border)]"
           />
         </div>
@@ -177,7 +177,7 @@ export function RechargeChannelForm({ initialData, onSuccess, onCancel }: Rechar
           <Input
             type="number"
             step="0.01"
-            {...register("maxAmount")}
+            {...register("maxAmount", { valueAsNumber: true })}
             className="h-10 bg-[var(--admin-input-bg)] border-[var(--admin-border)]"
           />
         </div>
@@ -186,7 +186,7 @@ export function RechargeChannelForm({ initialData, onSuccess, onCancel }: Rechar
           <Input
             type="number"
             step="0.0001"
-            {...register("feeRate")}
+            {...register("feeRate", { valueAsNumber: true })}
             className="h-10 bg-[var(--admin-input-bg)] border-[var(--admin-border)]"
           />
         </div>

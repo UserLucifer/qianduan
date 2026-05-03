@@ -98,7 +98,7 @@ export default function AdminOrdersPage() {
     },
   ];
 
-  const detailSections: DetailSectionDef<any>[] = [
+  const detailSections: DetailSectionDef<RentalOrderDetailResponse>[] = [
     {
       title: "订单信息",
       fields: [
