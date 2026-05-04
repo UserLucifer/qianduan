@@ -2,18 +2,13 @@
 
 import { useCallback, useState } from "react";
 import {
-  AlertCircle,
-  CreditCard,
   Loader2,
   Zap,
-  Terminal,
   XCircle,
   Wallet,
   CheckCircle2,
   MoreHorizontal,
   LayoutDashboard,
-  ReceiptText,
-  Clock,
   History,
   Info
 } from "lucide-react";
@@ -26,7 +21,6 @@ import {
   DialogHeader,
   DialogTitle
 } from "@/components/ui/dialog";
-import { ConfirmActionButton } from "@/components/shared/ConfirmActionButton";
 import { DateTimeText } from "@/components/shared/DateTimeText";
 import { DetailDrawer, type DetailSectionDef } from "@/components/shared/DetailDrawer";
 import { MoneyText } from "@/components/shared/MoneyText";
@@ -69,9 +63,7 @@ import type {
   WalletMeResponse
 } from "@/api/types";
 import { usePaginatedResource } from "@/hooks/usePaginatedResource";
-import { toErrorMessage } from "@/lib/format";
 import { RentalOrderStatus } from "@/types/enums";
-import { cn } from "@/lib/utils";
 
 const initialParams: RentalOrderQueryRequest = { pageNo: 1, pageSize: 10 };
 
@@ -103,7 +95,7 @@ export default function DashboardOrdersPage() {
     try {
       const res = await getRentalOrderDetail(orderNo);
       setDetail(res.data);
-    } catch (err) {
+    } catch {
       // 错误由拦截器处理
     }
   };
@@ -114,7 +106,7 @@ export default function DashboardOrdersPage() {
     try {
       const res = await getWalletInfo();
       setWallet(res.data);
-    } catch (err) {
+    } catch {
       // 错误处理
     }
   };
@@ -131,7 +123,7 @@ export default function DashboardOrdersPage() {
         setPayTarget(null);
         reload();
       }, 2000);
-    } catch (err) {
+    } catch {
       setPaymentState("idle");
     } finally {
       setPaying(false);
@@ -142,7 +134,7 @@ export default function DashboardOrdersPage() {
     try {
       await action();
       reload();
-    } catch (err) {
+    } catch {
       // 拦截器处理
     }
   };

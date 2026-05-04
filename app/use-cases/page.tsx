@@ -2,7 +2,6 @@ import Header from '@/components/marketing/Header';
 import Footer from '@/components/marketing/Footer';
 import Link from 'next/link';
 import {
-  FiCpu,
   FiType,
   FiImage,
   FiUsers,

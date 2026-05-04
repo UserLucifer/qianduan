@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 
 const navigationItems = [
   { name: "博客", href: "/blog" },
+  { name: "帮助中心", href: "/help-center" },
 ];
 
 export default function Header() {
@@ -105,6 +106,23 @@ export default function Header() {
             </AnimatePresence>
           </div>
 
+          {/* Use Cases */}
+          <div 
+            className="nav-dropdown-wrapper nav-dropdown-wrapper--mega"
+            onMouseEnter={() => handleMouseEnter('use-cases')}
+            onMouseLeave={handleMouseLeave}
+          >
+            <button 
+              className={`site-nav__link nav-dropdown-trigger ${activeMenu === 'use-cases' ? 'is-active' : ''}`}
+              onClick={() => handleToggle('use-cases')}
+            >
+              产品用例
+            </button>
+            <AnimatePresence>
+              {activeMenu === 'use-cases' && <UseCaseMegaMenu />}
+            </AnimatePresence>
+          </div>
+
           {/* Solutions */}
           <div 
             className="nav-dropdown-wrapper nav-dropdown-wrapper--mega"
@@ -119,23 +137,6 @@ export default function Header() {
             </button>
             <AnimatePresence>
               {activeMenu === 'solutions' && <SolutionsMegaMenu />}
-            </AnimatePresence>
-          </div>
-
-          {/* Use Cases */}
-          <div 
-            className="nav-dropdown-wrapper nav-dropdown-wrapper--mega"
-            onMouseEnter={() => handleMouseEnter('use-cases')}
-            onMouseLeave={handleMouseLeave}
-          >
-            <button 
-              className={`site-nav__link nav-dropdown-trigger ${activeMenu === 'use-cases' ? 'is-active' : ''}`}
-              onClick={() => handleToggle('use-cases')}
-            >
-              用例
-            </button>
-            <AnimatePresence>
-              {activeMenu === 'use-cases' && <UseCaseMegaMenu />}
             </AnimatePresence>
           </div>
 

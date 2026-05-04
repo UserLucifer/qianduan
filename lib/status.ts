@@ -19,9 +19,7 @@ import {
   ApiTokenStatus,
   ApiDeployOrderStatus,
   ProfitStatus,
-  RentalSettlementOrderStatus,
   RentalOrderSettlementStatus,
-  NotificationBizType,
   WalletBusinessType,
   WalletTransactionType,
   RentalSettlementType
@@ -173,4 +171,3 @@ export function settlementTypeLabel(type: string | null | undefined): string {
   if (!type) return "-";
   return labels[type] ?? type;
 }
-

@@ -199,7 +199,7 @@ const initialQuery: AdminSysConfigQueryRequest = { pageNo: 1, pageSize: 12 };
 export default function AdminConfigPage() {
   const [filters, setFilters] = useState({ configKey: "" });
   const [activeGroup, setActiveGroup] = useState("");
-  const [globalError, setGlobalError] = useState<string | null>(null);
+  const [globalError] = useState<string | null>(null);
 
   const loader = useCallback(
     async (params: AdminSysConfigQueryRequest) => (await getAdminSysConfigs(params)).data,

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Calendar } from "lucide-react";
 import type { BlogPostResponse } from "@/api/blog";
 import { formatDate } from "@/lib/format";
 
@@ -52,5 +51,4 @@ export function BlogCard({ post }: { post: BlogPostResponse }) {
     </Link>
   );
 }
-
 

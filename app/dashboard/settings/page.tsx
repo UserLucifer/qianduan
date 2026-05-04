@@ -50,7 +50,7 @@ export default function SettingsPage() {
         const matchedStyle = AVATAR_STYLES.find(s => res.data.avatarKey?.startsWith(s.prefix));
         if (matchedStyle) setActiveStyle(matchedStyle.id);
       }
-    } catch (err) {
+    } catch {
       // 错误由拦截器接管
     } finally {
       setLoading(false);
@@ -80,7 +80,7 @@ export default function SettingsPage() {
         setCountdown(60);
         setResetForm(prev => ({ ...prev, code: "" }));
       }
-    } catch (err) {
+    } catch {
       // 错误由拦截器接管
     } finally {
       setIsLoading(false);
@@ -100,7 +100,7 @@ export default function SettingsPage() {
         setUser(res.data);
         toast.success("账户头像更新成功");
       }
-    } catch (err) {
+    } catch {
       // 错误由拦截器接管
     } finally {
       setUpdatingAvatar(false);
@@ -136,7 +136,7 @@ export default function SettingsPage() {
           router.push("/login");
         }, 2000);
       }
-    } catch (err) {
+    } catch {
       // 错误由拦截器接管
     } finally {
       setIsLoading(false);

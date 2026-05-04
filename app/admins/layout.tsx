@@ -46,11 +46,10 @@ export default function AdminRootLayout({
     </div>
   );
 
-  return (
-    <SysConfigProvider>
-      <style
-        dangerouslySetInnerHTML={{
-          __html: `
+  const adminStyles = (
+    <style
+      dangerouslySetInnerHTML={{
+        __html: `
         /* Hide Salesmartly customer service widget on all admin related pages */
         #salesmartly-iframe-container,
         .salesmartly-widget,
@@ -83,8 +82,22 @@ export default function AdminRootLayout({
           to { opacity: 1; }
         }
       `
-        }}
-      />
+      }}
+    />
+  );
+
+  if (isLoginPage) {
+    return (
+      <>
+        {adminStyles}
+        {content}
+      </>
+    );
+  }
+
+  return (
+    <SysConfigProvider>
+      {adminStyles}
       <AdminAuthProvider>
         {content}
       </AdminAuthProvider>

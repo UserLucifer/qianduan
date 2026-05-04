@@ -19,7 +19,6 @@ import { MoneyText } from "@/components/shared/MoneyText";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { DateTimeText } from "@/components/shared/DateTimeText";
 import { CopyableSecret } from "@/components/shared/CopyableSecret";
-import { ConfirmActionButton } from "@/components/shared/ConfirmActionButton";
 import { usePaginatedResource } from "@/hooks/usePaginatedResource";
 import { approveRecharge, getAdminRechargeOrderDetail, getAdminRechargeOrders, rejectRecharge } from "@/api/admin";
 import type { RechargeOrderQueryRequest, RechargeOrderResponse } from "@/api/types";

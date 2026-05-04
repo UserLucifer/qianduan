@@ -4,18 +4,10 @@ import Footer from '@/components/marketing/Footer';
 import Link from 'next/link';
 import { 
   FiZap, 
-  FiCpu, 
-  FiDatabase, 
-  FiLayers, 
   FiMaximize, 
-  FiWind, 
-  FiDroplet, 
-  FiLink, 
   FiShare2, 
-  FiCheckCircle, 
   FiActivity,
   FiServer,
-  FiBox
 } from 'react-icons/fi';
 import './gpu-computing.css';
 

@@ -19,7 +19,9 @@ export function CustomerService() {
   
   return (
     <Script
-      src="https://plugin-code.salesmartly.com/js/project_692700_714414_1777010586.js"
+      id="chatway"
+      async
+      src="https://cdn.chatway.app/widget.js?id=w1imp1TIzXva"
       strategy="lazyOnload"
     />
   );

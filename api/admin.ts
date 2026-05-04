@@ -33,6 +33,8 @@ import type {
   BlogTag,
   CommissionRecordResponse,
   CreateRechargeChannelRequest,
+  AdminDocsArticleQuery,
+  AdminDocsCategoryQuery,
   GpuModelResponse,
   NotificationBroadcastRequest,
   NotificationCreateRequest,
@@ -60,6 +62,10 @@ import type {
   WithdrawOrderResponse,
   TeamSummaryResponse,
   AdminBlogPost,
+  DocsArticle,
+  DocsArticleRequest,
+  DocsCategory,
+  DocsCategoryRequest,
   SysAdminRow,
   SysAdminQuery,
 } from "./types";
@@ -94,6 +100,12 @@ export type {
   BlogCategory,
   BlogTag,
   CommissionRecordResponse as AdminCommissionRecordResponse,
+  AdminDocsArticleQuery,
+  AdminDocsCategoryQuery,
+  DocsArticle,
+  DocsArticleRequest,
+  DocsCategory,
+  DocsCategoryRequest,
   GpuModelResponse as AdminGpuModelResponse,
   ProductResponse as AdminProductResponse,
   ProfitRecordResponse as AdminProfitRecordResponse,
@@ -139,7 +151,7 @@ export const getAdminUsersMap = () =>
   adminApiGet<AdminDashboardUsers>("/api/admin/dashboard/users");
 
 export const getAdminOverview = async () => {
-  const [overview, finance, orders, users] = await Promise.all([
+  const [overview, finance] = await Promise.all([
     getAdminOverviewMap(),
     getAdminFinanceMap(),
     getAdminOrdersMap(),
@@ -473,3 +485,42 @@ export const disableAdminBlogTag = (id: number) =>
 
 export const enableAdminBlogTag = (id: number) =>
   adminApiPost<BlogTag>(`/api/admin/blog/tags/${id}/enable`);
+
+export const getAdminDocsCategories = (params: AdminDocsCategoryQuery = {}) =>
+  adminApiGet<PageResult<DocsCategory>>("/api/admin/docs/categories", { params });
+
+export const createAdminDocsCategory = (data: DocsCategoryRequest) =>
+  adminApiPost<DocsCategory, DocsCategoryRequest>("/api/admin/docs/categories", data);
+
+export const updateAdminDocsCategory = (id: number, data: Partial<DocsCategoryRequest>) =>
+  adminApiPut<DocsCategory, Partial<DocsCategoryRequest>>(`/api/admin/docs/categories/${id}`, data);
+
+export const enableAdminDocsCategory = (id: number) =>
+  adminApiPost<DocsCategory>(`/api/admin/docs/categories/${id}/enable`);
+
+export const disableAdminDocsCategory = (id: number) =>
+  adminApiPost<DocsCategory>(`/api/admin/docs/categories/${id}/disable`);
+
+export const deleteAdminDocsCategory = (id: number) =>
+  adminApiPost<void>(`/api/admin/docs/categories/${id}/delete`);
+
+export const getAdminDocsArticles = (params: AdminDocsArticleQuery = {}) =>
+  adminApiGet<PageResult<DocsArticle>>("/api/admin/docs/articles", { params });
+
+export const getAdminDocsArticleDetail = (id: number) =>
+  adminApiGet<DocsArticle>(`/api/admin/docs/articles/${id}`);
+
+export const createAdminDocsArticle = (data: DocsArticleRequest) =>
+  adminApiPost<DocsArticle, DocsArticleRequest>("/api/admin/docs/articles", data);
+
+export const updateAdminDocsArticle = (id: number, data: Partial<DocsArticleRequest>) =>
+  adminApiPut<DocsArticle, Partial<DocsArticleRequest>>(`/api/admin/docs/articles/${id}`, data);
+
+export const publishAdminDocsArticle = (id: number) =>
+  adminApiPost<DocsArticle>(`/api/admin/docs/articles/${id}/publish`);
+
+export const unpublishAdminDocsArticle = (id: number) =>
+  adminApiPost<DocsArticle>(`/api/admin/docs/articles/${id}/unpublish`);
+
+export const deleteAdminDocsArticle = (id: number) =>
+  adminApiPost<void>(`/api/admin/docs/articles/${id}/delete`);

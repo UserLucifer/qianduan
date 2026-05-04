@@ -962,6 +962,94 @@ export interface AdminBlogPost {
   createdAt?: string;
   updatedAt?: string;
 }
+
+export type DocsLanguage = "zh-CN" | "en-US";
+
+export type DocsSection = "guide" | "integration" | "faq" | "support";
+
+export interface DocsCategory {
+  id: number;
+  language: DocsLanguage;
+  section: DocsSection;
+  parentId?: number | null;
+  categoryCode: string;
+  categoryName: string;
+  icon?: string | null;
+  sortNo: number;
+  status: number;
+  children?: DocsCategory[];
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface DocsCategoryRequest {
+  language: DocsLanguage;
+  section: DocsSection;
+  parentId?: number | null;
+  categoryCode: string;
+  categoryName: string;
+  icon?: string | null;
+  sortNo?: number;
+  status?: number;
+}
+
+export interface DocsArticle {
+  id: number;
+  language: DocsLanguage;
+  section: DocsSection;
+  categoryId?: number;
+  categoryName?: string;
+  title: string;
+  slug: string;
+  summary?: string;
+  contentMarkdown?: string;
+  publishStatus: number;
+  publishedAt?: string | null;
+  sortNo: number;
+  viewCount: number;
+  isSectionHome?: number;
+  createdBy?: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface DocsArticleRequest {
+  language: DocsLanguage;
+  section: DocsSection;
+  categoryId: number;
+  title: string;
+  slug: string;
+  summary?: string;
+  contentMarkdown: string;
+  publishStatus?: number;
+  isSectionHome?: number;
+  sortNo?: number;
+}
+
+export interface DocsArticleQuery extends PageQuery {
+  language?: DocsLanguage;
+  section?: DocsSection;
+  category_id?: number;
+  keyword?: string;
+}
+
+export interface AdminDocsCategoryQuery extends PageQuery {
+  language?: DocsLanguage;
+  section?: DocsSection;
+  parent_id?: number;
+  status?: number;
+}
+
+export interface AdminDocsArticleQuery extends PageQuery {
+  language?: DocsLanguage;
+  section?: DocsSection;
+  category_id?: number;
+  publish_status?: number;
+  is_section_home?: number;
+  keyword?: string;
+  start_time?: string;
+  end_time?: string;
+}
 export interface AdminRechargeChannelResponse {
   channelId: number;
   channelCode: string;

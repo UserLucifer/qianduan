@@ -43,6 +43,14 @@ export default function Footer() {
               <Link href="/data-processing" className="site-footer__link">数据处理</Link>
             </div>
           </div>
+
+          <div className="site-footer__col">
+            <h3 className="site-footer__title">帮助</h3>
+            <div className="site-footer__links">
+              <Link href="/docs" className="site-footer__link">文档中心</Link>
+              <Link href="/blog" className="site-footer__link">博客</Link>
+            </div>
+          </div>
         </div>
 
         <div className="site-footer__bottom">

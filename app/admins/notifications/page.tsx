@@ -13,7 +13,7 @@ import { StatusBadge } from "@/components/shared/StatusBadge";
 import { DateTimeText } from "@/components/shared/DateTimeText";
 import { ConfirmActionButton } from "@/components/shared/ConfirmActionButton";
 import { usePaginatedResource } from "@/hooks/usePaginatedResource";
-import { broadcastAdminNotification, cancelAdminNotification, createAdminNotification, getAdminNotifications } from "@/api/admin";
+import { cancelAdminNotification, getAdminNotifications } from "@/api/admin";
 import type { NotificationQueryRequest, SysNotification } from "@/api/types";
 import { notificationTypeLabel } from "@/lib/status";
 import { formatEmpty, toErrorMessage } from "@/lib/format";

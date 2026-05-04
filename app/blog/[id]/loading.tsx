@@ -1,6 +1,5 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
 
 export default function BlogDetailLoading() {
   return (

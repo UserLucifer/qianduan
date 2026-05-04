@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FiChevronRight, FiArrowRight, FiInfo, FiGlobe, FiBriefcase, FiFileText, FiActivity } from 'react-icons/fi';
+import { motion } from 'framer-motion';
+import { FiChevronRight } from 'react-icons/fi';
 import './ProductMegaMenu.css';
 
 const companyItems = [

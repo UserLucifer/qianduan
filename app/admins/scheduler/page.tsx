@@ -10,7 +10,6 @@ import { runScheduler, getAdminSchedulerLogs } from "@/api/admin";
 import type { SchedulerRunResult, SchedulerLogResponse } from "@/api/types";
 import { formatEmpty, formatNumber, toErrorMessage } from "@/lib/format";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogAction } from "@/components/ui/alert-dialog";
@@ -54,7 +53,7 @@ export default function AdminSchedulerPage() {
       if (triggerParams.trim()) {
         parsedParams = JSON.parse(triggerParams);
       }
-    } catch (e) {
+    } catch {
       setError("参数格式不正确，必须为有效 JSON");
       setIsSubmitting(false);
       return;

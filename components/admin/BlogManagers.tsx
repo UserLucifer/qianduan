@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Plus, Edit2, CheckCircle2, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { 
   createAdminBlogCategory, 
   updateAdminBlogCategory, 
@@ -25,7 +24,6 @@ interface CategoryManagerProps {
 
 export function CategoryManager({ items, onRefresh }: CategoryManagerProps) {
   const [name, setName] = useState("");
-  const [editingId, setEditingId] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
 
   const handleAdd = async () => {
