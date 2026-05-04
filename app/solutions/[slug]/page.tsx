@@ -1,11 +1,11 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import Header from '@/app/components/Header';
-import Footer from '@/app/components/Footer';
+import Header from '@/components/marketing/Header';
+import Footer from '@/components/marketing/Footer';
 import { solutionsData } from '@/lib/solutions-data';
-import { CodeSnippetWindow } from '@/app/components/solutions/CodeSnippetWindow';
-import { LineArtDiagram } from '@/app/components/solutions/LineArtDiagram';
+import { CodeSnippetWindow } from '@/components/marketing/solutions/CodeSnippetWindow';
+import { LineArtDiagram } from '@/components/marketing/solutions/LineArtDiagram';
 import { Button } from '@/components/ui/button';
 import { ChevronRight, Cpu } from 'lucide-react';
 import Link from 'next/link';

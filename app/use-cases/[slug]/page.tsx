@@ -7,9 +7,9 @@ import {
   FiX,
   FiZap,
 } from 'react-icons/fi';
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
-import { BuiltForSection } from '../../components/BuiltForSection';
+import Header from '@/components/marketing/Header';
+import Footer from '@/components/marketing/Footer';
+import { BuiltForSection } from '@/components/marketing/BuiltForSection';
 import './use-case-detail.css';
 
 const useCasePages = {

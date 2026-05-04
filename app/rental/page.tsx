@@ -3,8 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import "./rental.css";
-import Header from "@/app/components/Header";
-import Footer from "@/app/components/Footer";
+import Header from "@/components/marketing/Header";
+import Footer from "@/components/marketing/Footer";
 import { getAiModels, getProducts, getRentalCycleRules } from "@/api/product";
 import { createRentalOrder, estimateRental, payRentalOrder } from "@/api/rental";
 import type { AiModelResponse, ProductResponse, RentalCycleRuleResponse } from "@/api/types";

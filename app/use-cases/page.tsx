@@ -1,5 +1,5 @@
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import Header from '@/components/marketing/Header';
+import Footer from '@/components/marketing/Footer';
 import Link from 'next/link';
 import {
   FiCpu,
@@ -17,7 +17,7 @@ import {
   FiDollarSign,
   FiLayers,
 } from 'react-icons/fi';
-import MagicRings from '../components/MagicRings';
+import MagicRings from '@/components/marketing/MagicRings';
 import './use-cases.css';
 
 import type { Metadata } from 'next';

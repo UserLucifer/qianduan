@@ -1,6 +1,6 @@
-import Header from '../components/Header';
-import Aurora from '../components/Aurora';
-import Footer from '../components/Footer';
+import Header from '@/components/marketing/Header';
+import Aurora from '@/components/marketing/Aurora';
+import Footer from '@/components/marketing/Footer';
 import Link from 'next/link';
 import { 
   FiZap, 

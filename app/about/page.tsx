@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from 'react';
-import Header from '../components/Header';
-import Aurora from '../components/Aurora';
-import LogoCarousel from "../components/LogoCarousel";
-import Footer from '../components/Footer';
+import Header from '@/components/marketing/Header';
+import Aurora from '@/components/marketing/Aurora';
+import LogoCarousel from "@/components/marketing/LogoCarousel";
+import Footer from '@/components/marketing/Footer';
 import Image from 'next/image';
 import {
   FiChevronDown,

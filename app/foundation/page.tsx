@@ -1,7 +1,7 @@
 "use client";
 
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import Header from '@/components/marketing/Header';
+import Footer from '@/components/marketing/Footer';
 import './foundation.css';
 
 const inspireCards = [

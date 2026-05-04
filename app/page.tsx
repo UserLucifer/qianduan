@@ -1,16 +1,16 @@
-import Header from './components/Header';
-import ProductList from "./components/product-list";
-import Aurora from "./components/Aurora";
-import LogoCarousel from "./components/LogoCarousel";
-import FeatureGrid from './components/FeatureGrid';
-import UseCaseSection from './components/UseCaseSection';
-import WorkloadSection from './components/WorkloadSection';
-import TestimonialSection from './components/TestimonialSection';
-import FAQSection from './components/FAQSection';
-import HubSection from './components/HubSection';
-import EnterpriseSection from './components/EnterpriseSection';
-import AccordionSection from './components/AccordionSection';
-import Footer from './components/Footer';
+import Header from '@/components/marketing/Header';
+import ProductList from "@/components/marketing/product-list";
+import Aurora from "@/components/marketing/Aurora";
+import LogoCarousel from "@/components/marketing/LogoCarousel";
+import FeatureGrid from '@/components/marketing/FeatureGrid';
+import UseCaseSection from '@/components/marketing/UseCaseSection';
+import WorkloadSection from '@/components/marketing/WorkloadSection';
+import TestimonialSection from '@/components/marketing/TestimonialSection';
+import FAQSection from '@/components/marketing/FAQSection';
+import HubSection from '@/components/marketing/HubSection';
+import EnterpriseSection from '@/components/marketing/EnterpriseSection';
+import AccordionSection from '@/components/marketing/AccordionSection';
+import Footer from '@/components/marketing/Footer';
 
 export default function Home() {
   return (

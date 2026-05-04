@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
-import LogoCarousel from "../components/LogoCarousel";
+import LogoCarousel from "@/components/marketing/LogoCarousel";
 import Image from "next/image";
 import "./login.css";
 import { loginWithPassword } from "@/api/auth";

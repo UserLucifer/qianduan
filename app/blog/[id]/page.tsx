@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import Header from "@/app/components/Header";
-import Footer from "@/app/components/Footer";
+import Header from "@/components/marketing/Header";
+import Footer from "@/components/marketing/Footer";
 import { getBlogPostBySlug } from "@/api/blog";
 import type { BlogPostResponse } from "@/api/blog";
 import { MarkdownContent } from "@/components/shared/MarkdownContent";

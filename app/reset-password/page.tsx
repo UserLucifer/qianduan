@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import LogoCarousel from "../components/LogoCarousel";
+import LogoCarousel from "@/components/marketing/LogoCarousel";
 import Image from "next/image";
 import "../login/login.css";
 import { sendResetPasswordCode, resetPassword, verifyResetPasswordCode } from "@/api/auth";

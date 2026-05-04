@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Header from "@/app/components/Header";
-import Footer from "@/app/components/Footer";
+import Header from "@/components/marketing/Header";
+import Footer from "@/components/marketing/Footer";
 import { getBlogCategories, getBlogPosts } from "@/api/blog";
 import type { BlogPostQueryRequest, BlogPostResponse, PageResult } from "@/api/blog";
 import { BlogCard } from "@/components/shared/BlogCard";

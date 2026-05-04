@@ -1,6 +1,6 @@
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import '../components/LegalPage.css';
+import Header from '@/components/marketing/Header';
+import Footer from '@/components/marketing/Footer';
+import '@/components/marketing/LegalPage.css';
 
 export const metadata = {
   title: '合规 | 算力租赁',
