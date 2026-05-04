@@ -22,6 +22,7 @@ import type { PageResult, WalletMeResponse, WithdrawOrderQueryRequest, WithdrawO
 import { useAsyncResource } from "@/hooks/useAsyncResource";
 import { usePaginatedResource } from "@/hooks/usePaginatedResource";
 import { toErrorMessage } from "@/lib/format";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 const initialParams: WithdrawOrderQueryRequest = { pageNo: 1, pageSize: 10 };
 const networks = ["TRC20", "ERC20", "BEP20"];
@@ -207,7 +208,7 @@ export default function WithdrawPage() {
       </SearchPanel>
 
       {message ? <div className="rounded-lg border border-emerald-400/20 bg-emerald-400/10 p-4 text-sm text-emerald-200">{message}</div> : null}
-      {error || actionError ? <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-200">{error ?? actionError}</div> : null}
+      <ErrorAlert message={error ?? actionError} />
       <DataTable columns={columns} data={page.records} rowKey={(row) => row.withdrawNo} loading={loading} emptyText="暂无提现申请。" pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
       <DetailDrawer data={detail} open={Boolean(detail)} title="提现详情" subtitle={(data) => data.withdrawNo} sections={detailSections} onClose={() => setDetail(null)} />
     </div>

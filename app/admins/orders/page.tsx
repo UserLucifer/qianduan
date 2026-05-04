@@ -19,6 +19,7 @@ import { getAdminRentalOrderDetail, getAdminRentalOrders } from "@/api/admin";
 import type { AdminRentalOrderQuery, RentalOrderDetailResponse } from "@/api/types";
 import { formatEmpty, toErrorMessage } from "@/lib/format";
 import { RentalOrderStatus } from "@/types/enums";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 interface OrderFilters {
   userId: string;
@@ -149,11 +150,7 @@ export default function AdminOrdersPage() {
   return (
     <div className="space-y-6">
       <PageHeader eyebrow="RENTAL OPS" title="租赁订单管理" description="审计平台全部 GPU 算力租赁订单，追踪支付、收益、结算和 API 部署链路。" />
-      {(error || actionError) ? (
-        <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-500 font-medium">
-          {actionError ?? error}
-        </div>
-      ) : null}
+      <ErrorAlert message={actionError ?? error} />
       <SearchPanel
         onSearch={() => updateParams(buildQuery(filters))}
         onReset={() => {

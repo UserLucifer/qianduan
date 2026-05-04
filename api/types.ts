@@ -204,16 +204,12 @@ export interface ApiDeployInfoResponse {
   credentialNo: string;
   tokenStatus: string;
   modelNameSnapshot: string;
-  productNameSnapshot?: string;
-  aiModelNameSnapshot?: string;
   deployFeeSnapshot: number;
   apiName: string;
   apiBaseUrl: string;
   tokenMasked: string;
   deployOrderStatus: string;
   paidAt?: string;
-  deployFeePaidAt?: string;
-  apiGeneratedAt?: string;
 }
 
 export interface ApiDeployOrderResponse {
@@ -565,40 +561,49 @@ export interface AdminLoginResponse {
 }
 
 export interface AdminDashboardOverview {
-  totalUserCount: number;
-  todayNewUserCount: number;
-  activeUserCount: number;
-  totalOrderCount: number;
+  totalUsers: number;
+  activeUsers: number;
+  disabledUsers: number;
+  totalRechargeAmount: number;
+  totalWithdrawAmount: number;
+  totalOrderAmount: number;
+  totalProfitAmount: number;
+  totalCommissionAmount: number;
   runningOrderCount: number;
-  pendingPayOrderCount: number;
-  abnormalOrderCount: number;
-  systemStatus: string;
+  pendingRechargeCount: number;
+  pendingWithdrawCount: number;
 }
 
 export interface AdminDashboardFinance {
-  totalRechargeAmount: number;
-  pendingRechargeCount: number;
-  totalWithdrawAmount: number;
-  pendingWithdrawCount: number;
-  pendingPaidWithdrawCount: number;
-  totalProfitAmount: number;
-  pendingProfitAmount: number;
-  totalCommissionAmount: number;
+  todayRechargeAmount: number;
+  todayWithdrawAmount: number;
+  todayProfitAmount: number;
+  todayCommissionAmount: number;
+  walletTotalAvailableBalance: number;
+  walletTotalFrozenBalance: number;
+}
+
+export interface AdminDashboardStatusCount {
+  status: string;
+  count: number;
 }
 
 export interface AdminDashboardOrders {
-  totalOrderCount: number;
+  orderStatusCounts: AdminDashboardStatusCount[];
+  profitStatusCounts: AdminDashboardStatusCount[];
+  todayNewOrderCount: number;
+  todayPaidOrderCount: number;
   runningOrderCount: number;
-  pendingPayOrderCount: number;
-  abnormalOrderCount: number;
-  completedOrderCount: number;
+  pausedOrderCount: number;
 }
 
 export interface AdminDashboardUsers {
-  totalUserCount: number;
-  todayNewUserCount: number;
-  activeUserCount: number;
-  disabledUserCount: number;
+  todayNewUsers: number;
+  currentMonthNewUsers: number;
+  activeUsers: number;
+  disabledUsers: number;
+  usersWithParent: number;
+  usersWithoutParent: number;
 }
 
 export interface AdminUserRow {
@@ -1068,7 +1073,6 @@ export interface AdminRechargeChannelResponse {
 }
 
 export interface AdminRechargeChannelQuery extends PageQuery {
-  channelName?: string;
   status?: number;
 }
 

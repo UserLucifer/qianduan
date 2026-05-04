@@ -16,6 +16,7 @@ import { getCommissionRecords, getCommissionSummary } from "@/api/commission";
 import type { CommissionRecordQueryRequest, CommissionRecordResponse, CommissionSummaryResponse, PageResult } from "@/api/types";
 import { useAsyncResource } from "@/hooks/useAsyncResource";
 import { usePaginatedResource } from "@/hooks/usePaginatedResource";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 const initialParams: CommissionRecordQueryRequest = { pageNo: 1, pageSize: 10 };
 
@@ -96,7 +97,7 @@ export default function CommissionsPage() {
           <Input type="date" value={filters.endTime ?? ""} onChange={(event) => setFilters((current) => ({ ...current, endTime: event.target.value || undefined }))} className="h-9 w-[150px] bg-background text-foreground" />
         </div>
       </SearchPanel>
-      {records.error ? <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-200">{records.error}</div> : null}
+      <ErrorAlert message={records.error} />
       <DataTable columns={columns} data={records.page.records} rowKey={(row) => row.commissionNo} loading={records.loading} emptyText="暂无佣金记录。" pageNo={records.page.pageNo} pageSize={records.page.pageSize} total={records.page.total} onPageChange={records.changePage} />
     </div>
   );

@@ -23,6 +23,7 @@ import { usePaginatedResource } from "@/hooks/usePaginatedResource";
 import { approveRecharge, getAdminRechargeOrderDetail, getAdminRechargeOrders, rejectRecharge } from "@/api/admin";
 import type { RechargeOrderQueryRequest, RechargeOrderResponse } from "@/api/types";
 import { formatEmpty, toErrorMessage } from "@/lib/format";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 interface RechargeFilters {
   status: string;
@@ -197,11 +198,7 @@ export default function AdminRechargePage() {
   return (
     <div className="space-y-6">
       <PageHeader eyebrow="FINANCE REVIEW" title="充值审核" description="审核用户充值订单，待审核订单支持通过或拒绝。" />
-      {(error || actionError) ? (
-        <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-500 font-medium">
-          {actionError ?? error}
-        </div>
-      ) : null}
+      <ErrorAlert message={actionError ?? error} />
       <SearchPanel
         onSearch={() => updateParams(buildQuery(filters))}
         onReset={() => {

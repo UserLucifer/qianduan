@@ -32,6 +32,7 @@ import {
 import type { AdminCatalogQuery, ProductResponse, RegionResponse, GpuModelResponse } from "@/api/types";
 import { formatEmpty, formatNumber, toErrorMessage } from "@/lib/format";
 import { ProductForm } from "@/components/admin/CatalogForms";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 interface ProductFilters {
   productCode: string;
@@ -209,11 +210,7 @@ export default function AdminProductsPage() {
           </Button>
         }
       />
-      {(error || actionError) ? (
-        <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-500 font-medium">
-          {actionError ?? error}
-        </div>
-      ) : null}
+      <ErrorAlert message={actionError ?? error} />
       <SearchPanel
         onSearch={() => updateParams(buildQuery(filters))}
         onReset={() => {

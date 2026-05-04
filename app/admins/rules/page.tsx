@@ -23,6 +23,7 @@ import type { AdminCatalogQuery, RentalCycleRuleResponse } from "@/api/types";
 import { formatEmpty, formatPercent, toErrorMessage } from "@/lib/format";
 import { CycleRuleForm } from "@/components/admin/CatalogForms";
 import { Edit2 } from "lucide-react";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 interface Filters {
   cycleCode: string;
@@ -113,7 +114,7 @@ export default function AdminRulesPage() {
           </Button>
         }
       />
-      {(error || actionError) ? <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-500 font-medium">{actionError ?? error}</div> : null}
+      <ErrorAlert message={actionError ?? error} />
       <SearchPanel
         onSearch={() => updateParams(buildQuery(filters))}
         onReset={() => {

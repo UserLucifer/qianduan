@@ -19,6 +19,7 @@ import { getAdminWalletByUser, getAdminWalletTransactions, getAdminWallets } fro
 import type { AdminWalletQuery, AdminWalletTransactionQuery, UserWallet, WalletTransactionResponse } from "@/api/types";
 import { bizTypeLabel, txTypeLabel } from "@/lib/status";
 import { formatEmpty, toErrorMessage } from "@/lib/format";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 interface WalletFilters {
   userId: string;
@@ -140,11 +141,7 @@ export default function AdminWalletsPage() {
   return (
     <div className="space-y-6">
       <PageHeader eyebrow="WALLET OPS" title="钱包管理" description="查看用户钱包余额、冻结金额和平台资金流水。" />
-      {(wallets.error || txs.error || actionError) ? (
-        <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-200">
-          {actionError ?? wallets.error ?? txs.error}
-        </div>
-      ) : null}
+      <ErrorAlert message={actionError ?? wallets.error ?? txs.error} />
 
       <Tabs defaultValue="wallets" className="space-y-4">
         <TabsList className="border border-border bg-muted/40">

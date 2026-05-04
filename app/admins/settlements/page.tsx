@@ -19,6 +19,7 @@ import { getAdminSettlementOrderDetail, getAdminSettlementOrders } from "@/api/a
 import type { AdminSettlementOrderQuery, SettlementOrderResponse } from "@/api/types";
 import { settlementTypeLabel } from "@/lib/status";
 import { formatEmpty, toErrorMessage } from "@/lib/format";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 interface SettlementFilters {
   userId: string;
@@ -117,11 +118,7 @@ export default function AdminSettlementsPage() {
   return (
     <div className="space-y-6">
       <PageHeader eyebrow="SETTLEMENT OPS" title="结算订单管理" description="查看到期结算、提前结算和人工结算记录。" />
-      {(error || actionError) ? (
-        <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-200">
-          {actionError ?? error}
-        </div>
-      ) : null}
+      <ErrorAlert message={actionError ?? error} />
       <SearchPanel
         onSearch={() => updateParams(buildQuery(filters))}
         onReset={() => {

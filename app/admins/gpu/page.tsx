@@ -22,6 +22,7 @@ import type { AdminCatalogQuery, GpuModelResponse } from "@/api/types";
 import { formatEmpty, toErrorMessage } from "@/lib/format";
 import { GpuModelForm } from "@/components/admin/CatalogForms";
 import { Edit2 } from "lucide-react";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 interface Filters {
   status: string;
@@ -102,7 +103,7 @@ export default function AdminGpuPage() {
           </Button>
         }
       />
-      {(error || actionError) ? <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-500 font-medium">{actionError ?? error}</div> : null}
+      <ErrorAlert message={actionError ?? error} />
       <SearchPanel
         onSearch={() => updateParams({ pageNo: 1, pageSize: page.pageSize, status: filters.status ? Number(filters.status) : undefined })}
         onReset={() => {

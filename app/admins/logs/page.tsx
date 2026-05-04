@@ -15,6 +15,7 @@ import { usePaginatedResource } from "@/hooks/usePaginatedResource";
 import { getAdminLogDetail, getAdminLogs } from "@/api/admin";
 import type { AdminLogQuery, SysAdminLog } from "@/api/types";
 import { formatEmpty, toErrorMessage } from "@/lib/format";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 interface LogFilters {
   adminId: string;
@@ -152,11 +153,7 @@ export default function AdminLogsPage() {
   return (
     <div className="space-y-6">
       <PageHeader eyebrow="AUDIT LOG" title="管理员操作日志" description="审计管理端关键操作、目标对象和变更内容。" />
-      {(error || actionError) ? (
-        <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-200">
-          {actionError ?? error}
-        </div>
-      ) : null}
+      <ErrorAlert message={actionError ?? error} />
       <SearchPanel
         onSearch={() => updateParams(buildQuery(filters))}
         onReset={() => {

@@ -9,6 +9,7 @@ import type {
   AdminDashboardFinance,
   AdminDashboardOrders,
   AdminDashboardOverview,
+  AdminDashboardStatusCount,
   AdminDashboardUsers,
   AdminLogQuery,
   AdminLoginRequest,
@@ -30,6 +31,7 @@ import type {
   AiModelResponse,
   ApiDeployOrderResponse,
   BlogCategory,
+  BlogPostQueryRequest,
   BlogTag,
   CommissionRecordResponse,
   CreateRechargeChannelRequest,
@@ -80,6 +82,7 @@ export type {
   AdminDashboardOrders,
   AdminDashboardOverview,
   AdminDashboardOverview as AdminDashboardOverviewResponse,
+  AdminDashboardStatusCount,
   AdminDashboardUsers,
   AdminLogQuery,
   AdminLoginRequest,
@@ -98,6 +101,7 @@ export type {
   AdminWalletTransactionQuery,
   ApiDeployOrderResponse as AdminApiDeployOrderResponse,
   BlogCategory,
+  BlogPostQueryRequest,
   BlogTag,
   CommissionRecordResponse as AdminCommissionRecordResponse,
   AdminDocsArticleQuery,
@@ -441,7 +445,7 @@ export const getAdminBlogCategories = (params: PageQuery = {}) =>
 export const getAdminBlogTags = (params: PageQuery = {}) =>
   adminApiGet<PageResult<BlogTag>>("/api/admin/blog/tags", { params });
 
-export const getAdminBlogPosts = (params: AdminCatalogQuery = {}) =>
+export const getAdminBlogPosts = (params: BlogPostQueryRequest = {}) =>
   adminApiGet<PageResult<AdminBlogPost>>("/api/admin/blog/posts", { params });
 
 export const publishAdminBlogPost = (id: number) =>

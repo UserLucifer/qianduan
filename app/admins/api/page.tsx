@@ -19,6 +19,7 @@ import { usePaginatedResource } from "@/hooks/usePaginatedResource";
 import { getAdminApiCredentialDetail, getAdminApiCredentials, getAdminApiDeployOrderDetail, getAdminApiDeployOrders } from "@/api/admin";
 import type { AdminApiCredentialQuery, AdminApiCredentialRow, AdminApiDeployOrderQuery, ApiDeployOrderResponse } from "@/api/types";
 import { formatEmpty, toErrorMessage } from "@/lib/format";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 interface CredentialFilters {
   userId: string;
@@ -183,11 +184,7 @@ export default function AdminApiPage() {
   return (
     <div className="space-y-6">
       <PageHeader eyebrow="API OPS" title="API 凭证管理" description="查看平台 API 凭证、Token 状态和 API 部署订单。" />
-      {(credentials.error || deployOrders.error || actionError) ? (
-        <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-200">
-          {actionError ?? credentials.error ?? deployOrders.error}
-        </div>
-      ) : null}
+      <ErrorAlert message={actionError ?? credentials.error ?? deployOrders.error} />
 
       <Tabs defaultValue="credentials" className="space-y-4">
         <TabsList className="border border-white/10 bg-white/[0.03]">

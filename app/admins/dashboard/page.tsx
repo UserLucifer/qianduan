@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useState, ReactNode } from "react";
 import Link from "next/link";
 import {
-  AlertCircle,
   AlertTriangle,
   ArrowUpRight,
   Banknote,
@@ -19,6 +18,7 @@ import type { LucideIcon } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { useAsyncResource } from "@/hooks/useAsyncResource";
 import { getAdminDashboardBundle } from "@/api/admin";
@@ -37,17 +37,25 @@ export default function AdminDashboardPage() {
     setMounted(true);
   }, []);
 
+  const orderStatusCount = (status: string) =>
+    data?.orders.orderStatusCounts?.find((item) => item.status === status)?.count ?? 0;
+  const totalOrderCount = data?.orders.orderStatusCounts?.reduce((sum, item) => sum + item.count, 0) ?? 0;
+  const pendingPayOrderCount = orderStatusCount("PENDING_PAY");
+  const completedOrderCount =
+    orderStatusCount("EXPIRED") + orderStatusCount("EARLY_CLOSED") + orderStatusCount("SETTLED");
+  const systemStatus = getConfig("SYSTEM_STATUS", "NORMAL");
+
   const orderStructure = [
     { name: "进行中", value: data?.orders.runningOrderCount ?? 0 },
-    { name: "待支付", value: data?.orders.pendingPayOrderCount ?? 0 },
-    { name: "异常", value: data?.orders.abnormalOrderCount ?? 0 },
-    { name: "已完成", value: data?.orders.completedOrderCount ?? 0 },
+    { name: "待支付", value: pendingPayOrderCount },
+    { name: "已暂停", value: data?.orders.pausedOrderCount ?? 0 },
+    { name: "已完成", value: completedOrderCount },
   ];
   const userStructure = [
-    { name: "总用户", value: data?.users.totalUserCount ?? 0 },
-    { name: "新增", value: data?.users.todayNewUserCount ?? 0 },
-    { name: "活跃", value: data?.users.activeUserCount ?? 0 },
-    { name: "禁用", value: data?.users.disabledUserCount ?? 0 },
+    { name: "总用户", value: data?.overview.totalUsers ?? 0 },
+    { name: "新增", value: data?.users.todayNewUsers ?? 0 },
+    { name: "活跃", value: data?.users.activeUsers ?? 0 },
+    { name: "禁用", value: data?.users.disabledUsers ?? 0 },
   ];
 
   return (
@@ -69,23 +77,18 @@ export default function AdminDashboardPage() {
         }
       />
 
-      {error ? (
-        <div className="flex items-center gap-3 rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-600 dark:border-rose-500/20 dark:bg-rose-500/10 dark:text-rose-400">
-          <AlertCircle className="h-5 w-5" />
-          {error}
-        </div>
-      ) : null}
+      <ErrorAlert message={error} />
 
       {/* Top Integrated Stats Panel */}
       <section className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
         {/* Users Card */}
         <DashboardCard
           title="用户规模"
-          value={formatNumber(data?.users.totalUserCount)}
+          value={formatNumber(data?.overview.totalUsers)}
           subtitle={
             <div className="flex items-center gap-1.5 text-blue-600 dark:text-blue-400">
               <ArrowUpRight className="h-3.5 w-3.5" />
-              <span className="font-semibold">{data?.users?.todayNewUserCount ?? 0}</span>
+              <span className="font-semibold">{data?.users?.todayNewUsers ?? 0}</span>
               <span>今日新增</span>
             </div>
           }
@@ -97,14 +100,11 @@ export default function AdminDashboardPage() {
         {/* Orders Card */}
         <DashboardCard
           title="业务订单"
-          value={formatNumber(data?.orders.totalOrderCount)}
+          value={formatNumber(totalOrderCount)}
           subtitle={
-            <div className={cn(
-              "flex items-center gap-1.5",
-              (data?.orders?.abnormalOrderCount ?? 0) > 0 ? "text-rose-600 dark:text-rose-400" : "text-emerald-600 dark:text-emerald-400"
-            )}>
-              <span className="font-semibold">{data?.orders?.abnormalOrderCount ?? 0}</span>
-              <span>异常订单</span>
+            <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
+              <span className="font-semibold">{data?.orders?.todayPaidOrderCount ?? 0}</span>
+              <span>今日支付</span>
             </div>
           }
           icon={ClipboardList}
@@ -115,11 +115,11 @@ export default function AdminDashboardPage() {
         {/* Finance Card */}
         <DashboardCard
           title="累计收益"
-          value={formatMoney(data?.finance.totalProfitAmount)}
+          value={formatMoney(data?.overview.totalProfitAmount)}
           subtitle={
             <div className="flex items-center gap-1.5 text-slate-500 dark:text-zinc-400">
               <Banknote className="h-3.5 w-3.5" />
-              <span>流水：{formatMoney(data?.finance?.totalRechargeAmount)}</span>
+              <span>流水：{formatMoney(data?.overview?.totalRechargeAmount)}</span>
             </div>
           }
           icon={CircleDollarSign}
@@ -140,15 +140,15 @@ export default function AdminDashboardPage() {
               <div className="relative flex h-3 w-3">
                 <span className={cn(
                   "absolute inline-flex h-full w-full animate-ping rounded-full opacity-75",
-                  getConfig("SYSTEM_STATUS", data?.overview.systemStatus) === "ABNORMAL" ? "bg-rose-400" : "bg-emerald-400"
+                  systemStatus === "ABNORMAL" ? "bg-rose-400" : "bg-emerald-400"
                 )}></span>
                 <span className={cn(
                   "relative inline-flex h-3 w-3 rounded-full",
-                  getConfig("SYSTEM_STATUS", data?.overview.systemStatus) === "ABNORMAL" ? "bg-rose-500" : "bg-emerald-500"
+                  systemStatus === "ABNORMAL" ? "bg-rose-500" : "bg-emerald-500"
                 )}></span>
               </div>
               <span className="text-lg font-bold tracking-tight text-slate-900 dark:text-zinc-50">
-                {getConfig("SYSTEM_STATUS", data?.overview.systemStatus) === "ABNORMAL" ? "服务运行异常" : "所有服务运行正常"}
+                {systemStatus === "ABNORMAL" ? "服务运行异常" : "所有服务运行正常"}
               </span>
             </div>
             <p className="mt-2 text-xs text-slate-500 dark:text-zinc-500">
@@ -166,10 +166,10 @@ export default function AdminDashboardPage() {
             <CardTitle className="text-sm font-bold tracking-tight text-slate-900 dark:text-zinc-50">待处理事项</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3 p-6">
-            <PendingItem label="待审核充值" value={data?.finance.pendingRechargeCount ?? 0} href="/admins/recharge" color="blue" />
-            <PendingItem label="待审核提现" value={data?.finance.pendingWithdrawCount ?? 0} href="/admins/withdraw" color="amber" />
-            <PendingItem label="待打款提现" value={data?.finance.pendingPaidWithdrawCount ?? 0} href="/admins/withdraw" color="purple" />
-            <PendingItem label="异常订单待排查" value={data?.orders.abnormalOrderCount ?? 0} href="/admins/orders" color="rose" />
+            <PendingItem label="待审核充值" value={data?.overview.pendingRechargeCount ?? 0} href="/admins/recharge" color="blue" />
+            <PendingItem label="待审核提现" value={data?.overview.pendingWithdrawCount ?? 0} href="/admins/withdraw" color="amber" />
+            <PendingItem label="待支付订单" value={pendingPayOrderCount} href="/admins/orders" color="purple" />
+            <PendingItem label="暂停订单" value={data?.orders.pausedOrderCount ?? 0} href="/admins/orders" color="rose" />
           </CardContent>
         </Card>
 
@@ -177,28 +177,28 @@ export default function AdminDashboardPage() {
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:col-span-8">
           <DashboardCard
             title="充值总额"
-            value={formatMoney(data?.finance.totalRechargeAmount)}
+            value={formatMoney(data?.overview.totalRechargeAmount)}
             icon={Wallet}
             iconClassName="bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400"
             loading={loading}
           />
           <DashboardCard
             title="提现总额"
-            value={formatMoney(data?.finance.totalWithdrawAmount)}
+            value={formatMoney(data?.overview.totalWithdrawAmount)}
             icon={Banknote}
             iconClassName="bg-slate-50 text-slate-600 dark:bg-white/5 dark:text-zinc-400"
             loading={loading}
           />
           <DashboardCard
             title="累计收益"
-            value={formatMoney(data?.finance.totalProfitAmount)}
+            value={formatMoney(data?.overview.totalProfitAmount)}
             icon={CircleDollarSign}
             iconClassName="bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400"
             loading={loading}
           />
           <DashboardCard
             title="分销佣金支出"
-            value={formatMoney(data?.finance.totalCommissionAmount)}
+            value={formatMoney(data?.overview.totalCommissionAmount)}
             icon={AlertTriangle}
             iconClassName="bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400"
             loading={loading}

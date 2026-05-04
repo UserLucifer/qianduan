@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SearchPanel } from "@/components/shared/SearchPanel";
 import { DateTimeText } from "@/components/shared/DateTimeText";
@@ -223,11 +224,7 @@ export default function AdminConfigPage() {
         description="按配置键查看和修改钱包、提现、收益、佣金与系统开关配置。"
       />
 
-      {(error || globalError) && (
-        <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-destructive">
-          {globalError ?? error}
-        </div>
-      )}
+      <ErrorAlert message={globalError ?? error} />
 
       {/* Group Tabs */}
       <div className="flex items-center gap-2 flex-wrap">

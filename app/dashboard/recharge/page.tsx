@@ -21,6 +21,7 @@ import type { PageResult, RechargeChannelResponse, RechargeOrderQueryRequest, Re
 import { usePaginatedResource } from "@/hooks/usePaginatedResource";
 import { toErrorMessage } from "@/lib/format";
 import { cn } from "@/lib/utils";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 /* ───────── constants ───────── */
 const QUICK_AMOUNTS = [50, 100, 500, 1000];
@@ -405,9 +406,7 @@ export default function RechargePage() {
       )}
 
       {/* ═══════ 错误反馈 ═══════ */}
-      {error || actionError ? (
-        <div className="rounded-lg border border-rose-500/20 bg-rose-500/10 p-4 text-sm text-rose-700 dark:text-rose-200">{error ?? actionError}</div>
-      ) : null}
+      <ErrorAlert message={error ?? actionError} />
 
       {/* ═══════ 充值记录 ═══════ */}
       <div className="space-y-4">

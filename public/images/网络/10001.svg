@@ -1,0 +1,137 @@
+<svg width="1107" height="963" viewBox="0 0 1107 963" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto; display: block;">
+    <g class="map_us-canada_lines">
+        <path d="M75.043 306.397C75.043 306.397 213.687 313.945 425.427 353.671C637.166 393.397 689.207 438.288 739.262 441.863C789.317 445.439 799.248 444.018 879.892 431.137C960.536 418.257 1003.04 400.945 1003.04 400.945L993.509 424.384" stroke="#2741E7" stroke-width="2"></path>
+        <path d="M103.5 462.5C103.5 462.5 150.829 568.555 169.5 576.5" stroke="#2741E7" stroke-width="2"></path>
+        <path d="M75.043 306.794C75.043 306.794 90.9334 372.342 135.824 433.123C180.714 493.904 171 576 171 576C171 576 258.18 644.863 343.591 677.438C429.002 710.014 577 686.5 577 686.5C577 686.5 592.673 576.137 680.468 539.589C768.262 503.041 736 441 736 441" stroke="#2741E7" stroke-width="2"></path>
+        <path d="M171.5 575.5C171.5 575.5 318.563 519.23 461.577 487.945C604.591 456.661 734.5 442.5 734.5 442.5L968.481 475.63" stroke="#2741E7" stroke-width="2"></path>
+        <path d="M1001.45 402.534L981.589 417.233C981.589 417.233 965.301 431.534 964.904 448.616C964.507 465.699 971.657 476.822 970.466 491.52C969.274 506.219 944.644 535.616 944.644 535.616C944.644 535.616 944.248 519.726 949.412 502.247C954.577 484.767 966.493 474.836 966.493 474.836" stroke="#2741E7" stroke-width="2"></path>
+        <path d="M992.714 427.959C934.655 522.706 876.415 566.521 814.5 606.5C746.355 650.501 690 672 577.5 687" stroke="#2741E7" stroke-width="2" stroke-dasharray="4 4"></path>
+        <path d="M579.5 687.5C661.833 693.667 850.1 672.6 944.5 539" stroke="#2741E7" stroke-width="2" stroke-dasharray="4 4"></path>
+        <path d="M75.3014 306C75.3014 306 59.5496 344.137 43.6594 383.466C27.7692 422.795 28.4618 480.504 43.6593 527.274C59.0183 574.541 100.865 613.479 100.865 613.479" stroke="#2741E7" stroke-width="2" stroke-dasharray="4 4"></path>
+        <path d="M102 464C102 464 81.5 473 68.2899 482.781C55.0797 492.562 40.8789 510.589 40.8789 510.589" stroke="#2741E7" stroke-width="2" stroke-dasharray="4 4"></path>
+        <path d="M170.5 576C152.226 609.767 146.947 613.479 103.248 613.479" stroke="#2741E7" stroke-width="2" stroke-dasharray="4 4"></path>
+    </g>
+
+    <g class="map_us-canada_locations">
+        <g>
+            <circle class="map_us-canada_location-sub" cx="834" cy="637" r="34" fill="url(#rad1)" fill-opacity="0.35" shape-rendering="crispEdges"></circle>
+            <circle class="map_us-canada_location-main" cx="834" cy="637" r="14" fill="#2741E7"></circle>
+        </g>
+        <g>
+            <circle class="map_us-canada_location-sub" cx="842" cy="633" r="34" fill="url(#rad1)" fill-opacity="0.35" shape-rendering="crispEdges"></circle>
+            <circle class="map_us-canada_location-main" cx="842" cy="633" r="14" fill="#2741E7"></circle>
+        </g>
+        <g>
+            <circle class="map_us-canada_location-sub" cx="848" cy="623" r="34" fill="url(#rad1)" fill-opacity="0.35" shape-rendering="crispEdges"></circle>
+            <circle class="map_us-canada_location-main" cx="848" cy="623" r="14" fill="#2741E7"></circle>
+        </g>
+        <g>
+            <circle class="map_us-canada_location-sub" cx="554" cy="785" r="34" fill="url(#rad1)" fill-opacity="0.35" shape-rendering="crispEdges"></circle>
+            <circle class="map_us-canada_location-main" cx="554" cy="785" r="14" fill="#2741E7"></circle>
+        </g>
+        <g>
+            <circle class="map_us-canada_location-sub" cx="574" cy="685" r="34" fill="url(#rad1)" fill-opacity="0.35" shape-rendering="crispEdges"></circle>
+            <circle class="map_us-canada_location-main" cx="574" cy="685" r="14" fill="#2741E7"></circle>
+        </g>
+        <g>
+            <circle class="map_us-canada_location-sub" cx="814" cy="493" r="34" fill="url(#rad1)" fill-opacity="0.35" shape-rendering="crispEdges"></circle>
+            <circle class="map_us-canada_location-main" cx="814" cy="493" r="14" fill="#2741E7"></circle>
+        </g>
+        <g>
+            <circle class="map_us-canada_location-sub" cx="824" cy="489" r="34" fill="url(#rad1)" fill-opacity="0.35" shape-rendering="crispEdges"></circle>
+            <circle class="map_us-canada_location-main" cx="824" cy="489" r="14" fill="#2741E7"></circle>
+        </g>
+        <g>
+            <circle class="map_us-canada_location-sub" cx="848" cy="469" r="34" fill="url(#rad1)" fill-opacity="0.35" shape-rendering="crispEdges"></circle>
+            <circle class="map_us-canada_location-main" cx="848" cy="469" r="14" fill="#2741E7"></circle>
+        </g>
+        <g>
+            <circle class="map_us-canada_location-sub" cx="999" cy="410" r="34" fill="url(#rad1)" fill-opacity="0.35" shape-rendering="crispEdges"></circle>
+            <circle class="map_us-canada_location-main" cx="999" cy="410" r="14" fill="#2741E7"></circle>
+        </g>
+        <g>
+            <circle class="map_us-canada_location-sub" cx="973" cy="421" r="34" fill="url(#rad1)" fill-opacity="0.35" shape-rendering="crispEdges"></circle>
+            <circle class="map_us-canada_location-main" cx="973" cy="421" r="14" fill="#2741E7"></circle>
+        </g>
+        <g>
+            <circle class="map_us-canada_location-sub" cx="1011" cy="396" r="34" fill="url(#rad1)" fill-opacity="0.35" shape-rendering="crispEdges"></circle>
+            <circle class="map_us-canada_location-main" cx="1011" cy="396" r="14" fill="#2741E7"></circle>
+        </g>
+        <g>
+            <circle class="map_us-canada_location-sub" cx="1003" cy="399" r="34" fill="url(#rad1)" fill-opacity="0.35" shape-rendering="crispEdges"></circle>
+            <circle class="map_us-canada_location-main" cx="1003" cy="399" r="14" fill="#2741E7"></circle>
+        </g>
+        <g>
+            <circle class="map_us-canada_location-sub" cx="1048" cy="332" r="34" fill="url(#rad1)" fill-opacity="0.35" shape-rendering="crispEdges"></circle>
+            <circle class="map_us-canada_location-main" cx="1048" cy="332" r="14" fill="#2741E7"></circle>
+        </g>
+        <g>
+            <circle class="map_us-canada_location-sub" cx="583" cy="605" r="34" fill="url(#rad1)" fill-opacity="0.35" shape-rendering="crispEdges"></circle>
+            <circle class="map_us-canada_location-main" cx="583" cy="605" r="14" fill="#2741E7"></circle>
+        </g>
+        <g>
+            <circle class="map_us-canada_location-sub" cx="169" cy="575" r="34" fill="url(#rad1)" fill-opacity="0.35" shape-rendering="crispEdges"></circle>
+            <circle class="map_us-canada_location-main" cx="169" cy="575" r="14" fill="#2741E7"></circle>
+        </g>
+        <g>
+            <circle class="map_us-canada_location-sub" cx="82" cy="308" r="34" fill="url(#rad1)" fill-opacity="0.35" shape-rendering="crispEdges"></circle>
+            <circle class="map_us-canada_location-main" cx="82" cy="308" r="14" fill="#2741E7"></circle>
+        </g>
+        <g>
+            <circle class="map_us-canada_location-sub" cx="101" cy="459" r="34" fill="url(#rad1)" fill-opacity="0.35" shape-rendering="crispEdges"></circle>
+            <circle class="map_us-canada_location-main" cx="101" cy="459" r="14" fill="#2741E7"></circle>
+        </g>
+        <g>
+            <circle class="map_us-canada_location-sub" cx="39" cy="504" r="34" fill="url(#rad1)" fill-opacity="0.35" shape-rendering="crispEdges"></circle>
+            <circle class="map_us-canada_location-main" cx="39" cy="504" r="14" fill="#2741E7"></circle>
+        </g>
+        <g>
+            <circle class="map_us-canada_location-sub" cx="237" cy="649" r="34" fill="url(#rad1)" fill-opacity="0.35" shape-rendering="crispEdges"></circle>
+            <circle class="map_us-canada_location-main" cx="237" cy="649" r="14" fill="#2741E7"></circle>
+        </g>
+        <g>
+            <circle class="map_us-canada_location-sub" cx="73" cy="303" r="34" fill="url(#rad1)" fill-opacity="0.35" shape-rendering="crispEdges"></circle>
+            <circle class="map_us-canada_location-main" cx="73" cy="303" r="14" fill="#2741E7"></circle>
+        </g>
+        <g>
+            <circle class="map_us-canada_location-sub" cx="131" cy="265" r="34" fill="url(#rad1)" fill-opacity="0.35" shape-rendering="crispEdges"></circle>
+            <circle class="map_us-canada_location-main" cx="131" cy="265" r="14" fill="#2741E7"></circle>
+        </g>
+        <g>
+            <circle class="map_us-canada_location-sub" cx="949" cy="536" r="34" fill="url(#rad1)" fill-opacity="0.35" shape-rendering="crispEdges"></circle>
+            <circle class="map_us-canada_location-main" cx="949" cy="536" r="14" fill="#2741E7"></circle>
+        </g>
+        <g>
+            <circle class="map_us-canada_location-sub" cx="953" cy="502" r="44" fill="url(#rad1)" fill-opacity="0.35" shape-rendering="crispEdges"></circle>
+            <circle class="map_us-canada_location-main" cx="953" cy="502" r="18.12" fill="#2741E7"></circle>
+        </g>
+        <g>
+            <circle class="map_us-canada_location-sub" cx="724" cy="434" r="34" fill="url(#rad1)" fill-opacity="0.35" shape-rendering="crispEdges"></circle>
+            <circle class="map_us-canada_location-main" cx="724" cy="434" r="14" fill="#2741E7"></circle>
+        </g>
+        <g>
+            <circle class="map_us-canada_location-sub" cx="724" cy="421" r="34" fill="url(#rad1)" fill-opacity="0.35" shape-rendering="crispEdges"></circle>
+            <circle class="map_us-canada_location-main" cx="724" cy="421" r="14" fill="#2741E7"></circle>
+        </g>
+        <g>
+            <circle class="map_us-canada_location-sub" cx="750" cy="442" r="34" fill="url(#rad1)" fill-opacity="0.35" shape-rendering="crispEdges"></circle>
+            <circle class="map_us-canada_location-main" cx="750" cy="442" r="14" fill="#2741E7"></circle>
+        </g>
+        <g>
+            <circle class="map_us-canada_location-sub" cx="826" cy="163" r="34" fill="url(#rad1)" fill-opacity="0.35" shape-rendering="crispEdges"></circle>
+            <circle class="map_us-canada_location-main" cx="826" cy="163" r="14" fill="#2741E7"></circle>
+        </g>
+    </g>
+  <defs>
+    <radialGradient id="rad1">
+      <stop offset="0" stop-color="#2741E7"></stop>
+      <stop offset="0.9" stop-color="#2741E7"></stop>
+      <stop offset="1" stop-color="transparent"></stop>
+    </radialGradient>
+  </defs>
+  <style>
+    svg * {
+    	transform-box: fill-box;
+    }
+  </style>
+</svg>

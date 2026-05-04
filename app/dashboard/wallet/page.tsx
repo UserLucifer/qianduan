@@ -18,6 +18,7 @@ import { useAsyncResource } from "@/hooks/useAsyncResource";
 import { usePaginatedResource } from "@/hooks/usePaginatedResource";
 import { bizTypeLabel, txTypeLabel } from "@/lib/status";
 import { Lock, TrendingDown, TrendingUp, Wallet } from "lucide-react";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 const initialParams: WalletTransactionQueryRequest = { pageNo: 1, pageSize: 10 };
 
@@ -110,7 +111,7 @@ export default function WalletPage() {
             </div>
           </SearchPanel>
         </div>
-        {transactions.error ? <div className="mb-4 rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-200">{transactions.error}</div> : null}
+        <ErrorAlert message={transactions.error} />
         <DataTable columns={columns} data={transactions.page.records} rowKey={(row) => row.txNo} loading={transactions.loading} emptyText="暂无资金流水。" pageNo={transactions.page.pageNo} pageSize={transactions.page.pageSize} total={transactions.page.total} onPageChange={transactions.changePage} />
       </BentoCard>
     </div>

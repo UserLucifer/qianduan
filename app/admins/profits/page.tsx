@@ -20,6 +20,7 @@ import { usePaginatedResource } from "@/hooks/usePaginatedResource";
 import { getAdminProfitRecordDetail, getAdminProfitRecords } from "@/api/admin";
 import type { AdminProfitRecordQuery, ProfitRecordResponse } from "@/api/types";
 import { formatDate, formatEmpty, toErrorMessage } from "@/lib/format";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 interface ProfitFilters {
   userId: string;
@@ -132,11 +133,7 @@ export default function AdminProfitsPage() {
   return (
     <div className="space-y-6">
       <PageHeader eyebrow="PROFIT OPS" title="收益记录管理" description="查看用户租赁收益明细、收益状态和结算关联流水。" />
-      {(error || actionError) ? (
-        <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-200">
-          {actionError ?? error}
-        </div>
-      ) : null}
+      <ErrorAlert message={actionError ?? error} />
       <Card>
         <CardHeader>
           <CardTitle className="text-sm font-medium">收益分布</CardTitle>

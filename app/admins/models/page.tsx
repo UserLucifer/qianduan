@@ -24,6 +24,7 @@ import type { AdminCatalogQuery, AiModelResponse } from "@/api/types";
 import { formatEmpty, formatNumber, toErrorMessage } from "@/lib/format";
 import { AiModelForm } from "@/components/admin/CatalogForms";
 import { Edit2 } from "lucide-react";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 interface Filters {
   modelCode: string;
@@ -115,9 +116,7 @@ export default function AdminModelsPage() {
           </Button>
         }
       />
-      {(error || actionError) ? (
-        <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-500 font-medium">{actionError ?? error}</div>
-      ) : null}
+      <ErrorAlert message={actionError ?? error} />
       <SearchPanel
         onSearch={() => updateParams(buildQuery(filters))}
         onReset={() => {

@@ -37,6 +37,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { BentoCard, BentoGrid } from "@/components/shared/BentoGrid";
 import { DateTimeText } from "@/components/shared/DateTimeText";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 import { MoneyText } from "@/components/shared/MoneyText";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { StatusBadge } from "@/components/shared/StatusBadge";
@@ -160,12 +161,11 @@ export default function DashboardPage() {
       />
 
       {error ? (
-        <div className="rounded-lg border border-destructive/20 bg-destructive/10 p-4 text-sm text-destructive">
-          {error}
+        <ErrorAlert message={error}>
           <Button variant="destructive" className="ml-3 h-8" onClick={() => void reload()}>
             重试
           </Button>
-        </div>
+        </ErrorAlert>
       ) : null}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

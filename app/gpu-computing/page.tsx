@@ -1,259 +1,488 @@
-import Header from '@/components/marketing/Header';
-import Aurora from '@/components/marketing/Aurora';
-import Footer from '@/components/marketing/Footer';
-import Link from 'next/link';
-import { 
-  FiZap, 
-  FiMaximize, 
-  FiShare2, 
-  FiActivity,
-  FiServer,
-} from 'react-icons/fi';
-import './gpu-computing.css';
-
 import type { Metadata } from 'next';
+import Image from 'next/image';
+import Link from 'next/link';
+import Header from '@/components/marketing/Header';
+import Footer from '@/components/marketing/Footer';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import {
+  Check,
+  Cpu,
+  Database,
+  Gauge,
+  Network,
+  Server,
+  Sparkles,
+  Zap,
+} from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'GPU 计算 — 算力租赁',
-  description: '获取领先的 AI 优化 NVIDIA GPU，包括 Blackwell、Hopper 与 Ada Lovelace 架构，助力最复杂的 AI 工作负载。',
+  title: 'GPU 计算 | 算力租赁',
+  description: '快速获取面向 AI 优化的 NVIDIA GPU，支撑训练、推理和生成式 AI 工作负载。',
 };
 
-const featuredGpus = [
+const heroVideo = '/videos/基础架构/终版.mp4';
+const bottomVideo = '/videos/基础架构/底部.mp4';
+
+const gb200Features = [
   {
-    id: 'blackwell',
-    title: 'NVIDIA GB200 NVL72',
-    tag: 'Blackwell 架构',
-    desc: '面向实时万亿参数大语言模型推理与训练的领先平台。',
-    features: [
-      { label: '训练性能', value: '提升达 4 倍' },
-      { label: '推理速度', value: '提升达 30 倍' },
-      { label: '互联带宽', value: '双向 1.8TB/s' },
-      { label: '冷却技术', value: '先进液冷设计' }
-    ],
-    color: 'cyan'
+    title: '性能大幅提升',
+    description:
+      '相比 H100 架构，训练性能最高提升 4 倍；实时万亿参数大模型推理速度最高提升 30 倍。',
+    icon: Gauge,
   },
   {
-    id: 'h200',
-    title: 'NVIDIA HGX H200',
-    tag: 'Hopper 架构',
-    desc: '首款搭载 HBM3e 的 GPU，为生成式 AI 提供海量显存与吞吐量。',
-    features: [
-      { label: '显存容量', value: '141GB HBM3e' },
-      { label: '内存带宽', value: '4.8TB/s' },
-      { label: '性能对比', value: '1.9x 胜过 H100' },
-      { label: '互联', value: 'NVLink 第 4 代' }
-    ],
-    color: 'blue'
+    title: '更强算力接入',
+    description:
+      '单服务器集成 72 块 NVIDIA Blackwell GPU 与 36 颗 NVIDIA Grace CPU，提供更高密度算力。',
+    icon: Cpu,
   },
   {
-    id: 'h100',
-    title: 'NVIDIA HGX H100',
-    tag: 'Hopper 架构',
-    desc: '行业标准的 AI 算力核心，助力全球最快超级计算机。',
-    features: [
-      { label: '显存容量', value: '80GB HBM3' },
-      { label: '互联带宽', value: '900GB/s' },
-      { label: '训练效率', value: '4x 胜过 A100' },
-      { label: '网络', value: 'InfiniBand 400G' }
-    ],
-    color: 'violet'
+    title: '超大规模集群',
+    description:
+      '可在单站点连接数万套 NVIDIA Blackwell 系统，释放 100K+ GPU 超大集群能力。',
+    icon: Network,
   },
   {
-    id: 'l40s',
-    title: 'NVIDIA L40S',
-    tag: 'Ada Lovelace 架构',
-    desc: '多功能工作负载的最佳选择，平衡训练、推理与图形处理。',
-    features: [
-      { label: '显存', value: '48GB GDDR6' },
-      { label: '算力', value: '733 TFLOPs' },
-      { label: '核心数', value: '18,176 CUDA' },
-      { label: '优势', value: '2x 胜过 A40' }
-    ],
-    color: 'indigo'
-  }
+    title: '面向未来的可持续设计',
+    description:
+      '采用液冷 GPU 设计，支持高达 130 kW 机柜功率，满足高密度 AI 基础设施需求。',
+    icon: Sparkles,
+  },
 ];
 
-const efficiencyCards = [
+const h200Features = [
   {
-    icon: FiActivity,
+    title: '卓越性能',
+    description: '相比 H100 Tensor Core GPU，性能最高提升 1.9 倍。',
+    icon: Gauge,
+  },
+  {
+    title: '扩展显存容量',
+    description:
+      '单服务器提供 1,128 GB GPU 总显存，足以承载生成式 AI 工作负载所需的大规模数据。',
+    icon: Database,
+  },
+  {
+    title: '超高速互联',
+    description:
+      '通过 3200Gbps NVIDIA Quantum-2 InfiniBand 网络，实现 GPU 间低延迟连接。',
+    icon: Network,
+  },
+  {
+    title: '优化 GPU 计算效率',
+    description:
+      '利用 NVIDIA BlueField-3 DPU 卸载网络与存储任务，提高模型构建过程中的 GPU 利用率。',
+    icon: Zap,
+  },
+];
+
+const h100Features = [
+  {
+    title: '更强训练性能',
+    description:
+      '相比 NVIDIA A100 Tensor Core GPU，训练性能最高提升 4 倍。',
+    icon: Gauge,
+  },
+  {
+    title: '破纪录训练结果',
+    description:
+      '平台曾使用 3,500 块 H100，在 11 分钟内完成完整 GPT-3 大语言模型训练工作负载。',
+    icon: Network,
+  },
+  {
+    title: '释放更多 GPU 能力',
+    description:
+      '使用 NVIDIA BlueField-3 DPU 卸载处理任务，让 GPU 更专注于训练、实验和更多计算任务。',
+    icon: Server,
+  },
+];
+
+const l40sFeatures = [
+  {
+    title: '更低价格下的优秀性能',
+    description:
+      '相比 A40 实例，性能最高提升 2 倍，提供 733 TFLOPs 算力，并通过 NVIDIA BlueField-3 DPU 卸载任务。',
+    icon: Gauge,
+  },
+  {
+    title: '更灵活的算力接入',
+    description:
+      '每套系统可使用 8 块 L40S GPU，并搭配 Platinum Intel Emerald Rapids 处理器，适配生成式 AI 工作负载。',
+    icon: Server,
+  },
+  {
+    title: '灵活配置',
+    description:
+      '可接入 NVIDIA L40 配置，按照不同工作负载需求选择更合适的算力规模。',
+    icon: Sparkles,
+  },
+];
+
+const fastCards = [
+  {
     title: '持续稳定的性能',
-    desc: '算力规模必须伴随稳定性。我们的客户在使用中体验到更少的服务中断，节省数百万 GPU 小时。'
+    description:
+      '规模本身没有意义，稳定性能才是关键。客户可节省 310 万 GPU 小时，并将每日中断减少 50%。',
   },
   {
-    icon: FiZap,
-    title: '高效的基础设施',
-    desc: '通过高达 20% 的系统有效利用率 (MFU) 提升，客户可以用更少的基础设施实现相同的性能。'
+    title: '高效率基础设施',
+    description:
+      '系统 MFU 相比基准最高提升 20%，让团队以更少基础设施达到同等性能水平。',
   },
   {
-    icon: FiActivity,
-    title: '原生弹性支持',
-    desc: '内置自动健康检查与节点生命周期管理，全程监控集群性能，确保生产环境的高可用性。'
-  }
+    title: '从开始就具备韧性',
+    description:
+      '通过自动健康检查和节点生命周期管理，持续维护节点与集群性能，提升恢复能力。',
+  },
 ];
 
-const portfolio = [
-  'GB300 NVL72', 'B200', 'A100', 'H100', 'H200', 'RTX PRO 6000', 'L40', 'L40S', 'A40', 'V100'
+const acceleratorSkus = [
+  'GB300 NVL72',
+  'B200',
+  'A100',
+  'RTX PRO 6000 Blackwell Server Edition',
+  'L40',
 ];
+
+function VideoBox({
+  src,
+  className = '',
+  ariaLabel,
+}: {
+  src: string;
+  className?: string;
+  ariaLabel: string;
+}) {
+  return (
+    <video
+      aria-label={ariaLabel}
+      autoPlay
+      loop
+      muted
+      playsInline
+      preload="metadata"
+      className={`h-full w-full object-cover ${className}`}
+    >
+      <source src={src} type="video/mp4" />
+    </video>
+  );
+}
+
+function DarkFeatureSection({
+  title,
+  description,
+  buttonText,
+  features,
+}: {
+  title: string;
+  description: string;
+  buttonText?: string;
+  features: typeof h200Features;
+}) {
+  return (
+    <section className="bg-[#050505] px-5 text-white sm:px-8 lg:px-10">
+      <div className="mx-auto grid max-w-[1220px] overflow-hidden lg:grid-cols-[0.86fr_1.14fr]">
+        <div className="flex items-start justify-center border-white/15 px-6 py-16 lg:border-r lg:px-10 lg:py-20">
+          <div className="w-full max-w-[460px]">
+            <h2 className="text-4xl font-semibold leading-[1.08] tracking-[-0.04em] sm:text-5xl">
+              {title}
+            </h2>
+            <p className="mt-7 max-w-[460px] text-base font-medium leading-7 text-white/90">
+              {description}
+            </p>
+            {buttonText ? (
+              <Button
+                asChild
+                className="mt-8 h-14 rounded-full bg-[#0b45f5] px-8 text-base font-semibold text-white hover:bg-[#2a61ff]"
+              >
+                <Link href="/contact-sales">{buttonText}</Link>
+              </Button>
+            ) : null}
+          </div>
+        </div>
+        <div>
+          {features.map((feature) => {
+            const Icon = feature.icon;
+
+            return (
+              <article
+                key={feature.title}
+                className="flex min-h-[132px] items-start gap-3 border-t border-white/15 px-6 py-8 first:border-t-0 lg:px-8"
+              >
+                <Icon className="mt-1 h-7 w-7 shrink-0 text-white/70" aria-hidden="true" />
+                <div>
+                  <h3 className="text-xl font-semibold tracking-[-0.03em] sm:text-2xl">
+                    {feature.title}
+                  </h3>
+                  <p className="mt-4 max-w-[540px] text-base leading-7 text-white/55">
+                    {feature.description}
+                  </p>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function LightFeatureSection({
+  title,
+  description,
+  buttonText,
+  features,
+}: {
+  title: string;
+  description: string;
+  buttonText: string;
+  features: typeof h100Features;
+}) {
+  return (
+    <section className="bg-[#f7f8fa] px-5 sm:px-8 lg:px-10">
+      <div className="mx-auto grid max-w-[1220px] overflow-hidden border-y border-black/15 text-black lg:grid-cols-[0.86fr_1.14fr]">
+        <div className="flex items-start justify-center border-black/15 px-6 py-16 lg:border-r lg:px-10 lg:py-20">
+          <div className="w-full max-w-[460px]">
+            <h2 className="text-4xl font-semibold leading-[1.08] tracking-[-0.04em] sm:text-5xl">
+              {title}
+            </h2>
+            <p className="mt-7 max-w-[500px] text-base leading-7 text-black/90">
+              {description}
+            </p>
+            <Button
+              asChild
+              className="mt-8 h-14 rounded-full bg-[#0b45f5] px-8 text-base font-semibold text-white hover:bg-[#2a61ff]"
+            >
+              <Link href="/contact-sales">{buttonText}</Link>
+            </Button>
+          </div>
+        </div>
+        <div>
+          {features.map((feature) => {
+            const Icon = feature.icon;
+
+            return (
+              <article
+                key={feature.title}
+                className="flex min-h-[146px] items-start gap-3 border-t border-black/15 px-6 py-8 first:border-t-0 lg:px-8"
+              >
+                <Icon className="mt-1 h-7 w-7 shrink-0 text-black/65" aria-hidden="true" />
+                <div>
+                  <h3 className="text-xl font-semibold tracking-[-0.03em] sm:text-2xl">
+                    {feature.title}
+                  </h3>
+                  <p className="mt-4 max-w-[540px] text-base leading-7 text-black/58">
+                    {feature.description}
+                  </p>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export default function GpuComputingPage() {
   return (
     <>
       <Header />
-
-      {/* ── Hero ── */}
-      <section className="gpu-hero">
-        <div className="gpu-hero__bg">
-          <Aurora
-            colorStops={['#0ea5e9', '#6366f1', '#a855f7']}
-            blend={0.5}
-            amplitude={1.1}
-            speed={0.6}
-          />
-        </div>
-        <div className="gpu-hero__content">
-          <span className="gpu-hero__badge">GPU Compute</span>
-          <h1 className="gpu-hero__title">
-            面向 AI 模型与创新的<br /><em>高性能 GPU 计算</em>
-          </h1>
-          <p className="gpu-hero__desc">
-            快速获取领先的 AI 优化 NVIDIA GPU，抢占市场先机。
-            基于裸金属架构，为最复杂的 AI 工作负载提供极限性能、控制力与可扩展性。
-          </p>
-          <div className="gpu-hero__actions">
-            <Link href="/contact-sales" className="ent-btn ent-btn--primary">
-              获取算力支持
-            </Link>
-            <Link href="/pricing" className="ent-btn ent-btn--ghost">
-              查看定价
-            </Link>
+      <main className="bg-[#f7f8fa] text-black">
+        <section className="min-h-[680px] bg-[#f7f8fa]">
+          <div className="mx-auto grid min-h-[680px] max-w-[1440px] items-center gap-12 px-6 py-20 sm:px-10 lg:grid-cols-[0.92fr_1fr] lg:px-16">
+            <div className="mx-auto w-full max-w-[560px] lg:mx-0 lg:justify-self-end">
+              <h1 className="text-5xl font-semibold leading-[1.05] tracking-[-0.05em] text-[#1f2530] sm:text-6xl lg:text-7xl">
+                GPU 计算
+              </h1>
+              <p className="mt-7 max-w-[560px] text-xl leading-8 text-[#1f2530] sm:text-2xl sm:leading-10">
+                快速获取领先的 AI 优化 NVIDIA GPU，支撑训练、推理和生成式 AI 应用快速上线。
+              </p>
+            </div>
+            <div className="mx-auto aspect-square w-full max-w-[620px] overflow-hidden rounded-[24px] bg-white lg:mx-0">
+              <VideoBox src={heroVideo} ariaLabel="GPU 计算首屏动画" />
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ── Highlights ── */}
-      <div className="gpu-highlights">
-        <div className="gpu-highlight-card">
-          <div className="gpu-highlight-card__icon"><FiServer /></div>
-          <h3 className="gpu-highlight-card__title">裸金属性能</h3>
-          <p className="gpu-highlight-card__desc">无虚拟化损耗，直接访问 GPU 核心，确保最低延迟与最高吞吐。</p>
-        </div>
-        <div className="gpu-highlight-card">
-          <div className="gpu-highlight-card__icon"><FiShare2 /></div>
-          <h3 className="gpu-highlight-card__title">超速互联</h3>
-          <p className="gpu-highlight-card__desc">采用 NVIDIA Quantum-2 InfiniBand 网络，提供 3200Gbps 节点间带宽。</p>
-        </div>
-        <div className="gpu-highlight-card">
-          <div className="gpu-highlight-card__icon"><FiMaximize /></div>
-          <h3 className="gpu-highlight-card__title">弹性扩展</h3>
-          <p className="gpu-highlight-card__desc">从单卡测试到万卡集群，分钟级完成部署，随业务需求无缝扩展。</p>
-        </div>
-      </div>
-
-      {/* ── Featured Products ── */}
-      <section className="gpu-section">
-        <div className="gpu-section__inner">
-          <div className="gpu-section__header">
-            <span className="gpu-section__eyebrow">算力矩阵</span>
-            <h2 className="gpu-section__title">为您的 AI 突破提供动力</h2>
-            <p className="gpu-section__desc">
-              从尖端的 Blackwell 架构到高性价比的 Ada Lovelace 架构，
-              我们提供全系列 NVIDIA GPU，满足您在训练、微调与推理过程中的多样化需求。
+        <section className="border-y border-black/15 bg-[#f7f8fa] px-6 py-20 sm:px-10 lg:px-16">
+          <div className="mx-auto max-w-[1220px] text-center">
+            <h2 className="text-4xl font-semibold leading-tight tracking-[-0.04em] sm:text-5xl">
+              NVIDIA GB200 NVL72
+            </h2>
+            <p className="mx-auto mt-8 max-w-[760px] text-xl leading-8 text-black/82">
+              面向最新生成式 AI 应用构建和部署的行业领先平台。
             </p>
-          </div>
+            <Button
+              asChild
+              className="mt-7 h-16 rounded-full bg-[#0b45f5] px-12 text-lg font-semibold text-white hover:bg-[#2a61ff]"
+            >
+              <Link href="/contact-sales">了解 Blackwell</Link>
+            </Button>
 
-          <div className="gpu-product-grid">
-            {featuredGpus.map((gpu) => (
-              <div key={gpu.id} className="gpu-product-card">
-                <div className="gpu-product-card__content">
-                  <span className="gpu-product-card__tag">{gpu.tag}</span>
-                  <h3 className="gpu-product-card__title">{gpu.title}</h3>
-                  <p className="gpu-product-card__desc">{gpu.desc}</p>
-                  
-                  <div className="gpu-product-card__specs">
-                    {gpu.features.map((spec, idx) => (
-                      <div key={idx} className="gpu-spec-item">
-                        <span className="gpu-spec-item__label">{spec.label}</span>
-                        <span className="gpu-spec-item__value">{spec.value}</span>
-                      </div>
-                    ))}
-                  </div>
+            <div className="mt-16 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+              {gb200Features.map((feature) => {
+                const Icon = feature.icon;
+
+                return (
+                  <Card
+                    key={feature.title}
+                    className="min-h-[360px] rounded-[20px] border-[#0b45f5] bg-transparent shadow-none"
+                  >
+                    <CardContent className="flex h-full flex-col items-center justify-start p-10 text-center">
+                      <Icon className="h-9 w-9 text-black/70" aria-hidden="true" />
+                      <h3 className="mt-8 text-2xl font-semibold leading-tight tracking-[-0.03em]">
+                        {feature.title}
+                      </h3>
+                      <p className="mt-8 text-lg leading-8 text-black/62">
+                        {feature.description}
+                      </p>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        <DarkFeatureSection
+          title="NVIDIA H200 Tensor Core GPU"
+          description="我们较早提供 NVIDIA H200 Tensor Core GPU，帮助团队更快将 AI 应用推向市场。"
+          buttonText="了解 NVIDIA HGX H200"
+          features={h200Features}
+        />
+
+        <LightFeatureSection
+          title="NVIDIA H100 Tensor Core GPU"
+          description="这是一套帮助我们打破 MLPerf 纪录，并构建世界级高速超级计算能力的平台。"
+          buttonText="了解 NVIDIA HGX H100"
+          features={h100Features}
+        />
+
+        <DarkFeatureSection
+          title="NVIDIA L40S GPU"
+          description="为工作负载匹配恰到好处的算力，避免过度配置或性能不足。"
+          features={l40sFeatures}
+        />
+
+        <section className="border-y border-black/15 bg-[#f7f8fa] px-6 py-16 sm:px-10 lg:px-16">
+          <div className="mx-auto grid max-w-[1180px] items-center gap-12 lg:grid-cols-[0.9fr_0.8fr]">
+            <div className="mx-auto max-w-[620px] lg:mx-0">
+              <blockquote className="text-2xl font-semibold leading-snug tracking-[-0.03em] text-black sm:text-3xl">
+                “训练最先进的模型并进行大规模推理，需要在数十亿参数之间完成数万亿次同步计算。
+                这意味着团队需要极其庞大的计算资源。”
+              </blockquote>
+              <p className="mt-8 text-lg leading-8 text-black/80">
+                — Brannin McBee，CoreWeave 联合创始人兼首席开发官
+              </p>
+            </div>
+            <div className="mx-auto aspect-[5/6] w-full max-w-[500px] overflow-hidden rounded-[24px] bg-black">
+              <Image
+                src="/images/gpu-computing/brannin-mcbee.avif"
+                alt="Brannin McBee"
+                width={816}
+                height={979}
+                className="h-full w-full object-cover"
+              />
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-[#f7f8fa] px-5 sm:px-8 lg:px-10">
+          <div className="mx-auto grid max-w-[1220px] overflow-hidden border-y border-black/15 lg:grid-cols-2">
+            <div className="border-black/15 px-6 py-16 sm:px-10 lg:border-r">
+              <div className="mx-auto max-w-[560px]">
+                <h2 className="text-4xl font-semibold leading-tight tracking-[-0.04em] sm:text-5xl">
+                  更多 GPU SKU
+                </h2>
+                <div className="mt-8 space-y-7 text-lg leading-8 text-black/86">
+                  <p>按需配置计算资源，并为不同工作负载选择合适的 GPU。</p>
+                  <p>丰富的 GPU 阵容可灵活满足不同复杂度的业务需求。</p>
+                  <p>全部配备 DPU，全部基于裸金属交付。</p>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Portfolio Bar ── */}
-      <section className="gpu-portfolio">
-        <div className="gpu-section__inner">
-          <div className="gpu-section__header" style={{ textAlign: 'center', margin: '0 auto 40px' }}>
-            <span className="gpu-section__eyebrow">全量阵容</span>
-            <h2 className="gpu-section__title" style={{ fontSize: '1.5rem' }}>更多 GPU 配置可选</h2>
-          </div>
-          <div className="gpu-portfolio__grid">
-            {portfolio.map((item) => (
-              <div key={item} className="gpu-portfolio__item">
-                {item}
+            </div>
+            <div className="px-6 py-16 sm:px-10">
+              <div className="mx-auto max-w-[560px]">
+                <h3 className="text-2xl font-semibold tracking-[-0.03em]">
+                  加速器
+                </h3>
+                <ul className="mt-7 list-disc space-y-3 pl-5 text-lg leading-7 text-black/62">
+                  {acceleratorSkus.map((sku) => (
+                    <li key={sku}>{sku}</li>
+                  ))}
+                </ul>
               </div>
-            ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ── Quote ── */}
-      <section className="gpu-quote-section">
-        <div className="gpu-quote-container">
-          <p className="gpu-quote__text">
-            “训练最先进的模型并进行大规模推理需要数万亿次的同步计算。这不仅仅是显存的问题，更是基础设施整体效能的博弈。”
-          </p>
-          <div className="gpu-quote__author">
-            — <span>Brannin McBee</span>, 算力基础设施专家
-          </div>
-        </div>
-      </section>
+        <section className="bg-[#f7f8fa] px-6 py-20 sm:px-10 lg:px-16">
+          <div className="mx-auto max-w-[1160px] text-center">
+            <h2 className="text-4xl font-semibold leading-tight tracking-[-0.04em] sm:text-5xl">
+              更快进入市场
+            </h2>
+            <div className="mx-auto mt-8 max-w-[900px] space-y-6 text-lg leading-8 text-black/86">
+              <p>
+                我们的平台帮助团队获得前沿计算能力，推动下一次 AI 突破。
+              </p>
+              <p>
+                在<strong>高性能</strong>集群上运行任务，用<strong>更少时间</strong>完成<strong>更多工作</strong>。
+              </p>
+            </div>
+            <Button
+              asChild
+              className="mt-7 h-14 rounded-full bg-[#0b45f5] px-9 text-base font-semibold text-white hover:bg-[#2a61ff]"
+            >
+              <Link href="/contact-sales">了解更多</Link>
+            </Button>
 
-      {/* ── Efficiency ── */}
-      <section className="gpu-section gpu-section--alt">
-        <div className="gpu-section__inner">
-          <div className="gpu-section__header">
-            <span className="gpu-section__eyebrow">技术优势</span>
-            <h2 className="gpu-section__title">为何选择我们的 AI 云平台</h2>
+            <div className="mt-16 grid gap-6 lg:grid-cols-3">
+              {fastCards.map((card) => (
+                <Card
+                  key={card.title}
+                  className="min-h-[320px] rounded-[20px] border-[#0b45f5] bg-transparent shadow-none"
+                >
+                  <CardContent className="flex h-full flex-col items-center justify-start p-10 text-center">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full border border-black text-black">
+                      <Check className="h-5 w-5" aria-hidden="true" />
+                    </div>
+                    <h3 className="mt-8 text-2xl font-semibold tracking-[-0.03em]">
+                      {card.title}
+                    </h3>
+                    <p className="mt-7 text-lg leading-8 text-black/65">
+                      {card.description}
+                    </p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </div>
+        </section>
 
-          <div className="gpu-efficiency-grid">
-            {efficiencyCards.map((card, idx) => (
-              <div key={idx} className="gpu-efficiency-card">
-                <div className="gpu-efficiency-card__icon"><card.icon /></div>
-                <h3 className="gpu-efficiency-card__title">{card.title}</h3>
-                <p className="gpu-efficiency-card__desc">{card.desc}</p>
-              </div>
-            ))}
+        <section className="bg-[#f7f8fa] px-6 pb-20 sm:px-10 lg:px-16">
+          <div className="mx-auto grid max-w-[1180px] items-center gap-16 lg:grid-cols-[0.95fr_1fr] lg:gap-20">
+            <div className="aspect-square overflow-hidden rounded-[24px] bg-white">
+              <VideoBox src={bottomVideo} ariaLabel="开始构建 GPU 动画" />
+            </div>
+            <div className="max-w-[520px]">
+              <h2 className="text-4xl font-semibold leading-tight tracking-[-0.04em] sm:text-5xl">
+                立即开始构建
+              </h2>
+              <p className="mt-7 text-lg leading-8 text-black/88">
+                获取面向生成式 AI 的增强 GPU 计算能力。
+              </p>
+              <Button
+                asChild
+                className="mt-9 h-14 rounded-full bg-[#0b45f5] px-9 text-base font-semibold text-white hover:bg-[#2a61ff]"
+              >
+                <Link href="/contact-sales">立即开始</Link>
+              </Button>
+            </div>
           </div>
-        </div>
-      </section>
-
-      {/* ── Data Center Info ── */}
-      <section className="gpu-section">
-        <div className="gpu-section__inner">
-          <div className="gpu-section__header" style={{ maxWidth: '1000px' }}>
-            <span className="gpu-section__eyebrow">基础设施</span>
-            <h2 className="gpu-section__title">算力背后的 AI 数据中心</h2>
-            <p className="gpu-section__desc">
-              算力租赁平台致力于交付行业领先的 GPU 性能。我们的集群部署于全球 40 多个顶级数据中心，
-              配备吉瓦级电力支持与极低延迟的骨干网络。
-              从模型预训练到生产级推理，我们助力领先的 AI 实验室与企业更快实现规模化。
-            </p>
-          </div>
-          
-          <div className="gpu-hero__actions" style={{ justifyContent: 'flex-start' }}>
-            <Link href="/contact-sales" className="ent-btn ent-btn--primary">
-              立即开始构建
-            </Link>
-          </div>
-        </div>
-      </section>
-
+        </section>
+      </main>
       <Footer />
     </>
   );

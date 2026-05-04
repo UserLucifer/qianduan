@@ -1,3 +1,5 @@
+import { extractApiClientError, getApiErrorMessage } from "@/lib/api-errors";
+
 export function formatEmpty(value: string | number | boolean | null | undefined): string {
   if (value === null || value === undefined || value === "") return "-";
   return String(value);
@@ -114,10 +116,37 @@ export function translateErrorMessage(message: string | null | undefined): strin
 }
 
 export function toErrorMessage(error: unknown): string {
+  const apiError = extractApiClientError(error);
+  if (apiError) {
+    return getApiErrorMessage({
+      code: apiError.code,
+      status: apiError.status,
+      message: apiError.message,
+    });
+  }
+
   if (typeof error === "object" && error !== null && "response" in error) {
     const response = error.response;
     if (typeof response === "object" && response !== null && "data" in response) {
       const data = response.data;
+      if (
+        typeof data === "object" &&
+        data !== null &&
+        "code" in data &&
+        typeof data.code === "number"
+      ) {
+        return getApiErrorMessage({
+          code: data.code,
+          status:
+            "status" in response && typeof response.status === "number"
+              ? response.status
+              : undefined,
+          message:
+            "message" in data && typeof data.message === "string"
+              ? data.message
+              : undefined,
+        });
+      }
       if (
         typeof data === "object" &&
         data !== null &&
@@ -132,4 +161,3 @@ export function toErrorMessage(error: unknown): string {
   if (error instanceof Error && error.message) return translateErrorMessage(error.message);
   return "请求失败，请稍后重试";
 }
-

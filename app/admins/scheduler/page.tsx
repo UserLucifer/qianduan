@@ -17,6 +17,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } from "@/components/ui/drawer";
 import { usePaginatedResource } from "@/hooks/usePaginatedResource";
 import { DateTimeText } from "@/components/shared/DateTimeText";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 interface SchedulerTask {
   key: string;
@@ -77,7 +78,7 @@ export default function AdminSchedulerPage() {
   return (
     <div className="space-y-6">
       <PageHeader eyebrow="SCHEDULER" title="调度任务" description="手动执行平台内置调度任务，允许动态传入特定参数执行。" />
-      {error && !triggerTask ? <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-600 dark:text-rose-200">{error}</div> : null}
+      <ErrorAlert message={error} />
       
       <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
         {tasks.map((task) => {

@@ -18,6 +18,7 @@ import { usePaginatedResource } from "@/hooks/usePaginatedResource";
 import { getAdminCommissionRecordDetail, getAdminCommissionRecords } from "@/api/admin";
 import type { AdminCommissionRecordQuery, CommissionRecordResponse } from "@/api/types";
 import { formatEmpty, formatPercent, toErrorMessage } from "@/lib/format";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 interface CommissionFilters {
   userId: string;
@@ -116,11 +117,7 @@ export default function AdminCommissionsPage() {
   return (
     <div className="space-y-6">
       <PageHeader eyebrow="COMMISSION OPS" title="佣金记录管理" description="按用户、订单、层级和状态审计分销佣金。" />
-      {(error || actionError) ? (
-        <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-200">
-          {actionError ?? error}
-        </div>
-      ) : null}
+      <ErrorAlert message={actionError ?? error} />
       <SearchPanel
         onSearch={() => updateParams(buildQuery(filters))}
         onReset={() => {

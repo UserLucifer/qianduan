@@ -14,6 +14,7 @@ import { usePaginatedResource } from "@/hooks/usePaginatedResource";
 import { getAdminTeamRelations } from "@/api/admin";
 import type { AdminTeamRelationQuery, UserTeamRelation } from "@/api/types";
 import { formatEmpty } from "@/lib/format";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 interface TeamFilters {
   ancestorUserId: string;
@@ -53,11 +54,7 @@ export default function AdminTeamPage() {
         description="按上级、下级和层级查看邀请分销关系，用于排查佣金链路。"
         actions={<GitBranch className="h-5 w-5 text-[#9aa2ff]" />}
       />
-      {error ? (
-        <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-200">
-          {error}
-        </div>
-      ) : null}
+      <ErrorAlert message={error} />
       <SearchPanel
         onSearch={() => updateParams(buildQuery(filters))}
         onReset={() => {

@@ -30,18 +30,19 @@ import {
   updateAdminBlogPost,
   deleteAdminBlogPost
 } from "@/api/admin";
-import type { AdminCatalogQuery, AdminBlogPost, BlogCategory, BlogTag } from "@/api/types";
+import type { AdminBlogPost, BlogCategory, BlogPostQueryRequest, BlogTag } from "@/api/types";
 import { formatEmpty, toErrorMessage } from "@/lib/format";
 import { CategoryManager, TagManager } from "@/components/admin/BlogManagers";
 import { BlogPostForm } from "@/components/admin/BlogPostForm";
 import { BlogPublishStatus } from "@/types/enums";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 interface Filters {
   status: string;
 }
 
 const initialFilters: Filters = { status: "" };
-const initialQuery: AdminCatalogQuery = { pageNo: 1, pageSize: 10 };
+const initialQuery: BlogPostQueryRequest = { pageNo: 1, pageSize: 10 };
 
 export default function AdminContentPage() {
   const [filters, setFilters] = useState<Filters>(initialFilters);
@@ -55,7 +56,7 @@ export default function AdminContentPage() {
   const [tagMgrOpen, setTagMgrOpen] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
 
-  const loader = useCallback(async (params: AdminCatalogQuery) => (await getAdminBlogPosts(params)).data, []);
+  const loader = useCallback(async (params: BlogPostQueryRequest) => (await getAdminBlogPosts(params)).data, []);
   const { page, loading, error, updateParams, changePage, reload } = usePaginatedResource(loader, initialQuery);
 
   const refreshDictionaries = useCallback(async () => {
@@ -201,14 +202,14 @@ export default function AdminContentPage() {
         }
       />
 
-      {(error || actionError) ? (
-        <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-500 font-medium">
-          {actionError ?? error}
-        </div>
-      ) : null}
+      <ErrorAlert message={actionError ?? error} />
 
       <SearchPanel
-        onSearch={() => updateParams({ pageNo: 1, pageSize: page.pageSize, status: filters.status ? Number(filters.status) : undefined })}
+        onSearch={() => updateParams({
+          pageNo: 1,
+          pageSize: page.pageSize,
+          publish_status: filters.status ? Number(filters.status) : undefined,
+        })}
         onReset={() => {
           setFilters(initialFilters);
           updateParams(initialQuery);

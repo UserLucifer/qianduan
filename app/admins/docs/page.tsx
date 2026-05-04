@@ -46,6 +46,7 @@ import {
   docsSectionLabel,
 } from "@/components/docs/sections";
 import { formatEmpty, toErrorMessage } from "@/lib/format";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 const ALL_VALUE = "all";
 const DOCS_ADMIN_SECTION_ITEMS: Array<{ section: DocsSection; label: string }> = [
@@ -419,11 +420,7 @@ export default function AdminDocsPage() {
         }
       />
 
-      {actionError || categoryResource.error || articleResource.error ? (
-        <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm font-medium text-rose-500">
-          {actionError ?? categoryResource.error ?? articleResource.error}
-        </div>
-      ) : null}
+      <ErrorAlert message={actionError ?? categoryResource.error ?? articleResource.error} />
 
       <Tabs defaultValue="articles" className="space-y-4">
         <TabsList className="border border-border bg-card">

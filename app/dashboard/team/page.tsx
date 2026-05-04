@@ -17,6 +17,7 @@ import { getCurrentUser } from "@/api/user";
 import type { PageResult, TeamMemberQueryRequest, TeamMemberResponse, TeamSummaryResponse, UserMeResponse } from "@/api/types";
 import { useAsyncResource } from "@/hooks/useAsyncResource";
 import { usePaginatedResource } from "@/hooks/usePaginatedResource";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 const initialParams: TeamMemberQueryRequest = { pageNo: 1, pageSize: 10 };
 
@@ -96,7 +97,7 @@ export default function TeamPage() {
           </Select>
         </div>
       </SearchPanel>
-      {members.error ? <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-200">{members.error}</div> : null}
+      <ErrorAlert message={members.error} />
       <DataTable columns={columns} data={members.page.records} rowKey={(row) => row.userId} loading={members.loading} emptyText="暂无团队成员。" pageNo={members.page.pageNo} pageSize={members.page.pageSize} total={members.page.total} onPageChange={members.changePage} />
     </div>
   );

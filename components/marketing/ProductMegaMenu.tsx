@@ -45,9 +45,9 @@ const productCategories: ProductCategory[] = [
     icon: Cpu,
     subItems: [
       { name: 'GPU 计算', href: '/gpu-computing', items: ['NVIDIA Blackwell', 'NVIDIA Hopper', 'NVIDIA Ada Lovelace'] },
-      { name: 'CPU 计算', href: '#' },
-      { name: '裸金属服务器', href: '#' },
-      { name: '网络', href: '#' }
+      { name: 'CPU 计算', href: '/cpu-computing' },
+      { name: '裸金属服务器', href: '/bare-metal-servers' },
+      { name: '网络', href: '/networking-services' }
     ],
     featured: {
       title: '算力租赁荣获 SemiAnalysis 铂金级',
@@ -60,7 +60,7 @@ const productCategories: ProductCategory[] = [
     name: '数据与存储',
     icon: Database,
     subItems: [
-      { name: 'AI 对象存储', href: '#' },
+      { name: 'AI 对象存储', href: '/ai-object-storage' },
       { name: '专用 VAST 存储', href: '#' },
       { name: '分布式文件存储', href: '#' },
       { name: '本地存储', href: '#' }

@@ -17,6 +17,7 @@ import type { PageResult, SettlementOrderQueryRequest, SettlementOrderResponse }
 import { usePaginatedResource } from "@/hooks/usePaginatedResource";
 import { settlementTypeLabel } from "@/lib/status";
 import { toErrorMessage } from "@/lib/format";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 const initialParams: SettlementOrderQueryRequest = { pageNo: 1, pageSize: 10 };
 
@@ -107,7 +108,7 @@ export default function SettlementsPage() {
           </Select>
         </div>
       </SearchPanel>
-      {error || actionError ? <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-200">{error ?? actionError}</div> : null}
+      <ErrorAlert message={error ?? actionError} />
       <DataTable columns={columns} data={page.records} rowKey={(row) => row.settlementNo} loading={loading} emptyText="暂无结算记录。" pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
       <DetailDrawer data={detail} open={Boolean(detail)} title="结算详情" subtitle={(data) => data.settlementNo} sections={sections} onClose={() => setDetail(null)} />
     </div>

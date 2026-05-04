@@ -20,6 +20,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 const initialParams: NotificationQueryRequest = { pageNo: 1, pageSize: 10 };
 
@@ -106,11 +107,7 @@ export default function NotificationsPage() {
         </div>
       </SearchPanel>
       
-      {error || actionError ? (
-        <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-500">
-          {error ?? actionError}
-        </div>
-      ) : null}
+      <ErrorAlert message={error ?? actionError} />
 
       <div className="space-y-4">
         {loading && page.records.length === 0 ? (

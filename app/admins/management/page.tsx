@@ -25,6 +25,7 @@ import {
 import type { SysAdminQuery, SysAdminRow } from "@/api/types";
 import { formatEmpty } from "@/lib/format";
 import { AdminRole, CommonStatus } from "@/types/enums";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 const formSchema = z.object({
   userName: z.string().min(3, "账号名至少3个字符"),
@@ -198,11 +199,7 @@ export default function AdminManagementPage() {
         actions={<CreateAdminDialog onSuccess={reload} />}
       />
 
-      {error ? (
-        <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-500">
-          {error}
-        </div>
-      ) : null}
+      <ErrorAlert message={error} />
 
       <SearchPanel
         onSearch={() => updateParams(buildQuery(filters))}

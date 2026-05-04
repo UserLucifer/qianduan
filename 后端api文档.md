@@ -387,3 +387,28 @@ Authorization: Bearer <admin-token>
 - `0`：草稿
 - `1`：已发布
 - `2`：已下线
+
+## 后台调度日志
+
+接口：
+```http
+GET /api/admin/scheduler/logs
+Authorization: Bearer <admin-token>
+```
+
+Query：
+- `pageNo`：页码，默认 `1`
+- `pageSize`：每页条数，默认 `10`
+- `taskName`：调度任务名，可选
+
+返回 `data.records[]` 字段：
+- `id`
+- `taskName`
+- `status`
+- `totalCount`
+- `successCount`
+- `failCount`
+- `errorMessage`
+- `startedAt`
+- `finishedAt`
+- `createdAt`

@@ -3,7 +3,6 @@
 import { useCallback, useState } from "react";
 import { Power, PowerOff, Plus, Edit2, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { PageHeader } from "@/components/shared/PageHeader";
@@ -22,13 +21,13 @@ import { deleteAdminRechargeChannel, getAdminRechargeChannels, updateAdminRechar
 import type { AdminRechargeChannelQuery, AdminRechargeChannelResponse, UpdateRechargeChannelRequest } from "@/api/types";
 import { formatEmpty, toErrorMessage } from "@/lib/format";
 import { RechargeChannelForm } from "@/components/admin/RechargeForms";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 interface Filters {
-  channelName: string;
   status: string;
 }
 
-const initialFilters: Filters = { channelName: "", status: "" };
+const initialFilters: Filters = { status: "" };
 const initialQuery: AdminRechargeChannelQuery = { pageNo: 1, pageSize: 10 };
 
 export default function RechargeChannelsPage() {
@@ -43,7 +42,6 @@ export default function RechargeChannelsPage() {
   const buildQuery = (nextFilters: Filters): AdminRechargeChannelQuery => ({
     pageNo: 1,
     pageSize: page.pageSize,
-    channelName: nextFilters.channelName || undefined,
     status: nextFilters.status ? Number(nextFilters.status) : undefined,
   });
 
@@ -137,11 +135,7 @@ export default function RechargeChannelsPage() {
         }
       />
       
-      {(error || actionError) ? (
-        <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-500 font-medium">
-          {actionError ?? error}
-        </div>
-      ) : null}
+      <ErrorAlert message={actionError ?? error} />
 
       <SearchPanel
         onSearch={() => updateParams(buildQuery(filters))}
@@ -150,16 +144,6 @@ export default function RechargeChannelsPage() {
           updateParams(initialQuery);
         }}
       >
-        <div className="space-y-2">
-          <Label htmlFor="channelName">渠道名称</Label>
-          <Input 
-            id="channelName" 
-            placeholder="搜索渠道名称" 
-            value={filters.channelName} 
-            onChange={(event) => setFilters((current) => ({ ...current, channelName: event.target.value }))} 
-            className="h-9 w-[200px] bg-background text-foreground" 
-          />
-        </div>
         <div className="space-y-2">
           <Label>状态</Label>
           <Select value={filters.status} onValueChange={(val) => setFilters((current) => ({ ...current, status: val }))}>

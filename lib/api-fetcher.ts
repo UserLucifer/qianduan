@@ -1,5 +1,13 @@
 "use client";
 
+import {
+  createApiClientError,
+  getApiErrorMessage,
+  isApiResponseLike,
+  isSuccessApiCode,
+  shouldClearAuthSession,
+} from "@/lib/api-errors";
+
 /**
  * 通用 Fetcher 函数，为 Spring Boot 后端设计
  * 包含 Authorization: Bearer <token>
@@ -24,16 +32,51 @@ export async function apiFetcher<T>(url: string, options: RequestInit = {}): Pro
   };
 
   const response = await fetch(url, config);
+  const responseData = await response.json().catch(() => null);
+
+  if (isApiResponseLike(responseData) && !isSuccessApiCode(responseData.code)) {
+    if (shouldClearAuthSession(responseData.code, response.status) && typeof window !== "undefined") {
+      localStorage.removeItem("user_access_token");
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("token");
+      if (window.location.pathname !== "/login") {
+        window.location.href = "/login";
+      }
+    }
+
+    throw createApiClientError({
+      code: responseData.code,
+      status: response.status,
+      message: responseData.message,
+      data: responseData.data,
+      response: responseData,
+    });
+  }
 
   if (!response.ok) {
     // 处理常见的 HTTP 错误
-    if (response.status === 401) {
-      // Token 过期或无效，可在此跳转登录
-      console.error('Unauthorized: Please login again.');
+    if (shouldClearAuthSession(undefined, response.status) && typeof window !== "undefined") {
+      localStorage.removeItem("user_access_token");
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("token");
+      if (window.location.pathname !== "/login") {
+        window.location.href = "/login";
+      }
     }
-    const errorData = await response.json().catch(() => ({ message: 'An unknown error occurred' }));
-    throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+
+    throw createApiClientError({
+      status: response.status,
+      message: getApiErrorMessage({
+        status: response.status,
+        message:
+          responseData && typeof responseData === "object" && "message" in responseData
+            ? String(responseData.message)
+            : undefined,
+      }),
+      data: responseData,
+      response: responseData,
+    });
   }
 
-  return response.json();
+  return responseData as T;
 }

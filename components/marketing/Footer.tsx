@@ -49,6 +49,7 @@ export default function Footer() {
             <div className="site-footer__links">
               <Link href="/docs" className="site-footer__link">文档中心</Link>
               <Link href="/blog" className="site-footer__link">博客</Link>
+              <Link href="/contact" className="site-footer__link">联系我们</Link>
             </div>
           </div>
         </div>

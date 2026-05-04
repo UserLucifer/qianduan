@@ -23,6 +23,7 @@ import { usePaginatedResource } from "@/hooks/usePaginatedResource";
 import { approveWithdraw, getAdminWithdrawOrderDetail, getAdminWithdrawOrders, markWithdrawPaid, rejectWithdraw } from "@/api/admin";
 import type { WithdrawOrderQueryRequest, WithdrawOrderResponse } from "@/api/types";
 import { formatEmpty, toErrorMessage } from "@/lib/format";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 interface WithdrawFilters {
   status: string;
@@ -227,11 +228,7 @@ export default function AdminWithdrawPage() {
   return (
     <div className="space-y-6">
       <PageHeader eyebrow="FINANCE REVIEW" title="提现审核" description="审核提现申请、查看收款信息，并标记实际打款结果。" />
-      {(error || actionError) ? (
-        <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-200">
-          {actionError ?? error}
-        </div>
-      ) : null}
+      <ErrorAlert message={actionError ?? error} />
       <SearchPanel
         onSearch={() => updateParams(buildQuery(filters))}
         onReset={() => {

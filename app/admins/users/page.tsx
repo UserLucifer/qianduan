@@ -26,6 +26,7 @@ import {
 import type { AdminUserQuery, AdminUserRow } from "@/api/types";
 import { formatEmpty, toErrorMessage } from "@/lib/format";
 import { CommonStatus } from "@/types/enums";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 interface UserFilters {
   userId: string;
@@ -197,11 +198,7 @@ export default function CustomersPage() {
         description="管理平台 C 端注册用户，查询详情并执行状态控制。"
       />
 
-      {(error || actionError) ? (
-        <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-500">
-          {actionError ?? error}
-        </div>
-      ) : null}
+      <ErrorAlert message={actionError ?? error} />
 
       <SearchPanel
         onSearch={() => updateParams(buildQuery(filters))}

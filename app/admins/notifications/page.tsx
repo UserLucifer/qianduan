@@ -23,6 +23,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { NotificationForm } from "@/components/admin/NotificationForms";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 interface Filters {
   readStatus: string;
@@ -108,11 +109,7 @@ export default function AdminNotificationsPage() {
           </div>
         }
       />
-      {(error || actionError) ? (
-        <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-500 font-medium">
-          {actionError ?? error}
-        </div>
-      ) : null}
+      <ErrorAlert message={actionError ?? error} />
 
       <SearchPanel
         onSearch={() => updateParams(buildQuery(filters))}

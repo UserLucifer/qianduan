@@ -19,6 +19,7 @@ import type { PageResult, ProfitRecordQueryRequest, ProfitRecordResponse, Profit
 import { useAsyncResource } from "@/hooks/useAsyncResource";
 import { usePaginatedResource } from "@/hooks/usePaginatedResource";
 import { formatDate } from "@/lib/format";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 const initialParams: ProfitRecordQueryRequest = { pageNo: 1, pageSize: 10 };
 
@@ -117,7 +118,7 @@ export default function ProfitsPage() {
               <SelectItem value=" ">全部状态</SelectItem>
               <SelectItem value="PENDING">待结算</SelectItem>
               <SelectItem value="SETTLED">已结算</SelectItem>
-              <SelectItem value="CANCELLED">已失效</SelectItem>
+              <SelectItem value="CANCELED">已失效</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -126,7 +127,7 @@ export default function ProfitsPage() {
           <Input type="date" value={filters.profitDate ?? ""} onChange={(event) => setFilters((current) => ({ ...current, profitDate: event.target.value || undefined }))} className="h-9 w-[150px] bg-background text-foreground" />
         </div>
       </SearchPanel>
-      {records.error ? <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-200">{records.error}</div> : null}
+      <ErrorAlert message={records.error} />
       <DataTable columns={columns} data={records.page.records} rowKey={(row) => row.profitNo} loading={records.loading} emptyText="暂无收益记录。" pageNo={records.page.pageNo} pageSize={records.page.pageSize} total={records.page.total} onPageChange={records.changePage} />
     </div>
   );

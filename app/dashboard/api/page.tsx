@@ -15,6 +15,7 @@ import { getRentalApiManagement, getRentalDeployInfo, payDeployFee } from "@/api
 import type { ApiDeployInfoResponse, PageResult, RentalOrderQueryRequest } from "@/api/types";
 import { usePaginatedResource } from "@/hooks/usePaginatedResource";
 import { formatEmpty, toErrorMessage } from "@/lib/format";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 const initialParams: RentalOrderQueryRequest = { pageNo: 1, pageSize: 10 };
 
@@ -54,18 +55,29 @@ export default function DashboardApiPage() {
   const columns: DataTableColumn<ApiDeployInfoResponse>[] = [
     { key: "orderNo", title: "关联订单", render: (row) => <span className="font-mono text-xs">{row.orderNo}</span> },
     {
-      key: "productNameSnapshot",
-      title: "产品 / 模型",
+      key: "apiName",
+      title: "API / 凭证",
       render: (row) => (
         <div>
-          <div className="font-medium text-zinc-100">{row.productNameSnapshot}</div>
-          <div className="text-xs text-zinc-500">{row.aiModelNameSnapshot}</div>
+          <div className="font-medium text-foreground">{formatEmpty(row.apiName)}</div>
+          <div className="font-mono text-xs text-muted-foreground">{formatEmpty(row.credentialNo)}</div>
         </div>
       ),
     },
+    { key: "modelNameSnapshot", title: "模型", render: (row) => formatEmpty(row.modelNameSnapshot) },
     { key: "orderStatus", title: "订单状态", render: (row) => <StatusBadge status={row.orderStatus} /> },
-    { key: "apiGeneratedAt", title: "凭证生成", render: (row) => <DateTimeText value={row.apiGeneratedAt} /> },
-    { key: "deployFeePaidAt", title: "部署支付", render: (row) => <DateTimeText value={row.deployFeePaidAt} /> },
+    { key: "tokenStatus", title: "Token 状态", render: (row) => <StatusBadge status={row.tokenStatus} /> },
+    {
+      key: "deployOrderStatus",
+      title: "部署 / 费用",
+      render: (row) => (
+        <div className="space-y-1">
+          <StatusBadge status={row.deployOrderStatus} />
+          <MoneyText value={row.deployFeeSnapshot} className="block text-xs" />
+        </div>
+      ),
+    },
+    { key: "paidAt", title: "部署支付", render: (row) => <DateTimeText value={row.paidAt} /> },
     {
       key: "actions",
       title: "操作",
@@ -76,7 +88,7 @@ export default function DashboardApiPage() {
             <Eye className="h-3.5 w-3.5" />
             查看
           </Button>
-          {!row.deployFeePaidAt ? (
+          {!row.paidAt ? (
             <ConfirmActionButton title="支付 API 部署费" description="支付后后端会继续部署并生成访问凭证。" confirmText="确认支付" onConfirm={() => payDeploy(row.orderNo)}>
               <ReceiptText className="h-3.5 w-3.5" />支付部署费
             </ConfirmActionButton>
@@ -113,7 +125,7 @@ export default function DashboardApiPage() {
   return (
     <div className="space-y-6">
       <PageHeader eyebrow="API 管理" title="API 凭证与部署" description="从租赁订单进入 API 凭证、部署状态和部署费用支付。敏感字段默认脱敏。" />
-      {error || actionError ? <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-4 text-sm text-rose-200">{error ?? actionError}</div> : null}
+      <ErrorAlert message={error ?? actionError} />
       <DataTable columns={columns} data={page.records} rowKey={(row) => row.orderNo} loading={loading} emptyText="暂无可关联的租赁订单。" pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
       <div className="rounded-lg border border-border bg-muted/40 p-4 text-sm leading-6 text-muted-foreground">
         API 调用说明由后端凭证详情返回的 API Base URL 和 Token 组成。前端不明文暴露未脱敏 Token，复制操作仅对后端已返回字段生效。

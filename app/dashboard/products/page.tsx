@@ -33,6 +33,7 @@ import type {
 } from "@/api/types";
 import { toErrorMessage } from "@/lib/format";
 import { cn } from "@/lib/utils";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 const PAGE_SIZE = 12;
 const ESTIMATED_ROW_HEIGHT = 420;
@@ -638,7 +639,7 @@ export default function UserProductsPage() {
       />
 
       {message && <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/10 p-4 text-sm text-emerald-500">{message}</div>}
-      {error && <div className="rounded-lg border border-rose-500/20 bg-rose-500/10 p-4 text-sm text-rose-500">{error}</div>}
+      <ErrorAlert message={error} />
 
       <AnimatePresence mode="wait">
         {initLoading ? (
