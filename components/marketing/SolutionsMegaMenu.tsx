@@ -1,94 +1,86 @@
 'use client';
 
-import React from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
 import {
   BrainCircuit,
-  Cpu,
-  Layers,
-  Zap,
-  Video,
-  FlaskConical,
-  Rocket,
-  GraduationCap,
   CarFront,
-  Gamepad2
+  Cpu,
+  FlaskConical,
+  Gamepad2,
+  GraduationCap,
+  Layers,
+  Rocket,
+  Video,
+  Zap
 } from 'lucide-react';
+
+import MarketingMegaMenu from './MarketingMegaMenu';
 
 const useCaseCategories = [
   {
-    title: "AI 训练",
+    title: 'AI 训练',
     items: [
       {
-        name: "大模型训练",
-        description: "提供裸金属 GPU 集群",
+        name: '大模型训练',
+        description: '提供裸金属 GPU 集群',
         icon: BrainCircuit,
-        href: "/solutions/llm-training"
+        href: '/solutions/llm-training'
       },
       {
-        name: "智能体开发",
-        description: "支持复杂智能体迭代",
+        name: '智能体开发',
+        description: '支持复杂智能体迭代',
         icon: Cpu,
-        href: "/solutions/ai-agents"
+        href: '/solutions/ai-agents'
       }
     ]
   },
   {
-    title: "AI 推理",
+    title: 'AI 推理',
     items: [
       {
-        name: "高并发推理",
-        description: "低延迟的弹性 API 部署",
+        name: '高并发推理',
+        description: '低延迟的弹性 API 部署',
         icon: Zap,
-        href: "/solutions/high-concurrency-inference"
+        href: '/solutions/high-concurrency-inference'
       },
       {
-        name: "AIGC 生成",
-        description: "专为图像/视频生成优化",
+        name: 'AIGC 生成',
+        description: '专为图像/视频生成优化',
         icon: Video,
-        href: "/solutions/aigc-generation"
+        href: '/solutions/aigc-generation'
       }
     ]
   },
   {
-    title: "专用计算",
+    title: '专用计算',
     items: [
       {
-        name: "图形渲染",
-        description: "云端弹性渲染农场",
+        name: '图形渲染',
+        description: '云端弹性渲染农场',
         icon: Layers,
-        href: "/solutions/graphic-rendering"
+        href: '/solutions/graphic-rendering'
       },
       {
-        name: "科学计算",
-        description: "高密集型仿真计算",
+        name: '科学计算',
+        description: '高密集型仿真计算',
         icon: FlaskConical,
-        href: "/solutions/scientific-computing"
+        href: '/solutions/scientific-computing'
       }
     ]
   }
 ];
 
 const industryItems = [
-  { name: "AIGC 初创企业", icon: Rocket, href: "/solutions/aigc-startups" },
-  { name: "科研与高校", icon: GraduationCap, href: "/solutions/research" },
-  { name: "自动驾驶", icon: CarFront, href: "/solutions/autonomous-driving" },
-  { name: "游戏与数字娱乐", icon: Gamepad2, href: "/solutions/gaming" }
+  { name: 'AIGC 初创企业', icon: Rocket, href: '/solutions/aigc-startups' },
+  { name: '科研与高校', icon: GraduationCap, href: '/solutions/research' },
+  { name: '自动驾驶', icon: CarFront, href: '/solutions/autonomous-driving' },
+  { name: '游戏与数字娱乐', icon: Gamepad2, href: '/solutions/gaming' }
 ];
-
 
 export default function SolutionsMegaMenu() {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 10 }}
-      transition={{ duration: 0.2 }}
-      className="absolute top-full left-0 mt-2 w-[1000px] overflow-hidden rounded-xl border border-border bg-background shadow-lg flex flex-row items-stretch"
-    >
-      {/* Solutions by Use Case (2/3) */}
-      <div className="w-2/3 p-8">
+    <MarketingMegaMenu className="items-stretch">
+      <main className="w-2/3 p-8">
         <div className="mb-6">
           <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
             按场景解决方案
@@ -97,59 +89,66 @@ export default function SolutionsMegaMenu() {
         <div className="grid grid-cols-3 gap-6">
           {useCaseCategories.map((category) => (
             <div key={category.title} className="space-y-4">
-              <h4 className="text-xs font-medium text-muted-foreground/80 border-b border-border/50 pb-2">
+              <h4 className="border-b border-border/50 pb-2 text-xs font-medium text-muted-foreground/80">
                 {category.title}
               </h4>
               <div className="space-y-3">
-                {category.items.map((item) => (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    prefetch={false}
-                    className="group block rounded-lg p-2 transition-colors hover:bg-accent/50"
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className="mt-1 rounded-md bg-muted p-1.5 text-foreground transition-colors group-hover:bg-background shrink-0">
-                        <item.icon className="h-4 w-4" />
-                      </div>
-                      <div>
-                        <div className="text-sm font-semibold text-foreground leading-tight">
-                          {item.name}
+                {category.items.map((item) => {
+                  const Icon = item.icon;
+
+                  return (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      prefetch={false}
+                      className="group block rounded-lg p-2 transition-colors hover:bg-accent/50"
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className="mt-1 shrink-0 rounded-md bg-muted p-1.5 text-foreground transition-colors group-hover:bg-background">
+                          <Icon className="h-4 w-4" />
                         </div>
-                        <div className="mt-1 text-xs text-muted-foreground leading-snug">
-                          {item.description}
+                        <div>
+                          <div className="text-sm font-semibold leading-tight text-foreground">
+                            {item.name}
+                          </div>
+                          <div className="mt-1 text-xs leading-snug text-muted-foreground">
+                            {item.description}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </Link>
-                ))}
+                    </Link>
+                  );
+                })}
               </div>
             </div>
           ))}
         </div>
-      </div>
+      </main>
 
-      {/* Solutions by Industry (1/3) */}
-      <div className="w-1/3 p-8 bg-muted/30 flex flex-col">
+      <aside className="flex w-1/3 flex-col bg-muted/30 p-8">
         <div className="mb-6">
           <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
             按行业
           </h3>
         </div>
         <div className="flex flex-col gap-2">
-          {industryItems.map((item) => (
-            <Link
-              key={item.name}
-              href={item.href}
-              prefetch={false}
-              className="group flex items-center gap-3 rounded-lg p-3 transition-colors hover:bg-accent/50"
-            >
-              <item.icon className="h-4 w-4 text-muted-foreground transition-colors group-hover:text-foreground shrink-0" />
-              <span className="text-sm font-medium text-foreground">
-                {item.name}
-              </span>
-            </Link>
-          ))}
+          {industryItems.map((item) => {
+            const Icon = item.icon;
+
+            return (
+              <Link
+                key={item.name}
+                href={item.href}
+                prefetch={false}
+                className="group flex items-center gap-3 rounded-lg p-3 transition-colors hover:bg-accent/50"
+              >
+                <Icon className="h-4 w-4 shrink-0 text-muted-foreground transition-colors group-hover:text-foreground" />
+                <span className="text-sm font-medium text-foreground">
+                  {item.name}
+                </span>
+              </Link>
+            );
+          })}
         </div>
 
         <div className="mt-auto pt-8">
@@ -166,8 +165,7 @@ export default function SolutionsMegaMenu() {
             </Link>
           </div>
         </div>
-      </div>
-    </motion.div>
-
+      </aside>
+    </MarketingMegaMenu>
   );
 }

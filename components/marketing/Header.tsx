@@ -92,6 +92,7 @@ export default function Header() {
           {/* Products */}
           <div 
             className="nav-dropdown-wrapper nav-dropdown-wrapper--mega"
+            style={{ position: 'static' }}
             onMouseEnter={() => handleMouseEnter('products')}
             onMouseLeave={handleMouseLeave}
           >
@@ -109,6 +110,7 @@ export default function Header() {
           {/* Use Cases */}
           <div 
             className="nav-dropdown-wrapper nav-dropdown-wrapper--mega"
+            style={{ position: 'static' }}
             onMouseEnter={() => handleMouseEnter('use-cases')}
             onMouseLeave={handleMouseLeave}
           >
@@ -126,6 +128,7 @@ export default function Header() {
           {/* Solutions */}
           <div 
             className="nav-dropdown-wrapper nav-dropdown-wrapper--mega"
+            style={{ position: 'static' }}
             onMouseEnter={() => handleMouseEnter('solutions')}
             onMouseLeave={handleMouseLeave}
           >
@@ -147,6 +150,7 @@ export default function Header() {
           {/* Company */}
           <div 
             className="nav-dropdown-wrapper nav-dropdown-wrapper--mega"
+            style={{ position: 'static' }}
             onMouseEnter={() => handleMouseEnter('company')}
             onMouseLeave={handleMouseLeave}
           >
