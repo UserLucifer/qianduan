@@ -9,54 +9,54 @@ const testimonials = [
     id: 1,
     logoText: 'Jane Street',
     logoIcon: null,
-    quote: "CoreWeave's ability to deliver reliable, cutting-edge hardware has consistently met the demands of our critical workloads. We also value their flexibility in tailoring solutions to our unique requirements, enabling us to optimize performance and meet the demands of a rapidly evolving landscape.",
+    quote: "CoreWeave 提供可靠、前沿硬件的能力，持续满足了我们关键工作负载的需求。我们同样看重他们能够根据我们的独特需求定制解决方案，帮助我们优化性能，并应对快速变化的市场环境。",
     author: "Craig Falls",
-    title: "Head of Quant Research",
+    title: "量化研究负责人",
     company: "Jane Street"
   },
   {
     id: 2,
     logoText: 'OpenAI',
     logoIcon: <SiOpenai className="text-xl" />,
-    quote: "CoreWeave has been one of our earliest and largest compute partners. CoreWeave has helped us build really large-scale computing clusters that led to the creation of some of the models that we’re best known for and helped us deliver these systems to customers at the scale that they need.",
+    quote: "CoreWeave 是我们最早、规模最大的算力合作伙伴之一。CoreWeave 帮助我们构建了超大规模计算集群，推动了部分知名模型的诞生，并帮助我们以客户所需的规模交付这些系统。",
     author: "Sam Altman",
-    title: "CEO",
+    title: "首席执行官",
     company: "OpenAI"
   },
   {
     id: 3,
     logoText: 'Mistral AI',
     logoIcon: null,
-    quote: "We worked hand-in-hand with CoreWeave's team to build the infrastructure side. The performance of our CoreWeave clusters has been top tier in terms of reliability and stability as we continue to deliver cutting edge models.",
+    quote: "我们与 CoreWeave 团队紧密协作，共同建设基础设施。随着我们持续交付前沿模型，CoreWeave 集群在可靠性和稳定性方面始终保持一流水准。",
     author: "Arthur Mensch",
-    title: "Founder & CEO",
+    title: "创始人兼首席执行官",
     company: "Mistral AI"
   },
   {
     id: 4,
     logoText: 'Scale AI',
     logoIcon: null,
-    quote: "Our partnership with CoreWeave has significantly accelerated our model training cycles. Their API-first infrastructure is robust and highly scalable, exactly what we need for modern AI workflows.",
+    quote: "与 CoreWeave 的合作显著加快了我们的模型训练周期。他们以 API 优先的基础设施稳定且高度可扩展，正是现代 AI 工作流所需要的能力。",
     author: "Alexandr Wang",
-    title: "CEO",
+    title: "首席执行官",
     company: "Scale AI"
   },
   {
     id: 5,
     logoText: 'Hugging Face',
     logoIcon: null,
-    quote: "CoreWeave provides the high-performance GPU instances required to deploy our massive open-source models efficiently. The stability of their network ensures our models are always available to the community.",
+    quote: "CoreWeave 提供高性能 GPU 实例，让我们能够高效部署大型开源模型。他们稳定的网络确保我们的模型始终能够服务社区。",
     author: "Clem Delangue",
-    title: "CEO",
+    title: "首席执行官",
     company: "Hugging Face"
   },
   {
     id: 6,
     logoText: 'Anthropic',
     logoIcon: null,
-    quote: "Building state-of-the-art Claude models requires massive, uninterrupted compute power. CoreWeave’s infrastructure delivers precisely that, allowing our researchers to focus purely on algorithmic breakthroughs.",
+    quote: "构建先进的 Claude 模型需要大规模且不中断的算力。CoreWeave 的基础设施正好提供了这一点，让我们的研究人员能够专注于算法突破。",
     author: "Dario Amodei",
-    title: "CEO",
+    title: "首席执行官",
     company: "Anthropic"
   }
 ];
@@ -134,7 +134,7 @@ export default function TestimonialSection() {
   return (
     <section className="testimonial-section">
       <div className="testimonial-container">
-        <h2 className="testimonial-header">Leading AI innovators rely on CoreWeave</h2>
+        <h2 className="testimonial-header">领先的 AI 创新者信赖 CoreWeave</h2>
         
         <div className="testimonial-carousel-wrapper">
           <div 
@@ -173,7 +173,7 @@ export default function TestimonialSection() {
               key={i}
               className={`pagination-dot ${i === activeIndex ? 'active' : ''}`}
               onClick={() => scrollTo(i)}
-              aria-label={`Go to slide ${i + 1}`}
+              aria-label={`跳转到第 ${i + 1} 张推荐语`}
               style={{
                 backgroundColor: i === activeIndex ? dotColors[i % dotColors.length] : undefined
               }}

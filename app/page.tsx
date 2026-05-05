@@ -10,6 +10,7 @@ import FAQSection from '@/components/marketing/FAQSection';
 import HubSection from '@/components/marketing/HubSection';
 import EnterpriseSection from '@/components/marketing/EnterpriseSection';
 import AccordionSection from '@/components/marketing/AccordionSection';
+import BlogPreviewSection from '@/components/marketing/BlogPreviewSection';
 import Footer from '@/components/marketing/Footer';
 
 export default function Home() {
@@ -57,6 +58,7 @@ export default function Home() {
         <EnterpriseSection />
         <FAQSection />
         <HubSection />
+        <BlogPreviewSection />
       </main>
 
       <Footer />

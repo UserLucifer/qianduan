@@ -1,7 +1,11 @@
 "use client";
 
-import React, { useState } from 'react';
-import { FiPlus, FiMinus } from 'react-icons/fi';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 import './FAQSection.css';
 
 const faqs = [
@@ -28,12 +32,6 @@ const faqs = [
 ];
 
 export default function FAQSection() {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
-
-  const toggleFAQ = (index: number) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
-
   return (
     <section className="faq-section">
       <div className="faq-container">
@@ -42,36 +40,27 @@ export default function FAQSection() {
           <p>Everything you need to know about our product and billing.</p>
         </div>
         
-        <div className="faq-list">
-          {faqs.map((faq, index) => {
-            const isOpen = openIndex === index;
-            return (
-              <div 
-                key={index} 
-                className={`faq-item ${isOpen ? 'is-open' : ''}`}
-              >
-                <button 
-                  className="faq-question" 
-                  onClick={() => toggleFAQ(index)}
-                  aria-expanded={isOpen}
-                >
-                  <span>{faq.question}</span>
-                  <span className="faq-icon">
-                    {isOpen ? <FiMinus /> : <FiPlus />}
-                  </span>
-                </button>
-                <div 
-                  className="faq-answer-wrapper"
-                  style={{ height: isOpen ? 'auto' : 0, overflow: 'hidden' }}
-                >
-                  <div className="faq-answer">
-                    {faq.answer}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+        <Accordion
+          type="single"
+          collapsible
+          defaultValue="faq-0"
+          className="faq-accordion"
+        >
+          {faqs.map((faq, index) => (
+            <AccordionItem
+              key={faq.question}
+              value={`faq-${index}`}
+              className="faq-accordion__item"
+            >
+              <AccordionTrigger className="faq-accordion__trigger">
+                {faq.question}
+              </AccordionTrigger>
+              <AccordionContent className="faq-accordion__content">
+                {faq.answer}
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
       </div>
     </section>
   );

@@ -1,0 +1,253 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "算力租赁" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation "主导航" [ref=e5]:
+        - button "产品" [ref=e7] [cursor=pointer]
+        - button "产品用例" [ref=e9] [cursor=pointer]
+        - button "解决方案" [ref=e11] [cursor=pointer]
+        - link "租赁" [ref=e12] [cursor=pointer]:
+          - /url: /rental
+        - button "公司" [ref=e14] [cursor=pointer]
+        - link "博客" [ref=e15] [cursor=pointer]:
+          - /url: /blog
+        - link "帮助中心" [ref=e16] [cursor=pointer]:
+          - /url: /help-center
+      - generic [ref=e17]:
+        - button "切换明暗主题" [ref=e18] [cursor=pointer]:
+          - img [ref=e19]
+          - img [ref=e21]
+        - link "登录" [ref=e24] [cursor=pointer]:
+          - /url: /login
+  - main [ref=e25]:
+    - generic [ref=e27]:
+      - generic [ref=e28]:
+        - paragraph [ref=e29]: 现已全面可用
+        - heading "SUNK Anywhere" [level=1] [ref=e30]
+        - paragraph [ref=e31]: 将行业首个统一训练系统扩展到 CoreWeave 之外，帮助团队在任何已有基础架构上加速并扩展高要求 AI 工作负载。
+        - link "开始使用 SUNK Anywhere" [ref=e32] [cursor=pointer]:
+          - /url: /contact-sales
+      - generic [ref=e34]:
+        - button "Copy code" [ref=e36] [cursor=pointer]:
+          - generic [ref=e37]:
+            - img
+        - code [ref=e39]:
+          - generic [ref=e40]:
+            - generic [ref=e41]:
+              - generic [ref=e42]: "01"
+              - generic [ref=e43]: "# Install SUNK with Helm"
+            - generic [ref=e44]:
+              - generic [ref=e45]: "02"
+              - generic [ref=e46]: helm repo add coreweave https://helm.coreweave.com
+            - generic [ref=e47]:
+              - generic [ref=e48]: "03"
+              - generic [ref=e49]: helm repo update
+            - generic [ref=e51]: "04"
+            - generic [ref=e53]:
+              - generic [ref=e54]: "05"
+              - generic [ref=e55]: helm install sunk coreweave/sunk \
+            - generic [ref=e56]:
+              - generic [ref=e57]: "06"
+              - generic [ref=e58]: "--namespace slurm \\"
+            - generic [ref=e59]:
+              - generic [ref=e60]: "07"
+              - generic [ref=e61]: "--create-namespace \\"
+            - generic [ref=e62]:
+              - generic [ref=e63]: "08"
+              - generic [ref=e64]: "-f sunk-values.yaml"
+            - generic [ref=e66]: "09"
+            - generic [ref=e68]:
+              - generic [ref=e69]: "10"
+              - generic [ref=e70]: "# Verify controller status"
+            - generic [ref=e71]:
+              - generic [ref=e72]: "11"
+              - generic [ref=e73]: kubectl get pods -n slurm -l app.kubernetes.io/name=sunk
+    - generic [ref=e75]:
+      - generic [ref=e76]:
+        - paragraph [ref=e77]: 为什么选择 SUNK Anywhere？
+        - heading "灵活性不应该意味着碎片化" [level=2] [ref=e78]
+        - paragraph [ref=e79]: 随着训练环境扩展到不同提供商和客户自有基础架构，团队会面临不同工作流、控制方式和运行实践并存的风险。这种碎片化会在最需要连续性的地方增加复杂度。
+        - paragraph [ref=e80]: SUNK Anywhere 的价值在于把同一套 SUNK 系统扩展到 CoreWeave 之外，让组织在基础架构选择增长时，仍然拥有更快进入生产训练的路径和更少的设置工作。
+      - generic [ref=e81]:
+        - generic [ref=e83]:
+          - img [ref=e85]
+          - generic [ref=e88]:
+            - heading "更快进入生产训练" [level=3] [ref=e89]
+            - paragraph [ref=e90]: AI 团队应当更快进入可产出的训练阶段，而不是背负更多设置和运维开销。
+        - generic [ref=e92]:
+          - img [ref=e94]
+          - generic [ref=e97]:
+            - heading "减少人工协调" [level=3] [ref=e98]
+            - paragraph [ref=e99]: 训练负载迁移到 CoreWeave 之外时，常会引入新的设置工作和人工协调。SUNK Anywhere 减少这类开销，而不是继续叠加复杂度。
+        - generic [ref=e101]:
+          - img [ref=e103]
+          - generic [ref=e106]:
+            - heading "基础架构灵活性，不增加负担" [level=3] [ref=e107]
+            - paragraph [ref=e108]: 平台团队可以支持单一提供商之外的基础架构，同时避免在不同环境里维护碎片化或脆弱的运行模型。
+        - generic [ref=e110]:
+          - img [ref=e112]
+          - generic [ref=e115]:
+            - heading "更少碎片化，一个统一训练系统" [level=3] [ref=e116]
+            - paragraph [ref=e117]: SUNK Anywhere 为团队提供一条有意识的扩展路径，让同一套训练系统覆盖更多基础架构环境。
+    - generic [ref=e121]:
+      - paragraph [ref=e122]: SUNK Anywhere
+      - heading "市场中最成熟的 Slurm-on-Kubernetes 产品" [level=2] [ref=e123]
+    - generic [ref=e125]:
+      - heading "跨基础架构环境的一套统一训练系统" [level=2] [ref=e126]
+      - paragraph [ref=e127]: SUNK Anywhere 将同一套统一训练系统扩展到 CoreWeave 之外，帮助团队在基础架构环境扩展时保留一致的调度、工作流和运行实践。
+      - generic [ref=e128]:
+        - generic [ref=e135]:
+          - heading "CoreWeave Kubernetes 服务" [level=3] [ref=e136]
+          - generic [ref=e137]:
+            - paragraph [ref=e138]: sunk
+            - paragraph [ref=e139]:
+              - img [ref=e140]
+              - text: Slurm Jobs
+            - paragraph [ref=e143]:
+              - img [ref=e144]
+              - text: Kubernetes Pods
+          - generic [ref=e148]:
+            - img [ref=e149]
+            - text: Kubernetes Pods
+        - generic [ref=e152]:
+          - img [ref=e154]
+          - generic [ref=e156]:
+            - heading "云提供商 Kubernetes" [level=3] [ref=e157]
+            - generic [ref=e158]:
+              - paragraph [ref=e159]: sunk
+              - paragraph [ref=e160]:
+                - img [ref=e161]
+                - text: Slurm Jobs
+              - paragraph [ref=e164]:
+                - img [ref=e165]
+                - text: Kubernetes Pods
+            - generic [ref=e169]:
+              - img [ref=e170]
+              - text: Kubernetes Pods
+    - generic [ref=e174]:
+      - heading "为任何运行位置的高要求 AI 工作负载而建" [level=2] [ref=e175]
+      - paragraph [ref=e176]: SUNK Anywhere 扩展团队已经依赖的统一训练系统，不强迫团队采用新工具或不同的运行方式。
+      - generic [ref=e177]:
+        - generic [ref=e179]:
+          - img [ref=e180]
+          - heading "把训练环境纳入一个系统" [level=3] [ref=e182]
+          - paragraph [ref=e183]: 将更多训练环境能力整合到一个系统里，帮助团队避免外部环境中常见的工具碎片化和人工协调。
+        - generic [ref=e185]:
+          - img [ref=e186]
+          - heading "混合调度与可观测钩子" [level=3] [ref=e189]
+          - paragraph [ref=e190]: 集成混合调度、面向研究人员的能力和可观测钩子，让团队在负载扩展时仍保持控制力。
+        - generic [ref=e192]:
+          - img [ref=e193]
+          - heading "更快进入可产出的训练" [level=3] [ref=e196]
+          - paragraph [ref=e197]: 通过内置访问、用户环境和容器等基础能力，帮助团队减少设置时间，把更多时间用于训练工作。
+        - generic [ref=e199]:
+          - img [ref=e200]
+          - heading "跨环境一致运行" [level=3] [ref=e203]
+          - paragraph [ref=e204]: 将 SUNK 扩展到 CoreWeave 之外，同时保留熟悉的接口、调度行为和日常运维习惯。
+    - generic [ref=e206]:
+      - heading "生产规模先锋团队验证" [level=2] [ref=e207]
+      - link "查看更多客户故事" [ref=e208] [cursor=pointer]:
+        - /url: /blog
+        - text: 查看更多客户故事
+        - img [ref=e209]
+      - article [ref=e211]:
+        - generic [ref=e212]:
+          - generic [ref=e213]: “
+          - paragraph [ref=e214]: CoreWeave 的 SUNK 是业界领先的集群管理能力。它把 Slurm on Kubernetes 的优势结合起来，让我们在 CoreWeave 和非 CoreWeave 提供商上运行大规模分布式作业时，仍能保持熟悉的可观测性和生产级长期服务。
+          - generic [ref=e215]:
+            - paragraph [ref=e216]: Xander Dunn
+            - paragraph [ref=e217]: Periodic Labs 技术人员
+          - paragraph [ref=e218]: periodic labs
+        - img "Xander Dunn" [ref=e220]
+    - generic [ref=e222]:
+      - generic [ref=e224]:
+        - paragraph [ref=e225]: 交付能力
+        - heading "SUNK Anywhere 让什么成为可能" [level=2] [ref=e226]
+      - generic [ref=e227]:
+        - generic [ref=e229]:
+          - img [ref=e230]
+          - generic [ref=e232]:
+            - heading "标准化到统一训练系统" [level=3] [ref=e233]
+            - paragraph [ref=e234]: 为团队提供更清晰的标准化路径，让高要求 AI 负载在基础架构足迹扩展时仍以相同方式运行。
+        - generic [ref=e236]:
+          - img [ref=e237]
+          - generic [ref=e241]:
+            - heading "减少跨环境碎片化" [level=3] [ref=e242]
+            - paragraph [ref=e243]: 降低在多个提供商和客户自有基础架构中运行训练时常见的运维拼装成本。
+        - generic [ref=e245]:
+          - img [ref=e246]
+          - generic [ref=e250]:
+            - heading "简化生产 AI 负载路径" [level=3] [ref=e251]
+            - paragraph [ref=e252]: 帮助平台和研究团队更快进入可产出的训练阶段，在工作开始前减少设置、适配和运维开销。
+    - generic [ref=e254]:
+      - heading "常见问题" [level=2] [ref=e255]
+      - generic [ref=e256]:
+        - generic [ref=e259]:
+          - generic [ref=e260]:
+            - heading "什么是 SUNK Anywhere？" [level=3] [ref=e261]
+            - paragraph [ref=e262]: SUNK Anywhere 将 SUNK 扩展到 CoreWeave 之外，让团队可以在已有基础架构上使用同一套统一训练系统，而不需要引入独立的外部训练栈。
+          - generic [ref=e263]: +
+        - generic [ref=e266]:
+          - generic [ref=e267]:
+            - heading "团队什么时候应该使用 SUNK Anywhere？" [level=3] [ref=e268]
+            - paragraph [ref=e269]: 当团队需要在单一环境之外运行高要求 AI 负载，同时希望保持一致的工作流、工具和运维实践时，SUNK Anywhere 更适合。
+          - generic [ref=e270]: +
+        - generic [ref=e273]:
+          - generic [ref=e274]:
+            - heading "使用 SUNK Anywhere 需要改变现有工作方式吗？" [level=3] [ref=e275]
+            - paragraph [ref=e276]: 不需要。它的设计目标是保留熟悉的接口、调度行为和日常运维实践，让基础架构扩展不会迫使研究人员重新学习作业运行方式。
+          - generic [ref=e277]: +
+        - generic [ref=e280]:
+          - generic [ref=e281]:
+            - heading "沙盒工作负载在哪里运行？" [level=3] [ref=e282]
+            - paragraph [ref=e283]: 沙盒工作负载可以运行在现有 CoreWeave 环境和已约定的容量之上，用于验证、适配和逐步扩展训练工作流。
+          - generic [ref=e284]: +
+  - contentinfo [ref=e285]:
+    - generic [ref=e286]:
+      - generic [ref=e287]:
+        - generic [ref=e288]:
+          - link "算力租赁" [ref=e289] [cursor=pointer]:
+            - /url: /
+          - paragraph [ref=e290]: 基于 Token 经济的高性能 AI 算力调度平台，为全球开发者提供即时可用的计算资源。
+        - generic [ref=e291]:
+          - heading "公司信息" [level=3] [ref=e292]
+          - generic [ref=e293]:
+            - link "关于我们" [ref=e294] [cursor=pointer]:
+              - /url: /about
+            - link "企业可持续发展" [ref=e295] [cursor=pointer]:
+              - /url: /sustainability
+            - link "解决方案" [ref=e296] [cursor=pointer]:
+              - /url: /enterprise
+        - generic [ref=e297]:
+          - heading "资源" [level=3] [ref=e298]
+          - link "产品用例" [ref=e300] [cursor=pointer]:
+            - /url: /use-cases
+        - generic [ref=e301]:
+          - heading "条款" [level=3] [ref=e302]
+          - generic [ref=e303]:
+            - link "服务条款" [ref=e304] [cursor=pointer]:
+              - /url: /terms
+            - link "隐私政策" [ref=e305] [cursor=pointer]:
+              - /url: /privacy
+            - link "合规" [ref=e306] [cursor=pointer]:
+              - /url: /compliance
+            - link "漏洞披露" [ref=e307] [cursor=pointer]:
+              - /url: /vulnerability-disclosure
+            - link "数据处理" [ref=e308] [cursor=pointer]:
+              - /url: /data-processing
+        - generic [ref=e309]:
+          - heading "帮助" [level=3] [ref=e310]
+          - generic [ref=e311]:
+            - link "文档中心" [ref=e312] [cursor=pointer]:
+              - /url: /docs
+            - link "博客" [ref=e313] [cursor=pointer]:
+              - /url: /blog
+            - link "联系我们" [ref=e314] [cursor=pointer]:
+              - /url: /contact
+      - generic [ref=e315]:
+        - generic [ref=e316]: © 2026 算力租赁. All rights reserved.
+        - generic [ref=e317]: All systems operational
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e324] [cursor=pointer]:
+    - img [ref=e325]

@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 export function ReadingProgressBar() {
   const [progress, setProgress] = useState(0);
@@ -9,19 +9,25 @@ export function ReadingProgressBar() {
     const updateProgress = () => {
       const currentScroll = window.scrollY;
       const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-      
-      if (scrollHeight > 0) {
-        setProgress(Number((currentScroll / scrollHeight).toFixed(2)) * 100);
-      }
+      const nextProgress =
+        scrollHeight > 0 ? Math.max(0, Math.min((currentScroll / scrollHeight) * 100, 100)) : 0;
+      setProgress(nextProgress);
     };
 
-    window.addEventListener('scroll', updateProgress);
-    return () => window.removeEventListener('scroll', updateProgress);
+    updateProgress();
+    window.addEventListener("scroll", updateProgress, { passive: true });
+    window.addEventListener("resize", updateProgress);
+
+    return () => {
+      window.removeEventListener("scroll", updateProgress);
+      window.removeEventListener("resize", updateProgress);
+    };
   }, []);
 
   return (
-    <div 
-      className="fixed top-0 left-0 h-1 z-[100] bg-primary transition-all duration-150 ease-out"
+    <div
+      aria-hidden="true"
+      className="pointer-events-none fixed left-0 top-0 z-[200] h-1 bg-primary transition-[width] duration-150 ease-out"
       style={{ width: `${progress}%` }}
     />
   );

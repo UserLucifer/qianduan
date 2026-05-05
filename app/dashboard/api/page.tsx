@@ -14,7 +14,7 @@ import { StatusBadge } from "@/components/shared/StatusBadge";
 import { getRentalApiManagement, getRentalDeployInfo, payDeployFee } from "@/api/rental";
 import type { ApiDeployInfoResponse, PageResult, RentalOrderQueryRequest } from "@/api/types";
 import { usePaginatedResource } from "@/hooks/usePaginatedResource";
-import { formatEmpty, toErrorMessage } from "@/lib/format";
+import { formatEmpty } from "@/lib/format";
 import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 const initialParams: RentalOrderQueryRequest = { pageNo: 1, pageSize: 10 };
@@ -26,20 +26,17 @@ export default function DashboardApiPage() {
   }, []);
   const { page, loading, error, changePage, reload } = usePaginatedResource(loader, initialParams);
   const [detail, setDetail] = useState<ApiDeployInfoResponse | null>(null);
-  const [actionError, setActionError] = useState<string | null>(null);
 
   const openDeployInfo = async (orderNo: string) => {
-    setActionError(null);
     try {
       const res = await getRentalDeployInfo(orderNo);
       setDetail(res.data);
-    } catch (err) {
-      setActionError(toErrorMessage(err));
+    } catch {
+      // 请求拦截器已统一提示操作错误。
     }
   };
 
   const payDeploy = async (orderNo: string) => {
-    setActionError(null);
     try {
       await payDeployFee(orderNo);
       await reload();
@@ -47,8 +44,8 @@ export default function DashboardApiPage() {
         const next = await getRentalDeployInfo(orderNo);
         setDetail(next.data);
       }
-    } catch (err) {
-      setActionError(toErrorMessage(err));
+    } catch {
+      // 请求拦截器已统一提示操作错误。
     }
   };
 
@@ -125,7 +122,7 @@ export default function DashboardApiPage() {
   return (
     <div className="space-y-6">
       <PageHeader eyebrow="API 管理" title="API 凭证与部署" description="从租赁订单进入 API 凭证、部署状态和部署费用支付。敏感字段默认脱敏。" />
-      <ErrorAlert message={error ?? actionError} />
+      <ErrorAlert message={error} />
       <DataTable columns={columns} data={page.records} rowKey={(row) => row.orderNo} loading={loading} emptyText="暂无可关联的租赁订单。" pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
       <div className="rounded-lg border border-border bg-muted/40 p-4 text-sm leading-6 text-muted-foreground">
         API 调用说明由后端凭证详情返回的 API Base URL 和 Token 组成。前端不明文暴露未脱敏 Token，复制操作仅对后端已返回字段生效。

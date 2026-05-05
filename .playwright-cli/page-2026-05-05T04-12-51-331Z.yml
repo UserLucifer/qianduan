@@ -1,0 +1,225 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "算力租赁" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation "主导航" [ref=e5]:
+        - button "产品" [ref=e7] [cursor=pointer]
+        - button "产品用例" [ref=e9] [cursor=pointer]
+        - button "解决方案" [ref=e11] [cursor=pointer]
+        - link "租赁" [ref=e12] [cursor=pointer]:
+          - /url: /rental
+        - button "公司" [ref=e14] [cursor=pointer]
+        - link "博客" [ref=e15] [cursor=pointer]:
+          - /url: /blog
+        - link "帮助中心" [ref=e16] [cursor=pointer]:
+          - /url: /help-center
+      - generic [ref=e17]:
+        - button "切换明暗主题" [ref=e18] [cursor=pointer]:
+          - img [ref=e19]
+          - img [ref=e21]
+        - link "登录" [ref=e24] [cursor=pointer]:
+          - /url: /login
+  - main [ref=e25]:
+    - generic [ref=e27]:
+      - generic [ref=e28]:
+        - generic [ref=e29]: 企业级 AI 基础设施
+        - heading "为企业 AI 团队构建可控、可扩展的算力底座" [level=1] [ref=e30]
+        - paragraph [ref=e31]: 从数十张 GPU 到大规模集群，把训练、推理、网络、存储和支持流程整合到一个可运营的企业级基础设施方案中。
+        - generic [ref=e32]:
+          - link "联系销售" [ref=e33] [cursor=pointer]:
+            - /url: /contact-sales
+            - text: 联系销售
+            - img
+          - link "查看算力资源" [ref=e34] [cursor=pointer]:
+            - /url: /rental
+      - generic "企业级 AI 基础设施视频演示" [ref=e35]:
+        - generic [ref=e37]:
+          - generic [ref=e38]:
+            - generic [ref=e39]: 预留集群
+            - strong [ref=e40]: GPU 容量已就绪
+          - generic [ref=e41]: 生产可用
+    - generic [ref=e44]:
+      - generic [ref=e45]:
+        - generic [ref=e46]: 99.9%
+        - generic [ref=e47]: 关键工作负载可用性目标
+      - generic [ref=e48]:
+        - generic [ref=e49]: 24/7
+        - generic [ref=e50]: 企业级技术支持响应
+      - generic [ref=e51]:
+        - generic [ref=e52]: GPU
+        - generic [ref=e53]: 按训练、推理和批处理弹性组合
+    - generic [ref=e54]:
+      - generic [ref=e55]:
+        - generic [ref=e56]: 企业需求
+        - heading "把企业级约束放进基础设施设计，而不是上线后补救" [level=2] [ref=e57]
+        - paragraph [ref=e58]: 企业 AI 项目不只是租用 GPU。它还需要安全边界、成本模型、交付节奏和清晰的运营责任。
+      - generic [ref=e59]:
+        - generic [ref=e60]:
+          - generic [ref=e61]:
+            - img [ref=e63]
+            - generic [ref=e66]: 安全与合规隔离
+          - generic [ref=e67]: 专用 GPU 资源、私有访问路径和审计能力，让关键工作负载在可控边界内运行。
+        - generic [ref=e68]:
+          - generic [ref=e69]:
+            - img [ref=e71]
+            - generic [ref=e74]: 批量定价与容量规划
+          - generic [ref=e75]: 面向长期训练、推理和峰值任务设计预留方案，减少预算不确定性。
+        - generic [ref=e76]:
+          - generic [ref=e77]:
+            - img [ref=e79]
+            - generic [ref=e84]: 私有网络与高速互联
+          - generic [ref=e85]: 通过隔离网络、专属带宽和可配置访问策略，把计算、存储和团队协作连接起来。
+        - generic [ref=e86]:
+          - generic [ref=e87]:
+            - img [ref=e89]
+            - generic [ref=e91]: 企业级专家支持
+          - generic [ref=e92]: 从方案评估、上线迁移到生产运维，工程团队提供直接协作和快速响应。
+    - generic [ref=e94]:
+      - generic [ref=e95]:
+        - generic [ref=e96]: 基础设施模型
+        - heading "从资源堆叠，变成可治理的 AI 平台" [level=2] [ref=e97]
+        - paragraph [ref=e98]: 把 GPU 集群、私有网络、数据存储和运维控制拆成清晰层级，让研发、安全、采购和运维团队都能按职责扩展资源。
+        - generic [ref=e99]:
+          - generic [ref=e100]:
+            - img [ref=e101]
+            - text: 单租户 GPU 容量
+          - generic [ref=e103]:
+            - img [ref=e104]
+            - text: 私有 VPN / API / SSH 访问
+          - generic [ref=e106]:
+            - img [ref=e107]
+            - text: 审计日志与权限边界
+          - generic [ref=e109]:
+            - img [ref=e110]
+            - text: 预留容量和批量折扣
+          - generic [ref=e112]:
+            - img [ref=e113]
+            - text: 专属技术升级路径
+          - generic [ref=e115]:
+            - img [ref=e116]
+            - text: 自定义软件环境
+      - generic [ref=e120]:
+        - generic [ref=e121]:
+          - generic [ref=e122]: 算力
+          - strong [ref=e123]: GPU 集群
+          - paragraph [ref=e124]: 从单节点验证扩展到多 GPU 训练和推理集群。
+        - generic [ref=e125]:
+          - generic [ref=e126]: 网络
+          - strong [ref=e127]: 私有互联
+          - paragraph [ref=e128]: 低延迟网络、隔离访问和跨环境连接。
+        - generic [ref=e129]:
+          - generic [ref=e130]: 存储
+          - strong [ref=e131]: 数据与存储
+          - paragraph [ref=e132]: 为模型、数据集和检查点提供高吞吐访问。
+        - generic [ref=e133]:
+          - generic [ref=e134]: 运营
+          - strong [ref=e135]: 运维控制
+          - paragraph [ref=e136]: 成本、权限、监控和支持流程统一纳入运营面。
+    - generic [ref=e137]:
+      - generic [ref=e138]:
+        - generic [ref=e139]: 交付路径
+        - heading "用企业交付流程替代临时采购和零散部署" [level=2] [ref=e140]
+      - generic [ref=e141]:
+        - generic [ref=e142]:
+          - generic [ref=e143]:
+            - generic [ref=e144]: "01"
+            - generic [ref=e145]: 评估工作负载
+          - generic [ref=e146]: 确认模型规模、显存、网络、存储和合规要求，避免用通用云配置硬套 AI 场景。
+        - generic [ref=e147]:
+          - generic [ref=e148]:
+            - generic [ref=e149]: "02"
+            - generic [ref=e150]: 锁定交付架构
+          - generic [ref=e151]: 按训练、推理、微调或批处理场景组合 GPU、网络、存储和访问策略。
+        - generic [ref=e152]:
+          - generic [ref=e153]:
+            - generic [ref=e154]: "03"
+            - generic [ref=e155]: 上线并持续优化
+          - generic [ref=e156]: 通过专家支持、容量复盘和成本观察，让生产集群持续保持可用和可控。
+    - generic [ref=e158]:
+      - generic [ref=e159]:
+        - generic [ref=e160]:
+          - generic [ref=e161]: 企业运营面
+          - img [ref=e162]
+        - generic [ref=e165]:
+          - generic [ref=e166]:
+            - img [ref=e167]
+            - strong [ref=e170]: 算力编排
+            - generic [ref=e171]: 训练、推理与批处理资源统一规划
+          - generic [ref=e172]:
+            - img [ref=e173]
+            - strong [ref=e177]: 访问控制
+            - generic [ref=e178]: 团队、密钥、网络与环境隔离
+          - generic [ref=e179]:
+            - img [ref=e180]
+            - strong [ref=e184]: 数据路径
+            - generic [ref=e185]: 模型、数据集和检查点高速读写
+          - generic [ref=e186]:
+            - img [ref=e187]
+            - strong [ref=e188]: 成本治理
+            - generic [ref=e189]: 预留容量、用量观察和合同管理
+      - generic [ref=e190]:
+        - generic [ref=e191]: 运营治理
+        - heading "让采购、研发、安全和运维看到同一个基础设施事实" [level=2] [ref=e192]
+        - paragraph [ref=e193]: 围绕治理面建立共同语言：谁能访问、资源如何交付、数据如何流动、成本如何控制，以及生产问题如何升级。
+        - link "讨论企业方案" [ref=e194] [cursor=pointer]:
+          - /url: /contact-sales
+          - text: 讨论企业方案
+          - img
+    - generic [ref=e196]:
+      - img [ref=e197]
+      - heading "大胆构建，自信扩展" [level=2] [ref=e201]
+      - paragraph [ref=e202]: 企业级安全、定制部署、世界级支持。我们为您的团队提供所需的 GPU 基础设施，让关键 AI 项目稳定推进。
+      - generic [ref=e203]:
+        - link "开始使用" [ref=e204] [cursor=pointer]:
+          - /url: /rental
+        - link "联系销售" [ref=e205] [cursor=pointer]:
+          - /url: /contact-sales
+  - contentinfo [ref=e206]:
+    - generic [ref=e207]:
+      - generic [ref=e208]:
+        - generic [ref=e209]:
+          - link "算力租赁" [ref=e210] [cursor=pointer]:
+            - /url: /
+          - paragraph [ref=e211]: 基于 Token 经济的高性能 AI 算力调度平台，为全球开发者提供即时可用的计算资源。
+        - generic [ref=e212]:
+          - heading "公司信息" [level=3] [ref=e213]
+          - generic [ref=e214]:
+            - link "关于我们" [ref=e215] [cursor=pointer]:
+              - /url: /about
+            - link "企业可持续发展" [ref=e216] [cursor=pointer]:
+              - /url: /sustainability
+            - link "解决方案" [ref=e217] [cursor=pointer]:
+              - /url: /enterprise
+        - generic [ref=e218]:
+          - heading "资源" [level=3] [ref=e219]
+          - link "产品用例" [ref=e221] [cursor=pointer]:
+            - /url: /use-cases
+        - generic [ref=e222]:
+          - heading "条款" [level=3] [ref=e223]
+          - generic [ref=e224]:
+            - link "服务条款" [ref=e225] [cursor=pointer]:
+              - /url: /terms
+            - link "隐私政策" [ref=e226] [cursor=pointer]:
+              - /url: /privacy
+            - link "合规" [ref=e227] [cursor=pointer]:
+              - /url: /compliance
+            - link "漏洞披露" [ref=e228] [cursor=pointer]:
+              - /url: /vulnerability-disclosure
+            - link "数据处理" [ref=e229] [cursor=pointer]:
+              - /url: /data-processing
+        - generic [ref=e230]:
+          - heading "帮助" [level=3] [ref=e231]
+          - generic [ref=e232]:
+            - link "文档中心" [ref=e233] [cursor=pointer]:
+              - /url: /docs
+            - link "博客" [ref=e234] [cursor=pointer]:
+              - /url: /blog
+            - link "联系我们" [ref=e235] [cursor=pointer]:
+              - /url: /contact
+      - generic [ref=e236]:
+        - generic [ref=e237]: © 2026 算力租赁. All rights reserved.
+        - generic [ref=e238]: All systems operational
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e245] [cursor=pointer]:
+    - img [ref=e246]

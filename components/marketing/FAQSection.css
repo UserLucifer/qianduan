@@ -28,60 +28,43 @@
   color: var(--muted);
 }
 
-.faq-list {
+.faq-accordion {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.faq-item {
+.faq-accordion__item {
   border-bottom: 1px solid var(--card-border);
   transition: all 0.2s ease;
 }
 
-.faq-item:last-child {
+.faq-accordion__item:last-child {
   border-bottom: none;
 }
 
-.faq-question {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.faq-accordion__trigger {
   padding: 24px 0;
-  background: none;
-  border: none;
-  text-align: left;
   font-size: 1.125rem;
   font-weight: 600;
   color: var(--foreground);
-  cursor: pointer;
   transition: color 0.2s ease;
 }
 
-.faq-question:hover {
+.faq-accordion__trigger:hover {
   color: var(--accent);
+  text-decoration: none;
 }
 
-.faq-icon {
-  flex-shrink: 0;
-  margin-left: 16px;
+.faq-accordion__trigger svg {
   color: var(--muted);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.2s ease, color 0.2s ease;
 }
 
-.faq-item.is-open .faq-icon {
+.faq-accordion__trigger[data-state="open"] svg {
   color: var(--accent);
 }
 
-.faq-answer-wrapper {
-  transition: height 0.3s ease;
-}
-
-.faq-answer {
+.faq-accordion__content {
   padding-bottom: 24px;
   font-size: 1rem;
   line-height: 1.6;

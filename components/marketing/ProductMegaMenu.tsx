@@ -61,9 +61,9 @@ const productCategories: ProductCategory[] = [
     icon: Database,
     subItems: [
       { name: 'AI 对象存储', href: '/ai-object-storage' },
-      { name: '专用 VAST 存储', href: '#' },
-      { name: '分布式文件存储', href: '#' },
-      { name: '本地存储', href: '#' }
+      { name: '专用 VAST 存储', href: '/dedicated-vast-storage' },
+      { name: '分布式文件存储', href: '/ai-object-storage#distributed-file-storage' },
+      { name: '本地存储', href: '/ai-object-storage#local-storage' }
     ],
     featured: {
       title: '零流出数据迁移 (0EM)',
@@ -76,7 +76,7 @@ const productCategories: ProductCategory[] = [
     name: '基础架构控制',
     icon: Cloud,
     subItems: [
-      { name: '托管 Kubernetes', href: '#' }
+      { name: '托管 Kubernetes', href: '/managed-kubernetes' }
     ],
     featured: {
       title: '定义 AI 核心云',
@@ -89,9 +89,9 @@ const productCategories: ProductCategory[] = [
     name: '运行加速',
     icon: Zap,
     subItems: [
-      { name: 'SUNK', href: '#' },
-      { name: 'SUNK Anywhere', href: '#' },
-      { name: 'Serverless RL', href: '#' }
+      { name: 'SUNK', href: '/sunk' },
+      { name: 'SUNK Anywhere', href: '/sunk-anywhere' },
+      { name: 'Serverless RL', href: 'https://wandb.ai/site/serverless-rl/?utm_source=coreweave.com&utm_medium=site' }
     ],
     featured: {
       title: 'MLPerf v5.0 测试结果',
@@ -104,10 +104,10 @@ const productCategories: ProductCategory[] = [
     name: '模型与代理开发',
     icon: Target,
     subItems: [
-      { name: '训练', href: '#' },
-      { name: '微调', href: '#' },
-      { name: '推理', href: '#' },
-      { name: '监控', href: '#' }
+      { name: '训练', href: 'https://wandb.ai/site/models/?utm_source=coreweave.com&utm_medium=site' },
+      { name: '微调', href: 'https://wandb.ai/site/wb-training/?utm_source=coreweave.com&utm_medium=site' },
+      { name: '推理', href: 'https://wandb.ai/site/inference/?utm_source=coreweave.com&utm_medium=site#' },
+      { name: '监控', href: 'https://wandb.ai/site/weave/?utm_source=coreweave.com&utm_medium=site' }
     ],
     featured: {
       title: '算力租赁 ARENA',
@@ -120,12 +120,10 @@ const productCategories: ProductCategory[] = [
     name: '任务控制',
     icon: Activity,
     subItems: [
-      { name: 'Mission Control', href: '#' },
-      { name: 'Fleet lifecycle controller', href: '#' },
-      { name: 'Node lifecycle controller', href: '#' },
-      { name: 'Observability', href: '#' },
-      { name: 'Security', href: '#' },
-      { name: 'Tensorizer', href: '#' }
+      { name: 'Mission Control', href: '/mission-control' },
+      { name: 'Fleet lifecycle controller', href: '/mission-control#fleet-lifecycle-controller' },
+      { name: 'Node lifecycle controller', href: '/mission-control#node-lifecycle-controller' },
+      { name: 'Observability', href: '/observability' }
     ],
     featured: {
       title: 'Mission Control: 大型 AI 运行标准',

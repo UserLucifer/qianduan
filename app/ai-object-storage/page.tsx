@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 const storageAssets = {
   hero: '/videos/Ai对象存储/hero视频.mp4',
   objectStorage: '/videos/Ai对象存储/CoreWeave AI Object Storage模块视频.mp4',
-  distributedFile: '/videos/Ai对象存储/Distributed file storage的图片.avif',
+  distributedFile: '/videos/Ai对象存储/Distributed%20file%20storage%E7%9A%84%E5%9B%BE%E7%89%87.avif',
   localStorage: '/videos/Ai对象存储/底部视频.mp4',
   ctaBackground: '/videos/Ai对象存储/底部背景图.avif',
 };
@@ -384,7 +384,10 @@ export default function AiObjectStoragePage() {
           </div>
         </section>
 
-        <section className="bg-[#050505] px-6 py-20 text-white sm:px-10 lg:px-16 lg:py-24">
+        <section
+          id="distributed-file-storage"
+          className="scroll-mt-24 bg-[#050505] px-6 py-20 text-white sm:px-10 lg:px-16 lg:py-24"
+        >
           <div className="mx-auto max-w-[1220px]">
             <div className="grid items-center gap-16 lg:grid-cols-[0.95fr_1.05fr] lg:gap-20">
               <div>
@@ -410,15 +413,12 @@ export default function AiObjectStoragePage() {
                 </div>
               </div>
 
-              <div className="aspect-[1.06] overflow-hidden rounded-[24px] bg-white">
-                <Image
-                  src={storageAssets.distributedFile}
-                  alt="分布式文件存储示意图"
-                  width={1600}
-                  height={1200}
-                  className="h-full w-full object-cover"
-                />
-              </div>
+              <div
+                role="img"
+                aria-label="分布式文件存储示意图"
+                className="aspect-[1.06] overflow-hidden rounded-[24px] bg-white bg-cover bg-center bg-no-repeat"
+                style={{ backgroundImage: `url("${storageAssets.distributedFile}")` }}
+              />
             </div>
 
             <div className="mt-20 grid gap-7 lg:grid-cols-3">
@@ -446,7 +446,10 @@ export default function AiObjectStoragePage() {
           </div>
         </section>
 
-        <section className="bg-[#f7f8fa] px-6 py-20 sm:px-10 lg:px-16">
+        <section
+          id="local-storage"
+          className="scroll-mt-24 bg-[#f7f8fa] px-6 py-20 sm:px-10 lg:px-16"
+        >
           <div className="mx-auto grid max-w-[1180px] items-center gap-16 lg:grid-cols-[0.9fr_1fr] lg:gap-20">
             <div className="max-w-[580px]">
               <h2 className="text-4xl font-semibold leading-tight tracking-[-0.04em] sm:text-5xl">

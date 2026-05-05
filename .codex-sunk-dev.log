@@ -1,0 +1,18 @@
+
+> compute-rental-frontend@0.1.0 dev
+> next dev -p 3001
+
+▲ Next.js 16.2.4 (Turbopack)
+- Local:         http://localhost:3001
+- Network:       http://192.168.0.108:3001
+- Environments: .env.local
+✓ Ready in 13.5s
+⨯ Another next dev server is already running.
+
+- Local:        http://localhost:3000
+- PID:          10028
+- Dir:          E:\业务开发\qianduan
+- Log:          .next\dev\logs\next-development.log
+
+Run taskkill /PID 10028 /F to stop it.
+[?25h
