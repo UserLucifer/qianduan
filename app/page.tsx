@@ -42,13 +42,7 @@ export default function Home() {
 
         <LogoCarousel />
 
-        <section className="panel">
-          <div className="panel__header">
-            <h2>实例型号与规格</h2>
-            <p>探索各种显存容量的高性能计算节点。</p>
-          </div>
-          <ProductList />
-        </section>
+        <ProductList />
 
         <FeatureGrid />
         <UseCaseSection />

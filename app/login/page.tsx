@@ -9,6 +9,8 @@ import Image from "next/image";
 import "./login.css";
 import { loginWithPassword } from "@/api/auth";
 import { toErrorMessage, translateErrorMessage } from "@/lib/format";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -62,7 +64,7 @@ export default function LoginPage() {
 
           <form style={{ width: "100%" }} onSubmit={handleLogin}>
             <div className="input-group">
-              <input
+              <Input
                 type="email"
                 className="login-input"
                 placeholder="name@company.com"
@@ -77,7 +79,7 @@ export default function LoginPage() {
             </div>
 
             <div className="input-group" style={{ position: "relative" }}>
-              <input
+              <Input
                 type={showPassword ? "text" : "password"}
                 className="login-input"
                 placeholder="密码"
@@ -89,8 +91,10 @@ export default function LoginPage() {
                 required
                 disabled={isLoading}
               />
-              <button
+              <Button
                 type="button"
+                variant="ghost"
+                size="icon"
                 className="password-toggle"
                 onClick={() => setShowPassword(!showPassword)}
                 style={{
@@ -109,18 +113,18 @@ export default function LoginPage() {
                 }}
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-              </button>
+              </Button>
             </div>
 
             {error && <div className="error-message" style={{ marginBottom: "16px" }}>{error}</div>}
 
-            <button
+            <Button
               type="submit"
               className="login-button login-button--primary"
               disabled={isLoading}
             >
               {isLoading ? "登录中..." : "登录"}
-            </button>
+            </Button>
           </form>
 
           <div className="login-footer-links" style={{ marginTop: "24px" }}>

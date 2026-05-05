@@ -7,6 +7,8 @@ import Image from "next/image";
 import "../login/login.css";
 import { sendResetPasswordCode, resetPassword, verifyResetPasswordCode } from "@/api/auth";
 import { toErrorMessage, translateErrorMessage } from "@/lib/format";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 type Step = "email" | "otp" | "reset";
 
@@ -163,7 +165,7 @@ export default function ResetPasswordPage() {
                   <h1 className="login-title">重置您的密码</h1>
                   <p className="login-subtitle">输入与您的账号关联的电子邮箱地址。</p>
                   <form style={{ width: "100%" }} onSubmit={handleEmailSubmit}>
-                    <input
+                    <Input
                       type="email"
                       className="login-input"
                       placeholder="name@company.com"
@@ -172,9 +174,9 @@ export default function ResetPasswordPage() {
                       required
                     />
                     {error && <div className="error-message">{error}</div>}
-                    <button type="submit" className="login-button login-button--primary" disabled={isLoading}>
+                    <Button type="submit" className="login-button login-button--primary" disabled={isLoading}>
                       {isLoading ? "发送中..." : "发送重置链接"}
-                    </button>
+                    </Button>
                   </form>
                   <Link href="/login" className="back-link">返回登录</Link>
                 </>
@@ -189,7 +191,7 @@ export default function ResetPasswordPage() {
                   </p>
                   <div className="otp-container">
                     {otp.map((digit, i) => (
-                      <input
+                      <Input
                         key={i}
                         ref={otpRefs[i]}
                         className="otp-input"
@@ -206,16 +208,18 @@ export default function ResetPasswordPage() {
                   {error && <div className="error-message">{error}</div>}
 
                   <div className="otp-actions" style={{ marginTop: 24, display: "flex", flexDirection: "column", gap: 12 }}>
-                    <button 
+                    <Button
+                      type="button"
+                      variant="secondary"
                       className="login-button login-button--secondary"
                       onClick={() => handleEmailSubmit()}
                       disabled={isLoading || countdown > 0}
                     >
                       {countdown > 0 ? `${countdown}s 后重新发送` : "重新发送验证码"}
-                    </button>
-                    <button className="resend-button" style={{ alignSelf: "center" }} onClick={() => setStep("email")}>
+                    </Button>
+                    <Button type="button" variant="ghost" className="resend-button" style={{ alignSelf: "center" }} onClick={() => setStep("email")}>
                       返回邮箱输入
-                    </button>
+                    </Button>
                   </div>
                 </>
               )}
@@ -225,7 +229,7 @@ export default function ResetPasswordPage() {
                   <h1 className="login-title">设置新密码</h1>
                   <p className="login-subtitle">输入您的新安全密码。</p>
                   <form style={{ width: "100%" }} onSubmit={handleReset}>
-                    <input
+                    <Input
                       type="password"
                       className="login-input"
                       placeholder="新密码"
@@ -238,7 +242,7 @@ export default function ResetPasswordPage() {
                       autoFocus
                       disabled={isLoading}
                     />
-                    <input
+                    <Input
                       type="password"
                       className="login-input"
                       placeholder="确认密码"
@@ -251,17 +255,18 @@ export default function ResetPasswordPage() {
                       disabled={isLoading}
                     />
                     {error && <div className="error-message">{error}</div>}
-                    <button type="submit" className="login-button login-button--primary" disabled={isLoading}>
+                    <Button type="submit" className="login-button login-button--primary" disabled={isLoading}>
                       {isLoading ? "重置中..." : "更新密码"}
-                    </button>
-                    <button 
+                    </Button>
+                    <Button
                       type="button" 
+                      variant="ghost"
                       className="resend-button" 
                       style={{ width: "100%", marginTop: 12 }} 
                       onClick={() => setStep("otp")}
                     >
                       返回验证码输入
-                    </button>
+                    </Button>
                   </form>
                 </>
               )}

@@ -7,6 +7,8 @@ import Image from "next/image";
 import "../login/login.css"; // Reuse login styles
 import { sendSignupEmailCode, register, verifySignupEmailCode } from "@/api/auth";
 import { toErrorMessage, translateErrorMessage } from "@/lib/format";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 type Step = "email" | "otp" | "profile";
 
@@ -16,6 +18,7 @@ export default function SignupPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [userName, setUserName] = useState("");
+  const [inviteCode, setInviteCode] = useState("");
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -86,11 +89,13 @@ export default function SignupPage() {
     setIsLoading(true);
     setError("");
     try {
+      const trimmedInviteCode = inviteCode.trim();
       const res = await register({
         email,
         code: otp.join(""),
         userName: userName,
         password,
+        ...(trimmedInviteCode ? { inviteCode: trimmedInviteCode } : {}),
       });
       if (res && (res.code === 200 || res.code === 0) && res.data) {
         localStorage.setItem("user_access_token", res.data.accessToken);
@@ -138,6 +143,11 @@ export default function SignupPage() {
   };
 
   useEffect(() => {
+    const inviteCodeFromUrl = new URLSearchParams(window.location.search).get("inviteCode");
+    if (inviteCodeFromUrl) setInviteCode(inviteCodeFromUrl);
+  }, []);
+
+  useEffect(() => {
     if (step === "otp") otpRefs[0].current?.focus();
   }, [step]);
 
@@ -156,7 +166,7 @@ export default function SignupPage() {
               <p className="login-subtitle">注册以继续使用</p>
 
               <form style={{ width: "100%" }} onSubmit={handleEmailSubmit}>
-                <input
+                <Input
                   type="email"
                   className="login-input"
                   placeholder="工作邮箱"
@@ -164,10 +174,21 @@ export default function SignupPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                 />
+                <Input
+                  type="text"
+                  className="login-input"
+                  placeholder="邀请码（选填）"
+                  value={inviteCode}
+                  onChange={(e) => {
+                    setInviteCode(e.target.value);
+                    setError("");
+                  }}
+                  disabled={isLoading}
+                />
                 {error && <div className="error-message">{error}</div>}
-                <button type="submit" className="login-button login-button--primary" disabled={isLoading}>
+                <Button type="submit" className="login-button login-button--primary" disabled={isLoading}>
                   {isLoading ? "处理中..." : "继续"}
-                </button>
+                </Button>
               </form>
               <div className="footer-subtext" style={{ marginTop: 24 }}>
                 已经有账号了？ <Link href="/login" className="footer-link-bold">登录</Link>
@@ -184,7 +205,7 @@ export default function SignupPage() {
               </p>
               <div className="otp-container">
                 {otp.map((digit, i) => (
-                  <input
+                  <Input
                     key={i}
                     ref={otpRefs[i]}
                     className="otp-input"
@@ -201,16 +222,18 @@ export default function SignupPage() {
               {error && <div className="error-message">{error}</div>}
 
               <div className="otp-actions" style={{ marginTop: 24, display: "flex", flexDirection: "column", gap: 12 }}>
-                <button 
+                <Button
+                  type="button"
+                  variant="secondary"
                   className="login-button login-button--secondary"
                   onClick={() => handleEmailSubmit()}
                   disabled={isLoading || countdown > 0}
                 >
                   {countdown > 0 ? `${countdown}s 后重新发送` : "重新发送验证码"}
-                </button>
-                <button className="resend-button" style={{ alignSelf: "center" }} onClick={() => setStep("email")}>
+                </Button>
+                <Button type="button" variant="ghost" className="resend-button" style={{ alignSelf: "center" }} onClick={() => setStep("email")}>
                   返回邮箱输入
-                </button>
+                </Button>
               </div>
             </>
           )}
@@ -220,7 +243,7 @@ export default function SignupPage() {
               <h1 className="login-title">即将完成</h1>
               <p className="login-subtitle">设置您的用户名和密码。</p>
               <form style={{ width: "100%" }} onSubmit={handleRegister}>
-                <input
+                <Input
                   type="text"
                   className="login-input"
                   placeholder="用户名"
@@ -233,7 +256,7 @@ export default function SignupPage() {
                   autoFocus
                   disabled={isLoading}
                 />
-                <input
+                <Input
                   type="password"
                   className="login-input"
                   placeholder="设置密码"
@@ -245,7 +268,7 @@ export default function SignupPage() {
                   required
                   disabled={isLoading}
                 />
-                <input
+                <Input
                   type="password"
                   className="login-input"
                   placeholder="确认密码"
@@ -258,17 +281,18 @@ export default function SignupPage() {
                   disabled={isLoading}
                 />
                 {error && <div className="error-message">{error}</div>}
-                <button type="submit" className="login-button login-button--primary" disabled={isLoading}>
+                <Button type="submit" className="login-button login-button--primary" disabled={isLoading}>
                   {isLoading ? "创建账号中..." : "注册"}
-                </button>
-                <button 
+                </Button>
+                <Button
                   type="button" 
+                  variant="ghost"
                   className="resend-button" 
                   style={{ width: "100%", marginTop: 12 }} 
                   onClick={() => setStep("otp")}
                 >
                   返回验证码输入
-                </button>
+                </Button>
               </form>
             </>
           )}
