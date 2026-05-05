@@ -84,7 +84,7 @@ export default function Header() {
   return (
     <header className="site-header z-[100] bg-background/95 backdrop-blur sticky top-0" ref={headerRef}>
       <div className="site-header__inner">
-        <Link href="/" className="site-header__brand" onClick={() => setActiveMenu(null)}>
+        <Link href="/" className="site-header__brand text-foreground transition-colors hover:text-foreground/80" onClick={() => setActiveMenu(null)}>
           算力租赁
         </Link>
 
