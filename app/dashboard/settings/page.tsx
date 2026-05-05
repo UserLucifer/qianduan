@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { clearUserAuthSession } from "@/lib/auth-session";
 
 type ResetStep = 'idle' | 'countdown';
 
@@ -132,7 +133,7 @@ export default function SettingsPage() {
         setStep('idle');
         setResetForm({ code: "", newPassword: "", confirmPassword: "" });
         setTimeout(() => {
-          localStorage.removeItem("user_access_token");
+          clearUserAuthSession();
           router.push("/login");
         }, 2000);
       }

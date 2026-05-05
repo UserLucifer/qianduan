@@ -3,10 +3,11 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Bell, CreditCard, LogOut, Moon, Search, Settings, Sun, Wallet } from "lucide-react";
+import { Bell, BookOpen, CreditCard, Home, LogOut, Menu, Moon, Newspaper, Search, Settings, Sun, Wallet } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getCurrentUser, type UserMeResponse } from "@/api/user";
+import { clearUserAuthSession, subscribeUserAuthChanges } from "@/lib/auth-session";
 import { UserAvatar } from "@/components/shared/UserAvatar";
 import { getAvatarUrl } from "@/lib/avatars";
 import { USER_NAV_ITEMS } from "@/components/dashboard/sidebar";
@@ -18,6 +19,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
+const PUBLIC_HEADER_LINKS = [
+  { title: "首页", href: "/", icon: Home },
+  { title: "博客", href: "/blog", icon: Newspaper },
+  { title: "文档中心", href: "/docs", icon: BookOpen },
+];
 
 export function Header() {
   const [user, setUser] = useState<UserMeResponse | null>(null);
@@ -38,10 +45,25 @@ export function Header() {
     const currentTheme = document.documentElement.dataset.theme || "dark";
     setTheme(currentTheme);
 
+    const unsubscribeAuth = subscribeUserAuthChanges((action) => {
+      if (action === "logout") {
+        setUser(null);
+        router.replace("/login");
+        return;
+      }
+
+      getCurrentUser()
+        .then((res) => {
+          if (res.code === 200 || res.code === 0) setUser(res.data);
+        })
+        .catch(() => setUser(null));
+    });
+
     return () => {
       mounted = false;
+      unsubscribeAuth();
     };
-  }, []);
+  }, [router]);
 
   const toggleTheme = () => {
     const newTheme = theme === "dark" ? "light" : "dark";
@@ -52,8 +74,8 @@ export function Header() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("user_access_token");
-    localStorage.removeItem("accessToken");
+    clearUserAuthSession();
+    setUser(null);
     router.push("/login");
   };
 
@@ -67,17 +89,59 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-background px-8">
-      <div className="flex items-center gap-4">
-        <h1 className="text-lg font-semibold tracking-tight">{getPageTitle()}</h1>
-        <div className="hidden h-8 w-px bg-border/50 md:block" />
-        <div className="relative hidden w-64 md:block">
+    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-background px-4 sm:px-6 lg:px-8">
+      <div className="flex min-w-0 items-center gap-4">
+        <h1 className="truncate text-lg font-semibold tracking-tight">{getPageTitle()}</h1>
+        <div className="hidden h-8 w-px bg-border/50 xl:block" />
+        <div className="relative hidden w-64 xl:block">
           <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
           <Input className="h-9 pl-8 pr-3 text-xs shadow-none focus-visible:ring-1" placeholder="快速搜索..." />
         </div>
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex shrink-0 items-center gap-2">
+        <nav className="hidden items-center gap-1 lg:flex" aria-label="公共站点导航">
+          {PUBLIC_HEADER_LINKS.map((item) => (
+            <Button
+              key={item.href}
+              asChild
+              variant="ghost"
+              size="sm"
+              className="h-9 gap-2 text-muted-foreground hover:text-foreground"
+            >
+              <Link href={item.href}>
+                <item.icon className="h-4 w-4" />
+                <span>{item.title}</span>
+              </Link>
+            </Button>
+          ))}
+        </nav>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-9 w-9 text-muted-foreground hover:text-foreground lg:hidden"
+              aria-label="打开公共站点导航"
+            >
+              <Menu className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="mt-2 w-44 lg:hidden">
+            <DropdownMenuLabel>站点导航</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            {PUBLIC_HEADER_LINKS.map((item) => (
+              <DropdownMenuItem key={item.href} asChild className="cursor-pointer">
+                <Link href={item.href} className="flex w-full items-center">
+                  <item.icon className="mr-2 h-4 w-4" />
+                  {item.title}
+                </Link>
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+
         <Button
           variant="ghost"
           size="icon"
@@ -102,7 +166,7 @@ export function Header() {
                   name={user?.userName || user?.email || "U"}
                   className="h-7 w-7 ring-1 ring-border"
                 />
-                <span className="max-w-[100px] truncate text-xs font-bold text-foreground">
+                <span className="hidden max-w-[100px] truncate text-xs font-bold text-foreground sm:block">
                   {user?.userName || "账户"}
                 </span>
               </Button>

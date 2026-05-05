@@ -7,6 +7,7 @@ import {
   isSuccessApiCode,
   shouldClearAuthSession,
 } from "@/lib/api-errors";
+import { clearUserAuthSession, getUserAccessToken } from "@/lib/auth-session";
 
 const apiBaseURL =
   process.env.NEXT_PUBLIC_API_BASE_URL ||
@@ -40,8 +41,7 @@ function clearAuthSession(scope: ClientScope) {
     return;
   }
 
-  localStorage.removeItem("user_access_token");
-  localStorage.removeItem("accessToken");
+  clearUserAuthSession();
   if (window.location.pathname !== "/login") {
     window.location.href = "/login";
   }
@@ -125,7 +125,7 @@ const userAxiosClient = axios.create(baseConfig);
 userAxiosClient.interceptors.request.use(
   (config) => {
     if (typeof window !== "undefined") {
-      const token = localStorage.getItem("user_access_token") || localStorage.getItem("accessToken");
+      const token = getUserAccessToken();
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }

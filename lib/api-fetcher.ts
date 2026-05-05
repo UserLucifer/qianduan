@@ -7,13 +7,14 @@ import {
   isSuccessApiCode,
   shouldClearAuthSession,
 } from "@/lib/api-errors";
+import { clearUserAuthSession, getUserAccessToken } from "@/lib/auth-session";
 
 /**
  * 通用 Fetcher 函数，为 Spring Boot 后端设计
  * 包含 Authorization: Bearer <token>
  */
 export async function apiFetcher<T>(url: string, options: RequestInit = {}): Promise<T> {
-  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+  const token = getUserAccessToken();
 
   const defaultHeaders: Record<string, string> = {
     'Content-Type': 'application/json',
@@ -36,9 +37,7 @@ export async function apiFetcher<T>(url: string, options: RequestInit = {}): Pro
 
   if (isApiResponseLike(responseData) && !isSuccessApiCode(responseData.code)) {
     if (shouldClearAuthSession(responseData.code, response.status) && typeof window !== "undefined") {
-      localStorage.removeItem("user_access_token");
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("token");
+      clearUserAuthSession();
       if (window.location.pathname !== "/login") {
         window.location.href = "/login";
       }
@@ -56,9 +55,7 @@ export async function apiFetcher<T>(url: string, options: RequestInit = {}): Pro
   if (!response.ok) {
     // 处理常见的 HTTP 错误
     if (shouldClearAuthSession(undefined, response.status) && typeof window !== "undefined") {
-      localStorage.removeItem("user_access_token");
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("token");
+      clearUserAuthSession();
       if (window.location.pathname !== "/login") {
         window.location.href = "/login";
       }

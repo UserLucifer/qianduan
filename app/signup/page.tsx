@@ -7,6 +7,7 @@ import Image from "next/image";
 import "../login/login.css"; // Reuse login styles
 import { sendSignupEmailCode, register, verifySignupEmailCode } from "@/api/auth";
 import { toErrorMessage, translateErrorMessage } from "@/lib/format";
+import { setUserAccessToken } from "@/lib/auth-session";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -98,7 +99,7 @@ export default function SignupPage() {
         ...(trimmedInviteCode ? { inviteCode: trimmedInviteCode } : {}),
       });
       if (res && (res.code === 200 || res.code === 0) && res.data) {
-        localStorage.setItem("user_access_token", res.data.accessToken);
+        setUserAccessToken(res.data.accessToken);
         window.location.href = "/dashboard";
       } else {
         setError(translateErrorMessage(res?.message || "注册失败"));

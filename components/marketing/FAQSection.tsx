@@ -10,24 +10,24 @@ import './FAQSection.css';
 
 const faqs = [
   {
-    question: "What types of GPUs are available for rental?",
-    answer: "We offer a wide range of high-performance GPUs, including NVIDIA H100, A100, and RTX 4090, tailored for various AI training and inference workloads."
+    question: "可以租赁哪些类型的 GPU？",
+    answer: "我们提供多种高性能 GPU 资源，包括 NVIDIA H100、A100 和 RTX 4090 等，可满足 AI 训练、推理和不同规模的算力任务。"
   },
   {
-    question: "How does the pricing model work?",
-    answer: "Our pricing is transparent and based on a pay-as-you-go model. You are billed per hour of usage, with no hidden fees. We also offer discounted rates for long-term commitments."
+    question: "计费方式是怎样的？",
+    answer: "平台采用透明的按量计费模式，通常按实际使用时长计费，不设置隐藏费用。长期租赁或稳定使用场景也可以享受更合适的价格方案。"
   },
   {
-    question: "Is there a minimum rental period?",
-    answer: "No, there is no minimum rental period. You can spin up an instance for as little as one hour, making it perfect for both short experiments and long-running production workloads."
+    question: "是否有最短租赁时长？",
+    answer: "没有严格的最短租赁限制。你可以按需启动实例，既适合短时间实验验证，也适合持续运行的生产任务。"
   },
   {
-    question: "What level of technical support is provided?",
-    answer: "We provide 24/7 technical support for all our infrastructure. Our team of experts is available via chat and email to help you troubleshoot issues and optimize your deployments."
+    question: "平台提供哪些技术支持？",
+    answer: "我们为算力基础设施提供技术支持，协助你处理部署、连接、运行和资源使用中的问题，并帮助优化实际使用体验。"
   },
   {
-    question: "Can I scale my compute resources dynamically?",
-    answer: "Yes, our platform is designed for dynamic scaling. You can easily add or remove GPU nodes via our API or dashboard to match your workload demands in real-time."
+    question: "算力资源可以动态扩展吗？",
+    answer: "可以。你可以根据任务负载变化，通过控制台选择和调整 GPU 节点，让资源规模更贴合训练、推理或批处理任务的实际需求。"
   }
 ];
 
@@ -36,8 +36,8 @@ export default function FAQSection() {
     <section className="faq-section">
       <div className="faq-container">
         <div className="faq-header">
-          <h2>Frequently Asked Questions</h2>
-          <p>Everything you need to know about our product and billing.</p>
+          <h2>常见问题</h2>
+          <p>了解算力租赁、产品资源和计费方式的关键信息。</p>
         </div>
         
         <Accordion

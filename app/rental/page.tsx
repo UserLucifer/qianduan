@@ -4,293 +4,554 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Header from "@/components/marketing/Header";
 import Footer from "@/components/marketing/Footer";
-import { getAiModels, getProducts, getRentalCycleRules } from "@/api/product";
-import { createRentalOrder, estimateRental, payRentalOrder } from "@/api/rental";
-import type { AiModelResponse, ProductResponse, RentalCycleRuleResponse } from "@/api/types";
-import { formatMoney, toErrorMessage } from "@/lib/format";
+import { getGpuModels, getProducts, getRegions } from "@/api/product";
+import type { GpuModelResponse, ProductResponse, RegionResponse } from "@/api/types";
+import { formatMoney, formatNumber, toErrorMessage } from "@/lib/format";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Search, Cpu, HardDrive, MapPin, Calculator, ArrowRight, Zap, Server } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  AlertCircle,
+  ArrowUpRight,
+  Cpu,
+  MapPin,
+  Server,
+} from "lucide-react";
 import { toast } from "sonner";
-import Prism from "@/components/ui/prism";
+
+const PAGE_SIZE = 100;
+
+const accentPalette = [
+  {
+    stroke: "#ff4b00",
+    fill: "rgba(255, 75, 0, 0.12)",
+    chip: "border-[#ff4b00]/30 bg-[#ff4b00]/10 text-[#ffb199]",
+  },
+  {
+    stroke: "#10b981",
+    fill: "rgba(16, 185, 129, 0.12)",
+    chip: "border-[#10b981]/30 bg-[#10b981]/10 text-[#a7f3d0]",
+  },
+  {
+    stroke: "#7170ff",
+    fill: "rgba(113, 112, 255, 0.12)",
+    chip: "border-[#7170ff]/30 bg-[#7170ff]/10 text-[#c4c3ff]",
+  },
+];
+
+function getAccent(productId: number) {
+  return accentPalette[productId % accentPalette.length];
+}
+
+function buildDashboardHref(
+  item: ProductResponse,
+  selectedRegionId: number | null,
+  selectedGpuModelId: number | null,
+) {
+  const params = new URLSearchParams({
+    source: "rental",
+    productId: String(item.id),
+    productCode: item.productCode,
+  });
+
+  if (selectedRegionId) params.set("regionId", String(selectedRegionId));
+  if (selectedGpuModelId) params.set("gpuModelId", String(selectedGpuModelId));
+
+  return `/dashboard/products?${params.toString()}`;
+}
+
+function getAvailability(item: ProductResponse) {
+  if (item.availableStock <= 0) {
+    return { label: "售罄", tone: "border-white/10 bg-white/[0.04] text-[#62666d]" };
+  }
+
+  return { label: "可租", tone: "border-[#10b981]/30 bg-[#10b981]/10 text-[#a7f3d0]" };
+}
+
+function TechLine({
+  productId,
+  signalBars,
+}: {
+  productId: number;
+  signalBars: number;
+}) {
+  const accent = getAccent(productId);
+  const points = Array.from({ length: 17 }, (_, index) => {
+    const x = index * 20;
+    const wave = Math.sin((productId + 3) * (index + 1) * 0.31) * 12;
+    const step = Math.cos((productId + index) * 0.47) * 7;
+    const y = Math.max(12, Math.min(56, 34 + wave + step));
+    return { x, y: Number(y.toFixed(1)) };
+  });
+  const line = points.map((point, index) => `${index === 0 ? "M" : "L"}${point.x} ${point.y}`).join(" ");
+  const area = `${line} L320 72 L0 72 Z`;
+
+  return (
+    <div className="relative h-[86px] overflow-hidden rounded-[8px] border border-white/[0.06] bg-black/30">
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.045)_1px,transparent_1px)] bg-[size:32px_22px]" />
+      <svg
+        className="absolute inset-x-0 bottom-0 h-[82px] w-full overflow-visible"
+        viewBox="0 0 320 76"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        <path d={area} fill={accent.fill} />
+        <path d={line} fill="none" stroke={accent.stroke} strokeWidth="2" strokeLinecap="round" />
+        {points.filter((_, index) => index % 4 === 0).map((point) => (
+          <circle key={`${point.x}-${point.y}`} cx={point.x} cy={point.y} r="2.4" fill={accent.stroke} />
+        ))}
+      </svg>
+      <div className="absolute right-3 top-3 flex items-center gap-1.5">
+        {Array.from({ length: signalBars }).map((_, bar) => (
+          <span
+            key={bar}
+            className="h-1.5 w-5 rounded-full"
+            style={{ backgroundColor: accent.stroke }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function RentalCard({
+  item,
+  selectedRegionId,
+  selectedGpuModelId,
+}: {
+  item: ProductResponse;
+  selectedRegionId: number | null;
+  selectedGpuModelId: number | null;
+}) {
+  const accent = getAccent(item.id);
+  const availability = getAvailability(item);
+  const isSoldOut = item.availableStock <= 0;
+  const dashboardHref = buildDashboardHref(item, selectedRegionId, selectedGpuModelId);
+  const machineLabel = item.machineAlias || item.machineCode || item.productCode;
+  const signalBars = isSoldOut
+    ? 3
+    : item.availableStock >= Math.max(3, Math.ceil(item.totalStock * 0.5))
+      ? 2
+      : 1;
+  const techSpecs = [
+    { label: "显存", value: `${item.gpuMemoryGb}GB` },
+    { label: "算力", value: `${formatNumber(item.gpuPowerTops)} TOPS` },
+    { label: "CPU", value: `${item.cpuCores}核` },
+    { label: "内存", value: `${item.memoryGb}GB` },
+    { label: "磁盘", value: `${item.systemDiskGb + item.dataDiskGb}GB` },
+  ];
+  const runtimeSpecs = [
+    `CUDA ${item.cudaVersion || "-"}`,
+    `Driver ${item.driverVersion || "-"}`,
+    `库存 ${item.availableStock}/${item.totalStock}`,
+  ];
+
+  return (
+    <Card className="group relative overflow-hidden rounded-[10px] border border-white/[0.08] bg-[#101113] text-[#f7f8f8] shadow-none transition duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-[#141518]">
+      <div className="pointer-events-none absolute -right-20 -top-24 h-44 w-44 rounded-full opacity-20 blur-3xl" style={{ backgroundColor: accent.stroke }} />
+
+      <CardHeader className="space-y-0 p-5 pb-3">
+        <div className="flex items-start justify-between gap-4">
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge className={`rounded-[4px] border px-2 py-0.5 text-[11px] font-[510] shadow-none ${accent.chip}`}>
+                {item.regionName}
+              </Badge>
+              <Badge
+                variant="outline"
+                className="max-w-[150px] rounded-[4px] border-white/10 bg-white/[0.03] px-2 py-0.5 text-[11px] font-[510] text-[#d0d6e0]"
+              >
+                <span className="truncate">{machineLabel}</span>
+              </Badge>
+              <Badge
+                variant="outline"
+                className={`rounded-[4px] px-2 py-0.5 text-[11px] font-[510] ${availability.tone}`}
+              >
+                {availability.label}
+              </Badge>
+            </div>
+            <CardTitle className="mt-4 truncate text-2xl font-[590] leading-none tracking-normal text-[#f7f8f8]">
+              {item.gpuModelName}
+            </CardTitle>
+            <p className="mt-2 truncate text-sm text-[#8a8f98]">{item.productName}</p>
+          </div>
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[8px] border border-white/10 bg-white/[0.04] text-[#d0d6e0] transition-colors group-hover:text-[#f7f8f8]">
+            <Server className="h-5 w-5" />
+          </div>
+        </div>
+      </CardHeader>
+
+      <CardContent className="p-5 pt-2">
+        <TechLine productId={item.id} signalBars={signalBars} />
+
+        <div className="mt-3 rounded-[8px] border border-white/[0.06] bg-black/25 px-3 py-2.5">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5">
+            {techSpecs.map((spec, index) => (
+              <div key={spec.label} className="flex items-center gap-2">
+                <div className="whitespace-nowrap text-[12px] font-[590] text-[#f7f8f8]">
+                  <span className="tabular-nums">{spec.value}</span>
+                  <span className="ml-1 text-[11px] font-[510] text-[#62666d]">{spec.label}</span>
+                </div>
+                {index < techSpecs.length - 1 ? <span className="h-3 w-px bg-white/[0.08]" /> : null}
+              </div>
+            ))}
+          </div>
+          <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] font-[510] text-[#62666d]">
+            {runtimeSpecs.map((spec, index) => (
+              <div key={spec} className="flex items-center gap-2">
+                <span className="whitespace-nowrap">{spec}</span>
+                {index < runtimeSpecs.length - 1 ? <span className="h-2.5 w-px bg-white/[0.07]" /> : null}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-4 border-t border-white/[0.08] pt-4">
+          <div className="flex items-end justify-between gap-3">
+            <div className="min-w-0">
+              <div className="text-[11px] font-[510] uppercase tracking-[0.18em] text-[#62666d]">
+                当前租赁价格
+              </div>
+              <div className="mt-2 text-2xl font-[590] leading-none tracking-normal text-[#f7f8f8]">
+                {formatMoney(item.rentPrice)}
+              </div>
+            </div>
+            {isSoldOut ? (
+              <Button
+                className="h-10 w-[112px] shrink-0 rounded-[6px] bg-white/[0.05] px-3 text-sm font-[510] text-[#62666d]"
+                disabled
+              >
+                暂无库存
+              </Button>
+            ) : (
+              <Button
+                asChild
+                className="h-10 w-[112px] shrink-0 rounded-[6px] bg-[#2751E1] px-3 text-sm font-[590] text-white shadow-none hover:bg-[#3f66f0]"
+              >
+                <Link href={dashboardHref}>
+                  租赁
+                  <ArrowUpRight className="h-4 w-4" />
+                </Link>
+              </Button>
+            )}
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function RentalCardSkeleton() {
+  return (
+    <Card className="rounded-[10px] border border-white/[0.08] bg-[#101113] shadow-none">
+      <CardContent className="space-y-4 p-5">
+        <div className="flex justify-between">
+          <div className="space-y-3">
+            <Skeleton className="h-5 w-28 bg-white/[0.08]" />
+            <Skeleton className="h-7 w-40 bg-white/[0.08]" />
+          </div>
+          <Skeleton className="h-11 w-11 rounded-[8px] bg-white/[0.08]" />
+        </div>
+        <Skeleton className="h-[86px] rounded-[8px] bg-white/[0.08]" />
+        <div className="grid grid-cols-2 gap-3">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <Skeleton key={index} className="h-[66px] rounded-[8px] bg-white/[0.08]" />
+          ))}
+        </div>
+        <Skeleton className="h-20 rounded-[8px] bg-white/[0.08]" />
+      </CardContent>
+    </Card>
+  );
+}
 
 export default function RentalPage() {
   const [products, setProducts] = useState<ProductResponse[]>([]);
-  const [aiModels, setAiModels] = useState<AiModelResponse[]>([]);
-  const [cycleRules, setCycleRules] = useState<RentalCycleRuleResponse[]>([]);
-  const [selectedAiModelId, setSelectedAiModelId] = useState<number | null>(null);
-  const [selectedCycleRuleId, setSelectedCycleRuleId] = useState<number | null>(null);
-  const [filterModel, setFilterModel] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
-  const [isProcessing, setIsProcessing] = useState<number | null>(null);
-  const [dailyProfit, setDailyProfit] = useState<Record<number, number>>({});
-
-  const fetchInitialData = async () => {
-    setIsLoading(true);
-    try {
-      const [productRes, aiRes, cycleRes] = await Promise.all([
-        getProducts({ pageSize: 100 }),
-        getAiModels(),
-        getRentalCycleRules(),
-      ]);
-      setProducts(productRes.data.records);
-      setAiModels(aiRes.data);
-      setCycleRules(cycleRes.data);
-      setSelectedAiModelId(aiRes.data[0]?.id ?? null);
-      setSelectedCycleRuleId(cycleRes.data[0]?.id ?? null);
-    } catch (err) {
-      toast.error(toErrorMessage(err));
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const [regions, setRegions] = useState<RegionResponse[]>([]);
+  const [gpuModels, setGpuModels] = useState<GpuModelResponse[]>([]);
+  const [selectedRegionId, setSelectedRegionId] = useState<number | null>(null);
+  const [selectedGpuModelId, setSelectedGpuModelId] = useState<number | null>(null);
+  const [initLoading, setInitLoading] = useState(true);
+  const [gpuLoading, setGpuLoading] = useState(false);
+  const [productsLoading, setProductsLoading] = useState(false);
 
   useEffect(() => {
-    void fetchInitialData();
+    let ignore = false;
+
+    const init = async () => {
+      setInitLoading(true);
+      try {
+        const regionRes = await getRegions();
+        if (ignore) return;
+        setRegions(regionRes.data);
+        const defaultRegion = regionRes.data.find((region) => region.regionName.includes("北京A")) ?? regionRes.data[0];
+        if (defaultRegion) {
+          setSelectedRegionId(defaultRegion.id);
+        }
+      } catch (err) {
+        if (!ignore) {
+          toast.error(toErrorMessage(err));
+        }
+      } finally {
+        if (!ignore) {
+          setInitLoading(false);
+        }
+      }
+    };
+
+    void init();
+
+    return () => {
+      ignore = true;
+    };
   }, []);
 
-  const filteredListings = useMemo(() => {
-    const keyword = filterModel.trim().toLowerCase();
-    if (!keyword) return products;
-    return products.filter((item) =>
-      `${item.gpuModelName} ${item.productName} ${item.regionName}`.toLowerCase().includes(keyword),
-    );
-  }, [products, filterModel]);
+  useEffect(() => {
+    if (selectedRegionId === null) return;
 
-  const handleEstimate = async (productId: number) => {
-    if (!selectedAiModelId || !selectedCycleRuleId) {
-      toast.error("请先选择 AI 模型和租赁周期");
-      return;
-    }
-    try {
-      const res = await estimateRental({ productId, aiModelId: selectedAiModelId, cycleRuleId: selectedCycleRuleId });
-      setDailyProfit((current) => ({ ...current, [productId]: res.data.expectedDailyProfit }));
-    } catch (err) {
-      toast.error(toErrorMessage(err));
-    }
-  };
+    let ignore = false;
+    const regionId = selectedRegionId;
 
-  const handleRent = async (productId: number) => {
-    if (!selectedAiModelId || !selectedCycleRuleId) {
-      toast.error("请先选择 AI 模型和租赁周期");
-      return;
-    }
-    setIsProcessing(productId);
-    try {
-      const orderRes = await createRentalOrder({ productId, aiModelId: selectedAiModelId, cycleRuleId: selectedCycleRuleId });
-      await payRentalOrder(orderRes.data.orderNo);
-      toast.success("租赁订单创建成功并支付");
-      await fetchInitialData();
-    } catch (err) {
-      toast.error(toErrorMessage(err));
-    } finally {
-      setIsProcessing(null);
-    }
-  };
+    setSelectedGpuModelId(null);
+    setGpuModels([]);
+    setProducts([]);
+    setProductsLoading(true);
+
+    const fetchGpuModels = async () => {
+      setGpuLoading(true);
+      try {
+        const gpuRes = await getGpuModels(regionId);
+        if (ignore) return;
+        setGpuModels(gpuRes.data);
+        if (gpuRes.data.length > 0) {
+          setSelectedGpuModelId(gpuRes.data[0].id);
+        } else {
+          setProductsLoading(false);
+        }
+      } catch (err) {
+        if (!ignore) {
+          toast.error(toErrorMessage(err));
+          setProductsLoading(false);
+        }
+      } finally {
+        if (!ignore) {
+          setGpuLoading(false);
+        }
+      }
+    };
+
+    void fetchGpuModels();
+
+    return () => {
+      ignore = true;
+    };
+  }, [selectedRegionId]);
+
+  useEffect(() => {
+    if (selectedRegionId === null || selectedGpuModelId === null) return;
+
+    let ignore = false;
+    const regionId = selectedRegionId;
+    const gpuModelId = selectedGpuModelId;
+
+    const fetchProducts = async () => {
+      setProducts([]);
+      setProductsLoading(true);
+      try {
+        const productRes = await getProducts({
+          pageNo: 1,
+          pageSize: PAGE_SIZE,
+          regionId,
+          gpuModelId,
+        });
+        if (ignore) return;
+        setProducts(productRes.data.records);
+      } catch (err) {
+        if (!ignore) {
+          toast.error(toErrorMessage(err));
+        }
+      } finally {
+        if (!ignore) {
+          setProductsLoading(false);
+        }
+      }
+    };
+
+    void fetchProducts();
+
+    return () => {
+      ignore = true;
+    };
+  }, [selectedRegionId, selectedGpuModelId]);
+
+  const marketStats = useMemo(() => {
+    const availableCount = products.reduce((count, item) => count + item.availableStock, 0);
+    const averagePrice =
+      products.length === 0
+        ? 0
+        : products.reduce((sum, item) => sum + item.rentPrice, 0) / products.length;
+    const maxGpuMemory = products.reduce((max, item) => Math.max(max, item.gpuMemoryGb), 0);
+
+    return {
+      total: products.length,
+      availableCount,
+      averagePrice,
+      maxGpuMemory,
+    };
+  }, [products]);
+
+  const isGridLoading = initLoading || productsLoading;
 
   return (
-    <div className="min-h-screen bg-[#010102] text-[#f7f8f8] font-sans [font-feature-settings:'cv01','ss03'] selection:bg-[#5e6ad2]/30 selection:text-white">
+    <div className="min-h-screen bg-[#08090a] text-[#f7f8f8] font-sans [font-feature-settings:'cv01','ss03'] selection:bg-[#5e6ad2]/30 selection:text-white">
       <Header />
-      <main className="relative pb-24">
-        {/* Hero Section */}
-        <section className="relative mx-auto max-w-7xl px-6 lg:px-8 pt-24 pb-20 text-center">
-          {/* Subtle aurora/glow at the top center */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] -z-10 pointer-events-none opacity-50 mix-blend-screen [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_70%)]">
-            <Prism
-              animationType="rotate"
-              timeScale={0.5}
-              height={3.5}
-              baseWidth={5.5}
-              scale={3.6}
-              hueShift={0}
-              colorFrequency={1}
-              noise={0}
-              glow={1}
-            />
-          </div>
+      <main className="relative overflow-hidden pb-24">
+        <section className="relative overflow-hidden bg-[url('/images/products.avif')] bg-cover bg-center bg-no-repeat">
+          <div className="absolute inset-0 bg-[#08090a]/72" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(113,112,255,0.22),transparent_34%),linear-gradient(180deg,rgba(8,9,10,0.28)_0%,#08090a_100%)]" />
+          <div className="relative mx-auto max-w-[1280px] px-4 pb-14 pt-24 sm:px-6 lg:px-8 lg:pb-16 lg:pt-28">
+            <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_390px] lg:items-end">
+            <div>
+              <h1 className="max-w-4xl text-[44px] font-[510] leading-none tracking-normal text-[#f7f8f8] md:text-[68px]">
+                实时算力价格，
+                <br className="hidden sm:block" />
+                按地区与型号筛选。
+              </h1>
+              <p className="mt-6 max-w-2xl text-base leading-7 text-[#8a8f98] md:text-lg">
+                先选择地区，再选择可用 GPU 型号，列表会按后台产品大厅同一套接口逻辑展示对应算力资源。
+              </p>
+            </div>
 
-          <Badge variant="outline" className="mb-8 rounded-full border-white/10 bg-white/[0.02] px-4 py-1.5 text-xs text-[#d0d6e0] backdrop-blur-md">
-            <Zap className="mr-2 h-3.5 w-3.5 text-[#7170ff]" />
-            Compute Marketplace
-          </Badge>
-
-          <h1 className="text-[48px] md:text-[72px] font-[510] leading-[1.0] tracking-[-1.584px] text-[#f7f8f8] mb-8">
-            GPU 算力市场
-          </h1>
-          <p className="mx-auto max-w-2xl text-[18px] leading-[1.6] text-[#8a8f98] mb-12 font-normal tracking-[-0.165px]">
-            浏览可租赁的高性能 GPU 节点。选择 AI 模型与租赁周期，快速部署您的计算资源，即刻开启大模型训练与推理。
-          </p>
-
-          <div className="flex items-center justify-center gap-4">
-            <Button asChild className="h-12 rounded-lg bg-[#5e6ad2] px-8 text-[15px] font-[510] text-white hover:bg-[#828fff] shadow-[0_0_24px_rgba(94,106,210,0.4)] transition-all border-none">
-              <a href="#market">浏览算力节点</a>
-            </Button>
-            <Button asChild variant="outline" className="h-12 rounded-lg border-white/10 bg-white/[0.02] px-8 text-[15px] font-[510] text-[#d0d6e0] hover:bg-white/[0.05] hover:text-[#f7f8f8] transition-all">
-              <Link href="/dashboard/products">
-                进入控制台 <ArrowRight className="ml-2 h-4 w-4 text-[#8a8f98]" />
-              </Link>
-            </Button>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="rounded-[10px] border border-white/[0.08] bg-white/[0.035] p-4">
+                <div className="text-3xl font-[590] leading-none text-[#f7f8f8]">{marketStats.total}</div>
+                <div className="mt-2 text-xs text-[#8a8f98]">当前列表</div>
+              </div>
+              <div className="rounded-[10px] border border-white/[0.08] bg-white/[0.035] p-4">
+                <div className="text-3xl font-[590] leading-none text-[#f7f8f8]">{marketStats.availableCount}</div>
+                <div className="mt-2 text-xs text-[#8a8f98]">可租库存</div>
+              </div>
+              <div className="rounded-[10px] border border-white/[0.08] bg-white/[0.035] p-4">
+                <div className="text-2xl font-[590] leading-none text-[#f7f8f8]">
+                  {formatMoney(marketStats.averagePrice)}
+                </div>
+                <div className="mt-2 text-xs text-[#8a8f98]">平均价格</div>
+              </div>
+              <div className="rounded-[10px] border border-white/[0.08] bg-white/[0.035] p-4">
+                <div className="text-3xl font-[590] leading-none text-[#f7f8f8]">{marketStats.maxGpuMemory}GB</div>
+                <div className="mt-2 text-xs text-[#8a8f98]">最大显存</div>
+              </div>
+            </div>
+            </div>
           </div>
         </section>
 
-        {/* Filters & Market Container */}
-        <section id="market" className="mx-auto max-w-[1200px] px-6 lg:px-8">
-          {/* Filters Bar */}
-          <div className="flex flex-col md:flex-row items-end gap-4 rounded-t-xl border border-white/[0.08] border-b-0 bg-[#0f1011] p-5 shadow-[0_0_0_1px_rgba(0,0,0,0.2)]">
-            <div className="flex-1 w-full space-y-2.5">
-              <label className="text-[12px] font-[510] text-[#8a8f98] uppercase tracking-widest pl-1">AI 模型</label>
-              <Select value={selectedAiModelId?.toString() ?? ""} onValueChange={(val) => setSelectedAiModelId(Number(val))}>
-                <SelectTrigger className="h-11 w-full rounded-md border-white/10 bg-white/[0.02] text-[#d0d6e0] hover:bg-white/[0.04] transition-colors focus:ring-1 focus:ring-[#5e6ad2] focus:ring-offset-0">
-                  <SelectValue placeholder="选择 AI 模型" />
-                </SelectTrigger>
-                <SelectContent className="border-white/10 bg-[#191a1b] text-[#d0d6e0] shadow-xl">
-                  {aiModels.map(model => (
-                    <SelectItem key={model.id} value={model.id.toString()} className="focus:bg-[#5e6ad2]/20 focus:text-[#f7f8f8] cursor-pointer">
-                      {model.modelName}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+        <section id="market" className="relative mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
+          <div className="space-y-6 rounded-[12px] border border-white/[0.08] bg-[#0f1011]/95 p-4 shadow-[0_0_0_1px_rgba(0,0,0,0.2)] backdrop-blur-md sm:p-5">
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center gap-2 pl-1 text-[12px] font-[510] uppercase tracking-[0.18em] text-[#8a8f98]">
+                <MapPin className="h-3.5 w-3.5" />
+                地区选择
+              </div>
+              <div className="flex flex-wrap gap-2.5">
+                {initLoading
+                  ? Array.from({ length: 4 }).map((_, index) => (
+                      <Skeleton key={index} className="h-9 w-24 rounded-full bg-white/[0.08]" />
+                    ))
+                  : regions.map((region) => (
+                      <Button
+                        key={region.id}
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setSelectedRegionId(region.id);
+                          setSelectedGpuModelId(null);
+                          setGpuModels([]);
+                          setProducts([]);
+                          setProductsLoading(true);
+                        }}
+                        className={
+                          selectedRegionId === region.id
+                            ? "h-9 rounded-full border-[#2B55E8] bg-[#2B55E8] px-5 text-xs font-[590] text-white shadow-none hover:bg-[#4168f0] hover:text-white"
+                            : "h-9 rounded-full border-white/10 bg-white/[0.02] px-5 text-xs font-[510] text-[#d0d6e0] shadow-none hover:bg-white/[0.06] hover:text-[#f7f8f8]"
+                        }
+                      >
+                        {region.regionName}
+                      </Button>
+                    ))}
+                {!initLoading && regions.length === 0 ? (
+                  <div className="flex items-center gap-2 py-2 text-sm text-[#8a8f98]">
+                    <AlertCircle className="h-4 w-4" />
+                    暂无可用地区
+                  </div>
+                ) : null}
+              </div>
             </div>
 
-            <div className="flex-1 w-full space-y-2.5">
-              <label className="text-[12px] font-[510] text-[#8a8f98] uppercase tracking-widest pl-1">租赁周期</label>
-              <Select value={selectedCycleRuleId?.toString() ?? ""} onValueChange={(val) => setSelectedCycleRuleId(Number(val))}>
-                <SelectTrigger className="h-11 w-full rounded-md border-white/10 bg-white/[0.02] text-[#d0d6e0] hover:bg-white/[0.04] transition-colors focus:ring-1 focus:ring-[#5e6ad2] focus:ring-offset-0">
-                  <SelectValue placeholder="选择租赁周期" />
-                </SelectTrigger>
-                <SelectContent className="border-white/10 bg-[#191a1b] text-[#d0d6e0] shadow-xl">
-                  {cycleRules.map(rule => (
-                    <SelectItem key={rule.id} value={rule.id.toString()} className="focus:bg-[#5e6ad2]/20 focus:text-[#f7f8f8] cursor-pointer">
-                      {rule.cycleName}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            <div className="h-px w-full bg-white/[0.08]" />
 
-            <div className="flex-[1.5] w-full space-y-2.5 relative">
-              <label className="text-[12px] font-[510] text-[#8a8f98] uppercase tracking-widest pl-1">搜索节点</label>
-              <div className="relative">
-                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#62666d]" />
-                <Input
-                  className="h-11 pl-10 rounded-md border-white/10 bg-white/[0.02] text-[#f7f8f8] placeholder:text-[#62666d] hover:bg-white/[0.04] transition-colors focus-visible:ring-1 focus-visible:ring-[#5e6ad2] focus-visible:ring-offset-0"
-                  placeholder="搜索 GPU 型号、产品或地区..."
-                  value={filterModel}
-                  onChange={(e) => setFilterModel(e.target.value)}
-                />
+            <div className="grid gap-5">
+              <div className="flex min-w-0 flex-col gap-4">
+                <div className="flex items-center gap-2 pl-1 text-[12px] font-[510] uppercase tracking-[0.18em] text-[#8a8f98]">
+                  <Cpu className="h-3.5 w-3.5" />
+                  可用 GPU 型号
+                </div>
+                <div className="flex min-w-0 flex-nowrap gap-2.5 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                  {gpuLoading
+                    ? Array.from({ length: 5 }).map((_, index) => (
+                        <Skeleton key={index} className="h-9 w-28 shrink-0 rounded-full bg-white/[0.08]" />
+                      ))
+                    : gpuModels.map((gpuModel) => (
+                        <Button
+                          key={gpuModel.id}
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setSelectedGpuModelId(gpuModel.id)}
+                          className={
+                            selectedGpuModelId === gpuModel.id
+                              ? "h-9 shrink-0 rounded-full border-[#2B55E8] bg-[#2B55E8] px-5 text-xs font-[590] text-white shadow-none hover:bg-[#4168f0] hover:text-white"
+                              : "h-9 shrink-0 rounded-full border-white/10 bg-white/[0.02] px-5 text-xs font-[510] text-[#d0d6e0] shadow-none hover:bg-white/[0.06] hover:text-[#f7f8f8]"
+                          }
+                        >
+                          {gpuModel.modelName}
+                        </Button>
+                      ))}
+                  {!gpuLoading && selectedRegionId !== null && gpuModels.length === 0 ? (
+                    <div className="flex items-center gap-2 py-2 text-sm text-[#8a8f98]">
+                      <AlertCircle className="h-4 w-4" />
+                      该地区暂无可用算力资源
+                    </div>
+                  ) : null}
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Market Table */}
-          <div className="rounded-b-xl border border-white/[0.08] bg-[#0f1011] overflow-hidden shadow-[0_0_12px_rgba(0,0,0,0.2)_inset]">
-            {isLoading ? (
-              <div className="flex items-center justify-center py-32 text-[#8a8f98]">
-                <div className="flex flex-col items-center gap-5">
-                  <div className="h-8 w-8 animate-spin rounded-full border-[3px] border-[#34343a] border-t-[#5e6ad2]" />
-                  <p className="text-[14px] font-[510]">正在加载市场数据...</p>
-                </div>
+          <div className="mt-7">
+            {isGridLoading ? (
+              <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <RentalCardSkeleton key={index} />
+                ))}
               </div>
-            ) : filteredListings.length === 0 ? (
-              <div className="flex items-center justify-center py-32 text-[#8a8f98]">
-                <div className="flex flex-col items-center gap-3">
-                  <Search className="h-8 w-8 text-[#3e3e44] mb-2" />
-                  <p className="text-[15px] font-[510] text-[#d0d6e0]">未找到匹配的算力节点</p>
-                  <p className="text-[13px]">请尝试调整搜索关键词</p>
+            ) : products.length === 0 ? (
+              <div className="flex min-h-[360px] items-center justify-center rounded-[12px] border border-white/[0.08] bg-[#0f1011] text-center">
+                <div>
+                  <AlertCircle className="mx-auto h-10 w-10 text-[#3e3e44]" />
+                  <p className="mt-4 text-base font-[590] text-[#d0d6e0]">未找到匹配的算力节点</p>
+                  <p className="mt-2 text-sm text-[#8a8f98]">请尝试切换地区或 GPU 型号</p>
                 </div>
               </div>
             ) : (
-              <div className="overflow-x-auto">
-                <Table className="w-full text-left border-collapse">
-                  <TableHeader className="border-b border-white/[0.08] bg-white/[0.02]">
-                    <TableRow className="hover:bg-transparent border-none">
-                      <TableHead className="h-12 px-6 text-[12px] font-[510] text-[#8a8f98] uppercase tracking-widest">节点型号</TableHead>
-                      <TableHead className="h-12 px-6 text-[12px] font-[510] text-[#8a8f98] uppercase tracking-widest">配置详情</TableHead>
-                      <TableHead className="h-12 px-6 text-[12px] font-[510] text-[#8a8f98] uppercase tracking-widest">地区</TableHead>
-                      <TableHead className="h-12 px-6 text-[12px] font-[510] text-[#8a8f98] uppercase tracking-widest text-right">预计收益</TableHead>
-                      <TableHead className="h-12 px-6 text-[12px] font-[510] text-[#8a8f98] uppercase tracking-widest text-right">价格</TableHead>
-                      <TableHead className="h-12 px-6 text-[12px] font-[510] text-[#8a8f98] uppercase tracking-widest text-center">操作</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredListings.map((item, idx) => (
-                      <TableRow key={item.id} className={`border-b border-white/[0.05] hover:bg-white/[0.03] transition-colors group ${idx === filteredListings.length - 1 ? 'border-none' : ''}`}>
-                        <TableCell className="px-6 py-5">
-                          <div className="flex items-center gap-3.5">
-                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/[0.02] text-[#8a8f98] group-hover:border-[#5e6ad2]/50 group-hover:text-[#7170ff] group-hover:bg-[#5e6ad2]/10 transition-all">
-                              <Server className="h-5 w-5" />
-                            </div>
-                            <div>
-                              <div className="text-[15px] font-[590] tracking-[-0.165px] text-[#f7f8f8]">{item.gpuModelName}</div>
-                              <div className="text-[13px] text-[#8a8f98] mt-1">{item.productName}</div>
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell className="px-6 py-5">
-                          <div className="flex flex-col gap-2">
-                            <div className="flex items-center gap-2 text-[13px] text-[#d0d6e0]">
-                              <Cpu className="h-3.5 w-3.5 text-[#62666d]" />
-                              <span>{item.cpuCores} 核 CPU / {item.memoryGb}GB 内存</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-[13px] text-[#d0d6e0]">
-                              <HardDrive className="h-3.5 w-3.5 text-[#62666d]" />
-                              <span>{item.gpuMemoryGb}GB 显存</span>
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell className="px-6 py-5">
-                          <div className="inline-flex items-center gap-1.5 rounded-md border border-white/5 bg-white/[0.02] px-2.5 py-1 text-[13px] text-[#d0d6e0]">
-                            <MapPin className="h-3.5 w-3.5 text-[#62666d]" />
-                            {item.regionName}
-                          </div>
-                        </TableCell>
-                        <TableCell className="px-6 py-5 text-right">
-                          {dailyProfit[item.id] === undefined ? (
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="h-8 px-3 text-[13px] font-[510] text-[#7170ff] hover:bg-[#7170ff]/10 hover:text-[#828fff] transition-colors"
-                              onClick={() => handleEstimate(item.id)}
-                            >
-                              <Calculator className="mr-1.5 h-3.5 w-3.5" /> 预估收益
-                            </Button>
-                          ) : (
-                            <div className="text-[15px] font-[510] text-[#10b981]">
-                              +{formatMoney(dailyProfit[item.id])}
-                              <span className="text-[12px] text-[#62666d] font-normal ml-1">/天</span>
-                            </div>
-                          )}
-                        </TableCell>
-                        <TableCell className="px-6 py-5 text-right">
-                          <div className="text-[16px] font-[510] text-[#f7f8f8] tracking-[-0.165px]">
-                            {formatMoney(item.rentPrice)}
-                          </div>
-                        </TableCell>
-                        <TableCell className="px-6 py-5 text-center">
-                          <Button
-                            className="h-9 rounded-md bg-white/[0.05] border border-white/10 px-4 text-[13px] font-[510] text-[#f7f8f8] hover:bg-[#5e6ad2] hover:border-[#5e6ad2] transition-all w-[90px]"
-                            disabled={item.availableStock === 0 || isProcessing === item.id}
-                            onClick={() => handleRent(item.id)}
-                          >
-                            {isProcessing === item.id ? (
-                              <div className="flex items-center justify-center h-full">
-                                <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-                              </div>
-                            ) : item.availableStock === 0 ? (
-                              "售罄"
-                            ) : (
-                              "立即租赁"
-                            )}
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+              <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+                {products.map((item) => (
+                  <RentalCard
+                    key={item.id}
+                    item={item}
+                    selectedRegionId={selectedRegionId}
+                    selectedGpuModelId={selectedGpuModelId}
+                  />
+                ))}
               </div>
             )}
           </div>

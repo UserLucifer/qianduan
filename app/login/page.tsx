@@ -9,6 +9,7 @@ import Image from "next/image";
 import "./login.css";
 import { loginWithPassword } from "@/api/auth";
 import { toErrorMessage, translateErrorMessage } from "@/lib/format";
+import { getUserAccessToken, setUserAccessToken } from "@/lib/auth-session";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -29,7 +30,7 @@ export default function LoginPage() {
     try {
       const res = await loginWithPassword({ email, password });
       if (res && (res.code === 200 || res.code === 0) && res.data) {
-        localStorage.setItem("user_access_token", res.data.accessToken);
+        setUserAccessToken(res.data.accessToken);
         router.push("/dashboard");
       } else {
         setError(translateErrorMessage(res?.message || "登录失败，请检查您的凭据。"));
@@ -43,7 +44,7 @@ export default function LoginPage() {
 
   // Redirect if already logged in
   useEffect(() => {
-    const token = localStorage.getItem("user_access_token");
+    const token = getUserAccessToken();
     if (token) {
       router.push("/dashboard");
     }

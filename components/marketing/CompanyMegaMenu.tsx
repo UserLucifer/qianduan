@@ -5,6 +5,7 @@ import {
   ArrowRight,
   BriefcaseBusiness,
   Building2,
+  CircleDollarSign,
   Leaf,
   type LucideIcon
 } from 'lucide-react';
@@ -21,7 +22,8 @@ type CompanyItem = {
 const companyItems: CompanyItem[] = [
   { name: '关于我们', description: '了解团队、使命和算力基础设施方向', href: '/about', icon: Building2 },
   { name: '可持续发展', description: '查看能源效率和长期运营责任', href: '/sustainability', icon: Leaf },
-  { name: '企业解决方案', description: '为大型团队定制网络、存储与支持', href: '/enterprise', icon: BriefcaseBusiness }
+  { name: '企业解决方案', description: '为大型团队定制网络、存储与支持', href: '/enterprise', icon: BriefcaseBusiness },
+  { name: '融资', description: '为 GPU 主机匹配融资与硬件采购支持', href: '/financing', icon: CircleDollarSign }
 ];
 
 export default function CompanyMegaMenu() {

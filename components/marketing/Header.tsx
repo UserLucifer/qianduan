@@ -8,10 +8,13 @@ import ProductMegaMenu from "./ProductMegaMenu";
 import UseCaseMegaMenu from "./UseCaseMegaMenu";
 import CompanyMegaMenu from "./CompanyMegaMenu";
 import SolutionsMegaMenu from "./SolutionsMegaMenu";
+import MobileMarketingNav from "./MobileMarketingNav";
 import { getCurrentUser, type UserMeResponse } from "@/api/user";
+import { clearUserAuthSession, getUserAccessToken, subscribeUserAuthChanges } from "@/lib/auth-session";
 import { UserAvatar } from "@/components/shared/UserAvatar";
 import { getAvatarUrl } from "@/lib/avatars";
-import { LogOut, LayoutDashboard, User } from "lucide-react";
+import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
+import { LogOut, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const navigationItems = [
@@ -44,23 +47,44 @@ export default function Header() {
 
   // Fetch user info on mount
   useEffect(() => {
-    const token = localStorage.getItem("user_access_token") || localStorage.getItem("accessToken");
-    if (token) {
+    let mounted = true;
+    const loadUser = () => {
+      const token = getUserAccessToken();
+      if (!token) {
+        setUser(null);
+        return;
+      }
+
       getCurrentUser()
         .then((res) => {
-          if (res.code === 200 || res.code === 0) {
+          if (mounted && (res.code === 200 || res.code === 0)) {
             setUser(res.data);
           }
         })
         .catch(() => {
-          setUser(null);
+          if (mounted) setUser(null);
         });
-    }
+    };
+
+    loadUser();
+    const unsubscribeAuth = subscribeUserAuthChanges((action) => {
+      if (action === "logout") {
+        setUser(null);
+        setUserMenuOpen(false);
+        return;
+      }
+
+      loadUser();
+    });
+
+    return () => {
+      mounted = false;
+      unsubscribeAuth();
+    };
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("user_access_token");
-    localStorage.removeItem("accessToken");
+    clearUserAuthSession();
     setUser(null);
     setUserMenuOpen(false);
     router.push("/");
@@ -88,15 +112,15 @@ export default function Header() {
           算力租赁
         </Link>
 
-        <nav className="site-nav" aria-label="主导航">
+        <nav className="site-nav !hidden lg:!flex" aria-label="主导航">
           {/* Products */}
-          <div 
+          <div
             className="nav-dropdown-wrapper nav-dropdown-wrapper--mega"
             style={{ position: 'static' }}
             onMouseEnter={() => handleMouseEnter('products')}
             onMouseLeave={handleMouseLeave}
           >
-            <button 
+            <button
               className={`site-nav__link nav-dropdown-trigger ${activeMenu === 'products' ? 'is-active' : ''}`}
               onClick={() => handleToggle('products')}
             >
@@ -108,13 +132,13 @@ export default function Header() {
           </div>
 
           {/* Use Cases */}
-          <div 
+          <div
             className="nav-dropdown-wrapper nav-dropdown-wrapper--mega"
             style={{ position: 'static' }}
             onMouseEnter={() => handleMouseEnter('use-cases')}
             onMouseLeave={handleMouseLeave}
           >
-            <button 
+            <button
               className={`site-nav__link nav-dropdown-trigger ${activeMenu === 'use-cases' ? 'is-active' : ''}`}
               onClick={() => handleToggle('use-cases')}
             >
@@ -126,13 +150,13 @@ export default function Header() {
           </div>
 
           {/* Solutions */}
-          <div 
+          <div
             className="nav-dropdown-wrapper nav-dropdown-wrapper--mega"
             style={{ position: 'static' }}
             onMouseEnter={() => handleMouseEnter('solutions')}
             onMouseLeave={handleMouseLeave}
           >
-            <button 
+            <button
               className={`site-nav__link nav-dropdown-trigger ${activeMenu === 'solutions' ? 'is-active' : ''}`}
               onClick={() => handleToggle('solutions')}
             >
@@ -148,13 +172,13 @@ export default function Header() {
           </Link>
 
           {/* Company */}
-          <div 
+          <div
             className="nav-dropdown-wrapper nav-dropdown-wrapper--mega"
             style={{ position: 'static' }}
             onMouseEnter={() => handleMouseEnter('company')}
             onMouseLeave={handleMouseLeave}
           >
-            <button 
+            <button
               className={`site-nav__link nav-dropdown-trigger ${activeMenu === 'company' ? 'is-active' : ''}`}
               onClick={() => handleToggle('company')}
             >
@@ -166,9 +190,9 @@ export default function Header() {
           </div>
 
           {navigationItems.map((item) => (
-            <Link 
-              key={item.name} 
-              href={item.href} 
+            <Link
+              key={item.name}
+              href={item.href}
               className="site-nav__link"
               onMouseEnter={() => setActiveMenu(null)}
             >
@@ -179,74 +203,77 @@ export default function Header() {
 
 
         <div className="site-header__controls">
-          <ThemeToggle />
-          {user ? (
-            <div className="relative" ref={userMenuRef}>
-              <button
-                onClick={() => setUserMenuOpen(!userMenuOpen)}
-                className="flex items-center transition-transform hover:scale-105"
-              >
-                <UserAvatar 
-                  src={getAvatarUrl(user.avatarKey)}
-                  name={user.userName} 
-                  className="h-9 w-9 border border-border shadow-sm"
-                />
-              </button>
-
-              <AnimatePresence>
-                {userMenuOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                    transition={{ duration: 0.15 }}
-                    className="absolute right-0 mt-2 w-48 overflow-hidden rounded-xl border border-border bg-background shadow-xl py-1 z-[110]"
+          <div className="hidden items-center gap-3 lg:flex">
+            {user ? (
+              <>
+                <Link href="/dashboard" className="auth-console-link">
+                  控制台
+                </Link>
+                <div className="relative" ref={userMenuRef}>
+                  <button
+                    onClick={() => setUserMenuOpen(!userMenuOpen)}
+                    className="flex items-center transition-transform hover:scale-105"
                   >
-                    <div className="px-4 py-3 border-b border-border/50 bg-muted/30">
-                      <p className="text-xs font-medium text-muted-foreground truncate">
-                        {user.email}
-                      </p>
-                      <p className="text-sm font-bold text-foreground truncate mt-0.5">
-                        {user.userName || "未命名用户"}
-                      </p>
-                    </div>
-                    
-                    <Link 
-                      href="/dashboard"
-                      className="flex items-center gap-2 px-4 py-2.5 text-sm text-foreground hover:bg-accent transition-colors"
-                      onClick={() => setUserMenuOpen(false)}
-                    >
-                      <LayoutDashboard className="w-4 h-4 text-muted-foreground" />
-                      控制面板
-                    </Link>
-                    
-                    <Link 
-                      href="/dashboard/settings"
-                      className="flex items-center gap-2 px-4 py-2.5 text-sm text-foreground hover:bg-accent transition-colors"
-                      onClick={() => setUserMenuOpen(false)}
-                    >
-                      <User className="w-4 h-4 text-muted-foreground" />
-                      账户设置
-                    </Link>
+                    <UserAvatar
+                      src={getAvatarUrl(user.avatarKey)}
+                      name={user.userName}
+                      className="h-9 w-9 border border-border shadow-sm"
+                    />
+                  </button>
 
-                    <div className="h-px bg-border/50 my-1" />
+                  <AnimatePresence>
+                    {userMenuOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute right-0 mt-2 w-48 overflow-hidden rounded-xl border border-border bg-background shadow-xl py-1 z-[110]"
+                      >
+                        <div className="px-4 py-3 border-b border-border/50 bg-muted/30">
+                          <p className="text-xs font-medium text-muted-foreground truncate">
+                            {user.email}
+                          </p>
+                          <p className="text-sm font-bold text-foreground truncate mt-0.5">
+                            {user.userName || "未命名用户"}
+                          </p>
+                        </div>
 
-                    <button
-                      onClick={handleLogout}
-                      className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-rose-500 hover:bg-rose-500/10 transition-colors"
-                    >
-                      <LogOut className="w-4 h-4" />
-                      退出登录
-                    </button>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          ) : (
-            <Link href="/login" className="auth-signup">
-              登录
-            </Link>
-          )}
+                        <Link
+                          href="/dashboard/settings"
+                          className="flex items-center gap-2 px-4 py-2.5 text-sm text-foreground hover:bg-accent transition-colors"
+                          onClick={() => setUserMenuOpen(false)}
+                        >
+                          <User className="w-4 h-4 text-muted-foreground" />
+                          账户设置
+                        </Link>
+
+                        <div className="h-px bg-border/50 my-1" />
+
+                        <button
+                          onClick={handleLogout}
+                          className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-rose-500 hover:bg-rose-500/10 transition-colors"
+                        >
+                          <LogOut className="w-4 h-4" />
+                          退出登录
+                        </button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </>
+            ) : (
+              <InteractiveHoverButton
+                type="button"
+                className="h-9 min-w-[74px] border-border bg-background px-4 text-[0.9rem] font-semibold shadow-[var(--shadow-soft)]"
+                onClick={() => router.push("/login")}
+              >
+                登录
+              </InteractiveHoverButton>
+            )}
+          </div>
+          <MobileMarketingNav user={user} onLogout={handleLogout} />
+          <ThemeToggle />
         </div>
       </div>
     </header>
