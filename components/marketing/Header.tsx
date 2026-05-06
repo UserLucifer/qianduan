@@ -16,7 +16,6 @@ import { clearUserAuthSession, getUserAccessToken, subscribeUserAuthChanges } fr
 import { UserAvatar } from "@/components/shared/UserAvatar";
 import { getAvatarUrl } from "@/lib/avatars";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
-import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { LogOut, User } from "lucide-react";
 
 const navigationItems = [
@@ -286,7 +285,6 @@ export default function Header() {
               </InteractiveHoverButton>
             )}
           </div>
-          <LanguageSwitcher />
           <MobileMarketingNav user={user} onLogout={handleLogout} />
           <ThemeToggle />
         </div>

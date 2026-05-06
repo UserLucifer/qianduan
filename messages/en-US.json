@@ -161,6 +161,246 @@
       "description": "Read platform guides, API notes, and support documentation."
     }
   },
+  "Rental": {
+    "availability": {
+      "soldOut": "Sold out",
+      "available": "Available"
+    },
+    "specs": {
+      "vram": "VRAM",
+      "compute": "Compute",
+      "cpuCores": "{count, plural, one {# core} other {# cores}}",
+      "memory": "Memory",
+      "disk": "Disk"
+    },
+    "runtime": {
+      "stock": "Stock {available}/{total}"
+    },
+    "card": {
+      "currentPrice": "Current rental price",
+      "noStock": "No stock",
+      "rent": "Rent"
+    },
+    "hero": {
+      "titleLine1": "Live compute pricing,",
+      "titleLine2": "filtered by region and GPU model.",
+      "description": "Select a region, then choose an available GPU model. The list uses the same product-catalog logic as the admin product center."
+    },
+    "stats": {
+      "currentList": "Current list",
+      "availableStock": "Available stock",
+      "averagePrice": "Average price",
+      "maxVram": "Max VRAM"
+    },
+    "filters": {
+      "region": "Region",
+      "noRegions": "No available regions",
+      "gpuModel": "Available GPU models",
+      "noGpuModels": "No available compute resources in this region"
+    },
+    "empty": {
+      "title": "No matching compute nodes found",
+      "description": "Try switching the region or GPU model."
+    }
+  },
+  "UseCases": {
+    "metadata": {
+      "title": "Use Cases | Compute Rental",
+      "description": "Run AI training, inference, rendering, transcription, and other workloads quickly and flexibly on high-performance GPUs."
+    },
+    "hero": {
+      "badge": "Use Cases",
+      "titleLine1": "Every AI workload,",
+      "titleEm": "launched fast and scaled flexibly",
+      "description": "From training and fine-tuning to rendering and transcription, run demanding workloads on high-performance GPUs with flexible on-demand capacity.",
+      "primaryCta": "Get started",
+      "secondaryCta": "View pricing"
+    },
+    "items": [
+      {
+        "title": "AI text generation",
+        "desc": "Deploy large language models for text generation, conversational AI, content creation, and code assistance with low-latency GPU inference."
+      },
+      {
+        "title": "AI image and video generation",
+        "desc": "Run Stable Diffusion, Midjourney alternatives, and video-generation models to turn prompts into production-ready creative output."
+      },
+      {
+        "title": "AI agents",
+        "desc": "Build and run autonomous AI agents for task automation, decision support, and complex workflow orchestration."
+      },
+      {
+        "title": "Batch data processing",
+        "desc": "Accelerate large data pipelines, ETL jobs, and batch inference workloads across terabyte-scale datasets."
+      },
+      {
+        "title": "Audio-to-text transcription",
+        "desc": "Use models such as Whisper for accurate speech recognition and transcription across multilingual, streaming, and batch workloads."
+      },
+      {
+        "title": "AI fine-tuning",
+        "desc": "Fine-tune foundation models on private datasets with LoRA, QLoRA, and other efficient methods to create task-specific models."
+      },
+      {
+        "title": "Virtual computing",
+        "desc": "Launch high-performance virtual desktops and remote workstations for AI development, data science, and professional workflows."
+      },
+      {
+        "title": "GPU programming",
+        "desc": "Access CUDA, OpenCL, and GPU compute resources directly for scientific computing, simulation, and custom kernel development."
+      },
+      {
+        "title": "Graphics rendering",
+        "desc": "Use GPU acceleration for 3D rendering, animation, and visual effects with engines such as Blender and Unreal Engine."
+      }
+    ],
+    "highlights": {
+      "title": "Open-model workflows, full control, no platform premium",
+      "subtitle": "Access high-performance GPUs directly, run open-source models with prebuilt templates, and keep your stack under your control.",
+      "items": [
+        {
+          "title": "Ready-to-use templates",
+          "desc": "Skip environment setup and launch fully configured GPU instances in minutes with prebuilt templates."
+        },
+        {
+          "title": "Low-cost GPU capacity",
+          "desc": "Use a 20,000+ GPU resource pool with competitive pricing across RTX 5090, 4090, H100, and H200 instances."
+        },
+        {
+          "title": "Open source first",
+          "desc": "Run vLLM, TGI, ComfyUI, and other open frameworks without proprietary licensing fees or platform markups."
+        },
+        {
+          "title": "Flexible deployment",
+          "desc": "Bring your own models, scale inference your way, and resize capacity on demand without wasted spend."
+        }
+      ]
+    },
+    "cta": {
+      "titleLine1": "Join developers and teams",
+      "titleLine2": "running AI workloads on our platform",
+      "primaryCta": "Get started",
+      "secondaryCta": "Contact sales"
+    }
+  },
+  "UseCaseDetail": {
+    "metadataTitle": "{title} | Compute Rental",
+    "builtForTitle": "Built for this",
+    "visual": {
+      "cudaEditorAria": "CUDA code editor preview",
+      "editorMenuAria": "Editor menu",
+      "editorMenu": ["File", "Edit", "View", "Find", "Help"],
+      "vmLabel": "Virtual machine",
+      "galleryExampleAlt": "{title} example {index}",
+      "audioOutputTitle": "Audio-to-text output:",
+      "audioTranscription": "In computational biology, high-performance compute is accelerating drug discovery at a new pace. Distributed GPU clusters can reduce protein-folding simulations from weeks to hours, speeding up research while lowering the barrier for smaller teams...",
+      "uploadAudio": "Upload audio",
+      "dataProcessingLabel": "Processing",
+      "imagePrompt": "Generate a futuristic GPU cargo drone flying through a dramatic desert landscape.",
+      "chatUserMessage": "Summarize the main quantum computing breakthroughs in 2024.",
+      "chatAiLines": [
+        "Quantum computing made notable progress in 2024:",
+        "1. Error-correction capability improved 10x",
+        "2. Logical qubits crossed 48",
+        "3. Fault-tolerant simulation reached commercial cloud environments..."
+      ],
+      "chatInputPlaceholder": "Type a message..."
+    },
+    "pages": {
+      "ai-text-generation": {
+        "title": "AI text generation",
+        "description": "Launch and scale modern large language models in minutes with GPU-accelerated distributed inference.",
+        "builtFor": [
+          "Start open-source models such as LLaMA 3 and DeepSeek, or load your own fine-tuned checkpoints.",
+          "Skip DevOps setup with prebuilt vLLM, TGI, and Oobabooga inference images.",
+          "Serve models through a clean API or WebUI with less manual setup before launch.",
+          "Keep full control of the runtime. Models run on isolated GPUs and data can be cleared to your requirements."
+        ]
+      },
+      "ai-image-video-generation": {
+        "title": "AI image and video generation",
+        "description": "Generate high-quality images and video efficiently with GPU-powered creative workflows.",
+        "imageAlt": "AI image and video generation workflow",
+        "builtFor": [
+          "Generate high-resolution output with models such as Stable Diffusion and Disco Diffusion.",
+          "Start preconfigured creative environments optimized for generation workloads in minutes.",
+          "Access powerful GPUs for compute-heavy rendering while keeping budgets controlled.",
+          "Use Stable Diffusion and Disco Diffusion templates to simplify deployment and resource management."
+        ]
+      },
+      "ai-agents": {
+        "title": "AI agents",
+        "description": "Deploy and scale AI agent workloads on cost-effective GPU compute.",
+        "builtFor": [
+          "Run the frameworks you already use, including LangChain, Langflow, AutoGen, CrewAI, or custom code.",
+          "Scale agent workloads smoothly from a single node to distributed clusters.",
+          "Use usage dashboards to track GPU, CPU, and cost metrics while paying by actual runtime.",
+          "Package Docker images, libraries, CUDA, and driver versions into reusable templates.",
+          "Switch to open-source equivalents through OpenAI-compatible chat endpoints and reduce per-token cost."
+        ]
+      },
+      "batch-data-processing": {
+        "title": "Batch data processing",
+        "description": "Accelerate large-scale data processing and automated ETL jobs with reliable GPU performance.",
+        "builtFor": [
+          "Automate large data transformation, cleaning, and preparation tasks.",
+          "Allocate compute resources dynamically around batch job requirements.",
+          "Reduce idle cost with usage-based billing and interruptible instance options.",
+          "Connect easily to existing data pipelines or cloud storage."
+        ]
+      },
+      "audio-to-text-transcription": {
+        "title": "Audio-to-text transcription",
+        "description": "Convert audio into accurate text quickly with GPU-driven transcription workloads.",
+        "builtFor": [
+          "Use open-source models to turn audio files into accurate transcripts.",
+          "Process large transcription workloads through scalable GPU access.",
+          "Support multilingual and common audio formats inside locked containers.",
+          "Start ready-to-use speech-to-text environments through one-click actions or CLI."
+        ]
+      },
+      "ai-fine-tuning": {
+        "title": "AI fine-tuning",
+        "description": "Improve model behavior with efficient, on-demand fine-tuning workflows.",
+        "builtFor": [
+          "Train and optimize pretrained models on your own datasets for task-specific results.",
+          "Use powerful GPUs to shorten training time and reduce cost.",
+          "Match storage, memory, and compute resources to model scale.",
+          "Deploy fine-tuned models into inference environments after training."
+        ]
+      },
+      "virtual-computing": {
+        "title": "Virtual computing",
+        "description": "Provision GPU-backed virtual machines with flexible, secure access.",
+        "builtFor": [
+          "Launch GPU-backed virtual desktops or remote workstations in seconds.",
+          "Run Linux or Ubuntu with full access to your preferred tools and workflows.",
+          "Resize resources on demand without changing cloud providers or plans.",
+          "Keep work isolated inside dedicated environments."
+        ]
+      },
+      "gpu-programming": {
+        "title": "GPU programming",
+        "description": "Accelerate AI and HPC breakthroughs with scalable GPU compute performance.",
+        "builtFor": [
+          "Access raw GPU compute for custom CUDA application development.",
+          "Optimize performance for specific architectures such as A100 and 4090.",
+          "Use full admin access to configure drivers, memory, and execution environments.",
+          "Test and iterate across GPU types with minimal setup."
+        ]
+      },
+      "3d-rendering": {
+        "title": "Graphics rendering",
+        "description": "Accelerate 3D rendering and graphics workflows with powerful GPU acceleration.",
+        "builtFor": [
+          "Render detail-rich 3D models faster with GPU acceleration.",
+          "Reduce frame time and scene-processing time for complex animation or visualization.",
+          "Access professional-grade GPUs without long-term contracts.",
+          "Support VFX, product design, architecture, and other rendering workflows."
+        ]
+      }
+    }
+  },
   "MarketingHeader": {
     "mainNav": "Main navigation",
     "products": "Products",

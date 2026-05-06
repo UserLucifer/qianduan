@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import Header from "@/components/marketing/Header";
 import Footer from "@/components/marketing/Footer";
@@ -63,12 +63,12 @@ function buildDashboardHref(
   return `/dashboard/products?${params.toString()}`;
 }
 
-function getAvailability(item: ProductResponse) {
+function getAvailability(item: ProductResponse, labels: { soldOut: string; available: string }) {
   if (item.availableStock <= 0) {
-    return { label: "售罄", tone: "border-white/10 bg-white/[0.04] text-[#62666d]" };
+    return { label: labels.soldOut, tone: "border-white/10 bg-white/[0.04] text-[#62666d]" };
   }
 
-  return { label: "可租", tone: "border-[#10b981]/30 bg-[#10b981]/10 text-[#a7f3d0]" };
+  return { label: labels.available, tone: "border-[#10b981]/30 bg-[#10b981]/10 text-[#a7f3d0]" };
 }
 
 function TechLine({
@@ -121,13 +121,19 @@ function RentalCard({
   item,
   selectedRegionId,
   selectedGpuModelId,
+  locale,
 }: {
   item: ProductResponse;
   selectedRegionId: number | null;
   selectedGpuModelId: number | null;
+  locale: string;
 }) {
+  const t = useTranslations("Rental");
   const accent = getAccent(item.id);
-  const availability = getAvailability(item);
+  const availability = getAvailability(item, {
+    soldOut: t("availability.soldOut"),
+    available: t("availability.available"),
+  });
   const isSoldOut = item.availableStock <= 0;
   const dashboardHref = buildDashboardHref(item, selectedRegionId, selectedGpuModelId);
   const machineLabel = item.machineAlias || item.machineCode || item.productCode;
@@ -137,16 +143,16 @@ function RentalCard({
       ? 2
       : 1;
   const techSpecs = [
-    { label: "显存", value: `${item.gpuMemoryGb}GB` },
-    { label: "算力", value: `${formatNumber(item.gpuPowerTops)} TOPS` },
-    { label: "CPU", value: `${item.cpuCores}核` },
-    { label: "内存", value: `${item.memoryGb}GB` },
-    { label: "磁盘", value: `${item.systemDiskGb + item.dataDiskGb}GB` },
+    { label: t("specs.vram"), value: `${item.gpuMemoryGb}GB` },
+    { label: t("specs.compute"), value: `${formatNumber(item.gpuPowerTops, locale)} TOPS` },
+    { label: "CPU", value: t("specs.cpuCores", { count: item.cpuCores }) },
+    { label: t("specs.memory"), value: `${item.memoryGb}GB` },
+    { label: t("specs.disk"), value: `${item.systemDiskGb + item.dataDiskGb}GB` },
   ];
   const runtimeSpecs = [
     `CUDA ${item.cudaVersion || "-"}`,
     `Driver ${item.driverVersion || "-"}`,
-    `库存 ${item.availableStock}/${item.totalStock}`,
+    t("runtime.stock", { available: item.availableStock, total: item.totalStock }),
   ];
 
   return (
@@ -213,10 +219,10 @@ function RentalCard({
           <div className="flex items-end justify-between gap-3">
             <div className="min-w-0">
               <div className="text-[11px] font-[510] uppercase tracking-[0.18em] text-[#62666d]">
-                当前租赁价格
+                {t("card.currentPrice")}
               </div>
               <div className="mt-2 text-2xl font-[590] leading-none tracking-normal text-[#f7f8f8]">
-                {formatMoney(item.rentPrice)}
+                {formatMoney(item.rentPrice, { locale })}
               </div>
             </div>
             {isSoldOut ? (
@@ -224,7 +230,7 @@ function RentalCard({
                 className="h-10 w-[112px] shrink-0 rounded-[6px] bg-white/[0.05] px-3 text-sm font-[510] text-[#62666d]"
                 disabled
               >
-                暂无库存
+                {t("card.noStock")}
               </Button>
             ) : (
               <Button
@@ -232,7 +238,7 @@ function RentalCard({
                 className="h-10 w-[112px] shrink-0 rounded-[6px] bg-[#2751E1] px-3 text-sm font-[590] text-white shadow-none hover:bg-[#3f66f0]"
               >
                 <Link href={dashboardHref}>
-                  租赁
+                  {t("card.rent")}
                   <ArrowUpRight className="h-4 w-4" />
                 </Link>
               </Button>
@@ -269,6 +275,7 @@ function RentalCardSkeleton() {
 
 export default function RentalPage() {
   const locale = normalizeLocale(useLocale());
+  const t = useTranslations("Rental");
   const [products, setProducts] = useState<ProductResponse[]>([]);
   const [regions, setRegions] = useState<RegionResponse[]>([]);
   const [gpuModels, setGpuModels] = useState<GpuModelResponse[]>([]);
@@ -287,13 +294,13 @@ export default function RentalPage() {
         const regionRes = await getRegions({ language: locale });
         if (ignore) return;
         setRegions(regionRes.data);
-        const defaultRegion = regionRes.data.find((region) => region.regionName.includes("北京A")) ?? regionRes.data[0];
+        const defaultRegion = regionRes.data[0];
         if (defaultRegion) {
           setSelectedRegionId(defaultRegion.id);
         }
       } catch (err) {
         if (!ignore) {
-          toast.error(toErrorMessage(err));
+          toast.error(toErrorMessage(err, locale));
         }
       } finally {
         if (!ignore) {
@@ -333,7 +340,7 @@ export default function RentalPage() {
         }
       } catch (err) {
         if (!ignore) {
-          toast.error(toErrorMessage(err));
+          toast.error(toErrorMessage(err, locale));
           setProductsLoading(false);
         }
       } finally {
@@ -372,7 +379,7 @@ export default function RentalPage() {
         setProducts(productRes.data.records);
       } catch (err) {
         if (!ignore) {
-          toast.error(toErrorMessage(err));
+          toast.error(toErrorMessage(err, locale));
         }
       } finally {
         if (!ignore) {
@@ -417,33 +424,33 @@ export default function RentalPage() {
             <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_390px] lg:items-end">
             <div>
               <h1 className="max-w-4xl text-[44px] font-[510] leading-none tracking-normal text-[#f7f8f8] md:text-[68px]">
-                实时算力价格，
+                {t("hero.titleLine1")}
                 <br className="hidden sm:block" />
-                按地区与型号筛选。
+                {t("hero.titleLine2")}
               </h1>
               <p className="mt-6 max-w-2xl text-base leading-7 text-[#8a8f98] md:text-lg">
-                先选择地区，再选择可用 GPU 型号，列表会按后台产品大厅同一套接口逻辑展示对应算力资源。
+                {t("hero.description")}
               </p>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div className="rounded-[10px] border border-white/[0.08] bg-white/[0.035] p-4">
                 <div className="text-3xl font-[590] leading-none text-[#f7f8f8]">{marketStats.total}</div>
-                <div className="mt-2 text-xs text-[#8a8f98]">当前列表</div>
+                <div className="mt-2 text-xs text-[#8a8f98]">{t("stats.currentList")}</div>
               </div>
               <div className="rounded-[10px] border border-white/[0.08] bg-white/[0.035] p-4">
                 <div className="text-3xl font-[590] leading-none text-[#f7f8f8]">{marketStats.availableCount}</div>
-                <div className="mt-2 text-xs text-[#8a8f98]">可租库存</div>
+                <div className="mt-2 text-xs text-[#8a8f98]">{t("stats.availableStock")}</div>
               </div>
               <div className="rounded-[10px] border border-white/[0.08] bg-white/[0.035] p-4">
                 <div className="text-2xl font-[590] leading-none text-[#f7f8f8]">
-                  {formatMoney(marketStats.averagePrice)}
+                  {formatMoney(marketStats.averagePrice, { locale })}
                 </div>
-                <div className="mt-2 text-xs text-[#8a8f98]">平均价格</div>
+                <div className="mt-2 text-xs text-[#8a8f98]">{t("stats.averagePrice")}</div>
               </div>
               <div className="rounded-[10px] border border-white/[0.08] bg-white/[0.035] p-4">
                 <div className="text-3xl font-[590] leading-none text-[#f7f8f8]">{marketStats.maxGpuMemory}GB</div>
-                <div className="mt-2 text-xs text-[#8a8f98]">最大显存</div>
+                <div className="mt-2 text-xs text-[#8a8f98]">{t("stats.maxVram")}</div>
               </div>
             </div>
             </div>
@@ -455,7 +462,7 @@ export default function RentalPage() {
             <div className="flex flex-col gap-4">
               <div className="flex items-center gap-2 pl-1 text-[12px] font-[510] uppercase tracking-[0.18em] text-[#8a8f98]">
                 <MapPin className="h-3.5 w-3.5" />
-                地区选择
+                {t("filters.region")}
               </div>
               <div className="flex flex-wrap gap-2.5">
                 {initLoading
@@ -486,7 +493,7 @@ export default function RentalPage() {
                 {!initLoading && regions.length === 0 ? (
                   <div className="flex items-center gap-2 py-2 text-sm text-[#8a8f98]">
                     <AlertCircle className="h-4 w-4" />
-                    暂无可用地区
+                    {t("filters.noRegions")}
                   </div>
                 ) : null}
               </div>
@@ -498,7 +505,7 @@ export default function RentalPage() {
               <div className="flex min-w-0 flex-col gap-4">
                 <div className="flex items-center gap-2 pl-1 text-[12px] font-[510] uppercase tracking-[0.18em] text-[#8a8f98]">
                   <Cpu className="h-3.5 w-3.5" />
-                  可用 GPU 型号
+                  {t("filters.gpuModel")}
                 </div>
                 <div className="flex min-w-0 flex-nowrap gap-2.5 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                   {gpuLoading
@@ -523,7 +530,7 @@ export default function RentalPage() {
                   {!gpuLoading && selectedRegionId !== null && gpuModels.length === 0 ? (
                     <div className="flex items-center gap-2 py-2 text-sm text-[#8a8f98]">
                       <AlertCircle className="h-4 w-4" />
-                      该地区暂无可用算力资源
+                      {t("filters.noGpuModels")}
                     </div>
                   ) : null}
                 </div>
@@ -542,8 +549,8 @@ export default function RentalPage() {
               <div className="flex min-h-[360px] items-center justify-center rounded-[12px] border border-white/[0.08] bg-[#0f1011] text-center">
                 <div>
                   <AlertCircle className="mx-auto h-10 w-10 text-[#3e3e44]" />
-                  <p className="mt-4 text-base font-[590] text-[#d0d6e0]">未找到匹配的算力节点</p>
-                  <p className="mt-2 text-sm text-[#8a8f98]">请尝试切换地区或 GPU 型号</p>
+                  <p className="mt-4 text-base font-[590] text-[#d0d6e0]">{t("empty.title")}</p>
+                  <p className="mt-2 text-sm text-[#8a8f98]">{t("empty.description")}</p>
                 </div>
               </div>
             ) : (
@@ -554,6 +561,7 @@ export default function RentalPage() {
                     item={item}
                     selectedRegionId={selectedRegionId}
                     selectedGpuModelId={selectedGpuModelId}
+                    locale={locale}
                   />
                 ))}
               </div>

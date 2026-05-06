@@ -161,6 +161,246 @@
       "description": "阅读平台使用指南、API 说明和支持文档。"
     }
   },
+  "Rental": {
+    "availability": {
+      "soldOut": "售罄",
+      "available": "可租"
+    },
+    "specs": {
+      "vram": "显存",
+      "compute": "算力",
+      "cpuCores": "{count} 核",
+      "memory": "内存",
+      "disk": "磁盘"
+    },
+    "runtime": {
+      "stock": "库存 {available}/{total}"
+    },
+    "card": {
+      "currentPrice": "当前租赁价格",
+      "noStock": "暂无库存",
+      "rent": "租赁"
+    },
+    "hero": {
+      "titleLine1": "实时算力价格，",
+      "titleLine2": "按地区与型号筛选。",
+      "description": "先选择地区，再选择可用 GPU 型号，列表会按后台产品大厅同一套接口逻辑展示对应算力资源。"
+    },
+    "stats": {
+      "currentList": "当前列表",
+      "availableStock": "可租库存",
+      "averagePrice": "平均价格",
+      "maxVram": "最大显存"
+    },
+    "filters": {
+      "region": "地区选择",
+      "noRegions": "暂无可用地区",
+      "gpuModel": "可用 GPU 型号",
+      "noGpuModels": "该地区暂无可用算力资源"
+    },
+    "empty": {
+      "title": "未找到匹配的算力节点",
+      "description": "请尝试切换地区或 GPU 型号"
+    }
+  },
+  "UseCases": {
+    "metadata": {
+      "title": "产品用例 — 算力租赁",
+      "description": "无论您运行的是 AI 训练、推理、渲染还是转录工作负载，我们都能帮助您快速、灵活且经济地启动。"
+    },
+    "hero": {
+      "badge": "Use Cases",
+      "titleLine1": "无论何种 AI 工作负载，",
+      "titleEm": "快速启动，灵活扩展",
+      "description": "从训练、微调、渲染到转录，我们帮助您以最低成本在高性能 GPU 上运行任意工作负载。按需启用，灵活扩展。",
+      "primaryCta": "立即开始",
+      "secondaryCta": "查看定价"
+    },
+    "items": [
+      {
+        "title": "AI 文本生成",
+        "desc": "部署大型语言模型进行文本生成、对话 AI、内容创作和代码辅助。利用高性能 GPU 实现低延迟推理。"
+      },
+      {
+        "title": "AI 图像与视频生成",
+        "desc": "运行 Stable Diffusion、Midjourney 替代方案或视频生成模型。从文本到像素，释放创意工作流的全部潜力。"
+      },
+      {
+        "title": "AI 智能体",
+        "desc": "构建和运行自主 AI 智能体，用于任务自动化、决策支持和复杂工作流编排。"
+      },
+      {
+        "title": "批量数据处理",
+        "desc": "大规模数据管道、ETL 任务和批量推理作业。利用 GPU 加速处理 TB 级数据集。"
+      },
+      {
+        "title": "语音转文本",
+        "desc": "使用 Whisper 等模型进行高精度语音识别和转录。支持多语言、实时流和批量转录。"
+      },
+      {
+        "title": "AI 模型微调",
+        "desc": "在您的私有数据上微调基础模型。支持 LoRA、QLoRA 等高效微调方法，以最低成本获得定制模型。"
+      },
+      {
+        "title": "虚拟计算",
+        "desc": "按需启动高性能虚拟桌面和远程工作站。适用于 AI 研发、数据科学和专业工作流。"
+      },
+      {
+        "title": "GPU 编程",
+        "desc": "直接访问 CUDA、OpenCL 和 GPU 计算资源。为科学计算、数值模拟和自定义内核开发提供裸金属级性能。"
+      },
+      {
+        "title": "图形渲染",
+        "desc": "利用 GPU 加速 3D 渲染、动画制作和视觉特效。支持 Blender、Unreal Engine 等主流渲染引擎。"
+      }
+    ],
+    "highlights": {
+      "title": "以开源模型为核心，完全掌控，零平台溢价",
+      "subtitle": "直接访问高性能 GPU，以更低成本运行开源模型。预构建模板让部署变得轻而易举。",
+      "items": [
+        {
+          "title": "开箱即用的模板",
+          "desc": "跳过繁琐的环境配置，使用预构建模板在数分钟内启动完全配置的 GPU 实例。"
+        },
+        {
+          "title": "低成本 GPU 算力",
+          "desc": "使用 20,000+ 高性能 GPU 资源池，覆盖 RTX 5090、4090、H100 和 H200 等实例。"
+        },
+        {
+          "title": "开源优先",
+          "desc": "使用 vLLM、TGI、ComfyUI 等开源框架，无专有许可费，无平台溢价，完全掌控您的技术栈。"
+        },
+        {
+          "title": "灵活按需部署",
+          "desc": "自带模型，按您的方式扩展推理。按需调整容量，减少浪费支出。"
+        }
+      ]
+    },
+    "cta": {
+      "titleLine1": "加入开发者和企业的行列，",
+      "titleLine2": "在我们的平台上运行 AI 工作负载",
+      "primaryCta": "立即开始",
+      "secondaryCta": "联系销售"
+    }
+  },
+  "UseCaseDetail": {
+    "metadataTitle": "{title} — 算力租赁",
+    "builtForTitle": "专为此而打造",
+    "visual": {
+      "cudaEditorAria": "CUDA 代码编辑器展示",
+      "editorMenuAria": "编辑器菜单",
+      "editorMenu": ["文件", "编辑", "查看", "查找", "帮助"],
+      "vmLabel": "虚拟机",
+      "galleryExampleAlt": "{title}示例 {index}",
+      "audioOutputTitle": "音频转文本输出：",
+      "audioTranscription": "在计算生物学领域，高性能计算正以前所未有的速度推动药物研发。我们的平台通过分布式 GPU 集群，将原本需要数周的蛋白质折叠模拟缩短至数小时。这不仅加速了科学发现，也显著降低了初创企业的研发门槛...",
+      "uploadAudio": "上传音频",
+      "dataProcessingLabel": "加工",
+      "imagePrompt": "生成一架未来感十足的 GPU 运载无人机，穿梭于壮丽的沙漠景观之中。",
+      "chatUserMessage": "总结一下量子计算在 2024 年的主要突破。",
+      "chatAiLines": [
+        "2024 年量子计算取得了显著进展：",
+        "1. 纠错能力提升 10x",
+        "2. 逻辑量子比特突破 48 个",
+        "3. 首次在商业云端实现容错模拟..."
+      ],
+      "chatInputPlaceholder": "输入消息..."
+    },
+    "pages": {
+      "ai-text-generation": {
+        "title": "AI 文本生成",
+        "description": "通过 GPU 加速的分布式推理，数分钟内启动并扩展最新大语言模型。",
+        "builtFor": [
+          "启动 LLaMA 3、DeepSeek 等开源模型，或加载您自己的微调检查点。",
+          "跳过 DevOps 配置，使用 vLLM、TGI、Oobabooga 等预构建镜像承载推理服务。",
+          "通过简洁 API 或 WebUI 提供模型服务，尽量减少上线前的手动设置。",
+          "完全掌控运行环境。模型运行在隔离 GPU 上，数据按您的要求清除。"
+        ]
+      },
+      "ai-image-video-generation": {
+        "title": "AI 图像与视频生成",
+        "description": "使用 GPU 驱动的创意工作流，高效生成高质量图像和视频。",
+        "imageAlt": "AI 图像和视频生成工作流",
+        "builtFor": [
+          "使用 Stable Diffusion、Disco Diffusion 等模型生成高分辨率输出。",
+          "数分钟内启动针对创意工作负载优化的预配置环境。",
+          "为计算密集型渲染接入强大 GPU，同时控制预算。",
+          "使用 Stable Diffusion 与 Disco Diffusion 模板简化部署和资源管理。"
+        ]
+      },
+      "ai-agents": {
+        "title": "人工智能代理",
+        "description": "使用高性价比 GPU 算力部署并扩展 AI 代理工作负载。",
+        "builtFor": [
+          "运行您已经在用的框架，支持 LangChain、Langflow、AutoGen、CrewAI 或自定义代码。",
+          "让代理工作负载从单节点平滑扩展到分布式集群。",
+          "按秒计费，并通过实时利用率看板跟踪 GPU、CPU 和成本指标。",
+          "将 Docker 镜像、库、CUDA 与驱动版本固化为可复用模板。",
+          "用 OpenAI 兼容的聊天端点切换到开源等效方案，显著降低每 token 成本。"
+        ]
+      },
+      "batch-data-processing": {
+        "title": "批量数据处理",
+        "description": "借助可靠的 GPU 性能，加速大规模数据处理与自动化 ETL 任务。",
+        "builtFor": [
+          "自动化大规模数据转换、清洗和整理任务。",
+          "根据批处理作业需求动态分配计算资源。",
+          "通过按秒计费和可中断实例选项降低空闲成本。",
+          "轻松接入现有数据管道或云存储。"
+        ]
+      },
+      "audio-to-text-transcription": {
+        "title": "音频转文本转录",
+        "description": "使用 GPU 驱动转录，快速将音频转换为准确文本处理工作负载。",
+        "builtFor": [
+          "使用开源模型将音频文件转换为准确转录文本。",
+          "通过可扩展 GPU 访问处理大规模转录工作负载。",
+          "在锁定容器内支持多语言和常见音频格式。",
+          "通过一键操作或 CLI 启动可直接使用的语音转文本环境。"
+        ]
+      },
+      "ai-fine-tuning": {
+        "title": "AI 微调",
+        "description": "使用高效、按需的微调流程提升 AI 模型表现。",
+        "builtFor": [
+          "在您自己的数据集上训练并优化预训练模型，获得更贴合任务的结果。",
+          "使用强大 GPU 缩短训练时间并降低成本。",
+          "按模型规模定制存储、内存和计算资源。",
+          "训练完成后，将微调模型无缝部署到推理环境。"
+        ]
+      },
+      "virtual-computing": {
+        "title": "虚拟计算",
+        "description": "轻松配置支持 GPU 的虚拟机，获得灵活且安全的访问方式。",
+        "builtFor": [
+          "数秒内启动支持 GPU 的虚拟桌面或远程工作站。",
+          "运行 Linux 或 Ubuntu，并完整访问您偏好的工具和工作流。",
+          "按需调整资源，无需更换云服务商或套餐。",
+          "在专用环境中保持隐私与隔离。"
+        ]
+      },
+      "gpu-programming": {
+        "title": "GPU 编程",
+        "description": "加速 AI 与 HPC 突破，在规模化 GPU 计算上释放极致性能。",
+        "builtFor": [
+          "为自定义 CUDA 应用开发访问原始 GPU 算力。",
+          "针对 A100、4090 等特定架构优化性能。",
+          "使用完整管理员权限配置驱动、内存和执行环境。",
+          "用极少设置在多种 GPU 类型之间测试和迭代。"
+        ]
+      },
+      "3d-rendering": {
+        "title": "图形渲染",
+        "description": "使用强大的 GPU 加速能力，加速 3D 渲染与图形处理工作流。",
+        "builtFor": [
+          "使用 GPU 加速快速渲染细节丰富的 3D 模型。",
+          "为复杂动画或可视化降低帧时间与场景处理耗时。",
+          "无需长期合约即可访问专业级 GPU。",
+          "支持 VFX、产品设计、建筑等更多渲染工作流。"
+        ]
+      }
+    }
+  },
   "MarketingHeader": {
     "mainNav": "主导航",
     "products": "产品",

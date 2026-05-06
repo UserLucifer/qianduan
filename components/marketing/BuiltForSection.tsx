@@ -82,10 +82,11 @@ const SpotlightCard: React.FC<SpotlightCardProps> = ({ children, className }) =>
 
 /* ── BuiltForSection Component ── */
 interface BuiltForSectionProps {
+  title: string;
   items: string[];
 }
 
-export const BuiltForSection: React.FC<BuiltForSectionProps> = ({ items }) => {
+export const BuiltForSection: React.FC<BuiltForSectionProps> = ({ title, items }) => {
   const containerRef = useRef(null);
   const isInView = useInView(containerRef, { once: true, margin: "-100px" });
 
@@ -101,7 +102,7 @@ export const BuiltForSection: React.FC<BuiltForSectionProps> = ({ items }) => {
     <section ref={containerRef} className="uc-built-optimized">
       <div className="uc-built-header-optimized">
         <h2 className="text-center">
-          <SplitText text="专为此而打造" className="uc-built-title-optimized" />
+          <SplitText text={title} className="uc-built-title-optimized" />
         </h2>
       </div>
 

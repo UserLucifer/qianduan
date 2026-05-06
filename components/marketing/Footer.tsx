@@ -1,13 +1,16 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
+import { useLocale, useTranslations } from "next-intl";
+import { Link, usePathname } from "@/i18n/navigation";
+import { locales, localeLabels, normalizeLocale } from "@/i18n/locales";
 import "./Footer.css";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
   const t = useTranslations("Footer");
   const common = useTranslations("Common");
+  const locale = normalizeLocale(useLocale());
+  const pathname = usePathname();
 
   return (
     <footer className="site-footer">
@@ -65,9 +68,28 @@ export default function Footer() {
           <div className="site-footer__copyright">
             {t("copyright", { year: currentYear })}
           </div>
-          <div className="site-footer__status">
-            <span className="status-dot"></span>
-            {t("status")}
+          <div className="site-footer__bottom-meta">
+            <nav className="site-footer__locale" aria-label="Language">
+              {locales.map((item) => (
+                <Link
+                  key={item}
+                  href={pathname}
+                  locale={item}
+                  className={
+                    item === locale
+                      ? "site-footer__locale-link site-footer__locale-link--active"
+                      : "site-footer__locale-link"
+                  }
+                  aria-current={item === locale ? "true" : undefined}
+                >
+                  {localeLabels[item]}
+                </Link>
+              ))}
+            </nav>
+            <div className="site-footer__status">
+              <span className="status-dot"></span>
+              {t("status")}
+            </div>
           </div>
         </div>
       </div>
