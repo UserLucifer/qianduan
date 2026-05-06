@@ -8,6 +8,7 @@ import ProductMegaMenu from "./ProductMegaMenu";
 import UseCaseMegaMenu from "./UseCaseMegaMenu";
 import CompanyMegaMenu from "./CompanyMegaMenu";
 import SolutionsMegaMenu from "./SolutionsMegaMenu";
+import HostingMegaMenu from "./HostingMegaMenu";
 import MobileMarketingNav from "./MobileMarketingNav";
 import { getCurrentUser, type UserMeResponse } from "@/api/user";
 import { clearUserAuthSession, getUserAccessToken, subscribeUserAuthChanges } from "@/lib/auth-session";
@@ -164,6 +165,24 @@ export default function Header() {
             </button>
             <AnimatePresence>
               {activeMenu === 'solutions' && <SolutionsMegaMenu />}
+            </AnimatePresence>
+          </div>
+
+          {/* Hosting */}
+          <div
+            className="nav-dropdown-wrapper nav-dropdown-wrapper--mega"
+            style={{ position: 'static' }}
+            onMouseEnter={() => handleMouseEnter('hosting')}
+            onMouseLeave={handleMouseLeave}
+          >
+            <button
+              className={`site-nav__link nav-dropdown-trigger ${activeMenu === 'hosting' ? 'is-active' : ''}`}
+              onClick={() => handleToggle('hosting')}
+            >
+              托管
+            </button>
+            <AnimatePresence>
+              {activeMenu === 'hosting' && <HostingMegaMenu />}
             </AnimatePresence>
           </div>
 

@@ -1,0 +1,216 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "算力租赁" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation "主导航" [ref=e5]:
+        - button "产品" [ref=e7] [cursor=pointer]
+        - button "产品用例" [ref=e9] [cursor=pointer]
+        - button "解决方案" [ref=e11] [cursor=pointer]
+        - link "租赁" [ref=e12] [cursor=pointer]:
+          - /url: /rental
+        - button "公司" [ref=e14] [cursor=pointer]
+        - link "博客" [ref=e15] [cursor=pointer]:
+          - /url: /blog
+        - link "帮助中心" [ref=e16] [cursor=pointer]:
+          - /url: /help-center
+      - generic [ref=e17]:
+        - button "登录 登录" [ref=e19] [cursor=pointer]:
+          - generic [ref=e21]: 登录
+          - generic [ref=e22]:
+            - generic [ref=e23]: 登录
+            - img [ref=e24]
+        - button "切换明暗主题" [ref=e26] [cursor=pointer]:
+          - img [ref=e27]
+          - img [ref=e29]
+  - main [ref=e32]:
+    - generic [ref=e34]:
+      - heading "寻找准备好赚钱的显卡" [level=1] [ref=e35]
+      - paragraph [ref=e36]: 来自我们经过审核的供应商网络提供的全新认证翻新 GPU 服务器。每一台设备都经过压力测试、基准验证，并预配置支持平台，因此你的硬件从第一天起就开始获得收益。
+      - generic [ref=e37]:
+        - generic [ref=e38]:
+          - img [ref=e39]
+          - text: 新建与翻新
+        - generic [ref=e41]:
+          - img [ref=e42]
+          - text: 烧入测试
+        - generic [ref=e44]:
+          - img [ref=e45]
+          - text: 平台准备
+    - generic [ref=e48]:
+      - generic [ref=e49]:
+        - heading "工作原理" [level=2] [ref=e50]
+        - paragraph [ref=e51]: 提交一次。我们从多个供应商那里采购，并提供多种选择。
+      - generic [ref=e52]:
+        - generic [ref=e54]:
+          - heading "1. 告诉我们你需要什么" [level=3] [ref=e55]
+          - paragraph [ref=e56]: 分享你的 GPU 需求、偏好的状态、数量和时间安排。我们会为你匹配合适的供应商。
+        - generic [ref=e58]:
+          - heading "2. 我们负责获取和测试" [level=3] [ref=e59]
+          - paragraph [ref=e60]: 我们的团队从多个供应商处采购选项，无论是全新还是翻新设备。每块 GPU 在到达你手中之前，都通过我们的认证流程。
+        - generic [ref=e62]:
+          - heading "3. 部署与赚取" [level=3] [ref=e63]
+          - paragraph [ref=e64]: 获得认证硬件，安装我们的客户端，开始托管。你的 GPU 从第一天起就已经准备好支持平台。
+    - generic [ref=e67]:
+      - generic "GPU 硬件采购背景视频" [ref=e68]
+      - generic [ref=e70]:
+        - heading "为什么选择通过 Vast" [level=2] [ref=e71]
+        - paragraph [ref=e72]: 你的 GPU 硬件采购合作伙伴不是经销商，而是可信赖的中介，拥有跨新建和翻新渠道的供应商关系。
+      - generic [ref=e73]:
+        - generic [ref=e75]:
+          - img [ref=e76]
+          - heading "批量定价" [level=3] [ref=e79]
+          - paragraph [ref=e80]: 我们的采购量和供应商关系转化为你无法自行获取的价格。你买得越多，价格就越好。
+        - generic [ref=e82]:
+          - img [ref=e83]
+          - heading "平台准备" [level=3] [ref=e86]
+          - paragraph [ref=e87]: 硬件到达时已预配置为平台使用。安装客户端，列出机器，从第一天起开始赚取收入。
+        - generic [ref=e89]:
+          - img [ref=e90]
+          - heading "Vast 认证" [level=3] [ref=e93]
+          - paragraph [ref=e94]: 每个设备都经过我们的 GPU 验证流程。你会收到一份认证报告，包含烧屏、显存、基准测试和散热结果。
+        - generic [ref=e96]:
+          - img [ref=e97]
+          - heading "融资整合" [level=3] [ref=e100]
+          - paragraph [ref=e101]: 将硬件采购与融资结合，加快扩展速度。你的平台收益甚至能帮助你获得更好的条款。
+    - generic [ref=e104]:
+      - img [ref=e105]
+      - heading "准备好组建你的 GPU 车队了吗？" [level=2] [ref=e110]
+      - paragraph [ref=e111]: 通过我们经过审核的供应商网络采购硬件，或探索融资以加快规模化。
+      - generic [ref=e112]:
+        - link "探索融资" [ref=e113] [cursor=pointer]:
+          - /url: /financing
+        - link "开始托管" [ref=e114] [cursor=pointer]:
+          - /url: /contact-sales
+    - generic [ref=e117]:
+      - generic [ref=e118]:
+        - heading "你获得的服务：Vast 认证" [level=2] [ref=e119]
+        - paragraph [ref=e120]: 每台设备在发货前都会通过我们的 GPU 验证流程。每笔订单都会收到一份认证报告。
+        - generic [ref=e121]:
+          - generic [ref=e123]:
+            - img [ref=e124]
+            - heading "烧入测试" [level=3] [ref=e126]
+            - paragraph [ref=e127]: 满载 72 小时压力测试
+          - generic [ref=e129]:
+            - img [ref=e130]
+            - heading "显存验证" [level=3] [ref=e132]
+            - paragraph [ref=e133]: 完整的内存检查，无缺陷
+          - generic [ref=e135]:
+            - img [ref=e136]
+            - heading "基准评分" [level=3] [ref=e139]
+            - paragraph [ref=e140]: 性能与参考验证
+          - generic [ref=e142]:
+            - img [ref=e143]
+            - heading "热剖面" [level=3] [ref=e148]
+            - paragraph [ref=e149]: 持续负载下冷却已确认
+      - generic [ref=e150]:
+        - generic [ref=e151]:
+          - heading "获取报价" [level=2] [ref=e152]
+          - paragraph [ref=e153]: 告诉我们你需要什么。我们会从多个供应商那里获取选项，并在 1 到 2 个工作日内给出报价。
+          - generic [ref=e154]:
+            - generic [ref=e155]: "1"
+            - generic [ref=e156]: "2"
+        - generic [ref=e157]:
+          - heading "硬件需求" [level=3] [ref=e158]
+          - generic [ref=e159]:
+            - paragraph [ref=e160]: GPU 型号 *
+            - generic [ref=e161]:
+              - button "B200" [ref=e162] [cursor=pointer]
+              - button "H200 高 需求" [ref=e163] [cursor=pointer]:
+                - text: H200 高
+                - generic [ref=e164]: 需求
+              - button "H100 SXM 高需求" [ref=e165] [cursor=pointer]:
+                - text: H100 SXM
+                - generic [ref=e166]: 高需求
+              - button "H100 PCIe" [ref=e167] [cursor=pointer]
+              - button "A100 80GB" [ref=e168] [cursor=pointer]
+              - button "A100 40GB" [ref=e169] [cursor=pointer]
+              - button "L40S" [ref=e170] [cursor=pointer]
+              - button "RTX 5090 有限供应" [ref=e171] [cursor=pointer]:
+                - text: RTX 5090
+                - generic [ref=e172]: 有限供应
+              - button "RTX 4090" [ref=e173] [cursor=pointer]
+              - button "RTX 3090" [ref=e174] [cursor=pointer]
+              - button "其他" [ref=e175] [cursor=pointer]
+          - generic [ref=e176]:
+            - generic [ref=e177]:
+              - text: 数量 *
+              - combobox [ref=e178] [cursor=pointer]:
+                - generic: 精选
+                - img [ref=e179]
+            - generic [ref=e181]:
+              - text: 形态规格
+              - combobox [ref=e182] [cursor=pointer]:
+                - generic: 精选
+                - img [ref=e183]
+            - generic [ref=e185]:
+              - text: 时间线 *
+              - combobox [ref=e186] [cursor=pointer]:
+                - generic: 什么时候需要硬件?
+                - img [ref=e187]
+            - generic [ref=e189]:
+              - text: 主要使用场景
+              - combobox [ref=e190] [cursor=pointer]:
+                - generic: 精选
+                - img [ref=e191]
+            - generic [ref=e193]:
+              - text: 现有的潜在主机?
+              - combobox [ref=e194] [cursor=pointer]:
+                - generic: 精选
+                - img [ref=e195]
+            - generic [ref=e197]:
+              - text: 预算范围
+              - combobox [ref=e198] [cursor=pointer]:
+                - generic: 精选
+                - img [ref=e199]
+          - button "继续" [disabled]
+  - contentinfo [ref=e201]:
+    - generic [ref=e202]:
+      - generic [ref=e203]:
+        - generic [ref=e204]:
+          - link "算力租赁" [ref=e205] [cursor=pointer]:
+            - /url: /
+          - paragraph [ref=e206]: 基于 Token 经济的高性能 AI 算力调度平台，为全球开发者提供即时可用的计算资源。
+        - generic [ref=e207]:
+          - generic [ref=e208]:
+            - heading "公司信息" [level=3] [ref=e209]
+            - generic [ref=e210]:
+              - link "关于我们" [ref=e211] [cursor=pointer]:
+                - /url: /about
+              - link "企业可持续发展" [ref=e212] [cursor=pointer]:
+                - /url: /sustainability
+              - link "解决方案" [ref=e213] [cursor=pointer]:
+                - /url: /enterprise
+              - link "融资" [ref=e214] [cursor=pointer]:
+                - /url: /financing
+          - generic [ref=e215]:
+            - heading "资源" [level=3] [ref=e216]
+            - link "产品用例" [ref=e218] [cursor=pointer]:
+              - /url: /use-cases
+          - generic [ref=e219]:
+            - heading "条款" [level=3] [ref=e220]
+            - generic [ref=e221]:
+              - link "服务条款" [ref=e222] [cursor=pointer]:
+                - /url: /terms
+              - link "隐私政策" [ref=e223] [cursor=pointer]:
+                - /url: /privacy
+              - link "合规" [ref=e224] [cursor=pointer]:
+                - /url: /compliance
+              - link "漏洞披露" [ref=e225] [cursor=pointer]:
+                - /url: /vulnerability-disclosure
+              - link "数据处理" [ref=e226] [cursor=pointer]:
+                - /url: /data-processing
+          - generic [ref=e227]:
+            - heading "帮助" [level=3] [ref=e228]
+            - generic [ref=e229]:
+              - link "文档中心" [ref=e230] [cursor=pointer]:
+                - /url: /docs
+              - link "博客" [ref=e231] [cursor=pointer]:
+                - /url: /blog
+              - link "联系我们" [ref=e232] [cursor=pointer]:
+                - /url: /contact
+      - generic [ref=e233]:
+        - generic [ref=e234]: © 2026 算力租赁. All rights reserved.
+        - generic [ref=e235]: All systems operational
+  - region "Notifications alt+T"
+  - alert [ref=e237]

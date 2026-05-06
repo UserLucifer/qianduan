@@ -26,7 +26,7 @@ export function DocsArticleContent({
     <article className="pt-6 md:pt-10">
       <header className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
         <div className="min-w-0">
-          <p className="text-sm font-semibold text-emerald-600">
+          <p className="text-sm font-semibold text-[#4770FF]">
             {article.categoryName ?? "文档中心"}
           </p>
           <h1 className="mt-4 text-4xl font-bold tracking-tight text-foreground md:text-5xl">
@@ -79,9 +79,9 @@ export function DocsArticleContent({
         </div>
       ) : null}
 
-      <footer className="mt-10 flex items-center justify-between border-t border-border pt-8 text-sm text-muted-foreground">
-        <span>算力租赁文档</span>
-        <Link href={withDocsLanguage(docsSectionHref(article.section), language)} className="font-medium text-foreground hover:text-emerald-700">
+      <footer className="mt-10 flex items-center justify-between border-t border-border pt-8 text-sm text-foreground">
+        <span className="font-semibold">算力租赁文档</span>
+        <Link href={withDocsLanguage(docsSectionHref(article.section), language)} className="font-semibold text-foreground hover:text-foreground">
           返回{docsSectionLabel(article.section)}
         </Link>
       </footer>

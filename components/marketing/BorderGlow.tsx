@@ -169,7 +169,7 @@ const BorderGlow: React.FC<BorderGlowProps> = ({
       onPointerMove={handlePointerMove}
       onPointerEnter={() => setIsHovered(true)}
       onPointerLeave={() => setIsHovered(false)}
-      className={`relative grid isolate border border-white/15 ${className}`}
+      className={`relative isolate block border border-white/15 ${className}`}
       style={{
         background: backgroundColor,
         borderRadius: `${borderRadius}px`,
@@ -247,7 +247,7 @@ const BorderGlow: React.FC<BorderGlowProps> = ({
         />
       </span>
 
-      <div className="flex flex-col relative overflow-auto z-[1]">
+      <div className="relative z-[1] flex w-full min-w-0 flex-col overflow-hidden">
         {children}
       </div>
     </div>

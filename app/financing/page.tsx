@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import Header from '@/components/marketing/Header';
 import Footer from '@/components/marketing/Footer';
+import { HardwareQuoteFlow } from '@/app/hardware/HardwareQuoteFlow';
+import { MarketingGlowCard } from '@/components/marketing/MarketingGlowCard';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -12,12 +14,16 @@ import {
   Check,
   CircleDollarSign,
   CreditCard,
+  Flame,
+  Gauge,
   Handshake,
   Landmark,
   LineChart,
+  MemoryStick,
   PackageCheck,
   Repeat2,
   ShieldCheck,
+  Truck,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -91,6 +97,33 @@ const flywheelItems = [
   { title: '赚取', description: '来自开发者的收入', icon: CreditCard },
 ];
 
+const certificationItems: Array<{
+  title: string;
+  description: string;
+  icon: LucideIcon;
+}> = [
+    {
+      title: '烧入测试',
+      description: '满载 72 小时压力测试',
+      icon: Flame,
+    },
+    {
+      title: '显存验证',
+      description: '完整的内存检查，无缺陷',
+      icon: MemoryStick,
+    },
+    {
+      title: '基准评分',
+      description: '性能与参考验证',
+      icon: Gauge,
+    },
+    {
+      title: '热剖面',
+      description: '持续负载下冷却已确认',
+      icon: Truck,
+    },
+  ];
+
 function FinancingVideo({
   className = '',
   label = 'GPU 融资说明视频',
@@ -150,19 +183,17 @@ export default function FinancingPage() {
 
             <div className="mt-14 grid gap-6 lg:grid-cols-3">
               {steps.map((step, index) => (
-                <Card
+                <MarketingGlowCard
                   key={step.title}
-                  className="rounded-[8px] border-white/12 bg-white/[0.02] text-[#f7f8f8] shadow-none"
+                  contentClassName="min-h-[230px] p-7 sm:p-8"
                 >
-                  <CardContent className="min-h-[230px] p-7 sm:p-8">
-                    <h3 className="text-2xl font-semibold leading-tight tracking-[-0.03em]">
-                      {index + 1}. {step.title}
-                    </h3>
-                    <p className="mt-6 text-base leading-7 text-[#a4acb6]">
-                      {step.description}
-                    </p>
-                  </CardContent>
-                </Card>
+                  <h3 className="text-2xl font-semibold leading-tight tracking-[-0.03em]">
+                    {index + 1}. {step.title}
+                  </h3>
+                  <p className="mt-6 text-base leading-7 text-[#a4acb6]">
+                    {step.description}
+                  </p>
+                </MarketingGlowCard>
               ))}
             </div>
           </div>
@@ -218,23 +249,62 @@ export default function FinancingPage() {
                   const Icon = card.icon;
 
                   return (
-                    <Card
+                    <MarketingGlowCard
                       key={card.title}
-                      className="rounded-[8px] border-white/12 bg-[#050506]/90 text-[#f7f8f8] shadow-none"
+                      backgroundColor="rgba(5,5,6,0.9)"
+                      contentClassName="min-h-[270px] p-7"
                     >
-                      <CardContent className="min-h-[270px] p-7">
-                        <Icon className="h-8 w-8 text-[#8a8f98]" aria-hidden="true" />
-                        <h3 className="mt-7 text-2xl font-semibold leading-tight tracking-[-0.03em]">
-                          {card.title}
-                        </h3>
-                        <p className="mt-6 text-base leading-7 text-[#a4acb6]">
-                          {card.description}
-                        </p>
-                      </CardContent>
-                    </Card>
+                      <Icon className="h-8 w-8 text-[#8a8f98]" aria-hidden="true" />
+                      <h3 className="mt-7 text-2xl font-semibold leading-tight tracking-[-0.03em]">
+                        {card.title}
+                      </h3>
+                      <p className="mt-6 text-base leading-7 text-[#a4acb6]">
+                        {card.description}
+                      </p>
+                    </MarketingGlowCard>
                   );
                 })}
               </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-20 sm:py-24">
+          <div className={`${shellClass} rounded-[8px] border border-white/12`}>
+            <div className="grid lg:grid-cols-[0.88fr_1fr]">
+              <div className="border-white/12 p-8 sm:p-12 lg:border-r lg:p-14">
+                <h2 className="text-4xl font-semibold leading-tight tracking-[-0.045em] sm:text-5xl">
+                  你获得的服务：Vast 认证
+                </h2>
+                <p className="mt-7 max-w-[560px] text-base leading-7 text-[#a4acb6] sm:text-lg">
+                  每台设备在发货前都会通过我们的 GPU 验证流程。每笔订单都会收到一份认证报告。
+                </p>
+
+                <div className="mt-10 grid gap-5 sm:grid-cols-2">
+                  {certificationItems.map((item) => {
+                    const Icon = item.icon;
+
+                    return (
+                      <Card
+                        key={item.title}
+                        className="rounded-[8px] border-white/12 bg-white/[0.02] text-[#f7f8f8] shadow-none"
+                      >
+                        <CardContent className="p-6">
+                          <Icon className="h-7 w-7 text-[#8a8f98]" aria-hidden="true" />
+                          <h3 className="mt-6 text-2xl font-semibold tracking-[-0.03em]">
+                            {item.title}
+                          </h3>
+                          <p className="mt-3 text-sm leading-6 text-[#a4acb6]">
+                            {item.description}
+                          </p>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <HardwareQuoteFlow />
             </div>
           </div>
         </section>
@@ -301,16 +371,14 @@ function FlywheelCard({
   const Icon = item.icon;
 
   return (
-    <Card className="rounded-[8px] border-white/12 bg-[#050506] text-[#f7f8f8] shadow-none">
-      <CardContent className="p-6">
-        <Icon className="h-7 w-7 text-[#8a8f98]" aria-hidden="true" />
-        <h3 className="mt-6 text-2xl font-semibold tracking-[-0.03em]">
-          {item.title}
-        </h3>
-        <p className="mt-3 text-base leading-7 text-[#a4acb6]">
-          {item.description}
-        </p>
-      </CardContent>
-    </Card>
+    <MarketingGlowCard backgroundColor="rgba(5,5,6,1)" contentClassName="p-6">
+      <Icon className="h-7 w-7 text-[#8a8f98]" aria-hidden="true" />
+      <h3 className="mt-6 text-2xl font-semibold tracking-[-0.03em]">
+        {item.title}
+      </h3>
+      <p className="mt-3 text-base leading-7 text-[#a4acb6]">
+        {item.description}
+      </p>
+    </MarketingGlowCard>
   );
 }

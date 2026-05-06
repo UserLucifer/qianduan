@@ -4,8 +4,12 @@ import {
   BookOpen,
   ChevronRight,
   FileText,
+  Folder,
+  Lightbulb,
   Newspaper,
+  Terminal,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { DocsTopbar } from "@/components/docs/DocsTopbar";
 import {
   DOCS_DEFAULT_LANGUAGE,
@@ -43,6 +47,17 @@ function articlesForCategory(articles: DocsArticle[], categoryId: number) {
   return sortBySortNo(articles.filter((article) => article.categoryId === categoryId));
 }
 
+function getCategoryIcon(category: DocsCategory): LucideIcon {
+  const iconKey = `${category.icon ?? ""} ${category.categoryCode} ${category.categoryName}`.toLowerCase();
+
+  if (iconKey.includes("concept") || iconKey.includes("理念") || iconKey.includes("概念")) return Lightbulb;
+  if (iconKey.includes("cli") || iconKey.includes("sdk") || iconKey.includes("terminal")) return Terminal;
+  if (iconKey.includes("guide") || iconKey.includes("book") || iconKey.includes("指南")) return BookOpen;
+  if (iconKey.includes("doc") || iconKey.includes("api") || iconKey.includes("文档")) return FileText;
+
+  return Folder;
+}
+
 function renderCategoryBranch({
   category,
   articles,
@@ -63,6 +78,7 @@ function renderCategoryBranch({
   const branchArticles = articlesForCategory(articles, category.id);
   const children = sortBySortNo(category.children ?? []);
   const isActiveCategory = activeCategoryId === category.id;
+  const CategoryIcon = getCategoryIcon(category);
 
   return (
     <div key={category.id} className={cn("space-y-1", depth > 0 && "pl-3")}>
@@ -70,11 +86,12 @@ function renderCategoryBranch({
         href={withDocsLanguage(`${sectionHref}?category_id=${category.id}`, language)}
         aria-current={isActiveCategory ? "page" : undefined}
         className={cn(
-          "mt-6 block rounded-lg px-3 py-2 text-sm font-semibold text-foreground transition-colors first:mt-0",
-          !isActiveCategory && "hover:bg-muted/60",
+          "mt-6 flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-foreground transition-colors first:mt-0",
+          isActiveCategory ? "bg-muted/60" : "hover:bg-muted/60",
         )}
       >
-        {category.categoryName}
+        <CategoryIcon className="h-4 w-4 shrink-0 text-foreground" aria-hidden="true" />
+        <span className="min-w-0">{category.categoryName}</span>
       </Link>
 
       {branchArticles.map((article) => {
@@ -86,7 +103,7 @@ function renderCategoryBranch({
             className={cn(
               "flex items-start justify-between gap-2 rounded-lg px-3 py-2 text-sm leading-5 transition-colors",
               isActive
-                ? "bg-emerald-50 font-semibold text-emerald-700"
+                ? "bg-[#EAEFFF] font-semibold text-[#4770FF]"
                 : "text-muted-foreground hover:bg-muted/60 hover:text-foreground",
             )}
           >
@@ -145,7 +162,7 @@ export function DocsFrame({
                 href={item.href}
                 className={cn(
                   "flex h-12 shrink-0 items-center gap-1.5 border-b border-transparent transition-colors hover:text-foreground",
-                  item.active && "border-emerald-600 text-foreground",
+                  item.active && "border-[#4770FF] text-foreground",
                 )}
               >
                 {item.label}
@@ -195,7 +212,7 @@ export function DocsFrame({
                     href={articleHref(article, language)}
                     className={cn(
                       "flex items-start gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-muted/60 hover:text-foreground",
-                      activeSlug === article.slug && "bg-emerald-50 font-semibold text-emerald-700",
+                      activeSlug === article.slug && "bg-[#EAEFFF] font-semibold text-[#4770FF]",
                     )}
                   >
                     <FileText className="mt-0.5 h-3.5 w-3.5 shrink-0" />

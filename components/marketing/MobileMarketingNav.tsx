@@ -73,6 +73,16 @@ const navGroups = [
     ]
   },
   {
+    title: '托管',
+    icon: Server,
+    items: [
+      { name: '托管', href: '/hosting', description: '发布 GPU 主机并获得客户、支持、账单和交易流' },
+      { name: '数据中心', href: '/data-center', description: '申请认证数据中心，获得信任标签和优先展示' },
+      { name: '融资', href: '/financing', description: '为 GPU 主机匹配融资与硬件采购支持' },
+      { name: '硬件', href: '/hardware', description: '采购认证 GPU 服务器并预配置为平台可用状态' }
+    ]
+  },
+  {
     title: '公司',
     icon: Building2,
     items: [
@@ -123,7 +133,7 @@ export default function MobileMarketingNav({
       >
         <SheetTitle className="sr-only">移动端导航</SheetTitle>
         <SheetDescription className="sr-only">
-          打开产品、产品用例、解决方案、公司和账户入口。
+          打开产品、产品用例、解决方案、托管、公司和账户入口。
         </SheetDescription>
 
         <div className="flex h-20 shrink-0 items-center justify-between px-8">

@@ -144,7 +144,7 @@ export async function DocsSectionPage({
       <div className="pt-6 md:pt-10">
         <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
           <div>
-            <p className="text-sm font-semibold text-emerald-600">
+            <p className="text-sm font-semibold text-[#4770FF]">
               {keyword ? "搜索结果" : selectedCategory?.categoryName ?? sectionLabel}
             </p>
             <h1 className="mt-4 text-4xl font-bold tracking-tight text-foreground md:text-5xl">
@@ -163,7 +163,7 @@ export async function DocsSectionPage({
               <Link
                 key={article.id}
                 href={articleHref(article, language)}
-                className="group block border-b border-border py-6 transition-colors hover:border-emerald-500/40"
+                className="group block border-b border-border py-6 transition-colors hover:border-[#4770FF]/40"
               >
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                   <div className="min-w-0">
@@ -174,7 +174,7 @@ export async function DocsSectionPage({
                         </Badge>
                       ) : null}
                       {article.isSectionHome === 1 ? (
-                        <Badge variant="outline" className="rounded-full border-emerald-400/20 bg-emerald-400/10 font-normal text-emerald-600">
+                        <Badge variant="outline" className="rounded-full border-[#4770FF]/20 bg-[#EAEFFF] font-normal text-[#4770FF]">
                           分区首页
                         </Badge>
                       ) : null}
@@ -182,7 +182,7 @@ export async function DocsSectionPage({
                         {formatDate(article.publishedAt ?? article.createdAt)}
                       </span>
                     </div>
-                    <h2 className="mt-3 text-xl font-semibold tracking-tight text-foreground group-hover:text-emerald-700">
+                    <h2 className="mt-3 text-xl font-semibold tracking-tight text-foreground group-hover:text-[#4770FF]">
                       {article.title}
                     </h2>
                     {article.summary ? (

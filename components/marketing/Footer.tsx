@@ -25,6 +25,7 @@ export default function Footer() {
                 <Link href="/sustainability" className="site-footer__link">企业可持续发展</Link>
                 <Link href="/enterprise" className="site-footer__link">解决方案</Link>
                 <Link href="/financing" className="site-footer__link">融资</Link>
+                <Link href="/hardware" className="site-footer__link">硬件</Link>
               </div>
             </div>
 

@@ -61,7 +61,7 @@ export function DocsTopbar({
       <div className="mx-auto grid min-h-16 w-full max-w-[1240px] grid-cols-1 items-center gap-4 px-5 py-3 md:px-10 lg:grid-cols-[minmax(220px,1fr)_minmax(320px,450px)_minmax(220px,1fr)]">
         <div className="flex min-w-0 items-center gap-5">
           <Link href="/" className="flex shrink-0 items-center gap-2 text-2xl font-bold tracking-tight text-foreground">
-            <span className="flex h-7 w-7 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-sm font-black text-emerald-600">
+            <span className="flex h-7 w-7 items-center justify-center rounded-lg border border-border bg-background text-sm font-black text-foreground">
               算
             </span>
             算力租赁
@@ -115,7 +115,7 @@ export function DocsTopbar({
           <Link href="/contact-us" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
             支持
           </Link>
-          <Button asChild className="h-9 rounded-full bg-emerald-700 px-5 font-semibold text-white hover:bg-emerald-800">
+          <Button asChild className="h-9 rounded-full bg-[#4770FF] px-5 font-semibold text-white hover:bg-[#4770FF]">
             <Link href="/">
               系统主页
               <ChevronRight className="h-4 w-4" />
