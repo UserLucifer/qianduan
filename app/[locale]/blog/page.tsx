@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Header from "@/components/marketing/Header";
 import Footer from "@/components/marketing/Footer";
+import { getTranslations } from "next-intl/server";
 import { getBlogCategories, getBlogPosts } from "@/api/blog";
 import type { BlogPostQueryRequest, BlogPostResponse, PageResult } from "@/api/blog";
 import { BlogCard } from "@/components/shared/BlogCard";
@@ -11,11 +12,6 @@ import { normalizeLocale } from "@/i18n/locales";
 
 export const revalidate = 600; // Cache for 10 minutes
 
-export const metadata: Metadata = {
-  title: "技术博客 & 产品动态 | Platform News",
-  description: "探索高性能计算、AI 基础设施和去中心化云解决方案的未来。",
-};
-
 type BlogPageProps = {
   params: Promise<{ locale: string }>;
   searchParams?: Promise<{
@@ -24,6 +20,17 @@ type BlogPageProps = {
     pageNo?: string;
   }>;
 };
+
+export async function generateMetadata({ params }: Pick<BlogPageProps, "params">): Promise<Metadata> {
+  const { locale } = await params;
+  const language = normalizeLocale(locale);
+  const t = await getTranslations({ locale: language, namespace: "Blog" });
+
+  return {
+    title: t("metadata.title"),
+    description: t("metadata.description"),
+  };
+}
 
 const emptyPage: PageResult<BlogPostResponse> = {
   records: [],
@@ -51,6 +58,7 @@ function buildBlogQuery(params: Awaited<BlogPageProps["searchParams"]>): BlogPos
 export default async function BlogPage({ params, searchParams }: BlogPageProps) {
   const [{ locale }, resolvedSearchParams] = await Promise.all([params, searchParams]);
   const language = normalizeLocale(locale);
+  const t = await getTranslations({ locale: language, namespace: "Blog" });
   const query = buildBlogQuery(resolvedSearchParams);
 
   const [postsRes, categoriesRes] = await Promise.all([
@@ -73,10 +81,10 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
           {/* Hero Section */}
           <section className="mb-16 text-center">
             <h1 className="mb-4 text-4xl font-extrabold tracking-tight text-foreground md:text-5xl">
-              News & Insights
+              {t("heroTitle")}
             </h1>
             <p className="mx-auto max-w-2xl text-muted-foreground">
-              探索高性能计算、AI 基础设施和去中心化云解决方案的未来。
+              {t("heroDescription")}
             </p>
           </section>
 
@@ -93,7 +101,7 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
                     : "border-transparent text-muted-foreground hover:text-foreground"
                 )}
               >
-                全部文章
+                {t("allPosts")}
               </Link>
               {categories.map((cat) => (
                 <Link
@@ -118,20 +126,20 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
 
             {posts.records.length > 0 ? (
               posts.records.map((post) => (
-                <BlogCard key={post.id} post={post} />
+                <BlogCard key={post.id} post={post} locale={language} noImageLabel={t("noImage")} />
               ))
             ) : (
               <div className="col-span-full flex min-h-[400px] flex-col items-center justify-center rounded-3xl border border-dashed border-border p-12 text-center">
                 <div className="mb-4 rounded-full bg-muted p-4">
                   <Filter className="h-8 w-8 text-muted-foreground" />
                 </div>
-                <h3 className="text-xl font-medium text-foreground">未找到相关文章</h3>
-                <p className="mt-2 text-muted-foreground">尝试调整过滤条件或稍后再试。</p>
+                <h3 className="text-xl font-medium text-foreground">{t("emptyTitle")}</h3>
+                <p className="mt-2 text-muted-foreground">{t("emptyDescription")}</p>
                 <Link
                   href="/blog"
                   className="mt-6 text-sm font-medium text-primary hover:underline"
                 >
-                  清除所有过滤
+                  {t("clearFilters")}
                 </Link>
               </div>
             )}

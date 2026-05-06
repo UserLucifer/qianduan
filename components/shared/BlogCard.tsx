@@ -2,7 +2,15 @@ import { Link } from "@/i18n/navigation";
 import type { BlogPostResponse } from "@/api/blog";
 import { formatDate } from "@/lib/format";
 
-export function BlogCard({ post }: { post: BlogPostResponse }) {
+export function BlogCard({
+  post,
+  locale,
+  noImageLabel = "No Image",
+}: {
+  post: BlogPostResponse;
+  locale?: string;
+  noImageLabel?: string;
+}) {
   const publishedAt = post.publishedAt ?? post.createdAt;
 
   return (
@@ -20,14 +28,14 @@ export function BlogCard({ post }: { post: BlogPostResponse }) {
           />
         ) : (
           <div className="flex h-full items-center justify-center text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground/50">
-            No Image
+            {noImageLabel}
           </div>
         )}
       </div>
 
       {/* Meta Information */}
       <div className="mt-5 flex items-center gap-2 text-sm font-medium text-muted-foreground">
-        <span>{formatDate(publishedAt)}</span>
+        <span>{formatDate(publishedAt, locale)}</span>
         {post.categoryName && (
           <>
             <span className="text-muted-foreground/30">/</span>
@@ -51,4 +59,3 @@ export function BlogCard({ post }: { post: BlogPostResponse }) {
     </Link>
   );
 }
-

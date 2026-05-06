@@ -1,6 +1,7 @@
 import React from 'react';
+import Image from 'next/image';
 import { Link } from "@/i18n/navigation";
-import { FiType, FiImage, FiUsers, FiArrowRight } from 'react-icons/fi';
+import { FiArrowRight } from 'react-icons/fi';
 import { getTranslations } from "next-intl/server";
 import { normalizeLocale } from "@/i18n/locales";
 import './UseCaseSection.css';
@@ -12,15 +13,15 @@ type UseCaseCopy = {
 
 const previewUseCaseMeta = [
   {
-    icon: <FiType />,
+    image: '/images/use-cases/use_cases_6.png',
     href: '/use-cases/ai-text-generation'
   },
   {
-    icon: <FiImage />,
+    image: '/images/use-cases/use_cases_5.webp',
     href: '/use-cases/ai-image-video-generation'
   },
   {
-    icon: <FiUsers />,
+    image: '/images/use-cases/use_cases_7.jpeg',
     href: '/use-cases/ai-agents'
   }
 ];
@@ -50,7 +51,15 @@ export default async function UseCaseSection({ locale }: { locale?: string }) {
         <div className="uc-grid">
           {previewUseCases.map((uc, index) => (
             <Link key={index} href={uc.href} className="uc-preview-card">
-              <div className="uc-preview-card__icon">{uc.icon}</div>
+              <div className="uc-preview-card__media">
+                <Image
+                  src={uc.image}
+                  alt={uc.title}
+                  fill
+                  sizes="(max-width: 920px) calc(100vw - 40px), 384px"
+                  className="uc-preview-card__image"
+                />
+              </div>
               <h3 className="uc-preview-card__title">{uc.title}</h3>
               <p className="uc-preview-card__desc">{uc.desc}</p>
               <div className="uc-preview-card__footer">

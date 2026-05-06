@@ -1,17 +1,25 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { DocsSectionPage, type DocsSectionSearchParams } from "@/components/docs/DocsSectionPage";
+import { normalizeLocale } from "@/i18n/locales";
 
 export const revalidate = 300;
-
-export const metadata: Metadata = {
-  title: "支持 | 算力租赁文档",
-  description: "浏览算力租赁平台服务支持说明和联系指引。",
-};
 
 type DocsSupportPageProps = {
   params: Promise<{ locale: string }>;
   searchParams?: Promise<DocsSectionSearchParams>;
 };
+
+export async function generateMetadata({ params }: Pick<DocsSupportPageProps, "params">): Promise<Metadata> {
+  const { locale } = await params;
+  const language = normalizeLocale(locale);
+  const t = await getTranslations({ locale: language, namespace: "DocsMetadata.support" });
+
+  return {
+    title: t("title"),
+    description: t("description"),
+  };
+}
 
 export default async function DocsSupportPage({ params, searchParams }: DocsSupportPageProps) {
   const { locale } = await params;

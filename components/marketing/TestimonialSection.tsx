@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, type ReactNode } from 'react';
 import { useTranslations } from "next-intl";
-import { SiOpenai } from 'react-icons/si';
+import { SiAnthropic, SiHuggingface, SiMistralai, SiOpenai } from 'react-icons/si';
 import './TestimonialSection.css';
 
 type TestimonialCopy = {
@@ -16,36 +16,58 @@ const testimonialMeta = [
   {
     id: 1,
     logoText: 'Jane Street',
-    logoIcon: null,
+    logoIcon: <JaneStreetMark />,
   },
   {
     id: 2,
     logoText: 'OpenAI',
-    logoIcon: <SiOpenai className="text-xl" />,
+    logoIcon: <BrandIcon icon={<SiOpenai />} />,
   },
   {
     id: 3,
     logoText: 'Mistral AI',
-    logoIcon: null,
+    logoIcon: <BrandIcon icon={<SiMistralai />} />,
   },
   {
     id: 4,
     logoText: 'Scale AI',
-    logoIcon: null,
+    logoIcon: <ScaleAiMark />,
   },
   {
     id: 5,
     logoText: 'Hugging Face',
-    logoIcon: null,
+    logoIcon: <BrandIcon icon={<SiHuggingface />} />,
   },
   {
     id: 6,
     logoText: 'Anthropic',
-    logoIcon: null,
+    logoIcon: <BrandIcon icon={<SiAnthropic />} />,
   }
 ];
 
 const dotColors = ['#ef4444', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899'];
+
+function BrandIcon({ icon }: { icon: ReactNode }) {
+  return <span className="testimonial-logo-mark" aria-hidden="true">{icon}</span>;
+}
+
+function JaneStreetMark() {
+  return (
+    <span className="testimonial-logo-mark testimonial-logo-mark--jane" aria-hidden="true">
+      JS
+    </span>
+  );
+}
+
+function ScaleAiMark() {
+  return (
+    <span className="testimonial-logo-mark testimonial-logo-mark--scale" aria-hidden="true">
+      <span />
+      <span />
+      <span />
+    </span>
+  );
+}
 
 export default function TestimonialSection() {
   const t = useTranslations("MarketingHome.testimonials");
@@ -117,7 +139,7 @@ export default function TestimonialSection() {
     updateMaxIndex();
     window.addEventListener('resize', updateMaxIndex);
     return () => window.removeEventListener('resize', updateMaxIndex);
-  }, []);
+  }, [testimonials.length]);
 
   const dotsCount = maxIndex + 1;
 
@@ -140,7 +162,7 @@ export default function TestimonialSection() {
               <div key={t.id} className="testimonial-slide">
                 <div className="testimonial-content-wrapper">
                   <div className="testimonial-logo">
-                    {t.logoIcon && <span className="logo-icon">{t.logoIcon}</span>}
+                    <span className="logo-icon">{t.logoIcon}</span>
                     <span className="logo-text">{t.logoText}</span>
                   </div>
                   

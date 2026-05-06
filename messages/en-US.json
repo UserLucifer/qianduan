@@ -26,6 +26,141 @@
     "description": "The page you are looking for may have been removed, renamed, or is temporarily unavailable.",
     "home": "Back to home"
   },
+  "Auth": {
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Log in to your account",
+      "passwordPlaceholder": "Password",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "submit": "Log in",
+      "submitting": "Logging in...",
+      "noAccount": "No account yet?",
+      "signUp": "Create one for free",
+      "needHelp": "Need help signing in?",
+      "resetPassword": "Reset password",
+      "legalPrefix": "By using {brand}, you acknowledge that we collect and use",
+      "legalSuffixBefore": "your personal information as described in our ",
+      "privacyPolicy": "Privacy Policy",
+      "legalSuffixAfter": ".",
+      "imageAlt": "Abstract 3D login illustration",
+      "errors": {
+        "loginFailed": "Incorrect email or password."
+      }
+    },
+    "signup": {
+      "emailTitle": "Welcome to {brand}",
+      "emailSubtitle": "Create an account to continue",
+      "emailPlaceholder": "Work email",
+      "inviteCodePlaceholder": "Invite code (optional)",
+      "processing": "Processing...",
+      "continue": "Continue",
+      "hasAccount": "Already have an account?",
+      "login": "Log in",
+      "otpTitle": "Verify your email",
+      "otpSubtitle": "We sent a 6-digit verification code to",
+      "otpDigitAria": "Verification code digit {index}",
+      "resendCountdown": "Resend in {seconds}s",
+      "resendCode": "Resend code",
+      "backToEmail": "Back to email",
+      "profileTitle": "Almost done",
+      "profileSubtitle": "Set your username and password.",
+      "usernamePlaceholder": "Username",
+      "passwordPlaceholder": "Set password",
+      "confirmPasswordPlaceholder": "Confirm password",
+      "creatingAccount": "Creating account...",
+      "register": "Create account",
+      "backToOtp": "Back to verification code",
+      "legalPrefix": "By using {brand}, you agree to our",
+      "privacyPolicy": "Privacy Policy",
+      "and": "and",
+      "terms": "Terms of Service",
+      "legalSuffix": ".",
+      "imageAlt": "Account signup illustration",
+      "errors": {
+        "sendFailed": "We could not send the verification code. Please try again later.",
+        "invalidCode": "The verification code is incorrect or has expired.",
+        "passwordMismatch": "Passwords do not match.",
+        "registrationFailed": "Registration failed. Please try again later."
+      }
+    },
+    "resetPassword": {
+      "emailTitle": "Reset your password",
+      "emailSubtitle": "Enter the email address connected to your account.",
+      "sending": "Sending...",
+      "sendResetLink": "Send reset code",
+      "backToLogin": "Back to login",
+      "otpTitle": "Verify your email",
+      "otpSubtitle": "We sent a reset code to",
+      "otpDigitAria": "Reset code digit {index}",
+      "resendCountdown": "Resend in {seconds}s",
+      "resendCode": "Resend code",
+      "backToEmail": "Back to email",
+      "resetTitle": "Set a new password",
+      "resetSubtitle": "Enter a new secure password.",
+      "newPasswordPlaceholder": "New password",
+      "confirmPasswordPlaceholder": "Confirm password",
+      "resetting": "Resetting...",
+      "updatePassword": "Update password",
+      "backToOtp": "Back to verification code",
+      "successTitle": "Password reset complete",
+      "successSubtitle": "Your password has been updated. Redirecting to login...",
+      "legalPrefix": "By using {brand}, you agree to our",
+      "privacyPolicy": "Privacy Policy",
+      "and": "and",
+      "terms": "Terms of Service",
+      "legalSuffix": ".",
+      "imageAlt": "Password reset illustration",
+      "errors": {
+        "sendFailed": "We could not send the reset code. Please try again later.",
+        "invalidCode": "The verification code is incorrect or has expired.",
+        "passwordMismatch": "Passwords do not match.",
+        "resetFailed": "Password reset failed. Please try again later."
+      }
+    }
+  },
+  "Blog": {
+    "metadata": {
+      "title": "Technical Blog & Product Updates | Compute Rental",
+      "description": "Explore the future of high-performance compute, AI infrastructure, and decentralized cloud solutions."
+    },
+    "heroTitle": "News & Insights",
+    "heroDescription": "Explore the future of high-performance compute, AI infrastructure, and decentralized cloud solutions.",
+    "allPosts": "All posts",
+    "emptyTitle": "No matching posts found",
+    "emptyDescription": "Try adjusting the filters or check back later.",
+    "clearFilters": "Clear all filters",
+    "noImage": "No Image",
+    "detail": {
+      "notFoundMetadataTitle": "Blog | Article Not Found",
+      "backToList": "Back to articles",
+      "author": "Editorial team",
+      "readCount": "{count} reads",
+      "emptyContent": "No article content yet."
+    }
+  },
+  "DocsMetadata": {
+    "guide": {
+      "title": "Guides | Compute Rental Docs",
+      "description": "Browse guides, configuration notes, and platform documentation."
+    },
+    "faq": {
+      "title": "FAQ | Compute Rental Docs",
+      "description": "Browse common questions and support notes for the Compute Rental platform."
+    },
+    "integrations": {
+      "title": "Integrations | Compute Rental Docs",
+      "description": "Browse integration guides and API connection notes for the Compute Rental platform."
+    },
+    "support": {
+      "title": "Support | Compute Rental Docs",
+      "description": "Browse service support notes and contact guidance for the Compute Rental platform."
+    },
+    "detail": {
+      "title": "Documentation | Compute Rental",
+      "description": "Read platform guides, API notes, and support documentation."
+    }
+  },
   "MarketingHeader": {
     "mainNav": "Main navigation",
     "products": "Products",

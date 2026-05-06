@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { cache } from "react";
+import { getTranslations } from "next-intl/server";
 import {
   getDocsArticleBySlug,
   getDocsArticles,
@@ -13,18 +14,25 @@ import {
 import { DocsArticleContent } from "@/components/docs/DocsArticleContent";
 import { DocsFrame } from "@/components/docs/DocsFrame";
 import { normalizeDocsLanguage } from "@/components/docs/sections";
+import { normalizeLocale } from "@/i18n/locales";
 
 export const dynamic = "force-dynamic";
-
-export const metadata: Metadata = {
-  title: "文档详情 | 算力租赁",
-  description: "阅读平台使用指南、API 说明和支持文档。",
-};
 
 type DocsDetailPageProps = {
   params: Promise<{ locale: string; slug: string }>;
   searchParams?: Promise<{ language?: string }>;
 };
+
+export async function generateMetadata({ params }: Pick<DocsDetailPageProps, "params">): Promise<Metadata> {
+  const { locale } = await params;
+  const language = normalizeLocale(locale);
+  const t = await getTranslations({ locale: language, namespace: "DocsMetadata.detail" });
+
+  return {
+    title: t("title"),
+    description: t("description"),
+  };
+}
 
 const emptyPage: PageResult<DocsArticle> = {
   records: [],

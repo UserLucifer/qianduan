@@ -26,6 +26,141 @@
     "description": "您访问的页面可能已经被移除、重命名或暂时不可用。",
     "home": "返回首页"
   },
+  "Auth": {
+    "login": {
+      "title": "欢迎回来",
+      "subtitle": "登录您的账号",
+      "passwordPlaceholder": "密码",
+      "showPassword": "显示密码",
+      "hidePassword": "隐藏密码",
+      "submit": "登录",
+      "submitting": "登录中...",
+      "noAccount": "还没有账号？",
+      "signUp": "免费注册",
+      "needHelp": "需要登录帮助？",
+      "resetPassword": "重置密码",
+      "legalPrefix": "通过使用 {brand}，您承认我们收集并使用",
+      "legalSuffixBefore": "您的个人信息，如我们的 ",
+      "privacyPolicy": "隐私政策",
+      "legalSuffixAfter": "中所述。",
+      "imageAlt": "抽象 3D 登录插图",
+      "errors": {
+        "loginFailed": "登录失败，请检查您的凭据。"
+      }
+    },
+    "signup": {
+      "emailTitle": "欢迎来到 {brand}",
+      "emailSubtitle": "注册以继续使用",
+      "emailPlaceholder": "工作邮箱",
+      "inviteCodePlaceholder": "邀请码（选填）",
+      "processing": "处理中...",
+      "continue": "继续",
+      "hasAccount": "已经有账号了？",
+      "login": "登录",
+      "otpTitle": "验证您的邮箱",
+      "otpSubtitle": "我们已向以下地址发送了 6 位验证码",
+      "otpDigitAria": "验证码第 {index} 位",
+      "resendCountdown": "{seconds}s 后重新发送",
+      "resendCode": "重新发送验证码",
+      "backToEmail": "返回邮箱输入",
+      "profileTitle": "即将完成",
+      "profileSubtitle": "设置您的用户名和密码。",
+      "usernamePlaceholder": "用户名",
+      "passwordPlaceholder": "设置密码",
+      "confirmPasswordPlaceholder": "确认密码",
+      "creatingAccount": "创建账号中...",
+      "register": "注册",
+      "backToOtp": "返回验证码输入",
+      "legalPrefix": "通过使用 {brand}，即表示您同意我们的",
+      "privacyPolicy": "隐私政策",
+      "and": "和",
+      "terms": "服务条款",
+      "legalSuffix": "。",
+      "imageAlt": "账号注册插图",
+      "errors": {
+        "sendFailed": "发送失败",
+        "invalidCode": "验证码无效",
+        "passwordMismatch": "两次输入的密码不一致",
+        "registrationFailed": "注册失败"
+      }
+    },
+    "resetPassword": {
+      "emailTitle": "重置您的密码",
+      "emailSubtitle": "输入与您的账号关联的电子邮箱地址。",
+      "sending": "发送中...",
+      "sendResetLink": "发送重置链接",
+      "backToLogin": "返回登录",
+      "otpTitle": "验证您的邮箱",
+      "otpSubtitle": "我们已向以下地址发送了重置码",
+      "otpDigitAria": "重置码第 {index} 位",
+      "resendCountdown": "{seconds}s 后重新发送",
+      "resendCode": "重新发送验证码",
+      "backToEmail": "返回邮箱输入",
+      "resetTitle": "设置新密码",
+      "resetSubtitle": "输入您的新安全密码。",
+      "newPasswordPlaceholder": "新密码",
+      "confirmPasswordPlaceholder": "确认密码",
+      "resetting": "重置中...",
+      "updatePassword": "更新密码",
+      "backToOtp": "返回验证码输入",
+      "successTitle": "密码重置成功！",
+      "successSubtitle": "您的密码已更新。正在跳转至登录页面...",
+      "legalPrefix": "通过使用 {brand}，即表示您同意我们的",
+      "privacyPolicy": "隐私政策",
+      "and": "和",
+      "terms": "服务条款",
+      "legalSuffix": "。",
+      "imageAlt": "密码重置插图",
+      "errors": {
+        "sendFailed": "重置验证码发送失败",
+        "invalidCode": "验证码无效",
+        "passwordMismatch": "两次输入的密码不一致",
+        "resetFailed": "重置失败"
+      }
+    }
+  },
+  "Blog": {
+    "metadata": {
+      "title": "技术博客 & 产品动态 | 算力租赁",
+      "description": "探索高性能计算、AI 基础设施和去中心化云解决方案的未来。"
+    },
+    "heroTitle": "News & Insights",
+    "heroDescription": "探索高性能计算、AI 基础设施和去中心化云解决方案的未来。",
+    "allPosts": "全部文章",
+    "emptyTitle": "未找到相关文章",
+    "emptyDescription": "尝试调整过滤条件或稍后再试。",
+    "clearFilters": "清除所有过滤",
+    "noImage": "No Image",
+    "detail": {
+      "notFoundMetadataTitle": "博客 | 文章未找到",
+      "backToList": "返回列表",
+      "author": "官方团队",
+      "readCount": "{count} 次阅读",
+      "emptyContent": "暂无正文内容。"
+    }
+  },
+  "DocsMetadata": {
+    "guide": {
+      "title": "向导 | 算力租赁文档",
+      "description": "浏览算力租赁平台向导、配置说明和使用文档。"
+    },
+    "faq": {
+      "title": "常见问题 | 算力租赁文档",
+      "description": "浏览算力租赁平台常见问题和支持说明。"
+    },
+    "integrations": {
+      "title": "集成 | 算力租赁文档",
+      "description": "浏览算力租赁平台集成指南和 API 接入说明。"
+    },
+    "support": {
+      "title": "支持 | 算力租赁文档",
+      "description": "浏览算力租赁平台服务支持说明和联系指引。"
+    },
+    "detail": {
+      "title": "文档详情 | 算力租赁",
+      "description": "阅读平台使用指南、API 说明和支持文档。"
+    }
+  },
   "MarketingHeader": {
     "mainNav": "主导航",
     "products": "产品",

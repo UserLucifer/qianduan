@@ -130,6 +130,48 @@
   align-items: center;
 }
 
+.testimonial-logo-mark {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--foreground);
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.testimonial-logo-mark--jane {
+  border: 1px solid color-mix(in srgb, var(--foreground) 32%, transparent);
+  border-radius: 4px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: -0.06em;
+}
+
+.testimonial-logo-mark--scale {
+  align-items: flex-end;
+  gap: 3px;
+}
+
+.testimonial-logo-mark--scale span {
+  width: 5px;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.testimonial-logo-mark--scale span:nth-child(1) {
+  height: 11px;
+}
+
+.testimonial-logo-mark--scale span:nth-child(2) {
+  height: 18px;
+}
+
+.testimonial-logo-mark--scale span:nth-child(3) {
+  height: 24px;
+}
+
 .logo-text {
   letter-spacing: -0.03em;
 }

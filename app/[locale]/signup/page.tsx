@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Link } from "@/i18n/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import LogoCarousel from "@/components/marketing/LogoCarousel";
 import Image from "next/image";
 import "../login/login.css"; // Reuse login styles
@@ -15,6 +16,9 @@ import { getClientLocale, localizePathname } from "@/i18n/locales";
 type Step = "email" | "otp" | "profile";
 
 export default function SignupPage() {
+  const locale = useLocale();
+  const t = useTranslations("Auth.signup");
+  const common = useTranslations("Common");
   const [step, setStep] = useState<Step>("email");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -54,10 +58,10 @@ export default function SignupPage() {
         setStep("otp");
         setCountdown(60);
       } else {
-        setError(translateErrorMessage(res?.message || "发送失败"));
+        setError(res?.message ? translateErrorMessage(res.message, locale) : t("errors.sendFailed"));
       }
     } catch (err) {
-      setError(toErrorMessage(err));
+      setError(toErrorMessage(err, locale));
     } finally {
       setIsLoading(false);
     }
@@ -71,10 +75,10 @@ export default function SignupPage() {
       if (res && (res.code === 200 || res.code === 0)) {
         setStep("profile");
       } else {
-        setError(translateErrorMessage(res?.message || "验证码无效"));
+        setError(res?.message ? translateErrorMessage(res.message, locale) : t("errors.invalidCode"));
       }
     } catch (err) {
-      setError(toErrorMessage(err));
+      setError(toErrorMessage(err, locale));
     } finally {
       setIsLoading(false);
     }
@@ -84,7 +88,7 @@ export default function SignupPage() {
     e.preventDefault();
     if (!userName || !password) return;
     if (password !== confirmPassword) {
-      setError("两次输入的密码不一致");
+      setError(t("errors.passwordMismatch"));
       return;
     }
     
@@ -103,10 +107,10 @@ export default function SignupPage() {
         setUserAccessToken(res.data.accessToken);
         window.location.href = localizePathname("/dashboard", getClientLocale());
       } else {
-        setError(translateErrorMessage(res?.message || "注册失败"));
+        setError(res?.message ? translateErrorMessage(res.message, locale) : t("errors.registrationFailed"));
       }
     } catch (err) {
-      setError(toErrorMessage(err));
+      setError(toErrorMessage(err, locale));
     } finally {
       setIsLoading(false);
     }
@@ -158,20 +162,20 @@ export default function SignupPage() {
       <div className="login-left">
         <div className="login-brand-header">
           <div className="login-brand-logo-mini" />
-          <span className="login-brand-name">算力租赁</span>
+          <span className="login-brand-name">{common("brand")}</span>
         </div>
 
         <div className="login-form-container">
           {step === "email" && (
             <>
-              <h1 className="login-title">欢迎来到 算力租赁</h1>
-              <p className="login-subtitle">注册以继续使用</p>
+              <h1 className="login-title">{t("emailTitle", { brand: common("brand") })}</h1>
+              <p className="login-subtitle">{t("emailSubtitle")}</p>
 
               <form style={{ width: "100%" }} onSubmit={handleEmailSubmit}>
                 <Input
                   type="email"
                   className="login-input"
-                  placeholder="工作邮箱"
+                  placeholder={t("emailPlaceholder")}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -179,7 +183,7 @@ export default function SignupPage() {
                 <Input
                   type="text"
                   className="login-input"
-                  placeholder="邀请码（选填）"
+                  placeholder={t("inviteCodePlaceholder")}
                   value={inviteCode}
                   onChange={(e) => {
                     setInviteCode(e.target.value);
@@ -189,20 +193,20 @@ export default function SignupPage() {
                 />
                 {error && <div className="error-message">{error}</div>}
                 <Button type="submit" className="login-button login-button--primary" disabled={isLoading}>
-                  {isLoading ? "处理中..." : "继续"}
+                  {isLoading ? t("processing") : t("continue")}
                 </Button>
               </form>
               <div className="footer-subtext" style={{ marginTop: 24 }}>
-                已经有账号了？ <Link href="/login" className="footer-link-bold">登录</Link>
+                {t("hasAccount")} <Link href="/login" className="footer-link-bold">{t("login")}</Link>
               </div>
             </>
           )}
 
           {step === "otp" && (
             <>
-              <h1 className="login-title">验证您的邮箱</h1>
+              <h1 className="login-title">{t("otpTitle")}</h1>
               <p className="login-subtitle">
-                我们已向以下地址发送了 6 位验证码 <br />
+                {t("otpSubtitle")} <br />
                 <span style={{ color: "#000", fontWeight: 600 }}>{email}</span>
               </p>
               <div className="otp-container">
@@ -213,6 +217,7 @@ export default function SignupPage() {
                     className="otp-input"
                     type="text"
                     maxLength={1}
+                    aria-label={t("otpDigitAria", { index: i + 1 })}
                     value={digit}
                     onChange={(e) => handleOtpChange(i, e.target.value)}
                     onKeyDown={(e) => handleOtpKeyDown(i, e)}
@@ -231,10 +236,10 @@ export default function SignupPage() {
                   onClick={() => handleEmailSubmit()}
                   disabled={isLoading || countdown > 0}
                 >
-                  {countdown > 0 ? `${countdown}s 后重新发送` : "重新发送验证码"}
+                  {countdown > 0 ? t("resendCountdown", { seconds: countdown }) : t("resendCode")}
                 </Button>
                 <Button type="button" variant="ghost" className="resend-button" style={{ alignSelf: "center" }} onClick={() => setStep("email")}>
-                  返回邮箱输入
+                  {t("backToEmail")}
                 </Button>
               </div>
             </>
@@ -242,13 +247,13 @@ export default function SignupPage() {
 
           {step === "profile" && (
             <>
-              <h1 className="login-title">即将完成</h1>
-              <p className="login-subtitle">设置您的用户名和密码。</p>
+              <h1 className="login-title">{t("profileTitle")}</h1>
+              <p className="login-subtitle">{t("profileSubtitle")}</p>
               <form style={{ width: "100%" }} onSubmit={handleRegister}>
                 <Input
                   type="text"
                   className="login-input"
-                  placeholder="用户名"
+                  placeholder={t("usernamePlaceholder")}
                   value={userName}
                   onChange={(e) => {
                     setUserName(e.target.value);
@@ -261,7 +266,7 @@ export default function SignupPage() {
                 <Input
                   type="password"
                   className="login-input"
-                  placeholder="设置密码"
+                  placeholder={t("passwordPlaceholder")}
                   value={password}
                   onChange={(e) => {
                     setPassword(e.target.value);
@@ -273,7 +278,7 @@ export default function SignupPage() {
                 <Input
                   type="password"
                   className="login-input"
-                  placeholder="确认密码"
+                  placeholder={t("confirmPasswordPlaceholder")}
                   value={confirmPassword}
                   onChange={(e) => {
                     setConfirmPassword(e.target.value);
@@ -284,7 +289,7 @@ export default function SignupPage() {
                 />
                 {error && <div className="error-message">{error}</div>}
                 <Button type="submit" className="login-button login-button--primary" disabled={isLoading}>
-                  {isLoading ? "创建账号中..." : "注册"}
+                  {isLoading ? t("creatingAccount") : t("register")}
                 </Button>
                 <Button
                   type="button" 
@@ -293,22 +298,22 @@ export default function SignupPage() {
                   style={{ width: "100%", marginTop: 12 }} 
                   onClick={() => setStep("otp")}
                 >
-                  返回验证码输入
+                  {t("backToOtp")}
                 </Button>
               </form>
             </>
           )}
 
           <div className="login-legal-text" style={{ marginTop: 40 }}>
-            通过使用 算力租赁，即表示您同意我们的 <br />
-            <span className="legal-link">隐私政策</span> 和 <span className="legal-link">服务条款</span>。
+            {t("legalPrefix", { brand: common("brand") })} <br />
+            <Link href="/privacy" className="legal-link">{t("privacyPolicy")}</Link> {t("and")} <Link href="/terms" className="legal-link">{t("terms")}</Link>{t("legalSuffix")}
           </div>
         </div>
       </div>
 
       <div className="login-right">
         <div className="login-right-illustration">
-          <Image className="login-right-image" src="/images/retool-blocks-login-door.jpg" alt="Showcase" fill priority />
+          <Image className="login-right-image" src="/images/retool-blocks-login-door.jpg" alt={t("imageAlt")} fill priority />
         </div>
         <div className="login-right-content">
           <div className="login-trusted-section"><LogoCarousel /></div>

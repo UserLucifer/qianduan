@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "@/i18n/navigation";
 import { useRouter } from "@/i18n/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import { Eye, EyeOff } from "lucide-react";
 import LogoCarousel from "@/components/marketing/LogoCarousel";
 import Image from "next/image";
@@ -15,6 +16,9 @@ import { Input } from "@/components/ui/input";
 
 export default function LoginPage() {
   const router = useRouter();
+  const locale = useLocale();
+  const t = useTranslations("Auth.login");
+  const common = useTranslations("Common");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -33,10 +37,10 @@ export default function LoginPage() {
         setUserAccessToken(res.data.accessToken);
         router.push("/dashboard");
       } else {
-        setError(translateErrorMessage(res?.message || "登录失败，请检查您的凭据。"));
+        setError(res?.message ? translateErrorMessage(res.message, locale) : t("errors.loginFailed"));
       }
     } catch (err) {
-      setError(toErrorMessage(err));
+      setError(toErrorMessage(err, locale));
     } finally {
       setIsLoading(false);
     }
@@ -56,12 +60,12 @@ export default function LoginPage() {
       <div className="login-left">
         <div className="login-brand-header">
           <div className="login-brand-logo-mini" />
-          <span className="login-brand-name">算力租赁</span>
+          <span className="login-brand-name">{common("brand")}</span>
         </div>
 
         <div className="login-form-container">
-          <h1 className="login-title">欢迎回来</h1>
-          <p className="login-subtitle">登录您的账号</p>
+          <h1 className="login-title">{t("title")}</h1>
+          <p className="login-subtitle">{t("subtitle")}</p>
 
           <form style={{ width: "100%" }} onSubmit={handleLogin}>
             <div className="input-group">
@@ -83,7 +87,7 @@ export default function LoginPage() {
               <Input
                 type={showPassword ? "text" : "password"}
                 className="login-input"
-                placeholder="密码"
+                placeholder={t("passwordPlaceholder")}
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
@@ -98,6 +102,7 @@ export default function LoginPage() {
                 size="icon"
                 className="password-toggle"
                 onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? t("hidePassword") : t("showPassword")}
                 style={{
                   position: "absolute",
                   right: "12px",
@@ -124,22 +129,22 @@ export default function LoginPage() {
               className="login-button login-button--primary"
               disabled={isLoading}
             >
-              {isLoading ? "登录中..." : "登录"}
+              {isLoading ? t("submitting") : t("submit")}
             </Button>
           </form>
 
           <div className="login-footer-links" style={{ marginTop: "24px" }}>
             <div className="footer-subtext">
-              还没有账号？ <Link href="/signup" className="footer-link-bold">免费注册</Link>
+              {t("noAccount")} <Link href="/signup" className="footer-link-bold">{t("signUp")}</Link>
             </div>
             <div className="footer-subtext">
-              需要登录帮助？ <Link href="/reset-password" className="footer-link-bold">重置密码</Link>
+              {t("needHelp")} <Link href="/reset-password" className="footer-link-bold">{t("resetPassword")}</Link>
             </div>
           </div>
 
           <div className="login-legal-text">
-            通过使用 算力租赁，您承认我们收集并使用 <br />
-            您的个人信息，如我们的 <span className="legal-link">隐私政策</span>中所述。
+            {t("legalPrefix", { brand: common("brand") })} <br />
+            {t("legalSuffixBefore")} <Link href="/privacy" className="legal-link">{t("privacyPolicy")}</Link>{t("legalSuffixAfter")}
           </div>
         </div>
       </div>
@@ -150,7 +155,7 @@ export default function LoginPage() {
           <Image
             className="login-right-image"
             src="/images/retool-blocks-login-door.jpg"
-            alt="Abstract 3D Shape"
+            alt={t("imageAlt")}
             fill
             priority
           />

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import Header from "@/components/marketing/Header";
 import Footer from "@/components/marketing/Footer";
 import { getBlogPostBySlug } from "@/api/blog";
@@ -34,8 +35,9 @@ export async function generateMetadata({ params }: BlogDetailPageProps): Promise
   const post = await loadPost(id, language);
 
   if (!post) {
+    const t = await getTranslations({ locale: language, namespace: "Blog" });
     return {
-      title: "Blog | Article Not Found",
+      title: t("detail.notFoundMetadataTitle"),
     };
   }
 
@@ -53,6 +55,7 @@ export async function generateMetadata({ params }: BlogDetailPageProps): Promise
 export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
   const { locale, id } = await params;
   const language = normalizeLocale(locale);
+  const t = await getTranslations({ locale: language, namespace: "Blog" });
   const post = await loadPost(id, language);
 
   if (!post) {
@@ -73,7 +76,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
             className="group inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
             <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
-            返回列表
+            {t("detail.backToList")}
           </Link>
         </div>
 
@@ -87,16 +90,16 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
             <div className="mt-8 flex flex-wrap items-center gap-6 text-sm text-muted-foreground">
               <div className="flex items-center gap-1.5">
                 <Calendar className="h-4 w-4" />
-                <span>{formatDate(publishedAt)}</span>
+                <span>{formatDate(publishedAt, language)}</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <User className="h-4 w-4" />
-                <span>官方团队</span>
+                <span>{t("detail.author")}</span>
               </div>
               {post.viewCount !== undefined && (
                 <div className="flex items-center gap-1.5">
                   <Eye className="h-4 w-4" />
-                  <span>{post.viewCount} 次阅读</span>
+                  <span>{t("detail.readCount", { count: post.viewCount })}</span>
                 </div>
               )}
               {post.categoryName && (
@@ -124,7 +127,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
               <MarkdownContent content={post.contentMarkdown} />
             ) : (
               <div className="py-20 text-center text-muted-foreground italic">
-                暂无正文内容。
+                {t("detail.emptyContent")}
               </div>
             )}
           </div>
