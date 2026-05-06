@@ -984,6 +984,316 @@
       }
     ]
   },
+  "Terms": {
+    "metadata": {
+      "title": "Terms of Service | Compute Rental",
+      "description": "Terms of Service and usage agreement for the Compute Rental platform."
+    },
+    "title": "Terms of Service",
+    "date": "Version date: November 10, 2025",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "text": "This Terms of Use Agreement (this Agreement) is a legally binding agreement between you, whether personally or on behalf of an entity or authorized user (collectively, user or you), and Compute Rental and its affiliates (collectively, the Company, we, or us), governing your access to and use of this website and any related media forms, media channels, mobile websites, or mobile applications (collectively, the website)."
+      },
+      {
+        "type": "paragraph",
+        "text": "Authorized User means the user and, where applicable, the user's employees, consultants, contractors, and agents who are authorized by the user to access the services under this Agreement."
+      },
+      {
+        "type": "paragraph",
+        "text": "The website provides services that allow users (renters) to rent compute hosting services from independent providers (providers), and software services that allow users to act as independent providers and receive compensation (Company Services). Supplemental terms and conditions or documents posted on the website from time to time are expressly incorporated into this Agreement by reference."
+      },
+      {
+        "type": "paragraph",
+        "text": "All providers are independent contractors of the Company and users. The Company is therefore not responsible for any act or omission of any provider outside the scope of the agreement between the Company and that provider."
+      },
+      {
+        "type": "paragraph",
+        "text": "All service interactions occur through the website. In general, the Company does not permit direct interactions between users and providers."
+      },
+      {
+        "type": "notice",
+        "title": "Important notice: ",
+        "text": "This Agreement contains a mandatory arbitration provision. You agree that any claim you bring against us relating to the website or Company Services must be resolved through arbitration, and you expressly waive the right to: (1) bring claims against us in court; (2) participate in representative or class actions; and (3) have your case heard by a jury. If you do not agree to be bound by this provision, you may not access or use the website or any Company Services."
+      },
+      {
+        "type": "paragraph",
+        "text": "The Company reserves the right, at its sole discretion, to change or modify this Agreement at any time by updating it. We will notify you of changes by updating the Last Updated date of this Agreement. Your continued use of the website after the revised Agreement is posted means you acknowledge and accept the changes."
+      },
+      {
+        "type": "paragraph",
+        "text": "Users who are minors in their jurisdiction of residence, usually under 18 years old, must have permission from a parent or guardian and use the website under direct supervision. Persons under 13 years old may not register for the website or use Company Services."
+      },
+      {
+        "type": "heading",
+        "text": "Accounts, purchases, and payment"
+      },
+      {
+        "type": "subheading",
+        "text": "Account registration"
+      },
+      {
+        "type": "paragraph",
+        "text": "If you create an account, you must provide complete and accurate information and promptly update it to keep it complete and accurate. You are solely responsible for maintaining the confidentiality of your password and account and for all activities that occur under your account. You may not use another person's account."
+      },
+      {
+        "type": "subheading",
+        "text": "Account security"
+      },
+      {
+        "type": "paragraph",
+        "text": "You agree to notify the Company immediately of any unauthorized use of your account or any other security breach. To the fullest extent permitted by law, we are not responsible for any loss that may result from another person using your password or account."
+      },
+      {
+        "type": "subheading",
+        "text": "Payment"
+      },
+      {
+        "type": "paragraph",
+        "text": "The Company charges you for purchases of products and/or services through an online billing account. You agree to pay all charges at the prices then in effect and authorize the Company to charge your selected payment method for such purchases. All payments are settled in Chinese yuan. The Company reserves the right to correct pricing errors at any time."
+      },
+      {
+        "type": "subheading",
+        "text": "Top-ups"
+      },
+      {
+        "type": "paragraph",
+        "text": "The website sets out additional terms and conditions for purchasing service credits from the Company through the website. We reserve the right to change credit pricing, run promotions, and cause credits to expire."
+      },
+      {
+        "type": "heading",
+        "text": "Refund policy"
+      },
+      {
+        "type": "paragraph",
+        "text": "All amounts corresponding to credits consumed through the website are final payments and are non-refundable. Refunds of unused credit balances may be provided at our sole discretion depending on the payment method. The Company reserves the right to suspend a user's account if the user fails to pay or initiates a payment dispute."
+      },
+      {
+        "type": "heading",
+        "text": "User representations and warranties"
+      },
+      {
+        "type": "paragraph",
+        "text": "By using the Company Services, you represent and warrant that:"
+      },
+      {
+        "type": "orderedList",
+        "items": [
+          "all registration information you submit is current, true, accurate, and complete;",
+          "you will maintain the accuracy of such information;",
+          "you will keep your password secure and are responsible for all use of your password and account by you and your Authorized Users;",
+          "you are not a minor in your jurisdiction of residence;",
+          "your use of the Company Services does not violate any applicable law or regulation;",
+          "you own or otherwise hold the necessary rights, licenses, and consents to all data and content you submit through the website or services."
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Prohibited activities"
+      },
+      {
+        "type": "paragraph",
+        "text": "You may not use the website for any purpose other than the purpose for which the Company provides it. Prohibited activities include, without limitation:"
+      },
+      {
+        "type": "orderedList",
+        "items": [
+          "attempting to bypass any access restriction measure on the website;",
+          "attempting to impersonate another user or person;",
+          "criminal or tortious activity;",
+          "deciphering, decompiling, disassembling, or reverse engineering any software component of the website;",
+          "interfering with, disrupting, or placing an undue burden on the website or the networks or services connected to it;",
+          "collecting usernames and/or email addresses without authorization for unsolicited messages;",
+          "systematically retrieving data from the website to create a database or directory without the Company's written permission;",
+          "uploading or transmitting viruses, Trojan horses, malware, or other harmful software;",
+          "using the website in a manner that violates any applicable law or regulation;",
+          "infringing third-party intellectual property or other rights;",
+          "accessing or using the services to develop, train, or improve any competing or similar product or service;",
+          "using web scraping or other methods to extract data from the website or services;",
+          "if you purchase credits with a credit card, conducting any cryptocurrency mining activity."
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Export compliance"
+      },
+      {
+        "type": "paragraph",
+        "text": "Users shall comply with all applicable export control laws and regulations. Users represent that neither they nor any end user of the services is located in, organized under the laws of, or ordinarily resident in any country or territory subject to comprehensive sanctions or embargoes."
+      },
+      {
+        "type": "paragraph",
+        "text": "Users may not export, re-export, transfer, or provide the services or any technical data derived from the services to any prohibited destination or person, or use the services for any end use restricted by export control regulations, unless all required government authorizations are obtained in advance."
+      },
+      {
+        "type": "heading",
+        "text": "Intellectual property"
+      },
+      {
+        "type": "paragraph",
+        "text": "The content on the website (Company Content) and the trademarks, service marks, and logos contained in it (Marks) are owned by or licensed to the Company and protected by domestic and international intellectual property laws. Company Content may not be used for any purpose other than personal, non-commercial use without the prior written consent of the relevant rights holder."
+      },
+      {
+        "type": "heading",
+        "text": "Third-party websites and content"
+      },
+      {
+        "type": "paragraph",
+        "text": "The website may contain or link to third-party websites and third-party content. We are not responsible for the content, accuracy, privacy practices, or other policies of any third-party websites accessed through the website, or any third-party content posted on, available through, or installed from the website. If you decide to leave the website and access third-party websites, you do so at your own risk."
+      },
+      {
+        "type": "heading",
+        "text": "Website management"
+      },
+      {
+        "type": "paragraph",
+        "text": "The Company reserves the right, but has no obligation, to:"
+      },
+      {
+        "type": "orderedList",
+        "items": [
+          "monitor the website for violations of this Agreement;",
+          "take appropriate legal action against anyone who violates this Agreement;",
+          "in its sole discretion, refuse, restrict, or disable any user contribution that may violate this Agreement;",
+          "in its sole discretion, remove files and content from the website that are excessive in size or burdensome to Company systems;",
+          "manage the website in a manner designed to protect the rights of the Company and others and promote proper operation of the website."
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Privacy Policy"
+      },
+      {
+        "type": "paragraph",
+        "text": "We value user privacy. Please review the Company's Privacy Policy, which governs the Company's use of users' personal information. By using the website or Company Services, you agree that personal data may be transferred to and processed in the People's Republic of China, and you agree to the terms of the Privacy Policy and Data Processing Agreement."
+      },
+      {
+        "type": "heading",
+        "text": "Term and termination"
+      },
+      {
+        "type": "paragraph",
+        "text": "This Agreement remains in full force and effect while you use the website or are a website user or member. You may stop using or participating at any time for any reason."
+      },
+      {
+        "type": "paragraph",
+        "text": "Without limiting any other provision of this Agreement, the Company reserves the right, at its sole discretion and without notice or liability, to deny anyone access to and use of the website and Company Services, including by terminating your use for breach of any representation, warranty, or covenant in this Agreement, or for violation of any applicable law or regulation."
+      },
+      {
+        "type": "heading",
+        "text": "Modifications"
+      },
+      {
+        "type": "subheading",
+        "text": "Agreement modifications"
+      },
+      {
+        "type": "paragraph",
+        "text": "The Company may modify this Agreement from time to time. Any change to this Agreement will be posted on the website and dated. Your continued use of Company Services after a modification becomes effective constitutes agreement to the modified Agreement."
+      },
+      {
+        "type": "subheading",
+        "text": "Service modifications"
+      },
+      {
+        "type": "paragraph",
+        "text": "The Company does not guarantee that the website and services will always be available. The Company reserves the right to change, revise, update, suspend, discontinue, or otherwise modify the website or services at any time for any reason without notice."
+      },
+      {
+        "type": "heading",
+        "text": "Dispute resolution, governing law, and arbitration"
+      },
+      {
+        "type": "subheading",
+        "text": "Disputes between users"
+      },
+      {
+        "type": "paragraph",
+        "text": "If a dispute arises between website users or between a user and any third party, you understand and agree that the Company has no obligation to become involved. If you have a dispute with another user, you release the Company from any claims and damages arising out of such dispute."
+      },
+      {
+        "type": "subheading",
+        "text": "Disputes with the Company"
+      },
+      {
+        "type": "paragraph",
+        "text": "Any dispute relating to the website, Privacy Policy, or these Terms shall be governed by the laws of the People's Republic of China and submitted to a competent court or arbitral institution where the Company is located. Regardless of any law or regulation to the contrary, any claim arising out of use of the website, Company Services, or this Agreement must be brought within one (1) year after it arises, or it will be permanently barred."
+      },
+      {
+        "type": "heading",
+        "text": "Disclaimers"
+      },
+      {
+        "type": "subheading",
+        "text": "Website disclaimer"
+      },
+      {
+        "type": "paragraph",
+        "text": "The Company cannot control the nature of all content available on the website. You agree that use of the website and Company Services is at your own risk. To the fullest extent permitted by law, the Company and its officers, directors, employees, and agents disclaim all express or implied warranties relating to the website and Company Services, including implied warranties of merchantability, fitness for a particular purpose, and non-infringement."
+      },
+      {
+        "type": "subheading",
+        "text": "Service disclaimer"
+      },
+      {
+        "type": "paragraph",
+        "text": "Except as expressly provided in this Agreement, the Company makes no express or implied warranties or representations regarding hardware, software, services, or other products, and specifically disclaims implied warranties of merchantability and fitness for a particular purpose, as well as warranties of title or non-infringement relating to the services and software."
+      },
+      {
+        "type": "heading",
+        "text": "Limitation of liability"
+      },
+      {
+        "type": "paragraph",
+        "text": "In no event shall the Company or its directors, employees, or agents be liable to you or any third party for any direct, indirect, consequential, exemplary, incidental, special, or punitive damages. The Company's liability to you for any cause, regardless of form, shall at all times be limited to the service fees you paid to the Company during the three (3) months before the cause of action arose."
+      },
+      {
+        "type": "heading",
+        "text": "Indemnification"
+      },
+      {
+        "type": "paragraph",
+        "text": "You agree to defend, indemnify, and hold harmless the Company, its subsidiaries, affiliates, and their respective officers, agents, partners, and employees from any third-party loss, damage, liability, claim, or expense, including reasonable attorneys' fees, arising from: (i) content or submissions you provide; (ii) use of Company Services; (iii) breach of this Agreement and/or your representations and warranties; or (iv) your intentional or negligent conduct."
+      },
+      {
+        "type": "heading",
+        "text": "User data and feedback"
+      },
+      {
+        "type": "paragraph",
+        "text": "Our website will maintain certain data that you transmit to the website for operation of the Company Services, as well as data relating to your use of the Company Services. Although we perform regular backups, you are primarily responsible for all data you transmit. You agree that the Company has no liability for any loss or corruption of such data."
+      },
+      {
+        "type": "paragraph",
+        "text": "If you send or transmit any communications or materials to us, including suggestions or recommendations for changes to the services, new features, or functionality-related feedback (Feedback), we may freely use that Feedback. All Feedback is treated as non-confidential information."
+      },
+      {
+        "type": "heading",
+        "text": "Electronic contracting"
+      },
+      {
+        "type": "paragraph",
+        "text": "Your use of Company Services includes the ability to enter into agreements and/or make transactions electronically. You acknowledge that your electronic submissions constitute your agreement and intent to be bound by and pay for such agreements and transactions."
+      },
+      {
+        "type": "heading",
+        "text": "Miscellaneous"
+      },
+      {
+        "type": "paragraph",
+        "text": "This Agreement constitutes the entire agreement between you and the Company regarding use of the Company Services. The Company's failure to exercise or enforce any right or provision of this Agreement does not waive that right or provision. This Agreement operates to the fullest extent permitted by law. No joint venture, partnership, employment, or agency relationship is created between the parties by this Agreement or by use of the website and Company Services."
+      },
+      {
+        "type": "contact",
+        "title": "Contact us",
+        "paragraphs": [
+          "To submit a complaint about Company Services or request more information, contact the Company at:",
+          "Compute Rental\nEmail: contact@example.com"
+        ]
+      }
+    ]
+  },
   "DocsMetadata": {
     "guide": {
       "title": "Guides | Compute Rental Docs",
