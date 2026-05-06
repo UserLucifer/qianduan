@@ -556,6 +556,157 @@
       "thanks": "Thank you for helping protect the Compute Rental platform and community."
     }
   },
+  "Compliance": {
+    "metadata": {
+      "title": "Compliance | Compute Rental",
+      "description": "Security compliance certifications and data protection standards for the Compute Rental platform."
+    },
+    "title": "Compliance",
+    "subtitle": "Security controls and compliance certifications",
+    "intro": {
+      "description": "Compute Rental applies rigorous security controls and maintains multiple compliance certifications to protect customer data. As a GPU compute platform serving AI startups, research institutions, and enterprises, we hold ourselves to the same standards our customers require.",
+      "contactPrefix": "To discuss your compliance requirements, ",
+      "contactTeam": "contact our sales team",
+      "contactSuffix": "."
+    },
+    "certifications": {
+      "title": "Compliance certifications",
+      "items": [
+        {
+          "title": "SOC 2 Type 3",
+          "text": "Our SOC 2 Type 3 report is available promptly upon request. To obtain it, please contact the sales team."
+        },
+        {
+          "title": "SOC 2 Type 2",
+          "text": "Compute Rental has completed SOC 2 Type 2 certification. The audit was performed by an independent third party and validates that our security, availability, and confidentiality controls met AICPA Trust Services Criteria over the observation period. The report is available after execution of a nondisclosure agreement; contact the sales team to request access."
+        },
+        {
+          "title": "HIPAA",
+          "text": "Compute Rental supports HIPAA-aligned workloads at the secure cloud tier. Technical safeguards include data isolation, access controls, and audit logging designed to meet HIPAA requirements. Eligible customers may execute a Business Associate Agreement (BAA)."
+        },
+        {
+          "title": "GDPR",
+          "text": "We comply with the General Data Protection Regulation for all European users. Our Data Processing Agreement describes processing practices, subprocessor disclosures, and Data Subject rights. EU-region compute resources can be provided upon request."
+        },
+        {
+          "title": "Data privacy compliance",
+          "text": "Compute Rental complies with applicable data privacy laws and regulations. Our Privacy Policy describes data collection, use, retention, and deletion practices."
+        }
+      ]
+    },
+    "securityArchitecture": {
+      "title": "Security architecture",
+      "sections": [
+        {
+          "title": "Customer data isolation",
+          "items": [
+            "Each workload runs in a separate, unprivileged Docker container fully isolated from other tenants",
+            "Customers can access only their own data; there is no shared file system between tenants",
+            "Data is destroyed immediately after a customer deletes an instance"
+          ]
+        },
+        {
+          "title": "Network and access control",
+          "items": [
+            "All API and console traffic is encrypted in transit with TLS 1.2+",
+            "Role-based access control governs internal systems",
+            "All programmatic access uses API key authentication"
+          ]
+        },
+        {
+          "title": "Monitoring and incident response",
+          "items": [
+            "Continuous monitoring for anomalous activity across the platform",
+            "Documented incident response processes with clear escalation paths",
+            "Regular internal and third-party security audits"
+          ]
+        },
+        {
+          "title": "Employee security",
+          "items": [
+            "All employees undergo background checks",
+            "Security and compliance training is provided at onboarding and annually thereafter",
+            "All internal access follows the principle of least privilege"
+          ]
+        }
+      ]
+    },
+    "securityTiers": {
+      "title": "Security tiers",
+      "description": "Compute Rental offers two security tiers to support different requirements:",
+      "certifiedHost": {
+        "title": "Certified hosts",
+        "description": "Suitable for general AI and high-performance computing workloads:",
+        "items": [
+          "Manually tested for reliability and performance",
+          "Docker-level tenant isolation",
+          "Cost-efficient option for non-regulated workloads"
+        ]
+      },
+      "secureCloud": {
+        "title": "Secure Cloud (trusted data centers)",
+        "description": "Designed for regulated industries and enterprise security requirements:",
+        "sections": [
+          {
+            "title": "Data center partner requirements:",
+            "items": [
+              "Equipment is hosted in professionally managed data center facilities",
+              "At least five GPU servers with flagship-grade hardware",
+              "Data Processing Agreement executed with Compute Rental",
+              "Due diligence on facility security, ownership, and business identity"
+            ]
+          },
+          {
+            "title": "Partner certifications may include:",
+            "items": [
+              "ISO 27001, ISO 20000-1, ISO 22301, ISO 14001",
+              "SOC 1 Type 2, SOC 2 Type 2, SOC 3",
+              "HIPAA, HITRUST, PCI DSS",
+              "NIST framework and GDPR compliance"
+            ]
+          },
+          {
+            "title": "Physical and environmental security:",
+            "items": [
+              "Facility access uses biometric or keycard authentication",
+              "Video surveillance is retained for more than 90 days",
+              "Fire detection and suppression systems",
+              "Redundant power and temperature-control systems",
+              "Annual testing of all environmental control systems"
+            ]
+          },
+          {
+            "title": "Audit and oversight:",
+            "items": [
+              "Compute Rental audits data center partners for equity structure, identity, and source of funds",
+              "Ongoing verification that partners maintain facility standards and follow best practices"
+            ]
+          }
+        ]
+      }
+    },
+    "legalProtections": {
+      "title": "Legal and contractual safeguards",
+      "items": [
+        "The Data Processing Agreement governs all data processing activities",
+        "The Privacy Policy describes data collection, use, and retention practices",
+        "The Terms of Service define platform obligations and customer rights",
+        "Secure Cloud data center hosts execute extended hosting agreements with additional Data Processing Agreement terms"
+      ]
+    },
+    "securityRecord": {
+      "title": "Security record",
+      "text": "Compute Rental has maintained a clean security record since launch, with no major security incidents."
+    },
+    "contact": {
+      "title": "Contact us",
+      "description": "For compliance documentation, audit reports, or a discussion of your security requirements:",
+      "complianceLabel": "Compliance team: ",
+      "complianceEmail": "compliance@example.com",
+      "salesLabel": "Sales team: ",
+      "salesText": "Contact our sales team"
+    }
+  },
   "DocsMetadata": {
     "guide": {
       "title": "Guides | Compute Rental Docs",
