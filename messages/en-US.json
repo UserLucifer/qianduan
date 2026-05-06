@@ -1294,6 +1294,111 @@
       }
     ]
   },
+  "DashboardHome": {
+    "common": {
+      "retry": "Retry"
+    },
+    "header": {
+      "eyebrow": "User console",
+      "title": "Compute and asset console",
+      "description": "A consolidated view of wallet balance, rental orders, API activation, earnings, commissions, team activity, and recent notifications, with actionable items first.",
+      "refresh": "Refresh data"
+    },
+    "stats": {
+      "walletTotal": {
+        "title": "Total wallet balance",
+        "description": "Available + frozen balance"
+      },
+      "activeInstances": {
+        "title": "Active rental instances",
+        "pending": "{count} pending payment orders"
+      },
+      "todayProfit": {
+        "title": "Estimated earnings today",
+        "total": "Total earnings: {amount}"
+      },
+      "teamMembers": {
+        "title": "Team members",
+        "direct": "Direct invites: {count} people"
+      }
+    },
+    "assets": {
+      "title": "Asset center",
+      "description": "Balance, frozen funds, and cash flow",
+      "availableBalance": "Available balance",
+      "frozenBalance": "Frozen amount",
+      "totalRecharge": "Total top-ups",
+      "totalWithdraw": "Total withdrawals",
+      "actions": {
+        "recharge": "Top up",
+        "withdraw": "Withdraw",
+        "transactions": "Transactions"
+      }
+    },
+    "apiStatus": {
+      "title": "API status",
+      "description": "Credentials and deployment entry",
+      "active": "Activatable orders available",
+      "inactive": "No running orders",
+      "suggestionLabel": "Recommended action",
+      "suggestion": "Go to API management to review order-linked credentials, deployment status, and token expiration. Sensitive fields are masked by default.",
+      "cta": "View API credentials"
+    },
+    "profitTrend": {
+      "title": "Earnings trend",
+      "description": "Aggregated by date from earning records"
+    },
+    "quickActions": {
+      "title": "Quick actions",
+      "rentGpu": "Rent GPU",
+      "recharge": "Top up",
+      "withdraw": "Withdraw",
+      "apiCredentials": "API credentials",
+      "profits": "Earnings",
+      "team": "Team"
+    },
+    "orders": {
+      "title": "Recent compute instances",
+      "viewAll": "View all orders",
+      "loading": "Syncing cloud instance data...",
+      "emptyTitle": "No running instances",
+      "emptyDescription": "You do not have any active compute resources. Go to the compute marketplace and choose the GPU node that best fits your AI workload.",
+      "deploy": "Deploy a new instance",
+      "autoAssigned": "Auto assigned",
+      "columns": {
+        "instance": "Instance name",
+        "plan": "Plan",
+        "status": "Status",
+        "cost": "Cost"
+      },
+      "status": {
+        "running": "Running",
+        "pendingPay": "Pending payment",
+        "settled": "Settled"
+      },
+      "menu": {
+        "label": "Instance management",
+        "manage": "Manage details",
+        "console": "Console session"
+      }
+    },
+    "transactions": {
+      "title": "Recent wallet transactions",
+      "description": "Latest 5 wallet transaction records",
+      "empty": "No wallet transactions yet.",
+      "columns": {
+        "type": "Type",
+        "amount": "Amount",
+        "business": "Business",
+        "time": "Time"
+      }
+    },
+    "notifications": {
+      "title": "Latest notifications",
+      "description": "System, order, and finance updates",
+      "empty": "No unread notifications."
+    }
+  },
   "DocsMetadata": {
     "guide": {
       "title": "Guides | Compute Rental Docs",

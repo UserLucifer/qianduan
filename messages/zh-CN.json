@@ -1294,6 +1294,111 @@
       }
     ]
   },
+  "DashboardHome": {
+    "common": {
+      "retry": "重试"
+    },
+    "header": {
+      "eyebrow": "用户后台",
+      "title": "算力与资产控制台",
+      "description": "聚合钱包余额、租赁订单、API 激活、收益、佣金、团队和最近通知，优先呈现可执行事项。",
+      "refresh": "刷新数据"
+    },
+    "stats": {
+      "walletTotal": {
+        "title": "钱包总余额",
+        "description": "可用 + 冻结余额"
+      },
+      "activeInstances": {
+        "title": "有效租赁实例",
+        "pending": "{count} 个待支付订单"
+      },
+      "todayProfit": {
+        "title": "今日预计收益",
+        "total": "累计收益: {amount}"
+      },
+      "teamMembers": {
+        "title": "团队成员",
+        "direct": "直属邀请: {count} 人"
+      }
+    },
+    "assets": {
+      "title": "资产中心",
+      "description": "余额、冻结金额与资金流向",
+      "availableBalance": "可用余额",
+      "frozenBalance": "冻结金额",
+      "totalRecharge": "累计充值",
+      "totalWithdraw": "累计提现",
+      "actions": {
+        "recharge": "充值",
+        "withdraw": "提现",
+        "transactions": "流水"
+      }
+    },
+    "apiStatus": {
+      "title": "API 状态",
+      "description": "凭证与部署入口",
+      "active": "存在可激活订单",
+      "inactive": "暂无运行中订单",
+      "suggestionLabel": "建议操作",
+      "suggestion": "进入 API 管理页查看订单关联凭证、部署状态和 Token 到期时间。敏感字段默认脱敏。",
+      "cta": "查看 API 凭证"
+    },
+    "profitTrend": {
+      "title": "收益趋势",
+      "description": "基于收益记录按日期聚合"
+    },
+    "quickActions": {
+      "title": "快捷入口",
+      "rentGpu": "租赁 GPU",
+      "recharge": "充值",
+      "withdraw": "提现",
+      "apiCredentials": "API 凭证",
+      "profits": "收益",
+      "team": "团队"
+    },
+    "orders": {
+      "title": "最近算力实例",
+      "viewAll": "查看全部订单",
+      "loading": "同步云端实例数据...",
+      "emptyTitle": "没有任何运行中的实例",
+      "emptyDescription": "您当前没有活跃的算力资源。立即前往算力市场，选择最适合您 AI 任务的 GPU 节点。",
+      "deploy": "立即部署新实例",
+      "autoAssigned": "自动分配",
+      "columns": {
+        "instance": "实例名称",
+        "plan": "配置方案",
+        "status": "运行状态",
+        "cost": "费用"
+      },
+      "status": {
+        "running": "运行中",
+        "pendingPay": "待支付",
+        "settled": "已结算"
+      },
+      "menu": {
+        "label": "实例管理",
+        "manage": "管理详情",
+        "console": "控制台交互"
+      }
+    },
+    "transactions": {
+      "title": "最近资金流水",
+      "description": "展示最新 5 条钱包流水",
+      "empty": "暂无资金流水。",
+      "columns": {
+        "type": "类型",
+        "amount": "金额",
+        "business": "业务",
+        "time": "时间"
+      }
+    },
+    "notifications": {
+      "title": "最新通知",
+      "description": "系统、订单与财务动态",
+      "empty": "暂无未读通知。"
+    }
+  },
   "DocsMetadata": {
     "guide": {
       "title": "向导 | 算力租赁文档",
