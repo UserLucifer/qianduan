@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { useTranslations } from "next-intl";
 import { CircleDollarSign, Users } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -20,18 +21,8 @@ import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 const initialParams: CommissionRecordQueryRequest = { pageNo: 1, pageSize: 10 };
 
-const columns: DataTableColumn<CommissionRecordResponse>[] = [
-  { key: "commissionNo", title: "佣金编号", render: (row) => <span className="font-mono text-xs">{row.commissionNo}</span> },
-  { key: "sourceUserId", title: "来源用户", render: (row) => `用户 ${row.sourceUserId}` },
-  { key: "sourceOrderId", title: "关联订单", render: (row) => <span className="font-mono text-xs">{row.sourceOrderId}</span> },
-  { key: "levelNo", title: "层级", render: (row) => `${row.levelNo} 级` },
-  { key: "commissionRateSnapshot", title: "佣金比例", render: (row) => `${(row.commissionRateSnapshot * 100).toFixed(2)}%` },
-  { key: "commissionAmount", title: "佣金金额", render: (row) => <MoneyText value={row.commissionAmount} signed /> },
-  { key: "status", title: "状态", render: (row) => <StatusBadge status={row.status} /> },
-  { key: "createdAt", title: "创建时间", render: (row) => <DateTimeText value={row.createdAt} /> },
-];
-
 export default function CommissionsPage() {
+  const t = useTranslations("DashboardCommissions");
   const summaryLoader = useCallback(async (): Promise<CommissionSummaryResponse> => {
     const res = await getCommissionSummary();
     return res.data;
@@ -44,14 +35,25 @@ export default function CommissionsPage() {
   const records = usePaginatedResource(loader, initialParams);
   const [filters, setFilters] = useState<CommissionRecordQueryRequest>(initialParams);
 
+  const columns: DataTableColumn<CommissionRecordResponse>[] = [
+    { key: "commissionNo", title: t("columns.commissionNo"), render: (row) => <span className="font-mono text-xs">{row.commissionNo}</span> },
+    { key: "sourceUserId", title: t("columns.sourceUser"), render: (row) => t("columns.sourceUserValue", { id: row.sourceUserId }) },
+    { key: "sourceOrderId", title: t("columns.order"), render: (row) => <span className="font-mono text-xs">{row.sourceOrderId}</span> },
+    { key: "levelNo", title: t("columns.level"), render: (row) => t("columns.levelValue", { level: row.levelNo }) },
+    { key: "commissionRateSnapshot", title: t("columns.rate"), render: (row) => `${(row.commissionRateSnapshot * 100).toFixed(2)}%` },
+    { key: "commissionAmount", title: t("columns.amount"), render: (row) => <MoneyText value={row.commissionAmount} signed /> },
+    { key: "status", title: t("columns.status"), render: (row) => <StatusBadge status={row.status} /> },
+    { key: "createdAt", title: t("columns.createdAt"), render: (row) => <DateTimeText value={row.createdAt} /> },
+  ];
+
   return (
     <div className="space-y-6">
-      <PageHeader eyebrow="佣金中心" title="推广佣金记录" description="查看累计佣金、各层级贡献、来源用户、关联订单、佣金比例和结算状态。" />
+      <PageHeader eyebrow={t("header.eyebrow")} title={t("header.title")} description={t("header.description")} />
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-4">
-        <StatsCard title="累计佣金" value={<MoneyText value={summary.data?.totalCommission} />} description="历史累计" icon={CircleDollarSign} loading={summary.loading} status="good" />
-        <StatsCard title="今日佣金" value={<MoneyText value={summary.data?.todayCommission} />} description="当前自然日" icon={CircleDollarSign} loading={summary.loading} />
-        <StatsCard title="一级佣金" value={<MoneyText value={summary.data?.level1Commission} />} description="直属成员贡献" icon={Users} loading={summary.loading} />
-        <StatsCard title="二/三级佣金" value={<MoneyText value={(summary.data?.level2Commission ?? 0) + (summary.data?.level3Commission ?? 0)} />} description="下级团队贡献" icon={Users} loading={summary.loading} />
+        <StatsCard title={t("stats.total")} value={<MoneyText value={summary.data?.totalCommission} />} description={t("stats.totalDesc")} icon={CircleDollarSign} loading={summary.loading} status="good" />
+        <StatsCard title={t("stats.today")} value={<MoneyText value={summary.data?.todayCommission} />} description={t("stats.todayDesc")} icon={CircleDollarSign} loading={summary.loading} />
+        <StatsCard title={t("stats.level1")} value={<MoneyText value={summary.data?.level1Commission} />} description={t("stats.level1Desc")} icon={Users} loading={summary.loading} />
+        <StatsCard title={t("stats.level23")} value={<MoneyText value={(summary.data?.level2Commission ?? 0) + (summary.data?.level3Commission ?? 0)} />} description={t("stats.level23Desc")} icon={Users} loading={summary.loading} />
       </div>
       <SearchPanel
         onSearch={() => records.updateParams({ ...filters, pageNo: 1 })}
@@ -61,44 +63,44 @@ export default function CommissionsPage() {
         }}
       >
         <div className="space-y-2">
-          <Label>分销层级</Label>
+          <Label>{t("filters.level")}</Label>
           <Select value={filters.levelNo?.toString()} onValueChange={(val) => setFilters((current) => ({ ...current, levelNo: val === " " ? undefined : Number(val) }))}>
             <SelectTrigger className="h-9 w-[150px] bg-background text-foreground">
-              <SelectValue placeholder="全部层级" />
+              <SelectValue placeholder={t("filters.allLevels")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value=" ">全部层级</SelectItem>
-              <SelectItem value="1">1级 (直接推广)</SelectItem>
-              <SelectItem value="2">2级 (间接推广)</SelectItem>
-              <SelectItem value="3">3级 (间接推广)</SelectItem>
+              <SelectItem value=" ">{t("filters.allLevels")}</SelectItem>
+              <SelectItem value="1">{t("filters.level1")}</SelectItem>
+              <SelectItem value="2">{t("filters.level2")}</SelectItem>
+              <SelectItem value="3">{t("filters.level3")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
         <div className="space-y-2">
-          <Label>结算状态</Label>
+          <Label>{t("filters.status")}</Label>
           <Select value={filters.status} onValueChange={(val) => setFilters((current) => ({ ...current, status: val === " " ? undefined : val }))}>
             <SelectTrigger className="h-9 w-[150px] bg-background text-foreground">
-              <SelectValue placeholder="全部状态" />
+              <SelectValue placeholder={t("filters.allStatus")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value=" ">全部状态</SelectItem>
-              <SelectItem value="PENDING">待结算</SelectItem>
-              <SelectItem value="SETTLED">已结算</SelectItem>
-              <SelectItem value="CANCELLED">已取消</SelectItem>
+              <SelectItem value=" ">{t("filters.allStatus")}</SelectItem>
+              <SelectItem value="PENDING">{t("filters.pending")}</SelectItem>
+              <SelectItem value="SETTLED">{t("filters.settled")}</SelectItem>
+              <SelectItem value="CANCELLED">{t("filters.canceled")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
         <div className="space-y-2">
-          <Label>开始日期</Label>
+          <Label>{t("filters.startDate")}</Label>
           <Input type="date" value={filters.startTime ?? ""} onChange={(event) => setFilters((current) => ({ ...current, startTime: event.target.value || undefined }))} className="h-9 w-[150px] bg-background text-foreground" />
         </div>
         <div className="space-y-2">
-          <Label>结束日期</Label>
+          <Label>{t("filters.endDate")}</Label>
           <Input type="date" value={filters.endTime ?? ""} onChange={(event) => setFilters((current) => ({ ...current, endTime: event.target.value || undefined }))} className="h-9 w-[150px] bg-background text-foreground" />
         </div>
       </SearchPanel>
       <ErrorAlert message={records.error} />
-      <DataTable columns={columns} data={records.page.records} rowKey={(row) => row.commissionNo} loading={records.loading} emptyText="暂无佣金记录。" pageNo={records.page.pageNo} pageSize={records.page.pageSize} total={records.page.total} onPageChange={records.changePage} />
+      <DataTable columns={columns} data={records.page.records} rowKey={(row) => row.commissionNo} loading={records.loading} emptyText={t("empty")} pageNo={records.page.pageNo} pageSize={records.page.pageSize} total={records.page.total} onPageChange={records.changePage} />
     </div>
   );
 }

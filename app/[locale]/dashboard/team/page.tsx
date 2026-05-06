@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Copy, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,16 +22,9 @@ import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 const initialParams: TeamMemberQueryRequest = { pageNo: 1, pageSize: 10 };
 
-const columns: DataTableColumn<TeamMemberResponse>[] = [
-  { key: "userId", title: "用户 ID", render: (row) => <span className="font-mono text-xs">{row.userId}</span> },
-  { key: "email", title: "邮箱" },
-  { key: "userName", title: "用户名", render: (row) => row.userName || "-" },
-  { key: "levelDepth", title: "层级", render: (row) => `${row.levelDepth} 级` },
-  { key: "status", title: "状态", render: (row) => <StatusBadge status={row.status} /> },
-  { key: "createdAt", title: "加入时间", render: (row) => <DateTimeText value={row.createdAt} /> },
-];
 
 export default function TeamPage() {
+  const t = useTranslations("DashboardTeam");
   const summaryLoader = useCallback(async (): Promise<TeamSummaryResponse> => {
     const res = await getTeamSummary();
     return res.data;
@@ -49,6 +43,14 @@ export default function TeamPage() {
   const [filters, setFilters] = useState<TeamMemberQueryRequest>(initialParams);
   const origin = typeof window === "undefined" ? "" : window.location.origin;
   const inviteLink = user.data?.userId && origin ? `${origin}/signup?inviteCode=${user.data.userId}` : "";
+  const columns: DataTableColumn<TeamMemberResponse>[] = [
+    { key: "userId", title: t("columns.userId"), render: (row) => <span className="font-mono text-xs">{row.userId}</span> },
+    { key: "email", title: t("columns.email") },
+    { key: "userName", title: t("columns.userName"), render: (row) => row.userName || "-" },
+    { key: "levelDepth", title: t("columns.level"), render: (row) => t("columns.levelValue", { level: row.levelDepth }) },
+    { key: "status", title: t("columns.status"), render: (row) => <StatusBadge status={row.status} /> },
+    { key: "createdAt", title: t("columns.joinedAt"), render: (row) => <DateTimeText value={row.createdAt} /> },
+  ];
 
   const copyInviteLink = async () => {
     if (!inviteLink) return;
@@ -57,22 +59,21 @@ export default function TeamPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader eyebrow="我的团队" title="团队关系与邀请" description="查看直属成员、下级成员、团队人数和层级关系。邀请链接基于当前用户编号生成。" />
+      <PageHeader eyebrow={t("header.eyebrow")} title={t("header.title")} description={t("header.description")} />
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
-        <StatsCard title="团队总人数" value={summary.data?.totalTeamCount ?? 0} description="全部层级" icon={Users} loading={summary.loading} />
-        <StatsCard title="直属成员" value={summary.data?.directTeamCount ?? 0} description="1 级成员" icon={Users} loading={summary.loading} />
-        <StatsCard title="二级成员" value={summary.data?.level2TeamCount ?? 0} description="2 级成员" icon={Users} loading={summary.loading} />
-        <StatsCard title="三级成员" value={summary.data?.level3TeamCount ?? 0} description="3 级成员" icon={Users} loading={summary.loading} />
-        <StatsCard title="更深层级" value={summary.data?.deeperTeamCount ?? 0} description="接口返回统计" icon={Users} loading={summary.loading} />
+        <StatsCard title={t("stats.total")} value={summary.data?.totalTeamCount ?? 0} description={t("stats.totalDesc")} icon={Users} loading={summary.loading} />
+        <StatsCard title={t("stats.direct")} value={summary.data?.directTeamCount ?? 0} description={t("stats.directDesc")} icon={Users} loading={summary.loading} />
+        <StatsCard title={t("stats.level2")} value={summary.data?.level2TeamCount ?? 0} description={t("stats.level2Desc")} icon={Users} loading={summary.loading} />
+        <StatsCard title={t("stats.level3")} value={summary.data?.level3TeamCount ?? 0} description={t("stats.level3Desc")} icon={Users} loading={summary.loading} />
+        <StatsCard title={t("stats.deeper")} value={summary.data?.deeperTeamCount ?? 0} description={t("stats.deeperDesc")} icon={Users} loading={summary.loading} />
       </div>
       <div className="rounded-lg border border-border bg-card p-4 text-card-foreground">
-        <div className="mb-2 text-sm font-medium text-foreground">邀请链接</div>
+        <div className="mb-2 text-sm font-medium text-foreground">{t("invite.title")}</div>
         <div className="flex gap-2">
-          <Input readOnly value={inviteLink || "当前用户信息加载后显示"} />
+          <Input readOnly value={inviteLink || t("invite.loading")} />
           <Button onClick={() => void copyInviteLink()} disabled={!inviteLink}>
             <Copy className="h-4 w-4" />
-            复制
-          </Button>
+            {t("invite.copy")}</Button>
         </div>
       </div>
       <SearchPanel
@@ -83,22 +84,22 @@ export default function TeamPage() {
         }}
       >
         <div className="space-y-2">
-          <Label>层级深度</Label>
+          <Label>{t("filters.depth")}</Label>
           <Select value={filters.levelDepth?.toString()} onValueChange={(val) => setFilters((current) => ({ ...current, levelDepth: val === " " ? undefined : Number(val) }))}>
             <SelectTrigger className="h-9 w-[180px] bg-background text-foreground">
-              <SelectValue placeholder="全部层级" />
+              <SelectValue placeholder={t("filters.allLevels")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value=" ">全部层级</SelectItem>
-              <SelectItem value="1">1级 (直接推广)</SelectItem>
-              <SelectItem value="2">2级 (间接推广)</SelectItem>
-              <SelectItem value="3">3级 (间接推广)</SelectItem>
+              <SelectItem value=" ">{t("filters.allLevels")}</SelectItem>
+              <SelectItem value="1">{t("filters.level1")}</SelectItem>
+              <SelectItem value="2">{t("filters.level2")}</SelectItem>
+              <SelectItem value="3">{t("filters.level3")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
       </SearchPanel>
       <ErrorAlert message={members.error} />
-      <DataTable columns={columns} data={members.page.records} rowKey={(row) => row.userId} loading={members.loading} emptyText="暂无团队成员。" pageNo={members.page.pageNo} pageSize={members.page.pageSize} total={members.page.total} onPageChange={members.changePage} />
+      <DataTable columns={columns} data={members.page.records} rowKey={(row) => row.userId} loading={members.loading} emptyText={t("empty")} pageNo={members.page.pageNo} pageSize={members.page.pageSize} total={members.page.total} onPageChange={members.changePage} />
     </div>
   );
 }

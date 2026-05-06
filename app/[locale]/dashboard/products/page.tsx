@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import {
   Cpu,
   Loader2,
@@ -41,6 +41,7 @@ const PAGE_SIZE = 12;
 const ESTIMATED_ROW_HEIGHT = 420;
 
 export default function UserProductsPage() {
+  const t = useTranslations("DashboardProducts");
   const locale = normalizeLocale(useLocale());
   /* ─── Layout State ─── */
   const [columns, setColumns] = useState(1);
@@ -120,8 +121,8 @@ export default function UserProductsPage() {
         setRegions(regionRes.data);
         setAiModels(aiRes.data);
         setCycleRules(cycleRes.data);
-        // Auto-select first region (北京A preferred)
-        const def = regionRes.data.find(r => r.regionName.includes("北京A")) ?? regionRes.data[0];
+        // Prefer the Beijing A region when it is available.
+        const def = regionRes.data.find(r => r.regionName.includes("\u5317\u4eacA")) ?? regionRes.data[0];
         if (def) setSelectedRegionId(def.id);
       } catch (err) {
         setError(toErrorMessage(err));
@@ -261,7 +262,7 @@ export default function UserProductsPage() {
         cycleRuleId
       });
       await payRentalOrder(orderRes.data.orderNo);
-      setMessage(`订单 ${orderRes.data.orderNo} 已成功下单。`);
+      setMessage(t("messages.orderCreated", { orderNo: orderRes.data.orderNo }));
       setTimeout(() => {
         setStep(0);
         setMessage(null);
@@ -296,8 +297,7 @@ export default function UserProductsPage() {
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             <MapPin className="h-3.5 w-3.5" />
-            地区选择
-          </div>
+            {t("filters.region")}</div>
           <div className="flex flex-wrap gap-2.5">
             {regions.map((r) => (
               <Button
@@ -324,8 +324,7 @@ export default function UserProductsPage() {
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             <Cpu className="h-3.5 w-3.5" />
-            可用 GPU 型号
-          </div>
+            {t("filters.gpu")}</div>
           <div className="flex flex-wrap gap-2.5">
             {gpuLoading ? (
               // Skeleton placeholders while GPU list loads
@@ -353,8 +352,7 @@ export default function UserProductsPage() {
                 {gpuModels.length === 0 && selectedRegionId !== null && (
                   <div className="flex items-center gap-2 py-2 text-xs italic text-muted-foreground opacity-60">
                     <AlertCircle className="h-3.5 w-3.5" />
-                    该地区暂无可用算力资源
-                  </div>
+                    {t("filters.noGpu")}</div>
                 )}
               </>
             )}
@@ -408,28 +406,26 @@ export default function UserProductsPage() {
                             </div>
                             <StatusBadge
                               status={(p.availableStock ?? 0) > 0 ? "ACTIVE" : "DISABLED"}
-                              label={(p.availableStock ?? 0) > 0 ? "\u7a7a\u95f2\u4e2d" : "\u65e0\u5e93\u5b58"}
+                              label={(p.availableStock ?? 0) > 0 ? t("card.available") : t("card.outOfStock")}
                             />
                           </div>
 
                           <div className="mt-8 grid grid-cols-2 gap-5">
                             <div className="space-y-1.5">
                               <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">
-                                <Cpu className="h-3.5 w-3.5" /> 显存容量
-                              </div>
+                                <Cpu className="h-3.5 w-3.5" /> {t("card.memory")}</div>
                               <div className="text-base font-bold">{p.gpuMemoryGb} GB</div>
                             </div>
                             <div className="space-y-1.5">
                               <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">
-                                <Zap className="h-3.5 w-3.5" /> 算力性能
-                              </div>
+                                <Zap className="h-3.5 w-3.5" /> {t("card.power")}</div>
                               <div className="text-base font-bold">{p.gpuPowerTops} TOPS</div>
                             </div>
                           </div>
 
                           <div className="mt-9 flex items-end justify-between border-t border-border/50 pt-5">
                             <div className="space-y-1">
-                              <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70">起步单价</div>
+                              <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70">{t("card.startingPrice")}</div>
                               <MoneyText value={p.rentPrice} className="text-xl font-black text-primary" />
                             </div>
                             <Button
@@ -437,8 +433,7 @@ export default function UserProductsPage() {
                               disabled={(p.availableStock ?? 0) <= 0}
                               className="h-11 rounded-xl px-6 text-xs font-bold transition-all hover:shadow-lg hover:shadow-primary/30"
                             >
-                              开始租赁
-                            </Button>
+                              {t("card.startRent")}</Button>
                           </div>
                         </BentoCard>
                       ))}
@@ -451,8 +446,8 @@ export default function UserProductsPage() {
           {products.length === 0 && (
             <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-muted/20 py-20 text-center">
               <AlertCircle className="mb-4 h-10 w-10 text-muted-foreground/30" />
-              <h3 className="text-lg font-medium text-muted-foreground">暂无可用算力产品</h3>
-              <p className="mt-1 text-sm text-muted-foreground/60">尝试切换其他地区或型号以发现更多资源</p>
+              <h3 className="text-lg font-medium text-muted-foreground">{t("card.emptyTitle")}</h3>
+              <p className="mt-1 text-sm text-muted-foreground/60">{t("card.emptyDescription")}</p>
             </div>
           )}
         </div>
@@ -477,7 +472,7 @@ export default function UserProductsPage() {
               <Button variant="ghost" size="icon" onClick={handleCancelConfig} className="rounded-full">
                 <ArrowLeft className="h-5 w-5" />
               </Button>
-              <h2 className="text-lg font-bold">租赁配置</h2>
+              <h2 className="text-lg font-bold">{t("config.title")}</h2>
             </div>
             <div className="flex items-center gap-2">
               <div className="flex gap-1">
@@ -508,7 +503,7 @@ export default function UserProductsPage() {
                   className="space-y-6"
                 >
                   <div className="rounded-xl border border-border bg-muted/30 p-6">
-                    <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-widest mb-4">确认所选算力</h3>
+                    <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-widest mb-4">{t("config.confirmCompute")}</h3>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-6">
                         <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary">
@@ -524,14 +519,14 @@ export default function UserProductsPage() {
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className="text-sm text-muted-foreground">基础价格</div>
+                        <div className="text-sm text-muted-foreground">{t("config.basePrice")}</div>
                         <MoneyText value={selectedProduct.rentPrice} className="text-2xl font-bold" />
                       </div>
                     </div>
                   </div>
                   <div className="flex justify-end pt-4">
                     <Button onClick={() => setConfigStep(1)} className="group h-12 px-8">
-                      选择 AI 模型 <ChevronRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                      {t("config.chooseAiModel")}<ChevronRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </Button>
                   </div>
                 </motion.div>
@@ -546,7 +541,7 @@ export default function UserProductsPage() {
                   className="space-y-6"
                 >
                   <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-bold">选择预装 AI 大模型</h3>
+                    <h3 className="text-lg font-bold">{t("config.choosePreinstalledModel")}</h3>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {aiModels.map((m) => (
@@ -574,8 +569,8 @@ export default function UserProductsPage() {
                     ))}
                   </div>
                   <div className="flex items-center justify-between pt-6">
-                    <Button variant="ghost" onClick={() => setConfigStep(0)} className="text-muted-foreground"><ChevronLeft className="mr-2 h-4 w-4" /> 返回上一步</Button>
-                    <Button onClick={() => setConfigStep(2)} disabled={!aiModelId} className="group h-12 px-8">下一步: 选择租赁周期 <ChevronRight className="ml-2 h-4 w-4" /></Button>
+                    <Button variant="ghost" onClick={() => setConfigStep(0)} className="text-muted-foreground"><ChevronLeft className="mr-2 h-4 w-4" /> {t("config.previous")}</Button>
+                    <Button onClick={() => setConfigStep(2)} disabled={!aiModelId} className="group h-12 px-8">{t("config.nextCycle")}<ChevronRight className="ml-2 h-4 w-4" /></Button>
                   </div>
                 </motion.div>
               )}
@@ -589,7 +584,7 @@ export default function UserProductsPage() {
                   className="space-y-8"
                 >
                   <div className="space-y-4">
-                    <h3 className="text-lg font-bold">租赁周期选项</h3>
+                    <h3 className="text-lg font-bold">{t("config.cycleOptions")}</h3>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       {cycleRules.map((rule) => (
                         <Button
@@ -600,7 +595,7 @@ export default function UserProductsPage() {
                           className={cn("h-auto rounded-xl p-4 text-center transition-all", cycleRuleId !== rule.id && "bg-background hover:bg-muted/50")}
                         >
                           <div className="text-sm font-bold">{rule.cycleName}</div>
-                          <div className="text-xs text-muted-foreground mt-1">{rule.cycleDays} 天</div>
+                          <div className="text-xs text-muted-foreground mt-1">{t("config.days", { days: rule.cycleDays })}</div>
                         </Button>
                       ))}
                     </div>
@@ -608,22 +603,21 @@ export default function UserProductsPage() {
                   <div className="flex min-h-[140px] flex-col items-center justify-center rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-8 text-center">
                     {estimate ? (
                       <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="space-y-2">
-                        <div className="text-sm font-medium text-emerald-600/80 dark:text-emerald-400/80 uppercase tracking-widest">预估总收益</div>
+                        <div className="text-sm font-medium text-emerald-600/80 dark:text-emerald-400/80 uppercase tracking-widest">{t("config.estimatedTotalProfit")}</div>
                         <motion.div animate={{ y: [0, -4, 0] }} transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }} className="text-4xl font-black text-emerald-500 tabular-nums flex items-center justify-center gap-2">
                           <MoneyText value={estimate.expectedTotalProfit} className="text-emerald-500" />
                         </motion.div>
-                        <div className="text-xs text-emerald-600/60 dark:text-emerald-400/60">预估日收: <MoneyText value={estimate.expectedDailyProfit} /> | 倍率: {(estimate.yieldMultiplier * 100).toFixed(0)}%</div>
+                        <div className="text-xs text-emerald-600/60 dark:text-emerald-400/60">{t("config.estimatedDailyProfit")}: <MoneyText value={estimate.expectedDailyProfit} /> | {t("config.multiplier")}: {(estimate.yieldMultiplier * 100).toFixed(0)}%</div>
                       </motion.div>
                     ) : (
-                      <div className="flex flex-col items-center gap-3 text-muted-foreground"><AlertCircle className="h-8 w-8 opacity-20" /><p className="text-sm">请选择上方租赁周期以计算预估收益</p></div>
+                      <div className="flex flex-col items-center gap-3 text-muted-foreground"><AlertCircle className="h-8 w-8 opacity-20" /><p className="text-sm">{t("config.chooseCycleHint")}</p></div>
                     )}
                   </div>
                   <div className="flex items-center justify-between pt-2">
-                    <Button variant="ghost" onClick={() => setConfigStep(1)} className="text-muted-foreground"><ChevronLeft className="mr-2 h-4 w-4" /> 返回上一步</Button>
+                    <Button variant="ghost" onClick={() => setConfigStep(1)} className="text-muted-foreground"><ChevronLeft className="mr-2 h-4 w-4" /> {t("config.previous")}</Button>
                     <Button onClick={() => void handleFinalSubmit()} disabled={!cycleRuleId || submitting} className="group h-12 px-10 shadow-lg shadow-primary/20">
                       {submitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <CheckCircle2 className="mr-2 h-4 w-4" />}
-                      确认下单并支付
-                    </Button>
+                      {t("config.submit")}</Button>
                   </div>
                 </motion.div>
               )}
@@ -638,9 +632,9 @@ export default function UserProductsPage() {
   return (
     <div className="space-y-8">
       <PageHeader
-        eyebrow="算力市场"
-        title={step === 0 ? "GPU 产品目录" : "下单配置中心"}
-        description={step === 0 ? "直接选择心仪的产品进入丝滑下单流程" : "按需配置您的算力资源"}
+        eyebrow={t("header.eyebrow")}
+        title={step === 0 ? t("header.listTitle") : t("header.configTitle")}
+        description={step === 0 ? t("header.listDescription") : t("header.configDescription")}
       />
 
       {message && <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/10 p-4 text-sm text-emerald-500">{message}</div>}
@@ -656,8 +650,7 @@ export default function UserProductsPage() {
             className="flex h-64 items-center justify-center text-muted-foreground"
           >
             <Loader2 className="mr-2 h-6 w-6 animate-spin" />
-            正在准备算力资源...
-          </motion.div>
+            {t("messages.loading")}</motion.div>
         ) : step === 0 ? (
           <div key="list">{renderList()}</div>
         ) : (

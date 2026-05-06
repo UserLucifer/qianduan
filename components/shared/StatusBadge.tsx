@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { getStatusMeta, type StatusTone } from "@/lib/status";
@@ -22,7 +23,10 @@ export function StatusBadge({
   label?: string;
   className?: string;
 }) {
+  const t = useTranslations("Status");
   const meta = getStatusMeta(status);
+  const normalizedStatus = typeof status === "boolean" ? (status ? "1" : "0") : status == null ? "" : String(status);
+  const translatedLabel = normalizedStatus && t.has(normalizedStatus) ? t(normalizedStatus) : meta.label;
 
   return (
     <Badge
@@ -33,7 +37,7 @@ export function StatusBadge({
         className,
       )}
     >
-      {label ?? meta.label}
+      {label ?? translatedLabel}
     </Badge>
   );
 }

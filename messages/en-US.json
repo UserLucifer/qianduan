@@ -5411,5 +5411,668 @@
       "text": "We ranked No. 4 on Glassdoor’s 2025 Best Places to Work list. Employees choose to stay and grow here; roughly one in five employees has worked here for ten years or longer.",
       "imageAlt": "Glassdoor Best Places to Work 2025"
     }
+  },
+  "Status": {
+    "0": "Disabled",
+    "1": "Enabled",
+    "ENABLED": "Enabled",
+    "DISABLED": "Disabled",
+    "RUNNING": "Running",
+    "PAUSED": "Paused",
+    "SETTLED": "Settled",
+    "SETTLING": "Settling",
+    "CANCELED": "Canceled",
+    "CANCELLED": "Canceled",
+    "PENDING": "Pending",
+    "PENDING_PAY": "Pending payment",
+    "PENDING_PAYMENT": "Pending payment",
+    "PAID": "Paid",
+    "PENDING_ACTIVATION": "Pending activation",
+    "ACTIVATING": "Activating",
+    "EXPIRED": "Expired",
+    "EARLY_CLOSED": "Closed early",
+    "NOT_STARTED": "Not started",
+    "FINISHED": "Finished",
+    "UNSETTLED": "Unsettled",
+    "SUBMITTED": "Submitted",
+    "APPROVED": "Approved",
+    "REJECTED": "Rejected",
+    "PENDING_REVIEW": "Pending review",
+    "GENERATED": "Generated",
+    "ACTIVE": "Active",
+    "REVOKED": "Revoked",
+    "REFUNDED": "Refunded",
+    "NORMAL": "Normal",
+    "ABNORMAL": "Abnormal",
+    "INACTIVE": "Inactive",
+    "DEPLOYING": "Deploying",
+    "COMPLETED": "Completed",
+    "IN": "Credit",
+    "OUT": "Debit",
+    "FREEZE": "Frozen",
+    "UNFREEZE": "Unfrozen"
+  },
+  "DashboardApi": {
+    "header": {
+      "eyebrow": "API management",
+      "title": "API credentials and deployment",
+      "description": "Open API credentials, deployment status, and deployment-fee payment from rental orders. Sensitive fields are masked by default."
+    },
+    "columns": {
+      "order": "Linked order",
+      "credential": "API / Credential",
+      "model": "Model",
+      "orderStatus": "Order status",
+      "tokenStatus": "Token status",
+      "deployCost": "Deployment / Fee",
+      "paidAt": "Deployment payment",
+      "actions": "Actions"
+    },
+    "actions": {
+      "view": "View",
+      "payTitle": "Pay API deployment fee",
+      "payDescription": "After payment, the backend will continue deployment and generate access credentials.",
+      "payConfirm": "Confirm payment",
+      "payButton": "Pay deployment fee"
+    },
+    "detail": {
+      "credentialInfo": "Credential details",
+      "credentialNo": "Credential No.",
+      "tokenStatus": "Token status",
+      "apiName": "API name",
+      "model": "Model",
+      "deploymentInfo": "Deployment details",
+      "order": "Linked order",
+      "orderStatus": "Order status",
+      "deployStatus": "Deployment status",
+      "deployFee": "Deployment fee",
+      "paidAt": "Paid at"
+    },
+    "empty": "No linked rental orders yet.",
+    "info": "API access is made up of the API Base URL and Token returned by the backend credential details. The frontend does not expose unmasked tokens; copy actions only use fields returned by the backend.",
+    "drawerTitle": "API deployment details"
+  },
+  "DashboardCommissions": {
+    "header": {
+      "eyebrow": "Commission center",
+      "title": "Referral commission records",
+      "description": "Track total commissions, level contributions, source users, linked orders, commission rates, and settlement status."
+    },
+    "columns": {
+      "commissionNo": "Commission No.",
+      "sourceUser": "Source user",
+      "sourceUserValue": "User {id}",
+      "order": "Linked order",
+      "level": "Level",
+      "levelValue": "Level {level}",
+      "rate": "Rate",
+      "amount": "Commission amount",
+      "status": "Status",
+      "createdAt": "Created at"
+    },
+    "stats": {
+      "total": "Total commission",
+      "totalDesc": "Lifetime total",
+      "today": "Commission today",
+      "todayDesc": "Current calendar day",
+      "level1": "Level 1 commission",
+      "level1Desc": "Direct member contribution",
+      "level23": "Level 2/3 commission",
+      "level23Desc": "Downline team contribution"
+    },
+    "filters": {
+      "level": "Referral level",
+      "allLevels": "All levels",
+      "level1": "Level 1 (direct)",
+      "level2": "Level 2 (indirect)",
+      "level3": "Level 3 (indirect)",
+      "status": "Settlement status",
+      "allStatus": "All statuses",
+      "pending": "Pending",
+      "settled": "Settled",
+      "canceled": "Canceled",
+      "startDate": "Start date",
+      "endDate": "End date"
+    },
+    "empty": "No commission records yet."
+  },
+  "DashboardNotifications": {
+    "header": {
+      "eyebrow": "Notifications",
+      "title": "System notifications",
+      "description": "Review system, order, finance, and earnings notifications, and mark them as read.",
+      "readAll": "Mark all read"
+    },
+    "filters": {
+      "readStatus": "Read status",
+      "allStatus": "All statuses",
+      "read": "Read",
+      "unread": "Unread",
+      "type": "Notification type",
+      "allTypes": "All types",
+      "system": "System",
+      "order": "Order",
+      "wallet": "Funds"
+    },
+    "types": {
+      "SYSTEM": "System",
+      "ANNOUNCEMENT": "Announcement",
+      "ALERT": "Risk alert",
+      "ORDER": "Order",
+      "FINANCE": "Finance",
+      "PROFIT": "Earnings",
+      "WALLET": "Funds"
+    },
+    "loading": "Loading...",
+    "empty": "No notifications yet.",
+    "bizId": "Business ID:",
+    "pagination": {
+      "summary": "Page {pageNo} of {pageCount}, {total} records",
+      "previous": "Previous",
+      "next": "Next"
+    }
+  },
+  "DashboardOrders": {
+    "header": {
+      "title": "Compute asset list",
+      "description": "Monitor your rental instances, runtime status, and earnings in real time."
+    },
+    "tabs": {
+      "ALL": "All",
+      "IN_PROGRESS": "Running",
+      "PENDING_PAY": "Pending payment",
+      "FINISHED": "Finished"
+    },
+    "columns": {
+      "instance": "Instance",
+      "plan": "Plan",
+      "status": "Runtime status",
+      "cycle": "Rental cycle",
+      "amount": "Order amount"
+    },
+    "loading": "Syncing cloud instance data...",
+    "empty": "No matching compute instances",
+    "cycleDays": "{days} days",
+    "menu": {
+      "label": "Actions",
+      "detail": "Details",
+      "console": "Console",
+      "earlyTerminate": "Terminate early",
+      "payNow": "Pay now",
+      "cancelOrder": "Cancel order"
+    },
+    "pagination": {
+      "summary": "Page {pageNo} / {pageCount}",
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "detail": {
+      "title": "Asset details",
+      "core": "Core configuration",
+      "finance": "Financial summary",
+      "orderNo": "Order No.",
+      "gpuModel": "Compute model",
+      "gpuMemory": "GPU memory",
+      "region": "Deployment region",
+      "aiModel": "AI model",
+      "orderAmount": "Order total",
+      "expectedTotalProfit": "Estimated total earnings",
+      "expectedDailyProfit": "Estimated daily earnings"
+    },
+    "payment": {
+      "success": "Payment successful",
+      "assigning": "Allocating compute node...",
+      "title": "Compute checkout",
+      "amountDue": "Amount due",
+      "walletBalance": "Wallet balance",
+      "insufficient": "Insufficient balance",
+      "cancel": "Cancel",
+      "confirm": "Confirm payment"
+    },
+    "status": {
+      "running": "Running",
+      "pendingPay": "Pending payment",
+      "finished": "Finished"
+    }
+  },
+  "DashboardProducts": {
+    "header": {
+      "eyebrow": "Compute marketplace",
+      "listTitle": "GPU product catalog",
+      "configTitle": "Order configuration",
+      "listDescription": "Choose a product and enter a fast rental flow.",
+      "configDescription": "Configure compute resources for your workload."
+    },
+    "filters": {
+      "region": "Region",
+      "gpu": "Available GPU models",
+      "noGpu": "No compute resources are available in this region"
+    },
+    "card": {
+      "available": "Available",
+      "outOfStock": "Out of stock",
+      "memory": "GPU memory",
+      "power": "Compute performance",
+      "startingPrice": "Starting price",
+      "startRent": "Start rental",
+      "emptyTitle": "No compute products available",
+      "emptyDescription": "Try another region or model to find more resources"
+    },
+    "config": {
+      "title": "Rental configuration",
+      "confirmCompute": "Confirm selected compute",
+      "basePrice": "Base price",
+      "chooseAiModel": "Choose AI model",
+      "choosePreinstalledModel": "Choose a preinstalled AI model",
+      "previous": "Back",
+      "nextCycle": "Next: choose rental cycle",
+      "cycleOptions": "Rental cycle options",
+      "days": "{days} days",
+      "estimatedTotalProfit": "Estimated total earnings",
+      "estimatedDailyProfit": "Estimated daily earnings",
+      "multiplier": "Multiplier",
+      "chooseCycleHint": "Choose a rental cycle above to calculate estimated earnings",
+      "submit": "Confirm order and pay"
+    },
+    "messages": {
+      "orderCreated": "Order {orderNo} has been placed successfully.",
+      "loading": "Preparing compute resources..."
+    }
+  },
+  "DashboardProfits": {
+    "header": {
+      "eyebrow": "Earnings center",
+      "title": "Earning records and trend",
+      "description": "Review today's earnings, total earnings, pending settlements, and order-level earning records."
+    },
+    "columns": {
+      "profitNo": "Earning No.",
+      "orderNo": "Linked order",
+      "productModel": "Product / Model",
+      "amount": "Earning amount",
+      "status": "Status",
+      "profitDate": "Earning date",
+      "settledAt": "Settled at"
+    },
+    "stats": {
+      "today": "Earnings today",
+      "todayDesc": "Current calendar day",
+      "total": "Total earnings",
+      "totalDesc": "Lifetime earnings",
+      "month": "Earnings this month",
+      "monthDesc": "Current month",
+      "settledCount": "Settled records",
+      "settledCountDesc": "Returned by API"
+    },
+    "trend": "Earnings trend",
+    "filters": {
+      "orderNo": "Order No.",
+      "orderPlaceholder": "Linked order No.",
+      "status": "Settlement status",
+      "allStatus": "All statuses",
+      "pending": "Pending",
+      "settled": "Settled",
+      "canceled": "Invalid",
+      "profitDate": "Earning date"
+    },
+    "empty": "No earning records yet."
+  },
+  "DashboardRecharge": {
+    "header": {
+      "eyebrow": "Top-up management",
+      "title": "Account top-up",
+      "description": "Select a top-up channel and amount, submit on-chain transaction details, and track finance review status."
+    },
+    "errors": {
+      "chooseChannel": "Select a top-up channel.",
+      "invalidAmount": "Enter a valid top-up amount.",
+      "minAmount": "The minimum for this channel is {amount} USDT.",
+      "maxAmount": "The maximum for this channel is {amount} USDT."
+    },
+    "columns": {
+      "rechargeNo": "Top-up order",
+      "amount": "Requested amount",
+      "channel": "Payment method",
+      "status": "Review status",
+      "reviewRemark": "Review note",
+      "createdAt": "Created at",
+      "actions": "Actions"
+    },
+    "actions": {
+      "detail": "Details",
+      "cancelTitle": "Cancel top-up request",
+      "cancelDescription": "Only top-up requests awaiting review can be canceled.",
+      "cancelConfirm": "Confirm cancellation",
+      "cancel": "Cancel"
+    },
+    "detail": {
+      "amountSection": "Transaction amount",
+      "amount": "Top-up amount",
+      "currency": "Currency",
+      "actualAmount": "Actual credit",
+      "pendingConfirm": "Awaiting review confirmation",
+      "orderSection": "Order information",
+      "orderNo": "Order No.",
+      "channel": "Top-up channel",
+      "accountNo": "Receiving address",
+      "status": "Current status",
+      "userRemark": "User note",
+      "timeSection": "Timeline",
+      "submittedAt": "Submitted at",
+      "reviewedAt": "Reviewed at",
+      "creditedAt": "Credited at",
+      "proofSection": "Proof and notes",
+      "externalTxNo": "Transaction hash",
+      "paymentProof": "Payment proof",
+      "reviewRemark": "Review note",
+      "walletTxNo": "Wallet transaction No."
+    },
+    "success": {
+      "title": "Top-up request submitted",
+      "description": "Your top-up order is now in the system. Finance usually completes review and crediting within 10 to 30 minutes.",
+      "history": "View top-up records",
+      "continue": "Top up again"
+    },
+    "form": {
+      "amountTitle": "Top-up amount",
+      "amountDescription": "Choose a quick amount or enter a custom amount",
+      "customAmount": "Enter custom amount",
+      "channelTitle": "Choose top-up channel",
+      "channelDescription": "Select a payment channel. Fees can vary by channel.",
+      "loadingChannels": "Loading channels...",
+      "noChannels": "No top-up channels available",
+      "fee": "Fee",
+      "limit": "Limit",
+      "accountNo": "Receiving address",
+      "summary": "Order summary",
+      "amount": "Top-up amount",
+      "actualPay": "Actual payment",
+      "channel": "Channel:",
+      "proofTitle": "Payment proof",
+      "proofDescription": "Submit an on-chain transaction hash or payment screenshot to speed up review",
+      "txPlaceholder": "Transaction hash / TXID",
+      "proofPlaceholder": "Payment proof URL (optional)",
+      "submitting": "Submitting...",
+      "submit": "Confirm top-up"
+    },
+    "records": {
+      "title": "Top-up records",
+      "status": "Top-up status",
+      "allStatus": "All statuses",
+      "submitted": "Submitted",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "cancelled": "Canceled",
+      "startDate": "Start date",
+      "endDate": "End date",
+      "empty": "No top-up orders yet."
+    },
+    "drawerTitle": "Top-up order details",
+    "securityNote": "The platform separates hot and cold wallets to help protect your funds."
+  },
+  "DashboardSettings": {
+    "header": {
+      "eyebrow": "SETTINGS",
+      "title": "Account settings",
+      "description": "Manage your profile and security options. Choose from several built-in avatar styles."
+    },
+    "toasts": {
+      "codeSent": "Verification code sent to your email",
+      "avatarUpdated": "Account avatar updated",
+      "passwordMismatch": "The two new passwords do not match",
+      "passwordReset": "Password reset successfully. Please sign in again..."
+    },
+    "profile": {
+      "title": "Profile",
+      "description": "Customize your account appearance with minimalist geometry, playful characters, and robot-inspired styles.",
+      "previewLabel": "Live preview comparison",
+      "current": "Current",
+      "preview": "Preview",
+      "reset": "Reset selection",
+      "saveAvatar": "Save avatar",
+      "email": "Registered email",
+      "displayName": "Display name",
+      "registeredAt": "Registered at: "
+    },
+    "avatarStyles": {
+      "shapes": "Minimal geometry",
+      "bigears": "Playful characters",
+      "bottts": "Robot style"
+    },
+    "security": {
+      "title": "Security verification",
+      "description": "To protect your account, password changes require verification through your registered email {email}.",
+      "resetPassword": "Reset login password",
+      "sendCodeDescription": "The system will send a 6-digit verification code to your registered email.",
+      "sendCode": "Send code",
+      "resendCode": "Resend ({seconds}s)",
+      "resend": "Resend",
+      "emailCode": "Email verification code",
+      "codePlaceholder": "Enter the 6-digit code",
+      "newPassword": "New login password",
+      "newPasswordPlaceholder": "At least 8 characters",
+      "confirmPassword": "Confirm new password",
+      "confirmPasswordPlaceholder": "Enter it again to confirm",
+      "cancel": "Cancel",
+      "submit": "Update password"
+    }
+  },
+  "DashboardSettlements": {
+    "header": {
+      "eyebrow": "Settlement records",
+      "title": "Settlement orders",
+      "description": "Review expiry, early, and manual settlement records, and track settlement amounts, statuses, and linked orders."
+    },
+    "columns": {
+      "settlementNo": "Settlement No.",
+      "type": "Settlement type",
+      "orderNo": "Linked order",
+      "amount": "Settlement amount",
+      "status": "Status",
+      "time": "Time",
+      "actions": "Actions"
+    },
+    "actionDetail": "Details",
+    "detail": {
+      "title": "Settlement information",
+      "settlementNo": "Settlement No.",
+      "orderNo": "Linked order",
+      "type": "Settlement type",
+      "status": "Status",
+      "principal": "Principal",
+      "profit": "Earnings",
+      "penalty": "Penalty",
+      "actual": "Actual settlement",
+      "walletTx": "Wallet transaction",
+      "remark": "Remark"
+    },
+    "filters": {
+      "type": "Settlement type",
+      "allTypes": "All types",
+      "expire": "Expiry settlement",
+      "early": "Early settlement",
+      "manual": "Manual settlement",
+      "status": "Settlement status",
+      "allStatus": "All statuses",
+      "pending": "Pending",
+      "settled": "Settled",
+      "canceled": "Canceled"
+    },
+    "settlementTypes": {
+      "EXPIRE": "Expiry settlement",
+      "EARLY_TERMINATE": "Early settlement",
+      "EARLY": "Early settlement",
+      "MANUAL": "Manual settlement"
+    },
+    "empty": "No settlement records yet.",
+    "drawerTitle": "Settlement details"
+  },
+  "DashboardTeam": {
+    "header": {
+      "eyebrow": "My team",
+      "title": "Team relationships and invitations",
+      "description": "Review direct members, downline members, team size, and hierarchy. The invite link is generated from the current user ID."
+    },
+    "columns": {
+      "userId": "User ID",
+      "email": "Email",
+      "userName": "Username",
+      "level": "Level",
+      "levelValue": "Level {level}",
+      "status": "Status",
+      "joinedAt": "Joined at"
+    },
+    "stats": {
+      "total": "Total team members",
+      "totalDesc": "All levels",
+      "direct": "Direct members",
+      "directDesc": "Level 1 members",
+      "level2": "Level 2 members",
+      "level2Desc": "Level 2 members",
+      "level3": "Level 3 members",
+      "level3Desc": "Level 3 members",
+      "deeper": "Deeper levels",
+      "deeperDesc": "Returned by API"
+    },
+    "invite": {
+      "title": "Invite link",
+      "loading": "Shown after current user information loads",
+      "copy": "Copy"
+    },
+    "filters": {
+      "depth": "Level depth",
+      "allLevels": "All levels",
+      "level1": "Level 1 (direct)",
+      "level2": "Level 2 (indirect)",
+      "level3": "Level 3 (indirect)"
+    },
+    "empty": "No team members yet."
+  },
+  "DashboardWallet": {
+    "header": {
+      "eyebrow": "Wallet center",
+      "title": "Wallet balance and transactions",
+      "description": "Review available balance, frozen amount, total income and spending, and filter transactions by transaction type and business type."
+    },
+    "columns": {
+      "txNo": "Transaction No.",
+      "txType": "Transaction type",
+      "bizType": "Business type",
+      "amount": "Amount",
+      "available": "Available balance",
+      "frozen": "Frozen balance",
+      "time": "Time"
+    },
+    "stats": {
+      "available": "Available balance",
+      "frozen": "Frozen amount",
+      "frozenDesc": "Funds locked by review or orders",
+      "income": "Total income",
+      "incomeDesc": "Top-ups + earnings + commission",
+      "expense": "Total spending",
+      "expenseDesc": "Historical withdrawal amount"
+    },
+    "cardTitle": "Fund transactions",
+    "filters": {
+      "txType": "Transaction type",
+      "allTypes": "All types",
+      "bizType": "Business type",
+      "allBiz": "All business",
+      "startDate": "Start date",
+      "endDate": "End date"
+    },
+    "txTypes": {
+      "IN": "Credit",
+      "OUT": "Debit",
+      "FREEZE": "Freeze",
+      "UNFREEZE": "Unfreeze"
+    },
+    "bizTypes": {
+      "RECHARGE": "Top-up",
+      "WITHDRAW": "Withdrawal",
+      "RENT_PAY": "Rental payment",
+      "API_DEPLOY_FEE": "API deployment fee",
+      "RENT_PROFIT": "Rental earnings",
+      "COMMISSION_PROFIT": "Commission earnings",
+      "SETTLEMENT": "Settlement",
+      "EARLY_PENALTY": "Early settlement penalty",
+      "REFUND": "Refund",
+      "ADJUST": "System adjustment"
+    },
+    "empty": "No fund transactions yet."
+  },
+  "DashboardWithdraw": {
+    "header": {
+      "eyebrow": "Withdrawal management",
+      "title": "Create withdrawal request",
+      "description": "Submit withdrawal receiving details, and review status, fees, actual amount, and payment proof."
+    },
+    "errors": {
+      "invalidAmount": "Enter a valid withdrawal amount.",
+      "insufficient": "Available balance is insufficient.",
+      "accountRequired": "Enter a receiving address."
+    },
+    "messages": {
+      "submitted": "Withdrawal request submitted. Waiting for finance review."
+    },
+    "columns": {
+      "withdrawNo": "Withdrawal order",
+      "amount": "Withdrawal amount",
+      "feeActual": "Fee / Actual",
+      "account": "Receiving info",
+      "status": "Review status",
+      "paidAt": "Paid at",
+      "actions": "Actions"
+    },
+    "actions": {
+      "detail": "Details",
+      "cancelTitle": "Cancel withdrawal request",
+      "cancelDescription": "After cancellation, frozen funds will be released according to backend rules.",
+      "cancelConfirm": "Confirm cancellation",
+      "cancel": "Cancel"
+    },
+    "detail": {
+      "withdrawInfo": "Withdrawal information",
+      "orderNo": "Order No.",
+      "status": "Status",
+      "applyAmount": "Requested amount",
+      "fee": "Fee",
+      "actualAmount": "Actual amount",
+      "network": "Network",
+      "accountName": "Account name",
+      "accountNo": "Receiving address",
+      "reviewPay": "Review and payment",
+      "reviewRemark": "Review note",
+      "reviewedAt": "Reviewed at",
+      "payProof": "Payment proof",
+      "paidAt": "Paid at"
+    },
+    "stats": {
+      "available": "Available balance",
+      "frozen": "Frozen amount",
+      "frozenDesc": "Withdrawal review or order lock",
+      "total": "Total withdrawals",
+      "totalDesc": "Historical withdrawal amount"
+    },
+    "form": {
+      "network": "Network",
+      "accountName": "Recipient (optional)",
+      "accountNo": "Receiving address",
+      "amount": "Withdrawal amount USDT",
+      "submit": "Submit withdrawal request"
+    },
+    "filters": {
+      "status": "Withdrawal status",
+      "allStatus": "All statuses",
+      "pending": "Pending review",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "paid": "Paid",
+      "cancelled": "Canceled",
+      "startDate": "Start date",
+      "endDate": "End date"
+    },
+    "empty": "No withdrawal requests yet.",
+    "drawerTitle": "Withdrawal details"
   }
 }

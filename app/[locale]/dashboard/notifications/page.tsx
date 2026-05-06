@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { CheckCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -12,7 +12,6 @@ import { DateTimeText } from "@/components/shared/DateTimeText";
 import { getUserNotifications, markAllAsRead, markAsRead } from "@/api/notification";
 import type { NotificationQueryRequest, PageResult, SysNotification } from "@/api/types";
 import { usePaginatedResource } from "@/hooks/usePaginatedResource";
-import { notificationTypeLabel } from "@/lib/status";
 import { toErrorMessage } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import {
@@ -27,6 +26,7 @@ import { normalizeLocale } from "@/i18n/locales";
 const initialParams: NotificationQueryRequest = { pageNo: 1, pageSize: 10 };
 
 export default function NotificationsPage() {
+  const t = useTranslations("DashboardNotifications");
   const locale = normalizeLocale(useLocale());
   const loader = useCallback(async (params: NotificationQueryRequest): Promise<PageResult<SysNotification>> => {
     const res = await getUserNotifications({ ...params, language: locale });
@@ -35,6 +35,12 @@ export default function NotificationsPage() {
   const { page, loading, error, updateParams, changePage, reload } = usePaginatedResource(loader, initialParams);
   const [filters, setFilters] = useState<NotificationQueryRequest>(initialParams);
   const [actionError, setActionError] = useState<string | null>(null);
+
+  const getNotificationTypeLabel = (type: string | null | undefined) => {
+    if (!type) return "-";
+    const key = `types.${type}`;
+    return t.has(key) ? t(key) : type;
+  };
 
   const readAll = async () => {
     setActionError(null);
@@ -63,14 +69,13 @@ export default function NotificationsPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        eyebrow="消息通知"
-        title="系统通知"
-        description="查看系统、订单、财务、收益相关通知，支持标记已读。"
+        eyebrow={t("header.eyebrow")}
+        title={t("header.title")}
+        description={t("header.description")}
         actions={
           <Button onClick={() => void readAll()}>
             <CheckCheck className="h-4 w-4 mr-2" />
-            全部已读
-          </Button>
+            {t("header.readAll")}</Button>
         }
       />
       
@@ -82,29 +87,29 @@ export default function NotificationsPage() {
         }}
       >
         <div className="space-y-2">
-          <Label>已读状态</Label>
+          <Label>{t("filters.readStatus")}</Label>
           <Select value={filters.read_status?.toString()} onValueChange={(val) => setFilters((current) => ({ ...current, read_status: val === " " ? undefined : Number(val) }))}>
             <SelectTrigger className="h-9 w-[180px] bg-background text-foreground">
-              <SelectValue placeholder="全部状态" />
+              <SelectValue placeholder={t("filters.allStatus")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value=" ">全部状态</SelectItem>
-              <SelectItem value="1">已读</SelectItem>
-              <SelectItem value="0">未读</SelectItem>
+              <SelectItem value=" ">{t("filters.allStatus")}</SelectItem>
+              <SelectItem value="1">{t("filters.read")}</SelectItem>
+              <SelectItem value="0">{t("filters.unread")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
         <div className="space-y-2">
-          <Label>通知类型</Label>
+          <Label>{t("filters.type")}</Label>
           <Select value={filters.notification_type} onValueChange={(val) => setFilters((current) => ({ ...current, notification_type: val === " " ? undefined : val }))}>
             <SelectTrigger className="h-9 w-[180px] bg-background text-foreground">
-              <SelectValue placeholder="全部类型" />
+              <SelectValue placeholder={t("filters.allTypes")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value=" ">全部类型</SelectItem>
-              <SelectItem value="SYSTEM">系统通知</SelectItem>
-              <SelectItem value="ORDER">订单通知</SelectItem>
-              <SelectItem value="WALLET">资金通知</SelectItem>
+              <SelectItem value=" ">{t("filters.allTypes")}</SelectItem>
+              <SelectItem value="SYSTEM">{t("filters.system")}</SelectItem>
+              <SelectItem value="ORDER">{t("filters.order")}</SelectItem>
+              <SelectItem value="WALLET">{t("filters.wallet")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -114,9 +119,9 @@ export default function NotificationsPage() {
 
       <div className="space-y-4">
         {loading && page.records.length === 0 ? (
-          <div className="py-8 text-center text-sm text-muted-foreground">加载中...</div>
+          <div className="py-8 text-center text-sm text-muted-foreground">{t("loading")}</div>
         ) : page.records.length === 0 ? (
-          <div className="py-8 text-center text-sm text-muted-foreground">暂无通知。</div>
+          <div className="py-8 text-center text-sm text-muted-foreground">{t("empty")}</div>
         ) : (
           <Accordion type="single" collapsible onValueChange={handleAccordionChange} className="space-y-3">
             {page.records.map((row) => {
@@ -143,7 +148,7 @@ export default function NotificationsPage() {
                       </div>
                       <div className="flex items-center gap-4 shrink-0 mr-2">
                         <span className={cn("text-xs", isUnread ? "opacity-100" : "opacity-70")}>
-                          {notificationTypeLabel(row.type)}
+                          {getNotificationTypeLabel(row.type)}
                         </span>
                         <div className={cn("text-xs", isUnread ? "opacity-100" : "opacity-70")}>
                           <DateTimeText value={row.createdAt} />
@@ -154,7 +159,7 @@ export default function NotificationsPage() {
                   <AccordionContent className="pt-0 pb-4">
                     <div className="rounded-md bg-muted/30 p-4 text-muted-foreground">
                       <div className="mb-3 text-xs opacity-70 font-mono">
-                        业务 ID: {row.bizId || "-"}
+                        {t("bizId")}{row.bizId || "-"}
                       </div>
                       <p className="whitespace-pre-wrap leading-relaxed text-sm text-foreground/90">
                         {row.content}
@@ -171,7 +176,7 @@ export default function NotificationsPage() {
       {page.total > 0 && (
         <div className="mt-6 flex items-center justify-between rounded-xl border border-border bg-card px-4 py-4 text-xs text-muted-foreground shadow-sm">
           <span className="font-medium">
-            第 {page.pageNo} / {Math.max(1, Math.ceil(page.total / page.pageSize))} 页，共 {page.total} 条数据
+            {t("pagination.summary", { pageNo: page.pageNo, pageCount: Math.max(1, Math.ceil(page.total / page.pageSize)), total: page.total })}
           </span>
           <div className="flex items-center gap-2">
             <Button
@@ -181,8 +186,7 @@ export default function NotificationsPage() {
               disabled={page.pageNo <= 1}
               onClick={() => changePage(page.pageNo - 1)}
             >
-              上一页
-            </Button>
+              {t("pagination.previous")}</Button>
             <Button
               variant="outline"
               size="sm"
@@ -190,8 +194,7 @@ export default function NotificationsPage() {
               disabled={page.pageNo >= Math.ceil(page.total / page.pageSize)}
               onClick={() => changePage(page.pageNo + 1)}
             >
-              下一页
-            </Button>
+              {t("pagination.next")}</Button>
           </div>
         </div>
       )}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -16,23 +17,14 @@ import { getTransactions, getWalletInfo } from "@/api/wallet";
 import type { PageResult, WalletMeResponse, WalletTransactionQueryRequest, WalletTransactionResponse } from "@/api/types";
 import { useAsyncResource } from "@/hooks/useAsyncResource";
 import { usePaginatedResource } from "@/hooks/usePaginatedResource";
-import { bizTypeLabel, txTypeLabel } from "@/lib/status";
 import { Lock, TrendingDown, TrendingUp, Wallet } from "lucide-react";
 import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 const initialParams: WalletTransactionQueryRequest = { pageNo: 1, pageSize: 10 };
 
-const columns: DataTableColumn<WalletTransactionResponse>[] = [
-  { key: "txNo", title: "流水号", render: (row) => <span className="font-mono text-xs">{row.txNo}</span> },
-  { key: "txType", title: "交易类型", render: (row) => <StatusBadge status={row.txType} label={txTypeLabel(row.txType)} /> },
-  { key: "bizType", title: "业务类型", render: (row) => bizTypeLabel(row.bizType) },
-  { key: "amount", title: "金额", render: (row) => <MoneyText value={row.amount} signed={row.txType === "IN" || row.txType === "UNFREEZE"} /> },
-  { key: "afterAvailableBalance", title: "可用余额", render: (row) => <MoneyText value={row.afterAvailableBalance} /> },
-  { key: "afterFrozenBalance", title: "冻结余额", render: (row) => <MoneyText value={row.afterFrozenBalance} /> },
-  { key: "createdAt", title: "时间", render: (row) => <DateTimeText value={row.createdAt} /> },
-];
 
 export default function WalletPage() {
+  const t = useTranslations("DashboardWallet");
   const walletLoader = useCallback(async (): Promise<WalletMeResponse> => {
     const res = await getWalletInfo();
     return res.data;
@@ -45,18 +37,39 @@ export default function WalletPage() {
   const transactions = usePaginatedResource(txLoader, initialParams);
   const [filters, setFilters] = useState<WalletTransactionQueryRequest>(initialParams);
 
+  const getTxTypeLabel = (type: string | null | undefined) => {
+    if (!type) return "-";
+    const key = `txTypes.${type}`;
+    return t.has(key) ? t(key) : type;
+  };
+  const getBizTypeLabel = (type: string | null | undefined) => {
+    if (!type) return "-";
+    const key = `bizTypes.${type}`;
+    return t.has(key) ? t(key) : type;
+  };
+
+  const columns: DataTableColumn<WalletTransactionResponse>[] = [
+    { key: "txNo", title: t("columns.txNo"), render: (row) => <span className="font-mono text-xs">{row.txNo}</span> },
+    { key: "txType", title: t("columns.txType"), render: (row) => <StatusBadge status={row.txType} label={getTxTypeLabel(row.txType)} /> },
+    { key: "bizType", title: t("columns.bizType"), render: (row) => getBizTypeLabel(row.bizType) },
+    { key: "amount", title: t("columns.amount"), render: (row) => <MoneyText value={row.amount} signed={row.txType === "IN" || row.txType === "UNFREEZE"} /> },
+    { key: "afterAvailableBalance", title: t("columns.available"), render: (row) => <MoneyText value={row.afterAvailableBalance} /> },
+    { key: "afterFrozenBalance", title: t("columns.frozen"), render: (row) => <MoneyText value={row.afterFrozenBalance} /> },
+    { key: "createdAt", title: t("columns.time"), render: (row) => <DateTimeText value={row.createdAt} /> },
+  ];
+
   return (
     <div className="space-y-6">
-      <PageHeader eyebrow="钱包中心" title="钱包余额与资金流水" description="查看可用余额、冻结金额、累计收入支出，以及按交易类型和业务类型筛选资金流水。" />
+      <PageHeader eyebrow={t("header.eyebrow")} title={t("header.title")} description={t("header.description")} />
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-4">
-        <StatsCard title="可用余额" value={<MoneyText value={wallet.data?.availableBalance} />} description={wallet.data?.currency ?? "USDT"} icon={Wallet} loading={wallet.loading} className="lg:col-span-1" />
-        <StatsCard title="冻结金额" value={<MoneyText value={wallet.data?.frozenBalance} />} description="审核或订单锁定资金" icon={Lock} loading={wallet.loading} className="lg:col-span-1" />
-        <StatsCard title="累计收入" value={<MoneyText value={(wallet.data?.totalRecharge ?? 0) + (wallet.data?.totalProfit ?? 0) + (wallet.data?.totalCommission ?? 0)} />} description="充值 + 收益 + 佣金" icon={TrendingUp} loading={wallet.loading} className="lg:col-span-1" status="good" />
-        <StatsCard title="累计支出" value={<MoneyText value={wallet.data?.totalWithdraw} />} description="历史提现金额" icon={TrendingDown} loading={wallet.loading} className="lg:col-span-1" />
+        <StatsCard title={t("stats.available")} value={<MoneyText value={wallet.data?.availableBalance} />} description={wallet.data?.currency ?? "USDT"} icon={Wallet} loading={wallet.loading} className="lg:col-span-1" />
+        <StatsCard title={t("stats.frozen")} value={<MoneyText value={wallet.data?.frozenBalance} />} description={t("stats.frozenDesc")} icon={Lock} loading={wallet.loading} className="lg:col-span-1" />
+        <StatsCard title={t("stats.income")} value={<MoneyText value={(wallet.data?.totalRecharge ?? 0) + (wallet.data?.totalProfit ?? 0) + (wallet.data?.totalCommission ?? 0)} />} description={t("stats.incomeDesc")} icon={TrendingUp} loading={wallet.loading} className="lg:col-span-1" status="good" />
+        <StatsCard title={t("stats.expense")} value={<MoneyText value={wallet.data?.totalWithdraw} />} description={t("stats.expenseDesc")} icon={TrendingDown} loading={wallet.loading} className="lg:col-span-1" />
       </div>
 
-      <BentoCard title="资金流水">
+      <BentoCard title={t("cardTitle")}>
         <div className="mb-4">
           <SearchPanel
             onSearch={() => transactions.updateParams({ ...filters, pageNo: 1 })}
@@ -66,53 +79,53 @@ export default function WalletPage() {
             }}
           >
             <div className="space-y-2">
-              <Label>交易类型</Label>
+              <Label>{t("filters.txType")}</Label>
               <Select value={filters.txType ?? "ALL"} onValueChange={(val) => setFilters((current) => ({ ...current, txType: val === "ALL" ? undefined : val }))}>
                 <SelectTrigger className="h-9 w-[120px] bg-background text-foreground">
-                  <SelectValue placeholder="全部类型" />
+                  <SelectValue placeholder={t("filters.allTypes")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="ALL">全部类型</SelectItem>
-                  <SelectItem value="IN">入账</SelectItem>
-                  <SelectItem value="OUT">支出</SelectItem>
-                  <SelectItem value="FREEZE">冻结</SelectItem>
-                  <SelectItem value="UNFREEZE">解冻</SelectItem>
+                  <SelectItem value="ALL">{t("filters.allTypes")}</SelectItem>
+                  <SelectItem value="IN">{t("txTypes.IN")}</SelectItem>
+                  <SelectItem value="OUT">{t("txTypes.OUT")}</SelectItem>
+                  <SelectItem value="FREEZE">{t("txTypes.FREEZE")}</SelectItem>
+                  <SelectItem value="UNFREEZE">{t("txTypes.UNFREEZE")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>业务类型</Label>
+              <Label>{t("filters.bizType")}</Label>
               <Select value={filters.bizType ?? "ALL"} onValueChange={(val) => setFilters((current) => ({ ...current, bizType: val === "ALL" ? undefined : val }))}>
                 <SelectTrigger className="h-9 w-[160px] bg-background text-foreground">
-                  <SelectValue placeholder="全部业务" />
+                  <SelectValue placeholder={t("filters.allBiz")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="ALL">全部业务</SelectItem>
-                  <SelectItem value="RECHARGE">充值</SelectItem>
-                  <SelectItem value="WITHDRAW">提现</SelectItem>
-                  <SelectItem value="RENT_PAY">租赁支付</SelectItem>
-                  <SelectItem value="API_DEPLOY_FEE">API 部署费</SelectItem>
-                  <SelectItem value="RENT_PROFIT">租赁收益</SelectItem>
-                  <SelectItem value="COMMISSION_PROFIT">佣金收益</SelectItem>
-                  <SelectItem value="SETTLEMENT">结算</SelectItem>
-                  <SelectItem value="EARLY_PENALTY">提前结算违约金</SelectItem>
-                  <SelectItem value="REFUND">退款</SelectItem>
-                  <SelectItem value="ADJUST">系统调账</SelectItem>
+                  <SelectItem value="ALL">{t("filters.allBiz")}</SelectItem>
+                  <SelectItem value="RECHARGE">{t("bizTypes.RECHARGE")}</SelectItem>
+                  <SelectItem value="WITHDRAW">{t("bizTypes.WITHDRAW")}</SelectItem>
+                  <SelectItem value="RENT_PAY">{t("bizTypes.RENT_PAY")}</SelectItem>
+                  <SelectItem value="API_DEPLOY_FEE">{t("bizTypes.API_DEPLOY_FEE")}</SelectItem>
+                  <SelectItem value="RENT_PROFIT">{t("bizTypes.RENT_PROFIT")}</SelectItem>
+                  <SelectItem value="COMMISSION_PROFIT">{t("bizTypes.COMMISSION_PROFIT")}</SelectItem>
+                  <SelectItem value="SETTLEMENT">{t("bizTypes.SETTLEMENT")}</SelectItem>
+                  <SelectItem value="EARLY_PENALTY">{t("bizTypes.EARLY_PENALTY")}</SelectItem>
+                  <SelectItem value="REFUND">{t("bizTypes.REFUND")}</SelectItem>
+                  <SelectItem value="ADJUST">{t("bizTypes.ADJUST")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>开始日期</Label>
+              <Label>{t("filters.startDate")}</Label>
               <Input type="date" value={filters.startTime ?? ""} onChange={(event) => setFilters((current) => ({ ...current, startTime: event.target.value || undefined }))} className="h-9 w-[150px] bg-background text-foreground" />
             </div>
             <div className="space-y-2">
-              <Label>结束日期</Label>
+              <Label>{t("filters.endDate")}</Label>
               <Input type="date" value={filters.endTime ?? ""} onChange={(event) => setFilters((current) => ({ ...current, endTime: event.target.value || undefined }))} className="h-9 w-[150px] bg-background text-foreground" />
             </div>
           </SearchPanel>
         </div>
         <ErrorAlert message={transactions.error} />
-        <DataTable columns={columns} data={transactions.page.records} rowKey={(row) => row.txNo} loading={transactions.loading} emptyText="暂无资金流水。" pageNo={transactions.page.pageNo} pageSize={transactions.page.pageSize} total={transactions.page.total} onPageChange={transactions.changePage} />
+        <DataTable columns={columns} data={transactions.page.records} rowKey={(row) => row.txNo} loading={transactions.loading} emptyText={t("empty")} pageNo={transactions.page.pageNo} pageSize={transactions.page.pageSize} total={transactions.page.total} onPageChange={transactions.changePage} />
       </BentoCard>
     </div>
   );

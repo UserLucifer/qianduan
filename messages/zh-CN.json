@@ -5411,5 +5411,668 @@
       "text": "我们在 Glassdoor 的“2025 年最佳工作场所”榜单中排名第 4 位。员工愿意长期在这里成长；大约五分之一的员工已在 NVIDIA 工作十年或更长时间。",
       "imageAlt": "Glassdoor 2025 年最佳工作场所"
     }
+  },
+  "Status": {
+    "0": "已禁用",
+    "1": "已启用",
+    "ENABLED": "已启用",
+    "DISABLED": "已禁用",
+    "RUNNING": "运行中",
+    "PAUSED": "已暂停",
+    "SETTLED": "已结算",
+    "SETTLING": "结算中",
+    "CANCELED": "已取消",
+    "CANCELLED": "已取消",
+    "PENDING": "待处理",
+    "PENDING_PAY": "待支付",
+    "PENDING_PAYMENT": "待支付",
+    "PAID": "已支付",
+    "PENDING_ACTIVATION": "待激活",
+    "ACTIVATING": "激活中",
+    "EXPIRED": "已到期",
+    "EARLY_CLOSED": "提前结束",
+    "NOT_STARTED": "未开始",
+    "FINISHED": "已结束",
+    "UNSETTLED": "未结算",
+    "SUBMITTED": "待审核",
+    "APPROVED": "已通过",
+    "REJECTED": "已拒绝",
+    "PENDING_REVIEW": "待审核",
+    "GENERATED": "已生成",
+    "ACTIVE": "正常",
+    "REVOKED": "已撤销",
+    "REFUNDED": "已退款",
+    "NORMAL": "正常",
+    "ABNORMAL": "异常",
+    "INACTIVE": "未启用",
+    "DEPLOYING": "部署中",
+    "COMPLETED": "已完成",
+    "IN": "入账",
+    "OUT": "支出",
+    "FREEZE": "冻结",
+    "UNFREEZE": "解冻"
+  },
+  "DashboardApi": {
+    "header": {
+      "eyebrow": "API 管理",
+      "title": "API 凭证与部署",
+      "description": "从租赁订单进入 API 凭证、部署状态和部署费用支付。敏感字段默认脱敏。"
+    },
+    "columns": {
+      "order": "关联订单",
+      "credential": "API / 凭证",
+      "model": "模型",
+      "orderStatus": "订单状态",
+      "tokenStatus": "Token 状态",
+      "deployCost": "部署 / 费用",
+      "paidAt": "部署支付",
+      "actions": "操作"
+    },
+    "actions": {
+      "view": "查看",
+      "payTitle": "支付 API 部署费",
+      "payDescription": "支付后后端会继续部署并生成访问凭证。",
+      "payConfirm": "确认支付",
+      "payButton": "支付部署费"
+    },
+    "detail": {
+      "credentialInfo": "凭证信息",
+      "credentialNo": "凭证编号",
+      "tokenStatus": "Token 状态",
+      "apiName": "API 名称",
+      "model": "模型",
+      "deploymentInfo": "部署信息",
+      "order": "关联订单",
+      "orderStatus": "订单状态",
+      "deployStatus": "部署状态",
+      "deployFee": "部署费用",
+      "paidAt": "支付时间"
+    },
+    "empty": "暂无可关联的租赁订单。",
+    "info": "API 调用说明由后端凭证详情返回的 API Base URL 和 Token 组成。前端不明文暴露未脱敏 Token，复制操作仅对后端已返回字段生效。",
+    "drawerTitle": "API 部署详情"
+  },
+  "DashboardCommissions": {
+    "header": {
+      "eyebrow": "佣金中心",
+      "title": "推广佣金记录",
+      "description": "查看累计佣金、各层级贡献、来源用户、关联订单、佣金比例和结算状态。"
+    },
+    "columns": {
+      "commissionNo": "佣金编号",
+      "sourceUser": "来源用户",
+      "sourceUserValue": "用户 {id}",
+      "order": "关联订单",
+      "level": "层级",
+      "levelValue": "{level} 级",
+      "rate": "佣金比例",
+      "amount": "佣金金额",
+      "status": "状态",
+      "createdAt": "创建时间"
+    },
+    "stats": {
+      "total": "累计佣金",
+      "totalDesc": "历史累计",
+      "today": "今日佣金",
+      "todayDesc": "当前自然日",
+      "level1": "一级佣金",
+      "level1Desc": "直属成员贡献",
+      "level23": "二/三级佣金",
+      "level23Desc": "下级团队贡献"
+    },
+    "filters": {
+      "level": "分销层级",
+      "allLevels": "全部层级",
+      "level1": "1级 (直接推广)",
+      "level2": "2级 (间接推广)",
+      "level3": "3级 (间接推广)",
+      "status": "结算状态",
+      "allStatus": "全部状态",
+      "pending": "待结算",
+      "settled": "已结算",
+      "canceled": "已取消",
+      "startDate": "开始日期",
+      "endDate": "结束日期"
+    },
+    "empty": "暂无佣金记录。"
+  },
+  "DashboardNotifications": {
+    "header": {
+      "eyebrow": "消息通知",
+      "title": "系统通知",
+      "description": "查看系统、订单、财务、收益相关通知，支持标记已读。",
+      "readAll": "全部已读"
+    },
+    "filters": {
+      "readStatus": "已读状态",
+      "allStatus": "全部状态",
+      "read": "已读",
+      "unread": "未读",
+      "type": "通知类型",
+      "allTypes": "全部类型",
+      "system": "系统通知",
+      "order": "订单通知",
+      "wallet": "资金通知"
+    },
+    "types": {
+      "SYSTEM": "系统通知",
+      "ANNOUNCEMENT": "公告",
+      "ALERT": "风险提醒",
+      "ORDER": "订单通知",
+      "FINANCE": "财务通知",
+      "PROFIT": "收益通知",
+      "WALLET": "资金通知"
+    },
+    "loading": "加载中...",
+    "empty": "暂无通知。",
+    "bizId": "业务 ID:",
+    "pagination": {
+      "summary": "第 {pageNo} / {pageCount} 页，共 {total} 条数据",
+      "previous": "上一页",
+      "next": "下一页"
+    }
+  },
+  "DashboardOrders": {
+    "header": {
+      "title": "算力资产列表",
+      "description": "实时监控您的租赁实例运行状态与收益数据。"
+    },
+    "tabs": {
+      "ALL": "全部",
+      "IN_PROGRESS": "运行中",
+      "PENDING_PAY": "待支付",
+      "FINISHED": "已完成"
+    },
+    "columns": {
+      "instance": "实例信息",
+      "plan": "配置方案",
+      "status": "运行状态",
+      "cycle": "租赁周期",
+      "amount": "订单金额"
+    },
+    "loading": "同步云端实例数据...",
+    "empty": "暂无匹配的算力实例",
+    "cycleDays": "{days} 天",
+    "menu": {
+      "label": "操作菜单",
+      "detail": "详情",
+      "console": "控制台",
+      "earlyTerminate": "提前终止",
+      "payNow": "立即支付",
+      "cancelOrder": "取消订单"
+    },
+    "pagination": {
+      "summary": "Page {pageNo} / {pageCount}",
+      "previous": "上一页",
+      "next": "下一页"
+    },
+    "detail": {
+      "title": "资产详情",
+      "core": "核心配置",
+      "finance": "财务统计",
+      "orderNo": "订单号",
+      "gpuModel": "算力型号",
+      "gpuMemory": "显存容量",
+      "region": "部署地区",
+      "aiModel": "AI 模型",
+      "orderAmount": "订单总额",
+      "expectedTotalProfit": "预计总收益",
+      "expectedDailyProfit": "日均预计收益"
+    },
+    "payment": {
+      "success": "支付成功",
+      "assigning": "正在分配算力节点...",
+      "title": "算力收银台",
+      "amountDue": "应付金额",
+      "walletBalance": "钱包余额",
+      "insufficient": "余额不足",
+      "cancel": "取消",
+      "confirm": "确认支付"
+    },
+    "status": {
+      "running": "运行中",
+      "pendingPay": "待支付",
+      "finished": "已完成"
+    }
+  },
+  "DashboardProducts": {
+    "header": {
+      "eyebrow": "算力市场",
+      "listTitle": "GPU 产品目录",
+      "configTitle": "下单配置中心",
+      "listDescription": "直接选择心仪的产品进入丝滑下单流程",
+      "configDescription": "按需配置您的算力资源"
+    },
+    "filters": {
+      "region": "地区选择",
+      "gpu": "可用 GPU 型号",
+      "noGpu": "该地区暂无可用算力资源"
+    },
+    "card": {
+      "available": "空闲中",
+      "outOfStock": "无库存",
+      "memory": "显存容量",
+      "power": "算力性能",
+      "startingPrice": "起步单价",
+      "startRent": "开始租赁",
+      "emptyTitle": "暂无可用算力产品",
+      "emptyDescription": "尝试切换其他地区或型号以发现更多资源"
+    },
+    "config": {
+      "title": "租赁配置",
+      "confirmCompute": "确认所选算力",
+      "basePrice": "基础价格",
+      "chooseAiModel": "选择 AI 模型",
+      "choosePreinstalledModel": "选择预装 AI 大模型",
+      "previous": "返回上一步",
+      "nextCycle": "下一步: 选择租赁周期",
+      "cycleOptions": "租赁周期选项",
+      "days": "{days} 天",
+      "estimatedTotalProfit": "预估总收益",
+      "estimatedDailyProfit": "预估日收",
+      "multiplier": "倍率",
+      "chooseCycleHint": "请选择上方租赁周期以计算预估收益",
+      "submit": "确认下单并支付"
+    },
+    "messages": {
+      "orderCreated": "订单 {orderNo} 已成功下单。",
+      "loading": "正在准备算力资源..."
+    }
+  },
+  "DashboardProfits": {
+    "header": {
+      "eyebrow": "收益中心",
+      "title": "收益记录与趋势",
+      "description": "查看今日收益、累计收益、待结算收益及订单维度收益记录。"
+    },
+    "columns": {
+      "profitNo": "收益编号",
+      "orderNo": "关联订单",
+      "productModel": "产品 / 模型",
+      "amount": "收益金额",
+      "status": "状态",
+      "profitDate": "收益日期",
+      "settledAt": "结算时间"
+    },
+    "stats": {
+      "today": "今日收益",
+      "todayDesc": "当前自然日",
+      "total": "累计收益",
+      "totalDesc": "历史累计收益",
+      "month": "本月收益",
+      "monthDesc": "当前月份",
+      "settledCount": "已结算笔数",
+      "settledCountDesc": "接口返回统计"
+    },
+    "trend": "收益趋势",
+    "filters": {
+      "orderNo": "订单号",
+      "orderPlaceholder": "关联单号",
+      "status": "结算状态",
+      "allStatus": "全部状态",
+      "pending": "待结算",
+      "settled": "已结算",
+      "canceled": "已失效",
+      "profitDate": "收益日期"
+    },
+    "empty": "暂无收益记录。"
+  },
+  "DashboardRecharge": {
+    "header": {
+      "eyebrow": "充值管理",
+      "title": "账户充值",
+      "description": "选择充值渠道与金额，提交链上交易信息并跟踪财务审核状态。"
+    },
+    "errors": {
+      "chooseChannel": "请选择充值渠道。",
+      "invalidAmount": "请输入有效充值金额。",
+      "minAmount": "当前渠道最低充值 {amount} USDT。",
+      "maxAmount": "当前渠道最高充值 {amount} USDT。"
+    },
+    "columns": {
+      "rechargeNo": "充值订单",
+      "amount": "申请金额",
+      "channel": "支付方式",
+      "status": "审核状态",
+      "reviewRemark": "审核备注",
+      "createdAt": "创建时间",
+      "actions": "操作"
+    },
+    "actions": {
+      "detail": "详情",
+      "cancelTitle": "取消充值申请",
+      "cancelDescription": "仅待审核充值申请可以取消。",
+      "cancelConfirm": "确认取消",
+      "cancel": "取消"
+    },
+    "detail": {
+      "amountSection": "交易金额",
+      "amount": "充值金额",
+      "currency": "币种",
+      "actualAmount": "实际到账",
+      "pendingConfirm": "待审核确认",
+      "orderSection": "订单信息",
+      "orderNo": "订单号",
+      "channel": "充值渠道",
+      "accountNo": "收款地址",
+      "status": "当前状态",
+      "userRemark": "用户备注",
+      "timeSection": "时间追踪",
+      "submittedAt": "提交时间",
+      "reviewedAt": "审核时间",
+      "creditedAt": "入账时间",
+      "proofSection": "凭证与备注",
+      "externalTxNo": "交易哈希",
+      "paymentProof": "支付凭证",
+      "reviewRemark": "审核备注",
+      "walletTxNo": "钱包流水号"
+    },
+    "success": {
+      "title": "充值申请已成功提交！",
+      "description": "您的充值订单已经进入系统，财务人员将会在 10 到 30 分钟内完成审核与入账。请耐心等待。",
+      "history": "查看充值记录",
+      "continue": "继续充值"
+    },
+    "form": {
+      "amountTitle": "充值金额",
+      "amountDescription": "选择快捷金额或输入自定义金额",
+      "customAmount": "输入自定义金额",
+      "channelTitle": "选择充值渠道",
+      "channelDescription": "点击选择支付渠道，不同渠道手续费可能不同",
+      "loadingChannels": "加载渠道中...",
+      "noChannels": "暂无可用充值渠道",
+      "fee": "手续费",
+      "limit": "限额",
+      "accountNo": "收款地址",
+      "summary": "订单摘要",
+      "amount": "充值金额",
+      "actualPay": "实际支付",
+      "channel": "渠道：",
+      "proofTitle": "支付凭证",
+      "proofDescription": "提交链上交易哈希或付款截图以加速审核",
+      "txPlaceholder": "交易哈希 / TXID",
+      "proofPlaceholder": "支付凭证 URL（如有）",
+      "submitting": "提交中...",
+      "submit": "确认充值"
+    },
+    "records": {
+      "title": "充值记录",
+      "status": "充值状态",
+      "allStatus": "全部状态",
+      "submitted": "已提交",
+      "approved": "已审核",
+      "rejected": "已拒绝",
+      "cancelled": "已取消",
+      "startDate": "开始日期",
+      "endDate": "结束日期",
+      "empty": "暂无充值订单。"
+    },
+    "drawerTitle": "充值订单详情",
+    "securityNote": "平台采用冷热钱包隔离技术，保障您的资金安全。"
+  },
+  "DashboardSettings": {
+    "header": {
+      "eyebrow": "SETTINGS",
+      "title": "账户设置",
+      "description": "管理个人资料与安全选项。提供多种风格的内置头像供您选择。"
+    },
+    "toasts": {
+      "codeSent": "验证码已发送至您的邮箱",
+      "avatarUpdated": "账户头像更新成功",
+      "passwordMismatch": "两次输入的新密码不一致",
+      "passwordReset": "密码重置成功，请重新登录..."
+    },
+    "profile": {
+      "title": "个人档案",
+      "description": "定制您的账户外观，支持极简几何、萌系动物及科技机器人多种风格。",
+      "previewLabel": "实时预览对比",
+      "current": "当前",
+      "preview": "预览",
+      "reset": "重置选择",
+      "saveAvatar": "保存头像",
+      "email": "注册邮箱",
+      "displayName": "显示昵称",
+      "registeredAt": "注册时间："
+    },
+    "avatarStyles": {
+      "shapes": "极简几何",
+      "bigears": "萌系动物",
+      "bottts": "科技机器人"
+    },
+    "security": {
+      "title": "安全验证",
+      "description": "为保障账户安全，修改密码需验证注册邮箱 {email}。",
+      "resetPassword": "重置登录密码",
+      "sendCodeDescription": "系统将向您的注册邮箱发送 6 位数字验证码。",
+      "sendCode": "发送验证码",
+      "resendCode": "重新发送 ({seconds}s)",
+      "resend": "重新发送",
+      "emailCode": "邮箱验证码",
+      "codePlaceholder": "请输入 6 位验证码",
+      "newPassword": "新登录密码",
+      "newPasswordPlaceholder": "至少 8 位字符",
+      "confirmPassword": "确认新密码",
+      "confirmPasswordPlaceholder": "再次输入以确认",
+      "cancel": "取消",
+      "submit": "确认更新密码"
+    }
+  },
+  "DashboardSettlements": {
+    "header": {
+      "eyebrow": "结算记录",
+      "title": "结算订单",
+      "description": "查看到期、提前和人工结算记录，跟踪结算金额、状态和关联订单。"
+    },
+    "columns": {
+      "settlementNo": "结算编号",
+      "type": "结算类型",
+      "orderNo": "关联订单",
+      "amount": "结算金额",
+      "status": "状态",
+      "time": "时间",
+      "actions": "操作"
+    },
+    "actionDetail": "详情",
+    "detail": {
+      "title": "结算信息",
+      "settlementNo": "结算编号",
+      "orderNo": "关联订单",
+      "type": "结算类型",
+      "status": "状态",
+      "principal": "本金",
+      "profit": "收益",
+      "penalty": "违约金",
+      "actual": "实际结算",
+      "walletTx": "钱包流水",
+      "remark": "备注"
+    },
+    "filters": {
+      "type": "结算类型",
+      "allTypes": "全部类型",
+      "expire": "到期结算",
+      "early": "提前结算",
+      "manual": "人工结算",
+      "status": "结算状态",
+      "allStatus": "全部状态",
+      "pending": "待结算",
+      "settled": "已结算",
+      "canceled": "已取消"
+    },
+    "settlementTypes": {
+      "EXPIRE": "到期结算",
+      "EARLY_TERMINATE": "提前结算",
+      "EARLY": "提前结算",
+      "MANUAL": "人工结算"
+    },
+    "empty": "暂无结算记录。",
+    "drawerTitle": "结算详情"
+  },
+  "DashboardTeam": {
+    "header": {
+      "eyebrow": "我的团队",
+      "title": "团队关系与邀请",
+      "description": "查看直属成员、下级成员、团队人数和层级关系。邀请链接基于当前用户编号生成。"
+    },
+    "columns": {
+      "userId": "用户 ID",
+      "email": "邮箱",
+      "userName": "用户名",
+      "level": "层级",
+      "levelValue": "{level} 级",
+      "status": "状态",
+      "joinedAt": "加入时间"
+    },
+    "stats": {
+      "total": "团队总人数",
+      "totalDesc": "全部层级",
+      "direct": "直属成员",
+      "directDesc": "1 级成员",
+      "level2": "二级成员",
+      "level2Desc": "2 级成员",
+      "level3": "三级成员",
+      "level3Desc": "3 级成员",
+      "deeper": "更深层级",
+      "deeperDesc": "接口返回统计"
+    },
+    "invite": {
+      "title": "邀请链接",
+      "loading": "当前用户信息加载后显示",
+      "copy": "复制"
+    },
+    "filters": {
+      "depth": "层级深度",
+      "allLevels": "全部层级",
+      "level1": "1级 (直接推广)",
+      "level2": "2级 (间接推广)",
+      "level3": "3级 (间接推广)"
+    },
+    "empty": "暂无团队成员。"
+  },
+  "DashboardWallet": {
+    "header": {
+      "eyebrow": "钱包中心",
+      "title": "钱包余额与资金流水",
+      "description": "查看可用余额、冻结金额、累计收入支出，以及按交易类型和业务类型筛选资金流水。"
+    },
+    "columns": {
+      "txNo": "流水号",
+      "txType": "交易类型",
+      "bizType": "业务类型",
+      "amount": "金额",
+      "available": "可用余额",
+      "frozen": "冻结余额",
+      "time": "时间"
+    },
+    "stats": {
+      "available": "可用余额",
+      "frozen": "冻结金额",
+      "frozenDesc": "审核或订单锁定资金",
+      "income": "累计收入",
+      "incomeDesc": "充值 + 收益 + 佣金",
+      "expense": "累计支出",
+      "expenseDesc": "历史提现金额"
+    },
+    "cardTitle": "资金流水",
+    "filters": {
+      "txType": "交易类型",
+      "allTypes": "全部类型",
+      "bizType": "业务类型",
+      "allBiz": "全部业务",
+      "startDate": "开始日期",
+      "endDate": "结束日期"
+    },
+    "txTypes": {
+      "IN": "入账",
+      "OUT": "支出",
+      "FREEZE": "冻结",
+      "UNFREEZE": "解冻"
+    },
+    "bizTypes": {
+      "RECHARGE": "充值",
+      "WITHDRAW": "提现",
+      "RENT_PAY": "租赁支付",
+      "API_DEPLOY_FEE": "API 部署费",
+      "RENT_PROFIT": "租赁收益",
+      "COMMISSION_PROFIT": "佣金收益",
+      "SETTLEMENT": "结算",
+      "EARLY_PENALTY": "提前结算违约金",
+      "REFUND": "退款",
+      "ADJUST": "系统调账"
+    },
+    "empty": "暂无资金流水。"
+  },
+  "DashboardWithdraw": {
+    "header": {
+      "eyebrow": "提现管理",
+      "title": "创建提现申请",
+      "description": "提交提现收款信息，查看审核状态、手续费、到账金额和打款凭证。"
+    },
+    "errors": {
+      "invalidAmount": "请输入有效提现金额。",
+      "insufficient": "可用余额不足。",
+      "accountRequired": "请输入收款地址。"
+    },
+    "messages": {
+      "submitted": "提现申请已提交，等待财务审核。"
+    },
+    "columns": {
+      "withdrawNo": "提现订单",
+      "amount": "提现金额",
+      "feeActual": "手续费 / 到账",
+      "account": "收款信息",
+      "status": "审核状态",
+      "paidAt": "打款时间",
+      "actions": "操作"
+    },
+    "actions": {
+      "detail": "详情",
+      "cancelTitle": "取消提现申请",
+      "cancelDescription": "取消后冻结资金将按后端规则释放。",
+      "cancelConfirm": "确认取消",
+      "cancel": "取消"
+    },
+    "detail": {
+      "withdrawInfo": "提现信息",
+      "orderNo": "订单号",
+      "status": "状态",
+      "applyAmount": "申请金额",
+      "fee": "手续费",
+      "actualAmount": "到账金额",
+      "network": "网络",
+      "accountName": "账户名",
+      "accountNo": "收款地址",
+      "reviewPay": "审核与打款",
+      "reviewRemark": "审核备注",
+      "reviewedAt": "审核时间",
+      "payProof": "打款凭证",
+      "paidAt": "打款时间"
+    },
+    "stats": {
+      "available": "可用余额",
+      "frozen": "冻结金额",
+      "frozenDesc": "提现审核或订单锁定",
+      "total": "累计提现",
+      "totalDesc": "历史提现金额"
+    },
+    "form": {
+      "network": "网络",
+      "accountName": "收款人（可选）",
+      "accountNo": "收款地址",
+      "amount": "提现金额 USDT",
+      "submit": "提交提现申请"
+    },
+    "filters": {
+      "status": "提现状态",
+      "allStatus": "全部状态",
+      "pending": "待审核",
+      "approved": "已通过",
+      "rejected": "已拒绝",
+      "paid": "已打款",
+      "cancelled": "已取消",
+      "startDate": "开始日期",
+      "endDate": "结束日期"
+    },
+    "empty": "暂无提现申请。",
+    "drawerTitle": "提现详情"
   }
 }

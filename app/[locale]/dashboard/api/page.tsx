@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Eye, ReceiptText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ConfirmActionButton } from "@/components/shared/ConfirmActionButton";
@@ -20,6 +21,7 @@ import { ErrorAlert } from "@/components/shared/ErrorAlert";
 const initialParams: RentalOrderQueryRequest = { pageNo: 1, pageSize: 10 };
 
 export default function DashboardApiPage() {
+  const t = useTranslations("DashboardApi");
   const loader = useCallback(async (params: RentalOrderQueryRequest): Promise<PageResult<ApiDeployInfoResponse>> => {
     const res = await getRentalApiManagement(params);
     return res.data;
@@ -32,7 +34,7 @@ export default function DashboardApiPage() {
       const res = await getRentalDeployInfo(orderNo);
       setDetail(res.data);
     } catch {
-      // 请求拦截器已统一提示操作错误。
+      // API errors are surfaced by the request interceptor.
     }
   };
 
@@ -45,15 +47,15 @@ export default function DashboardApiPage() {
         setDetail(next.data);
       }
     } catch {
-      // 请求拦截器已统一提示操作错误。
+      // API errors are surfaced by the request interceptor.
     }
   };
 
   const columns: DataTableColumn<ApiDeployInfoResponse>[] = [
-    { key: "orderNo", title: "关联订单", render: (row) => <span className="font-mono text-xs">{row.orderNo}</span> },
+    { key: "orderNo", title: t("columns.order"), render: (row) => <span className="font-mono text-xs">{row.orderNo}</span> },
     {
       key: "apiName",
-      title: "API / 凭证",
+      title: t("columns.credential"),
       render: (row) => (
         <div>
           <div className="font-medium text-foreground">{formatEmpty(row.apiName)}</div>
@@ -61,12 +63,12 @@ export default function DashboardApiPage() {
         </div>
       ),
     },
-    { key: "modelNameSnapshot", title: "模型", render: (row) => formatEmpty(row.modelNameSnapshot) },
-    { key: "orderStatus", title: "订单状态", render: (row) => <StatusBadge status={row.orderStatus} /> },
-    { key: "tokenStatus", title: "Token 状态", render: (row) => <StatusBadge status={row.tokenStatus} /> },
+    { key: "modelNameSnapshot", title: t("columns.model"), render: (row) => formatEmpty(row.modelNameSnapshot) },
+    { key: "orderStatus", title: t("columns.orderStatus"), render: (row) => <StatusBadge status={row.orderStatus} /> },
+    { key: "tokenStatus", title: t("columns.tokenStatus"), render: (row) => <StatusBadge status={row.tokenStatus} /> },
     {
       key: "deployOrderStatus",
-      title: "部署 / 费用",
+      title: t("columns.deployCost"),
       render: (row) => (
         <div className="space-y-1">
           <StatusBadge status={row.deployOrderStatus} />
@@ -74,21 +76,19 @@ export default function DashboardApiPage() {
         </div>
       ),
     },
-    { key: "paidAt", title: "部署支付", render: (row) => <DateTimeText value={row.paidAt} /> },
+    { key: "paidAt", title: t("columns.paidAt"), render: (row) => <DateTimeText value={row.paidAt} /> },
     {
       key: "actions",
-      title: "操作",
+      title: t("columns.actions"),
       className: "text-right",
       render: (row) => (
         <div className="flex justify-end gap-2">
           <Button variant="ghost" size="sm" className="text-muted-foreground hover:bg-muted" onClick={() => void openDeployInfo(row.orderNo)}>
             <Eye className="h-3.5 w-3.5" />
-            查看
-          </Button>
+            {t("actions.view")}</Button>
           {!row.paidAt ? (
-            <ConfirmActionButton title="支付 API 部署费" description="支付后后端会继续部署并生成访问凭证。" confirmText="确认支付" onConfirm={() => payDeploy(row.orderNo)}>
-              <ReceiptText className="h-3.5 w-3.5" />支付部署费
-            </ConfirmActionButton>
+            <ConfirmActionButton title={t("actions.payTitle")} description={t("actions.payDescription")} confirmText={t("actions.payConfirm")} onConfirm={() => payDeploy(row.orderNo)}>
+              <ReceiptText className="h-3.5 w-3.5" />{t("actions.payButton")}</ConfirmActionButton>
           ) : null}
         </div>
       ),
@@ -97,37 +97,36 @@ export default function DashboardApiPage() {
 
   const detailSections: DetailSectionDef<ApiDeployInfoResponse>[] = [
     {
-      title: "凭证信息",
+      title: t("detail.credentialInfo"),
       fields: [
-        { label: "凭证编号", render: (detail) => <span className="font-mono">{formatEmpty(detail.credentialNo)}</span> },
-        { label: "Token 状态", render: (detail) => <StatusBadge status={detail.tokenStatus} /> },
-        { label: "API 名称", render: (detail) => formatEmpty(detail.apiName) },
+        { label: t("detail.credentialNo"), render: (detail) => <span className="font-mono">{formatEmpty(detail.credentialNo)}</span> },
+        { label: t("detail.tokenStatus"), render: (detail) => <StatusBadge status={detail.tokenStatus} /> },
+        { label: t("detail.apiName"), render: (detail) => formatEmpty(detail.apiName) },
         { label: "API Base URL", render: (detail) => <CopyableSecret value={detail.apiBaseUrl} canReveal={false} /> },
         { label: "Token", render: (detail) => <CopyableSecret value={detail.tokenMasked} maskedValue={detail.tokenMasked} canReveal={false} /> },
-        { label: "模型", render: (detail) => formatEmpty(detail.modelNameSnapshot) },
+        { label: t("detail.model"), render: (detail) => formatEmpty(detail.modelNameSnapshot) },
       ],
     },
     {
-      title: "部署信息",
+      title: t("detail.deploymentInfo"),
       fields: [
-        { label: "关联订单", render: (detail) => <span className="font-mono">{detail.orderNo}</span> },
-        { label: "订单状态", render: (detail) => <StatusBadge status={detail.orderStatus} /> },
-        { label: "部署状态", render: (detail) => <StatusBadge status={detail.deployOrderStatus} /> },
-        { label: "部署费用", render: (detail) => <MoneyText value={detail.deployFeeSnapshot} /> },
-        { label: "支付时间", render: (detail) => <DateTimeText value={detail.paidAt} /> },
+        { label: t("detail.order"), render: (detail) => <span className="font-mono">{detail.orderNo}</span> },
+        { label: t("detail.orderStatus"), render: (detail) => <StatusBadge status={detail.orderStatus} /> },
+        { label: t("detail.deployStatus"), render: (detail) => <StatusBadge status={detail.deployOrderStatus} /> },
+        { label: t("detail.deployFee"), render: (detail) => <MoneyText value={detail.deployFeeSnapshot} /> },
+        { label: t("detail.paidAt"), render: (detail) => <DateTimeText value={detail.paidAt} /> },
       ],
     },
   ];
 
   return (
     <div className="space-y-6">
-      <PageHeader eyebrow="API 管理" title="API 凭证与部署" description="从租赁订单进入 API 凭证、部署状态和部署费用支付。敏感字段默认脱敏。" />
+      <PageHeader eyebrow={t("header.eyebrow")} title={t("header.title")} description={t("header.description")} />
       <ErrorAlert message={error} />
-      <DataTable columns={columns} data={page.records} rowKey={(row) => row.orderNo} loading={loading} emptyText="暂无可关联的租赁订单。" pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
+      <DataTable columns={columns} data={page.records} rowKey={(row) => row.orderNo} loading={loading} emptyText={t("empty")} pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
       <div className="rounded-lg border border-border bg-muted/40 p-4 text-sm leading-6 text-muted-foreground">
-        API 调用说明由后端凭证详情返回的 API Base URL 和 Token 组成。前端不明文暴露未脱敏 Token，复制操作仅对后端已返回字段生效。
-      </div>
-      <DetailDrawer data={detail} open={Boolean(detail)} title="API 部署详情" subtitle={(data) => data.orderNo} sections={detailSections} onClose={() => setDetail(null)} />
+        {t("info")}</div>
+      <DetailDrawer data={detail} open={Boolean(detail)} title={t("drawerTitle")} subtitle={(data) => data.orderNo} sections={detailSections} onClose={() => setDetail(null)} />
     </div>
   );
 }

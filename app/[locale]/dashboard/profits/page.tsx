@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { TrendingUp } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { Input } from "@/components/ui/input";
@@ -28,18 +29,9 @@ interface TrendPoint {
   amount: number;
 }
 
-const columns: DataTableColumn<ProfitRecordResponse>[] = [
-  { key: "profitNo", title: "收益编号", render: (row) => <span className="font-mono text-xs">{row.profitNo}</span> },
-  { key: "orderNo", title: "关联订单", render: (row) => <span className="font-mono text-xs">{row.orderNo}</span> },
-  { key: "productNameSnapshot", title: "产品 / 模型", render: (row) => <span>{row.productNameSnapshot} · {row.aiModelNameSnapshot}</span> },
-  { key: "finalProfitAmount", title: "收益金额", render: (row) => <MoneyText value={row.finalProfitAmount} signed /> },
-  { key: "status", title: "状态", render: (row) => <StatusBadge status={row.status} /> },
-  { key: "profitDate", title: "收益日期", render: (row) => formatDate(row.profitDate) },
-  { key: "settledAt", title: "结算时间", render: (row) => <DateTimeText value={row.settledAt} /> },
-];
 
 function buildTrend(records: ProfitRecordResponse[]): TrendPoint[] {
-  // 后端暂无收益趋势接口，这里基于当前页收益记录按日期聚合。
+  // The backend does not expose a profit trend endpoint yet, so this chart aggregates the current page by date.
   const map = new Map<string, number>();
   records.forEach((record) => {
     const key = formatDate(record.profitDate);
@@ -49,6 +41,7 @@ function buildTrend(records: ProfitRecordResponse[]): TrendPoint[] {
 }
 
 export default function ProfitsPage() {
+  const t = useTranslations("DashboardProfits");
   const [chartReady, setChartReady] = useState(false);
   const summaryLoader = useCallback(async (): Promise<ProfitSummaryResponse> => {
     const res = await getProfitSummary();
@@ -63,20 +56,30 @@ export default function ProfitsPage() {
   const [filters, setFilters] = useState<ProfitRecordQueryRequest>(initialParams);
   const trend = buildTrend(records.page.records);
 
+  const columns: DataTableColumn<ProfitRecordResponse>[] = [
+    { key: "profitNo", title: t("columns.profitNo"), render: (row) => <span className="font-mono text-xs">{row.profitNo}</span> },
+    { key: "orderNo", title: t("columns.orderNo"), render: (row) => <span className="font-mono text-xs">{row.orderNo}</span> },
+    { key: "productNameSnapshot", title: t("columns.productModel"), render: (row) => <span>{row.productNameSnapshot} / {row.aiModelNameSnapshot}</span> },
+    { key: "finalProfitAmount", title: t("columns.amount"), render: (row) => <MoneyText value={row.finalProfitAmount} signed /> },
+    { key: "status", title: t("columns.status"), render: (row) => <StatusBadge status={row.status} /> },
+    { key: "profitDate", title: t("columns.profitDate"), render: (row) => formatDate(row.profitDate) },
+    { key: "settledAt", title: t("columns.settledAt"), render: (row) => <DateTimeText value={row.settledAt} /> },
+  ];
+
   useEffect(() => {
     setChartReady(true);
   }, []);
 
   return (
     <div className="space-y-6">
-      <PageHeader eyebrow="收益中心" title="收益记录与趋势" description="查看今日收益、累计收益、待结算收益及订单维度收益记录。" />
+      <PageHeader eyebrow={t("header.eyebrow")} title={t("header.title")} description={t("header.description")} />
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-4">
-        <StatsCard title="今日收益" value={<MoneyText value={summary.data?.todayProfit} />} description="当前自然日" icon={TrendingUp} loading={summary.loading} status="good" />
-        <StatsCard title="累计收益" value={<MoneyText value={summary.data?.totalProfit} />} description="历史累计收益" icon={TrendingUp} loading={summary.loading} status="good" />
-        <StatsCard title="本月收益" value={<MoneyText value={summary.data?.currentMonthProfit} />} description="当前月份" icon={TrendingUp} loading={summary.loading} />
-        <StatsCard title="已结算笔数" value={summary.data?.settledProfitCount ?? 0} description="接口返回统计" icon={TrendingUp} loading={summary.loading} />
+        <StatsCard title={t("stats.today")} value={<MoneyText value={summary.data?.todayProfit} />} description={t("stats.todayDesc")} icon={TrendingUp} loading={summary.loading} status="good" />
+        <StatsCard title={t("stats.total")} value={<MoneyText value={summary.data?.totalProfit} />} description={t("stats.totalDesc")} icon={TrendingUp} loading={summary.loading} status="good" />
+        <StatsCard title={t("stats.month")} value={<MoneyText value={summary.data?.currentMonthProfit} />} description={t("stats.monthDesc")} icon={TrendingUp} loading={summary.loading} />
+        <StatsCard title={t("stats.settledCount")} value={summary.data?.settledProfitCount ?? 0} description={t("stats.settledCountDesc")} icon={TrendingUp} loading={summary.loading} />
       </div>
-      <BentoCard title="收益趋势">
+      <BentoCard title={t("trend")}>
         <div className="h-64">
           {chartReady ? (
             <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
@@ -105,30 +108,30 @@ export default function ProfitsPage() {
         }}
       >
         <div className="space-y-2">
-          <Label htmlFor="orderNo">订单号</Label>
-          <Input id="orderNo" value={filters.orderNo ?? ""} onChange={(event) => setFilters((current) => ({ ...current, orderNo: event.target.value || undefined }))} placeholder="关联单号" className="h-9 w-[180px] bg-background text-foreground" />
+          <Label htmlFor="orderNo">{t("filters.orderNo")}</Label>
+          <Input id="orderNo" value={filters.orderNo ?? ""} onChange={(event) => setFilters((current) => ({ ...current, orderNo: event.target.value || undefined }))} placeholder={t("filters.orderPlaceholder")} className="h-9 w-[180px] bg-background text-foreground" />
         </div>
         <div className="space-y-2">
-          <Label>结算状态</Label>
+          <Label>{t("filters.status")}</Label>
           <Select value={filters.status} onValueChange={(val) => setFilters((current) => ({ ...current, status: val === " " ? undefined : val }))}>
             <SelectTrigger className="h-9 w-[180px] bg-background text-foreground">
-              <SelectValue placeholder="全部状态" />
+              <SelectValue placeholder={t("filters.allStatus")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value=" ">全部状态</SelectItem>
-              <SelectItem value="PENDING">待结算</SelectItem>
-              <SelectItem value="SETTLED">已结算</SelectItem>
-              <SelectItem value="CANCELED">已失效</SelectItem>
+              <SelectItem value=" ">{t("filters.allStatus")}</SelectItem>
+              <SelectItem value="PENDING">{t("filters.pending")}</SelectItem>
+              <SelectItem value="SETTLED">{t("filters.settled")}</SelectItem>
+              <SelectItem value="CANCELED">{t("filters.canceled")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
         <div className="space-y-2">
-          <Label>收益日期</Label>
+          <Label>{t("filters.profitDate")}</Label>
           <Input type="date" value={filters.profitDate ?? ""} onChange={(event) => setFilters((current) => ({ ...current, profitDate: event.target.value || undefined }))} className="h-9 w-[150px] bg-background text-foreground" />
         </div>
       </SearchPanel>
       <ErrorAlert message={records.error} />
-      <DataTable columns={columns} data={records.page.records} rowKey={(row) => row.profitNo} loading={records.loading} emptyText="暂无收益记录。" pageNo={records.page.pageNo} pageSize={records.page.pageSize} total={records.page.total} onPageChange={records.changePage} />
+      <DataTable columns={columns} data={records.page.records} rowKey={(row) => row.profitNo} loading={records.loading} emptyText={t("empty")} pageNo={records.page.pageNo} pageSize={records.page.pageSize} total={records.page.total} onPageChange={records.changePage} />
     </div>
   );
 }

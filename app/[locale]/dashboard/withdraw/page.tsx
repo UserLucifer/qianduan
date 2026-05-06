@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Eye, Send, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,6 +29,7 @@ const initialParams: WithdrawOrderQueryRequest = { pageNo: 1, pageSize: 10 };
 const networks = ["TRC20", "ERC20", "BEP20"];
 
 export default function WithdrawPage() {
+  const t = useTranslations("DashboardWithdraw");
   const walletLoader = useCallback(async (): Promise<WalletMeResponse> => {
     const res = await getWalletInfo();
     return res.data;
@@ -52,14 +54,14 @@ export default function WithdrawPage() {
     setActionError(null);
     try {
       const applyAmount = Number(amount);
-      if (!Number.isFinite(applyAmount) || applyAmount <= 0) throw new Error("请输入有效提现金额。");
-      if (wallet.data && applyAmount > wallet.data.availableBalance) throw new Error("可用余额不足。");
-      if (!accountNo.trim()) throw new Error("请输入收款地址。");
+      if (!Number.isFinite(applyAmount) || applyAmount <= 0) throw new Error(t("errors.invalidAmount"));
+      if (wallet.data && applyAmount > wallet.data.availableBalance) throw new Error(t("errors.insufficient"));
+      if (!accountNo.trim()) throw new Error(t("errors.accountRequired"));
       await createWithdrawOrder({ network, accountName: accountName || undefined, accountNo, applyAmount });
       setAmount("");
       setAccountNo("");
       setAccountName("");
-      setMessage("提现申请已提交，等待财务审核。");
+      setMessage(t("messages.submitted"));
       await Promise.all([reload(), wallet.reload()]);
     } catch (err) {
       setActionError(toErrorMessage(err));
@@ -87,25 +89,23 @@ export default function WithdrawPage() {
   };
 
   const columns: DataTableColumn<WithdrawOrderResponse>[] = [
-    { key: "withdrawNo", title: "提现订单", render: (row) => <span className="font-mono text-xs">{row.withdrawNo}</span> },
-    { key: "applyAmount", title: "提现金额", render: (row) => <MoneyText value={row.applyAmount} /> },
-    { key: "feeAmount", title: "手续费 / 到账", render: (row) => <span><MoneyText value={row.feeAmount} /> / <MoneyText value={row.actualAmount} /></span> },
-    { key: "network", title: "收款信息", render: (row) => <span>{row.network} · <CopyableSecret value={row.accountNo} canReveal={false} /></span> },
-    { key: "status", title: "审核状态", render: (row) => <StatusBadge status={row.status} /> },
-    { key: "paidAt", title: "打款时间", render: (row) => <DateTimeText value={row.paidAt} /> },
+    { key: "withdrawNo", title: t("columns.withdrawNo"), render: (row) => <span className="font-mono text-xs">{row.withdrawNo}</span> },
+    { key: "applyAmount", title: t("columns.amount"), render: (row) => <MoneyText value={row.applyAmount} /> },
+    { key: "feeAmount", title: t("columns.feeActual"), render: (row) => <span><MoneyText value={row.feeAmount} /> / <MoneyText value={row.actualAmount} /></span> },
+    { key: "network", title: t("columns.account"), render: (row) => <span>{row.network} · <CopyableSecret value={row.accountNo} canReveal={false} /></span> },
+    { key: "status", title: t("columns.status"), render: (row) => <StatusBadge status={row.status} /> },
+    { key: "paidAt", title: t("columns.paidAt"), render: (row) => <DateTimeText value={row.paidAt} /> },
     {
       key: "actions",
-      title: "操作",
+      title: t("columns.actions"),
       className: "text-right",
       render: (row) => (
         <div className="flex justify-end gap-2">
           <Button variant="ghost" size="sm" className="text-muted-foreground hover:bg-muted" onClick={() => void openDetail(row.withdrawNo)}>
-            <Eye className="h-3.5 w-3.5" />详情
-          </Button>
+            <Eye className="h-3.5 w-3.5" />{t("actions.detail")}</Button>
           {row.status === "PENDING_REVIEW" ? (
-            <ConfirmActionButton title="取消提现申请" description="取消后冻结资金将按后端规则释放。" confirmText="确认取消" onConfirm={() => cancelOrder(row.withdrawNo)}>
-              <XCircle className="h-3.5 w-3.5" />取消
-            </ConfirmActionButton>
+            <ConfirmActionButton title={t("actions.cancelTitle")} description={t("actions.cancelDescription")} confirmText={t("actions.cancelConfirm")} onConfirm={() => cancelOrder(row.withdrawNo)}>
+              <XCircle className="h-3.5 w-3.5" />{t("actions.cancel")}</ConfirmActionButton>
           ) : null}
         </div>
       ),
@@ -114,54 +114,54 @@ export default function WithdrawPage() {
 
   const detailSections: DetailSectionDef<WithdrawOrderResponse>[] = [
     {
-      title: "提现信息",
+      title: t("detail.withdrawInfo"),
       fields: [
-        { label: "订单号", render: (detail) => <span className="font-mono">{detail.withdrawNo}</span> },
-        { label: "状态", render: (detail) => <StatusBadge status={detail.status} /> },
-        { label: "申请金额", render: (detail) => <MoneyText value={detail.applyAmount} /> },
-        { label: "手续费", render: (detail) => <MoneyText value={detail.feeAmount} /> },
-        { label: "到账金额", render: (detail) => <MoneyText value={detail.actualAmount} /> },
-        { label: "网络", render: (detail) => detail.network },
-        { label: "账户名", render: (detail) => detail.accountName || "-" },
-        { label: "收款地址", render: (detail) => <CopyableSecret value={detail.accountNo} canReveal={false} /> },
+        { label: t("detail.orderNo"), render: (detail) => <span className="font-mono">{detail.withdrawNo}</span> },
+        { label: t("detail.status"), render: (detail) => <StatusBadge status={detail.status} /> },
+        { label: t("detail.applyAmount"), render: (detail) => <MoneyText value={detail.applyAmount} /> },
+        { label: t("detail.fee"), render: (detail) => <MoneyText value={detail.feeAmount} /> },
+        { label: t("detail.actualAmount"), render: (detail) => <MoneyText value={detail.actualAmount} /> },
+        { label: t("detail.network"), render: (detail) => detail.network },
+        { label: t("detail.accountName"), render: (detail) => detail.accountName || "-" },
+        { label: t("detail.accountNo"), render: (detail) => <CopyableSecret value={detail.accountNo} canReveal={false} /> },
       ],
     },
     {
-      title: "审核与打款",
+      title: t("detail.reviewPay"),
       fields: [
-        { label: "审核备注", render: (detail) => detail.reviewRemark || "-" },
-        { label: "审核时间", render: (detail) => <DateTimeText value={detail.reviewedAt} /> },
-        { label: "打款凭证", render: (detail) => detail.payProofNo || "-" },
-        { label: "打款时间", render: (detail) => <DateTimeText value={detail.paidAt} /> },
+        { label: t("detail.reviewRemark"), render: (detail) => detail.reviewRemark || "-" },
+        { label: t("detail.reviewedAt"), render: (detail) => <DateTimeText value={detail.reviewedAt} /> },
+        { label: t("detail.payProof"), render: (detail) => detail.payProofNo || "-" },
+        { label: t("detail.paidAt"), render: (detail) => <DateTimeText value={detail.paidAt} /> },
       ],
     },
   ];
 
   return (
     <div className="space-y-6">
-      <PageHeader eyebrow="提现管理" title="创建提现申请" description="提交提现收款信息，查看审核状态、手续费、到账金额和打款凭证。" />
+      <PageHeader eyebrow={t("header.eyebrow")} title={t("header.title")} description={t("header.description")} />
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <StatsCard title="可用余额" value={<MoneyText value={wallet.data?.availableBalance} />} description={wallet.data?.currency ?? "USDT"} icon={Send} loading={wallet.loading} />
-        <StatsCard title="冻结金额" value={<MoneyText value={wallet.data?.frozenBalance} />} description="提现审核或订单锁定" icon={Send} loading={wallet.loading} />
-        <StatsCard title="累计提现" value={<MoneyText value={wallet.data?.totalWithdraw} />} description="历史提现金额" icon={Send} loading={wallet.loading} />
+        <StatsCard title={t("stats.available")} value={<MoneyText value={wallet.data?.availableBalance} />} description={wallet.data?.currency ?? "USDT"} icon={Send} loading={wallet.loading} />
+        <StatsCard title={t("stats.frozen")} value={<MoneyText value={wallet.data?.frozenBalance} />} description={t("stats.frozenDesc")} icon={Send} loading={wallet.loading} />
+        <StatsCard title={t("stats.total")} value={<MoneyText value={wallet.data?.totalWithdraw} />} description={t("stats.totalDesc")} icon={Send} loading={wallet.loading} />
       </div>
 
       <div className="rounded-lg border border-border bg-card p-5 text-card-foreground">
         <div className="grid grid-cols-1 gap-3 lg:grid-cols-5">
           <Select value={network} onValueChange={setNetwork}>
             <SelectTrigger className="h-9 w-full bg-background text-foreground">
-              <SelectValue placeholder="网络" />
+              <SelectValue placeholder={t("form.network")} />
             </SelectTrigger>
             <SelectContent>
               {networks.map((item) => <SelectItem key={item} value={item}>{item}</SelectItem>)}
             </SelectContent>
           </Select>
-          <Input value={accountName} onChange={(event) => setAccountName(event.target.value)} placeholder="收款人（可选）" className="h-9 bg-background text-foreground" />
-          <Input value={accountNo} onChange={(event) => setAccountNo(event.target.value)} placeholder="收款地址" className="h-9 bg-background text-foreground lg:col-span-2" />
-          <Input value={amount} onChange={(event) => setAmount(event.target.value)} placeholder="提现金额 USDT" className="h-9 bg-background text-foreground" />
+          <Input value={accountName} onChange={(event) => setAccountName(event.target.value)} placeholder={t("form.accountName")} className="h-9 bg-background text-foreground" />
+          <Input value={accountNo} onChange={(event) => setAccountNo(event.target.value)} placeholder={t("form.accountNo")} className="h-9 bg-background text-foreground lg:col-span-2" />
+          <Input value={amount} onChange={(event) => setAmount(event.target.value)} placeholder={t("form.amount")} className="h-9 bg-background text-foreground" />
         </div>
-        <Button onClick={() => void submitWithdraw()} className="mt-4">提交提现申请</Button>
+        <Button onClick={() => void submitWithdraw()} className="mt-4">{t("form.submit")}</Button>
       </div>
 
       <SearchPanel
@@ -172,23 +172,23 @@ export default function WithdrawPage() {
         }}
       >
         <div className="space-y-2">
-          <Label>提现状态</Label>
+          <Label>{t("filters.status")}</Label>
           <Select value={filters.status ?? "ALL"} onValueChange={(value) => setFilters((current) => ({ ...current, status: value === "ALL" ? undefined : value }))}>
             <SelectTrigger className="h-9 min-w-[140px] bg-background text-foreground">
-              <SelectValue placeholder="全部状态" />
+              <SelectValue placeholder={t("filters.allStatus")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="ALL">全部状态</SelectItem>
-              <SelectItem value="PENDING_REVIEW">待审核</SelectItem>
-              <SelectItem value="APPROVED">已通过</SelectItem>
-              <SelectItem value="REJECTED">已拒绝</SelectItem>
-              <SelectItem value="PAID">已打款</SelectItem>
-              <SelectItem value="CANCELLED">已取消</SelectItem>
+              <SelectItem value="ALL">{t("filters.allStatus")}</SelectItem>
+              <SelectItem value="PENDING_REVIEW">{t("filters.pending")}</SelectItem>
+              <SelectItem value="APPROVED">{t("filters.approved")}</SelectItem>
+              <SelectItem value="REJECTED">{t("filters.rejected")}</SelectItem>
+              <SelectItem value="PAID">{t("filters.paid")}</SelectItem>
+              <SelectItem value="CANCELLED">{t("filters.cancelled")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
         <div className="space-y-2">
-          <Label>开始日期</Label>
+          <Label>{t("filters.startDate")}</Label>
           <Input
             type="date"
             value={filters.startTime ?? ""}
@@ -197,7 +197,7 @@ export default function WithdrawPage() {
           />
         </div>
         <div className="space-y-2">
-          <Label>结束日期</Label>
+          <Label>{t("filters.endDate")}</Label>
           <Input
             type="date"
             value={filters.endTime ?? ""}
@@ -209,8 +209,8 @@ export default function WithdrawPage() {
 
       {message ? <div className="rounded-lg border border-emerald-400/20 bg-emerald-400/10 p-4 text-sm text-emerald-200">{message}</div> : null}
       <ErrorAlert message={error ?? actionError} />
-      <DataTable columns={columns} data={page.records} rowKey={(row) => row.withdrawNo} loading={loading} emptyText="暂无提现申请。" pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
-      <DetailDrawer data={detail} open={Boolean(detail)} title="提现详情" subtitle={(data) => data.withdrawNo} sections={detailSections} onClose={() => setDetail(null)} />
+      <DataTable columns={columns} data={page.records} rowKey={(row) => row.withdrawNo} loading={loading} emptyText={t("empty")} pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
+      <DetailDrawer data={detail} open={Boolean(detail)} title={t("drawerTitle")} subtitle={(data) => data.withdrawNo} sections={detailSections} onClose={() => setDetail(null)} />
     </div>
   );
 }
