@@ -183,6 +183,256 @@
       "emptyDescription": "The backend did not return published content, or the content API is temporarily unavailable."
     }
   },
+  "DataProcessing": {
+    "metadata": {
+      "title": "Data Processing Agreement | Compute Rental",
+      "description": "The Compute Rental platform Data Processing Agreement, setting out terms and conditions for personal data processing."
+    },
+    "title": "Data Processing Agreement",
+    "subtitle": "Data Processing Agreement (DPA)",
+    "intro": [
+      "This Data Processing Agreement (this Agreement) forms part of the Terms of Service (the Main Agreement) and is entered into by and between: (i) the customer (the Data Controller); and (ii) Compute Rental (the Data Processor or Service Provider). This Agreement takes effect on the date the customer and the processor enter into the Main Agreement.",
+      "Terms used in this Agreement have the meanings given in this Agreement. Capitalized terms not otherwise defined have the meanings assigned in the Main Agreement. Except as modified below, the Main Agreement remains in full force and effect."
+    ],
+    "definitions": {
+      "title": "Article 1. Definitions",
+      "intro": "For purposes of this Agreement, the following terms have the meanings set out below:",
+      "items": [
+        {
+          "term": "Anonymized Data",
+          "text": " means information relating to a group of consumers and/or individuals where: (i) the Controller cannot be identified as the source of the information; (ii) information that would permit identification of an individual has been removed; and (iii) the information cannot reasonably identify or be linked to any consumer, individual, household, or device."
+        },
+        {
+          "term": "Applicable Law",
+          "text": " means the GDPR."
+        },
+        {
+          "term": "Personal Data",
+          "text": " means any personal data processed by a Contracted Processor on behalf of the Controller under the Main Agreement."
+        },
+        {
+          "term": "Contracted Processor",
+          "text": " means the Processor or a Subprocessor."
+        },
+        {
+          "term": "European Economic Area (EEA)",
+          "text": " means the European Economic Area."
+        },
+        {
+          "term": "GDPR",
+          "text": " means Regulation (EU) 2016/679, the General Data Protection Regulation, and its implementing regulations in the European Economic Area and the United Kingdom."
+        },
+        {
+          "term": "Restricted Transfer",
+          "text": " means a transfer of Personal Data subject to the GDPR out of the European Economic Area."
+        },
+        {
+          "term": "Services",
+          "text": " means the services and other activities provided by the Contracted Processor to the Controller under the Main Agreement."
+        },
+        {
+          "term": "Standard Contractual Clauses",
+          "text": " means the standard contractual clauses for transfers of personal data to third countries under European Commission Implementing Decision (EU) 2021/914."
+        },
+        {
+          "term": "Subprocessor",
+          "text": " means any person appointed by the Processor or its affiliate to process Personal Data on behalf of any Controller, including third parties and Processor affiliates, but excluding employees of the Processor."
+        },
+        {
+          "term": "Processor Affiliate",
+          "text": " means an entity that owns, controls, is controlled by, or is under common control with the Processor."
+        }
+      ],
+      "gdprTerms": "The terms Commission, Controller, Data Subject, Member State, Personal Data, Personal Data Breach, Processing, and Supervisory Authority have the same meanings as in the GDPR."
+    },
+    "processing": {
+      "title": "Article 2. Processing of Personal Data",
+      "processorObligations": {
+        "title": "2.1 Processor obligations",
+        "intro": "The Processor and Processor Affiliates shall:",
+        "items": [
+          "comply with all Applicable Law when processing Personal Data;",
+          "not process Personal Data except on the Controller's written instructions unless required by Applicable Law. If Applicable Law requires such processing, the Processor or relevant Processor Affiliate shall notify the Controller of that legal requirement before processing the relevant Personal Data, unless the law prohibits such notice."
+        ]
+      },
+      "controllerObligations": {
+        "title": "2.2 Controller obligations",
+        "intro": "The Controller shall:",
+        "items": [
+          "instruct the Processor and each Processor Affiliate, and authorize them to instruct each Subprocessor, to process Personal Data, including transfers to any country or territory, to the extent reasonably necessary to provide the Services and consistent with the Main Agreement."
+        ]
+      },
+      "confidentiality": {
+        "title": "2.3 Confidentiality",
+        "text": "The Processor confirms that all Personal Data received from the Controller, the Controller's employees, or consultants, or obtained in connection with performance of the Services under the Main Agreement, shall be treated by the Processor as confidential information and protected accordingly."
+      },
+      "usageLimits": {
+        "title": "2.4 Use restrictions",
+        "text": "The Processor shall not directly or indirectly sell any Personal Data, use any Personal Data for purposes other than providing the Services to the Controller, or retain, use, or disclose any Personal Data outside the scope of this Agreement or the Main Agreement."
+      },
+      "anonymizedData": {
+        "title": "2.5 Anonymized Data",
+        "text": "The Processor may use Anonymized Data for its own purposes."
+      },
+      "controllerRepresentations": {
+        "title": "2.6 Controller representations and warranties",
+        "intro": "The Controller represents and warrants that:",
+        "items": [
+          "it is, at all relevant times, duly and validly authorized to issue the instructions described in this article;",
+          "it has all rights necessary to provide Personal Data to the Processor for processing related to the Services;",
+          "one or more lawful bases under Applicable Law support the lawfulness of the processing;",
+          "it has provided all necessary privacy notices to Data Subjects;",
+          "it has obtained all necessary Data Subject consents for processing and retains records of those consents;",
+          "if a Data Subject withdraws consent and no other lawful basis remains for retaining that Data Subject's Personal Data, the Controller will communicate that withdrawal to the Processor."
+        ]
+      }
+    },
+    "personnel": {
+      "title": "Article 3. Processor and Affiliate Personnel",
+      "text": "The Processor and each Processor Affiliate shall take reasonable steps to ensure the reliability of any employee, agent, or contractor of a Contracted Processor who may have access to Personal Data. In each case, access shall be limited to personnel who strictly need to know or access the relevant Personal Data for purposes of the Main Agreement, and all such personnel shall be bound by confidentiality commitments or professional or statutory confidentiality obligations."
+    },
+    "security": {
+      "title": "Article 4. Security",
+      "items": [
+        "Taking into account the state of the art, implementation costs, and the nature, scope, context, and purposes of processing, as well as the risks of varying likelihood and severity for the rights and freedoms of natural persons, the Processor and Processor Affiliates shall implement appropriate technical and organizational measures for Personal Data to ensure a level of security appropriate to the risk.",
+        "When assessing the appropriate level of security, the Processor and each Processor Affiliate shall consider in particular the risks presented by processing, especially the risk of Personal Data Breach.",
+        "The parties acknowledge that security requirements change over time and effective security requires frequent evaluation and regular improvement of outdated measures. The parties shall negotiate in good faith regarding the costs, if any, of implementing material changes required by Applicable Law or a competent Supervisory Authority.",
+        "If the Main Agreement must be amended to carry out the Controller's instructions to improve security measures, including as Applicable Law may require from time to time, the parties shall negotiate such amendment in good faith."
+      ]
+    },
+    "restrictedTransfers": {
+      "title": "Article 5. Restricted Transfers",
+      "items": [
+        "The Processor shall not export, transfer, or store Personal Data in, or remotely access Personal Data from, any country or territory outside the European Economic Area that has not received an adequacy decision from the European Commission, unless appropriate safeguards are provided. Such safeguards may include: (i) standard data protection clauses under GDPR Article 46.2(c) or (d); (ii) binding corporate rules under GDPR Article 46.2(b); (iii) derogations for specific situations under Article 49; or (iv) any other GDPR-recognized instrument approved by the European Commission or a Supervisory Authority.",
+        "To the extent no adequacy decision or other appropriate safeguard applies, the parties agree that the Standard Contractual Clauses are incorporated into this Agreement. The Controller shall be the data exporter and the Processor shall be the data importer."
+      ]
+    },
+    "subprocessing": {
+      "title": "Article 6. Subprocessing",
+      "items": [
+        "The Controller authorizes the Processor and each Processor Affiliate to appoint Subprocessors subject to this article and the restrictions in the Main Agreement.",
+        "The Processor and each Processor Affiliate may continue using Subprocessors already engaged as of the date this Agreement is entered into.",
+        "The Processor shall provide the Controller, upon reasonable request, a list of any new Subprocessors engaged after this Agreement is entered into."
+      ],
+      "responsibilitiesIntro": "For each Subprocessor, the Processor or Processor Affiliate shall:",
+      "responsibilities": [
+        "ensure its arrangement with the Subprocessor is governed by a written contract whose terms provide at least the same level of Personal Data protection as this Agreement;",
+        "if the arrangement involves a Restricted Transfer, ensure the Standard Contractual Clauses or another approved transfer mechanism under the GDPR is incorporated into the agreement between the parties at the relevant time."
+      ]
+    },
+    "dataSubjectRights": {
+      "title": "Article 7. Data Subject Rights",
+      "assistance": "Taking into account the nature of the processing, the Processor and each Processor Affiliate shall assist each Controller, through appropriate technical and organizational measures to the extent feasible, in fulfilling its obligation to respond to Data Subject requests to exercise rights under Applicable Law.",
+      "processorIntro": "The Processor shall:",
+      "processorItems": [
+        "notify the Controller when the Processor or a Processor Affiliate receives a request from a Data Subject under any Applicable Law regarding Personal Data;",
+        "ensure that the Contracted Processor does not respond to the request unless required by Applicable Law, in which case the Processor shall notify the Controller of the legal requirement before the Contracted Processor responds, unless the law prohibits such notice."
+      ],
+      "controller": "The Controller shall be responsible for responding to Data Subject requests concerning Personal Data as required by any Applicable Law."
+    },
+    "controllerAssistance": {
+      "title": "Article 8. Assistance to the Data Controller",
+      "text": "Taking into account the nature of the processing and the information available to the Processor, the Processor shall, at the Controller's expense, assist the Controller with data protection impact assessments and prior consultation with Supervisory Authorities. The Controller and Processor shall negotiate reasonable fees in good faith before such assistance begins."
+    },
+    "personalDataBreach": {
+      "title": "Article 9. Personal Data Breach",
+      "text": "The Processor shall notify the Controller without undue delay once the Processor or a Subprocessor becomes aware of a Personal Data Breach affecting Personal Data."
+    },
+    "audit": {
+      "title": "Article 10. Audit",
+      "text": "Upon the Controller's reasonable request, the Processor shall demonstrate the technical and organizational measures it has adopted under this Agreement and permit the Controller to audit and test those measures.",
+      "items": [
+        "A Controller conducting an audit shall give the Processor or relevant Processor Affiliate reasonable advance notice and shall use reasonable efforts to avoid causing damage, injury, or disruption when its personnel enter a Contracted Processor's premises for an audit or inspection.",
+        "The Contracted Processor is not required to provide premises access for an audit or inspection where any individual fails to present reasonable proof of identity and authorization, outside normal business hours of the premises except for an urgent audit, or more than once in any calendar year except for additional audits required by Applicable Law or a Supervisory Authority.",
+        "Unless Applicable Law or a Supervisory Authority requires otherwise, the Contracted Processor may satisfy the audit requirement in this article by providing its latest SOC 2 audit report or an equivalent report to the Controller under a confidentiality agreement."
+      ]
+    },
+    "returnDeletion": {
+      "title": "Article 11. Deletion or Return of Personal Data",
+      "items": [
+        "Within 30 days after the termination date, the Controller may request by written notice that the Processor and each Processor Affiliate either (a) return to the Controller a complete copy of all Personal Data and/or (b) delete and procure deletion of all other copies of Personal Data processed by the Contracted Processors. The Processor and each Processor Affiliate shall comply with such written request within 90 days after receipt.",
+        "Each Contracted Processor may retain Personal Data to the extent required by Applicable Law and shall ensure that such Personal Data is processed only for the purposes required by Applicable Law."
+      ]
+    },
+    "governingLaw": {
+      "title": "Article 12. Governing Law and Jurisdiction",
+      "items": [
+        "The parties to this Agreement submit to the choice of jurisdiction set out in the Main Agreement;",
+        "This Agreement and all non-contractual or other obligations arising out of or in connection with it are governed by the laws of the country or territory specified for that purpose in the Main Agreement."
+      ]
+    },
+    "appendix": {
+      "title": "Appendix A: Standard Contractual Clauses",
+      "paragraphs": [
+        "The Standard Contractual Clauses (controller-to-processor) are incorporated into this Agreement in accordance with European Commission Implementing Decision (EU) 2021/914 and provide appropriate safeguards for privacy and fundamental rights in cross-border transfers of Personal Data.",
+        "The clauses cover core matters including data protection obligations, Data Subject rights, remedies, liability, supervision, local laws and practices affecting compliance, notification obligations, non-compliance and termination, governing law, and dispute resolution."
+      ],
+      "annexOne": {
+        "title": "Annex I: Data Processing Information",
+        "fields": [
+          {
+            "label": "Data exporter: ",
+            "value": "Customer"
+          },
+          {
+            "label": "Data importer: ",
+            "value": "Compute Rental"
+          },
+          {
+            "label": "Data subjects: ",
+            "value": "Customer"
+          }
+        ],
+        "dataCategoriesLabel": "Categories of data:",
+        "dataCategories": [
+          "General contact information, including but not limited to telephone numbers and email addresses",
+          "Tracking technologies and persistent identifiers"
+        ],
+        "processingOperationsLabel": "Processing operations:",
+        "processingOperations": [
+          "Processing carried out to provide the services described in the Main Agreement",
+          "Data will be transferred on a continuing basis",
+          "Personal Data will be retained for as long as necessary to maintain the business relationship and provide the services"
+        ]
+      },
+      "annexTwo": {
+        "title": "Annex II: Technical and Organizational Measures",
+        "text": "The data importer will implement and maintain security standards at least equivalent to the level of protection specified in the data processing and security terms. Measures include:",
+        "measures": [
+          {
+            "term": "System access control: ",
+            "text": "measures to prevent unauthorized access to IT systems, including password policies covering special characters, minimum length, forced password changes, and prohibitions on guest users or anonymous accounts"
+          },
+          {
+            "term": "Data access control: ",
+            "text": "measures to prevent authorized users from accessing data beyond their authorization scope"
+          },
+          {
+            "term": "Encryption: ",
+            "text": "encryption at rest (AES 256) and encryption in transit across the cloud infrastructure"
+          }
+        ],
+        "customerSecurity": "The customer is responsible for securing its user credentials and for adopting appropriate technical and organizational measures to protect the confidentiality, integrity, and availability of the networks, endpoints, and browsers used to access the services."
+      },
+      "annexThree": {
+        "title": "Annex III: Subprocessors",
+        "text": "The Controller has authorized use of the following Subprocessors:",
+        "items": [
+          "Stripe (payment processing)",
+          "Google (analytics and infrastructure)",
+          "Meta (advertising and analytics)",
+          "Microsoft (infrastructure services)"
+        ]
+      }
+    },
+    "contact": {
+      "title": "Contact us",
+      "text": "If you have any questions about this Data Processing Agreement, please contact:",
+      "company": "Compute Rental",
+      "emailLabel": "Email: ",
+      "email": "contact@example.com"
+    }
+  },
   "DocsMetadata": {
     "guide": {
       "title": "Guides | Compute Rental Docs",
