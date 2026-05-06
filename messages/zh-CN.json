@@ -3414,5 +3414,263 @@
       "description": "不要满足于为传统 Web 应用构建的 Kubernetes 平台。使用真正面向 AI 的平台。",
       "cta": "开始使用"
     }
+  },
+  "MissionControl": {
+    "metadata": {
+      "title": "Mission Control | 算力租赁",
+      "description": "CoreWeave Mission Control 是面向 AI 生产运行的任务控制能力，统一可靠性、透明度和可执行洞察。"
+    },
+    "hero": {
+      "title": "CoreWeave Mission Control™",
+      "descriptionPrefix": "面向 CoreWeave Cloud 上 AI 生产运行的运营标准，提供",
+      "descriptionStrong": "可靠性、透明度和可执行洞察",
+      "descriptionSuffix": "。",
+      "primaryCta": "下载方案简报",
+      "secondaryCta": "观看讲解视频",
+      "videoLabel": "Mission Control 概览动画"
+    },
+    "intro": {
+      "title": "可靠、透明、洞察明确",
+      "description": "Mission Control 是 CoreWeave 以生产规模运行 AI 的核心方式。它将安全、专家运营和可观测性统一为一个运营标准，让团队能看得更清楚、行动更精确，并更有信心地运行大规模 AI。"
+    },
+    "standard": {
+      "title": "一个运营标准，统一每一层的收益",
+      "descriptionPrefix": "Mission Control 将",
+      "descriptionPrimaryStrong": "安全、专家服务和可观测性",
+      "descriptionMiddle": "整合到 CoreWeave Cloud 上运行 AI 的一致方式中，共同交付三项核心收益：",
+      "descriptionSecondaryStrong": "可靠性、透明度和洞察",
+      "descriptionSuffix": "。",
+      "diagram": {
+        "title": "CoreWeave Mission Control",
+        "cards": [
+          {
+            "title": "安全",
+            "description": "IAM/SAML、合规日志与审计。"
+          },
+          {
+            "title": "专家服务",
+            "description": "自动化生命周期控制与专家直达支持。"
+          },
+          {
+            "title": "可观测性",
+            "description": "指标、日志、遥测与系统信号。"
+          }
+        ],
+        "reliability": "可靠性",
+        "transparency": "透明度",
+        "insight": "洞察",
+        "agent": "CoreWeave Mission Control Agent"
+      }
+    },
+    "features": {
+      "items": [
+        {
+          "title": "安全与审计透明度",
+          "description": "Mission Control 提供对集群访问与活动的实时可见性。Telemetry Relay 将加密审计与安全事件转发到你的 SIEM，支持治理、合规审查和运营信任。",
+          "cta": "了解更多",
+          "mediaAlt": "Mission Control 安全与审计透明度"
+        },
+        {
+          "title": "Fleet lifecycle controller",
+          "description": "每个节点都会被持续评估，以满足现代 AI 工作负载的性能要求。Fleet Lifecycle Controller 跟踪长期 GPU 与节点健康状态，识别细微退化模式，并在不健康节点影响准确性或吞吐前完成替换。",
+          "mediaAlt": "Fleet lifecycle controller 控制台"
+        },
+        {
+          "title": "Node lifecycle controller",
+          "description": "Mission Control 持续监控节点健康回退，并在达到阈值时自动替换节点。Node Lifecycle Controller 管理从初始部署到完整节点生命周期的健康状态，减少中断、浪费的 GPU 小时和训练偏移。",
+          "mediaAlt": "Node lifecycle controller 节点生命周期"
+        },
+        {
+          "title": "专家直达支持",
+          "description": "当客户需要更深入的协助时，专家直达支持会把请求路由到构建和运营平台的工程师，确保问题得到快速、准确的解决。",
+          "mediaAlt": "Mission Control 专家支持"
+        },
+        {
+          "title": "可观测性与性能可见性",
+          "description": "Mission Control 将 GPU 指标、网络、存储、编排和工作负载行为统一到一致的信号体系中。团队可以用熟悉、直观的仪表盘衡量性能、诊断问题并更快恢复作业。",
+          "cta": "了解更多",
+          "mediaAlt": "Mission Control 可观测性"
+        },
+        {
+          "title": "审计与透明度",
+          "description": "Mission Control 的可观测层与 Telemetry Relay 提供访问、活动和系统行为的实时可见性。审计与访问日志可以直接进入 SIEM 或监控工具，支持治理、合规审查和快速运营诊断。",
+          "cta": "了解更多",
+          "mediaAlt": "Mission Control 审计仪表盘"
+        },
+        {
+          "title": "GPU Straggler Detection（预览）",
+          "description": "分布式训练不会优雅地失败。一个 GPU 落后时，整个作业都会变慢。GPU Straggler Detection 使用 NVIDIA 集体操作信号识别造成减速的精确 rank、GPU 和节点，让根因定位更快、更准确。",
+          "cta": "了解更多",
+          "mediaAlt": "GPU Straggler Detection"
+        }
+      ]
+    },
+    "visibility": {
+      "title": "看见一切、获得洞察、立即行动。",
+      "description": "Mission Control 统一最重要的信号，包括性能指标、审计活动、工作负载行为和 GPU 级异常，并将它们转化为即时、可执行的洞察。"
+    },
+    "faqs": {
+      "title": "常见问题",
+      "items": [
+        {
+          "question": "Mission Control 如何提升可靠性？",
+          "answer": "Mission Control 通过生命周期控制器、CloudOps 监控和专家直达支持，自动化节点与集群健康管理。"
+        },
+        {
+          "question": "Telemetry Relay 是否只支持审计日志？",
+          "answer": "不是。Telemetry Relay 可以转发审计与访问日志，并在启用时将更多遥测类型转发到客户端点。"
+        },
+        {
+          "question": "GPU Straggler Detection 可以用于推理作业吗？",
+          "answer": "GPU Straggler Detection 针对分布式训练优化。推理可见性由更广泛的 Mission Control 可观测性指标提供。"
+        },
+        {
+          "question": "Mission Control 是否包含可观测性工具？",
+          "answer": "包含。Mission Control 包括用于集群级指标和仪表盘的 CoreWeave Observe，以及用于审计和访问可见性的 Telemetry Relay。"
+        },
+        {
+          "question": "CoreWeave Mission Control Agent 是什么？",
+          "answer": "Mission Control Agent 帮助团队实时解读系统行为，可以回答 GPU 性能、训练变慢或集群健康相关问题。"
+        },
+        {
+          "question": "Mission Control 是否额外收费？",
+          "answer": "Mission Control 作为 CoreWeave Cloud 的一部分提供。Telemetry Relay 可以在不额外增加日志转发成本的情况下转发审计与访问日志。"
+        },
+        {
+          "question": "它如何与现有可观测性和安全工具集成？",
+          "answer": "Mission Control 可通过 Telemetry Relay 和 CoreWeave Observe 与现有 SIEM、日志和监控系统协同工作。"
+        }
+      ]
+    }
+  },
+  "Observability": {
+    "metadata": {
+      "title": "Observability | 算力租赁",
+      "description": "任务控制下的 Observability 能力，统一 GPU、网络、日志、指标和训练作业信号，帮助团队快速定位问题并提升资源利用率。"
+    },
+    "hero": {
+      "eyebrow": "Mission Control / Observability",
+      "title": "Observability",
+      "description": "统一 GPU、网络、存储、编排与训练作业信号，让团队更快看清问题来源，减少中断并提升有效训练时间。",
+      "primaryCta": "联系销售",
+      "secondaryCta": "查看规格与资源",
+      "imageAlt": "AI 基础设施团队协作会议"
+    },
+    "logos": {
+      "label": "受到 AI 实验室、平台团队与企业客户信任"
+    },
+    "visibility": {
+      "title": "更高可见性，更少中断",
+      "paragraphs": [
+        "集群越大，中断、性能下降和资源漂移就越容易隐藏在不同层级的日志与指标之间。",
+        "Observability 将基础设施指标、作业行为和平台告警关联起来，帮助 AI 工程团队快速判断问题来自模型训练流程还是底层资源。"
+      ],
+      "imageAlt": "Observability GPU 指标仪表盘"
+    },
+    "insights": {
+      "eyebrow": "Actionable insights",
+      "title": "可执行洞察",
+      "description": "开箱即可获得集群的关键指标和数据，无需额外搭建监控栈或重复整理仪表盘。",
+      "cta": "了解更多",
+      "items": [
+        {
+          "title": "全量硬件仪表盘",
+          "description": "集中查看 GPU 温度、功耗、XID 错误、PCIe 纠错、网络吞吐和节点健康，快速识别异常节点。"
+        },
+        {
+          "title": "SUNK 作业关联",
+          "description": "把硬件、Kubernetes、Slurm 与训练作业信号叠加在同一视图中，缩短问题定位路径。"
+        },
+        {
+          "title": "集群健康管理",
+          "description": "持续跟踪节点退化、网络超时和资源漂移，让平台团队在故障影响训练前完成处置。"
+        },
+        {
+          "title": "骨干网络可见性",
+          "description": "查看每个节点的入口、出口和跨集群吞吐，定位数据源、模型权重和训练通信瓶颈。"
+        },
+        {
+          "title": "快速可视化",
+          "description": "将训练中断一路下钻到网络、存储或基础设施信号，帮助团队把诊断结论转化为行动。"
+        }
+      ]
+    },
+    "transparency": {
+      "title": "前所未有的透明度",
+      "items": [
+        {
+          "title": "GPU 性能指标",
+          "description": "按单卡和节点查看温度、功耗、显存、纠错与利用率，减少对零散日志和手工脚本的依赖。"
+        },
+        {
+          "title": "日志与指标统一",
+          "description": "从软件栈、编排层和硬件层收集指标与日志，构建完整的训练运行视图。"
+        },
+        {
+          "title": "所见即所得",
+          "description": "客户看到的底层指标与平台运维团队保持一致，便于协作排障和透明复盘。"
+        }
+      ]
+    },
+    "resources": {
+      "title": "快速访问细粒度指标",
+      "description": "Observability 提供托管式仪表盘、指标、日志与遥测转发能力，帮助团队查看相关规格与可用资源。",
+      "cards": [
+        {
+          "title": "CoreWeave Grafana",
+          "description": "托管式 Grafana 体验，提供按超算规模运维经验整理的集群、节点和 GPU 仪表盘。"
+        },
+        {
+          "title": "CoreWeave Metrics",
+          "description": "托管式 VictoriaMetrics API，支撑大规模指标写入、查询和长期趋势分析。"
+        },
+        {
+          "title": "CoreWeave Logs",
+          "description": "托管式 Loki API，日志可立即访问，无需等待从冷存储回补或重新水合。"
+        },
+        {
+          "title": "Telemetry Relay",
+          "description": "将遥测转发到外部数据平台或本地端点，让团队沿用既有监控与安全工作流。"
+        }
+      ],
+      "specRows": [
+        {
+          "label": "硬件信号",
+          "value": "GPU 温度、功耗、XID、显存、PCIe 纠错、InfiniBand 与 NVLink 吞吐"
+        },
+        {
+          "label": "编排信号",
+          "value": "Kubernetes、Slurm、SUNK 作业、节点生命周期和集群健康状态"
+        },
+        {
+          "label": "可用接口",
+          "value": "Grafana 仪表盘、Metrics API、Logs API、Telemetry Relay 转发"
+        },
+        {
+          "label": "适用场景",
+          "value": "训练中断定位、资源利用率分析、网络瓶颈排查、平台协作复盘"
+        }
+      ]
+    },
+    "debugging": {
+      "eyebrow": "Faster debugging",
+      "title": "更快调试训练作业",
+      "paragraphs": [
+        "当训练中断或性能意外下降时，团队通常需要在集群日志、平台工程师反馈和训练曲线之间来回切换。",
+        "Observability 将基础设施告警嵌入训练指标和运行表中，让工程师更快判断是否需要重启作业、替换节点或调整工作负载。"
+      ],
+      "imageAlt": "训练作业调试界面"
+    },
+    "testimonial": {
+      "title": "响应迅速，协作透明",
+      "quote": "“Observability 让平台团队和模型团队围绕同一组事实协作，问题定位不再依赖猜测。”",
+      "author": "Jay Shin，Trillion Labs CEO 与联合创始人",
+      "imageAlt": "Jay Shin"
+    },
+    "bottomCta": {
+      "title": "准备好看得更清楚了吗？",
+      "description": "用 Observability 获得集群、作业和基础设施的一致可见性。",
+      "cta": "立即联系"
+    }
   }
 }

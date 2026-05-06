@@ -3414,5 +3414,263 @@
       "description": "Do not settle for a Kubernetes platform built for traditional web applications. Use a platform built for AI.",
       "cta": "Get started"
     }
+  },
+  "MissionControl": {
+    "metadata": {
+      "title": "Mission Control | Compute Rental",
+      "description": "CoreWeave Mission Control brings reliability, transparency, and actionable insight to production AI operations."
+    },
+    "hero": {
+      "title": "CoreWeave Mission Control™",
+      "descriptionPrefix": "The operating standard for production AI on CoreWeave Cloud, built around ",
+      "descriptionStrong": "reliability, transparency, and actionable insight",
+      "descriptionSuffix": ".",
+      "primaryCta": "Download solution brief",
+      "secondaryCta": "Watch overview video",
+      "videoLabel": "Mission Control overview animation"
+    },
+    "intro": {
+      "title": "Reliable. Transparent. Actionable.",
+      "description": "Mission Control is how CoreWeave operates AI at production scale. It brings security, expert operations, and observability into a single operating standard so teams can see more clearly, act with precision, and run large-scale AI with confidence."
+    },
+    "standard": {
+      "title": "One operating standard, value across every layer",
+      "descriptionPrefix": "Mission Control brings ",
+      "descriptionPrimaryStrong": "security, expert services, and observability",
+      "descriptionMiddle": " into a consistent way to run AI on CoreWeave Cloud, delivering three core outcomes: ",
+      "descriptionSecondaryStrong": "reliability, transparency, and insight",
+      "descriptionSuffix": ".",
+      "diagram": {
+        "title": "CoreWeave Mission Control",
+        "cards": [
+          {
+            "title": "Security",
+            "description": "IAM/SAML, compliance logs, and audit trails."
+          },
+          {
+            "title": "Expert services",
+            "description": "Automated lifecycle control and direct access to experts."
+          },
+          {
+            "title": "Observability",
+            "description": "Metrics, logs, telemetry, and system signals."
+          }
+        ],
+        "reliability": "Reliability",
+        "transparency": "Transparency",
+        "insight": "Insight",
+        "agent": "CoreWeave Mission Control Agent"
+      }
+    },
+    "features": {
+      "items": [
+        {
+          "title": "Security and audit transparency",
+          "description": "Mission Control provides real-time visibility into cluster access and activity. Telemetry Relay forwards encrypted audit and security events to your SIEM to support governance, compliance reviews, and operational trust.",
+          "cta": "Learn more",
+          "mediaAlt": "Mission Control security and audit transparency"
+        },
+        {
+          "title": "Fleet lifecycle controller",
+          "description": "Every node is continuously evaluated against the performance requirements of modern AI workloads. Fleet Lifecycle Controller tracks long-term GPU and node health, detects subtle degradation patterns, and replaces unhealthy nodes before they affect accuracy or throughput.",
+          "mediaAlt": "Fleet lifecycle controller console"
+        },
+        {
+          "title": "Node lifecycle controller",
+          "description": "Mission Control continuously monitors node health regressions and automatically replaces nodes when thresholds are reached. Node Lifecycle Controller manages health from first deployment through the full node lifecycle, reducing interruptions, wasted GPU hours, and training drift.",
+          "mediaAlt": "Node lifecycle controller workflow"
+        },
+        {
+          "title": "Direct access to experts",
+          "description": "When customers need deeper help, expert support routes requests to the engineers who build and operate the platform, helping issues get resolved quickly and accurately.",
+          "mediaAlt": "Mission Control expert support"
+        },
+        {
+          "title": "Observability and performance visibility",
+          "description": "Mission Control unifies GPU metrics, networking, storage, orchestration, and workload behavior into a consistent signal layer. Teams can measure performance, diagnose issues, and recover jobs faster through familiar dashboards.",
+          "cta": "Learn more",
+          "mediaAlt": "Mission Control observability"
+        },
+        {
+          "title": "Audit and transparency",
+          "description": "The observability layer and Telemetry Relay provide real-time visibility into access, activity, and system behavior. Audit and access logs can flow directly into SIEM or monitoring tools for governance, compliance reviews, and fast operational diagnosis.",
+          "cta": "Learn more",
+          "mediaAlt": "Mission Control audit dashboard"
+        },
+        {
+          "title": "GPU Straggler Detection preview",
+          "description": "Distributed training does not fail gracefully. When one GPU falls behind, the whole job slows down. GPU Straggler Detection uses NVIDIA collective operation signals to identify the exact rank, GPU, and node causing slowdowns so root cause analysis is faster and more precise.",
+          "cta": "Learn more",
+          "mediaAlt": "GPU Straggler Detection"
+        }
+      ]
+    },
+    "visibility": {
+      "title": "See everything. Understand faster. Act now.",
+      "description": "Mission Control unifies the signals that matter most, including performance metrics, audit activity, workload behavior, and GPU-level anomalies, then turns them into immediate, actionable insight."
+    },
+    "faqs": {
+      "title": "FAQs",
+      "items": [
+        {
+          "question": "How does Mission Control improve reliability?",
+          "answer": "Mission Control automates node and cluster health management through lifecycle controllers, CloudOps monitoring, and direct access to expert support."
+        },
+        {
+          "question": "Does Telemetry Relay only support audit logs?",
+          "answer": "No. Telemetry Relay can forward audit and access logs, and can forward additional telemetry types to customer endpoints when enabled."
+        },
+        {
+          "question": "Can GPU Straggler Detection be used for inference jobs?",
+          "answer": "GPU Straggler Detection is optimized for distributed training. Inference visibility is covered by the broader Mission Control observability metrics."
+        },
+        {
+          "question": "Does Mission Control include observability tools?",
+          "answer": "Yes. Mission Control includes CoreWeave Observe for cluster-level metrics and dashboards, plus Telemetry Relay for audit and access visibility."
+        },
+        {
+          "question": "What is the CoreWeave Mission Control Agent?",
+          "answer": "Mission Control Agent helps teams interpret system behavior in real time and can answer questions about GPU performance, slow training, and cluster health."
+        },
+        {
+          "question": "Is Mission Control billed separately?",
+          "answer": "Mission Control is delivered as part of CoreWeave Cloud. Telemetry Relay can forward audit and access logs without adding separate log forwarding costs."
+        },
+        {
+          "question": "How does it integrate with existing observability and security tools?",
+          "answer": "Mission Control works with existing SIEM, logging, and monitoring systems through Telemetry Relay and CoreWeave Observe."
+        }
+      ]
+    }
+  },
+  "Observability": {
+    "metadata": {
+      "title": "Observability | Compute Rental",
+      "description": "Observability under Mission Control unifies GPU, networking, logs, metrics, and training job signals so teams can diagnose issues faster and improve utilization."
+    },
+    "hero": {
+      "eyebrow": "Mission Control / Observability",
+      "title": "Observability",
+      "description": "Unify GPU, networking, storage, orchestration, and training job signals so teams can identify root causes faster, reduce interruptions, and increase productive training time.",
+      "primaryCta": "Contact sales",
+      "secondaryCta": "View specs and resources",
+      "imageAlt": "AI infrastructure team collaboration meeting"
+    },
+    "logos": {
+      "label": "Trusted by AI labs, platforms, and enterprises"
+    },
+    "visibility": {
+      "title": "More visibility. Fewer interruptions.",
+      "paragraphs": [
+        "The larger the cluster, the easier it is for interruptions, performance drops, and resource drift to hide across layers of logs and metrics.",
+        "Observability correlates infrastructure metrics, job behavior, and platform alerts so AI engineering teams can quickly understand whether issues come from the training workflow or the underlying resources."
+      ],
+      "imageAlt": "Observability GPU metrics dashboard"
+    },
+    "insights": {
+      "eyebrow": "Actionable insights",
+      "title": "Actionable insights",
+      "description": "Get the critical cluster metrics and data you need out of the box, without building a monitoring stack or recreating dashboards from scratch.",
+      "cta": "Learn more",
+      "items": [
+        {
+          "title": "Full hardware dashboards",
+          "description": "View GPU temperature, power, XID errors, PCIe corrections, network throughput, and node health in one place to identify abnormal nodes quickly."
+        },
+        {
+          "title": "SUNK job correlation",
+          "description": "Overlay hardware, Kubernetes, Slurm, and training job signals in one view to shorten the path to root cause."
+        },
+        {
+          "title": "Cluster health management",
+          "description": "Continuously track node degradation, network timeouts, and resource drift so platform teams can act before failures interrupt training."
+        },
+        {
+          "title": "Backbone network visibility",
+          "description": "Inspect ingress, egress, and cross-cluster throughput for each node to find bottlenecks in data sources, model weights, and training communication."
+        },
+        {
+          "title": "Fast visualization",
+          "description": "Drill from a training interruption into networking, storage, or infrastructure signals so teams can turn diagnosis into action."
+        }
+      ]
+    },
+    "transparency": {
+      "title": "A new level of transparency",
+      "items": [
+        {
+          "title": "GPU performance metrics",
+          "description": "View temperature, power, memory, correction, and utilization by GPU and node, reducing dependence on scattered logs and manual scripts."
+        },
+        {
+          "title": "Unified logs and metrics",
+          "description": "Collect metrics and logs across the software stack, orchestration layer, and hardware layer to build a complete view of training operations."
+        },
+        {
+          "title": "Shared operational truth",
+          "description": "Customers see the same low-level metrics as the platform operations team, making troubleshooting and post-incident reviews more transparent."
+        }
+      ]
+    },
+    "resources": {
+      "title": "Fast access to granular metrics",
+      "description": "Observability provides managed dashboards, metrics, logs, and telemetry forwarding so teams can inspect relevant specs and available resources.",
+      "cards": [
+        {
+          "title": "CoreWeave Grafana",
+          "description": "A managed Grafana experience with cluster, node, and GPU dashboards curated from supercomputing-scale operations experience."
+        },
+        {
+          "title": "CoreWeave Metrics",
+          "description": "A managed VictoriaMetrics API for high-scale metric ingestion, querying, and long-term trend analysis."
+        },
+        {
+          "title": "CoreWeave Logs",
+          "description": "A managed Loki API where logs are immediately available, without waiting for cold storage backfill or rehydration."
+        },
+        {
+          "title": "Telemetry Relay",
+          "description": "Forward telemetry to external data platforms or local endpoints while keeping existing monitoring and security workflows in place."
+        }
+      ],
+      "specRows": [
+        {
+          "label": "Hardware signals",
+          "value": "GPU temperature, power, XID, memory, PCIe corrections, InfiniBand, and NVLink throughput"
+        },
+        {
+          "label": "Orchestration signals",
+          "value": "Kubernetes, Slurm, SUNK jobs, node lifecycle, and cluster health state"
+        },
+        {
+          "label": "Available interfaces",
+          "value": "Grafana dashboards, Metrics API, Logs API, and Telemetry Relay forwarding"
+        },
+        {
+          "label": "Use cases",
+          "value": "Training interruption diagnosis, utilization analysis, network bottleneck investigation, and platform collaboration reviews"
+        }
+      ]
+    },
+    "debugging": {
+      "eyebrow": "Faster debugging",
+      "title": "Debug training jobs faster",
+      "paragraphs": [
+        "When training stops or performance drops unexpectedly, teams often have to move between cluster logs, platform engineering feedback, and training curves.",
+        "Observability embeds infrastructure alerts into training metrics and run views so engineers can decide faster whether to restart a job, replace a node, or adjust the workload."
+      ],
+      "imageAlt": "Training job debugging interface"
+    },
+    "testimonial": {
+      "title": "Responsive and transparent collaboration",
+      "quote": "Observability gives platform teams and model teams the same set of facts, so debugging no longer depends on guesswork.",
+      "author": "Jay Shin, CEO and Co-Founder, Trillion Labs",
+      "imageAlt": "Jay Shin"
+    },
+    "bottomCta": {
+      "title": "Ready to see more clearly?",
+      "description": "Use Observability to get consistent visibility across clusters, jobs, and infrastructure.",
+      "cta": "Contact us"
+    }
   }
 }
