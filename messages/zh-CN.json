@@ -2841,5 +2841,312 @@
       "primaryCta": "开始使用",
       "secondaryCta": "联系销售"
     }
+  },
+  "AiObjectStorage": {
+    "metadata": {
+      "title": "AI 对象存储 | 算力租赁",
+      "description": "面向 AI 工作负载的高性能、安全、可靠对象存储，支持训练、微调、推理与大规模数据迁移。"
+    },
+    "hero": {
+      "title": "AI 对象存储",
+      "description": "为 AI 提供高性能、安全、可靠的存储能力。",
+      "videoLabel": "AI 对象存储首屏动画"
+    },
+    "workloads": {
+      "title": "为 AI 工作负载量身打造",
+      "paragraphs": [
+        "不要让存储性能拖慢集群。",
+        "为容器化工作负载和虚拟服务器获得更高吞吐、更低延迟的数据访问能力。"
+      ],
+      "features": [
+        {
+          "title": "尽快将数据送入 GPU",
+          "description": "GenAI 模型需要大量数据，也需要更快的数据供给。以可靠、低摩擦的方式处理大规模数据集，缩短训练等待时间。"
+        },
+        {
+          "title": "从中断处继续",
+          "description": "通过关键结果检查点减少硬件中断后的延迟，让团队在恢复后继续沿着原有进度推进。"
+        },
+        {
+          "title": "获得企业级可靠性",
+          "description": "自动快照、恢复与保留策略帮助生产任务保持连续；存储与计算分离，让数据更容易移动和追踪。"
+        },
+        {
+          "title": "保持安全",
+          "description": "传输中和静态数据均可加密，并结合访问管理、认证与基于角色的策略保护关键数据。"
+        }
+      ]
+    },
+    "objectStorage": {
+      "title": "CoreWeave AI 对象存储",
+      "description": "使用 AI 原生对象存储更快、更可靠地训练、微调和部署模型，减少复制成本与性能取舍。",
+      "cta": "了解如何运行",
+      "videoLabel": "CoreWeave AI 对象存储模块动画",
+      "steps": [
+        {
+          "title": "本地对象传输加速器（LOTA）",
+          "description": "通过在 GPU 节点侧缓存数据，让对象数据更贴近 GPU，提供最高 7 GB/s/GPU 的近本地吞吐，降低延迟并提升集群利用率。"
+        },
+        {
+          "title": "自动化、按用量计费",
+          "description": "将低频数据以更低成本保存，同时在需要时即时访问。无需手动分层或多套 API，计费清晰可预测。"
+        },
+        {
+          "title": "跨区域与跨云统一数据",
+          "description": "访问单一全局数据集，无需复制即可简化操作、降低成本，并让 GPU 资源保持高效利用。"
+        }
+      ],
+      "cards": [
+        {
+          "title": "行业领先性能",
+          "description": "通过最高 7 GB/s/GPU 的吞吐，让计算资源持续保持高利用率。"
+        },
+        {
+          "title": "简化扩展",
+          "description": "一个全局数据集和完整可观测工具，让不同位置的工作负载更轻松扩展。"
+        },
+        {
+          "title": "更低总拥有成本",
+          "description": "对低频数据采用自动化按用量计费，减少不必要的迁移和复制成本。"
+        },
+        {
+          "title": "企业级可靠性",
+          "description": "支持认证、持久性、可用性与静态及传输中加密，保护关键 AI 工作负载。"
+        }
+      ]
+    },
+    "migration": {
+      "title": "零流出数据迁移（0EM）",
+      "description": "0EM 计划显著降低大规模数据迁移的成本和复杂度，帮助你直接从任意主流云迁移至 AI 对象存储，在符合条件时无流出费用、无退出惩罚。",
+      "cta": "了解更多",
+      "feeLabel": "流出费用",
+      "plans": [
+        {
+          "title": "算力租赁 0EM 计划",
+          "price": "$0.00/GB"
+        },
+        {
+          "title": "传统超大云厂商",
+          "price": "最高 $0.12/GB"
+        }
+      ],
+      "rows": [
+        "主流云厂商数据迁移",
+        "全托管迁移",
+        "端到端校验",
+        "无需关闭账号",
+        "专家直连支持",
+        "无流出费用",
+        "无厂商锁定",
+        "无退出惩罚"
+      ]
+    },
+    "distributed": {
+      "title": "分布式文件存储",
+      "description": "分布式文件存储帮助集中化管理资产，支持 GenAI 所需的并行计算和共享数据访问。",
+      "primaryCta": "查看基准测试",
+      "secondaryCta": "优化存储",
+      "imageLabel": "分布式文件存储示意图",
+      "cards": [
+        {
+          "title": "为 AI 构建的网络",
+          "description": "高性能、超低延迟网络架构从底层开始服务于 GenAI 数据访问，让训练、部署和推理获得所需速度。"
+        },
+        {
+          "title": "战略级合作",
+          "description": "与 VAST 的合作帮助我们管理并保护海量数据，同时满足多实例共享访问所需的 POSIX 语义。"
+        },
+        {
+          "title": "大规模极速访问",
+          "description": "使用 PB 级共享文件系统，以最高 1 GB/s/GPU 的能力支持大型 GPU 集群。"
+        }
+      ]
+    },
+    "localStorage": {
+      "title": "本地存储",
+      "paragraphs": [
+        "Kubernetes 方案让客户可以访问本地存储。根据节点类型不同，支持最高 60 TB 的临时本地存储。",
+        "所有物理节点均提供 SSD 或 NVMe 临时本地存储，无需额外创建卷声明即可在容器文件系统内写入。",
+        "这些能力无需额外成本。"
+      ],
+      "videoLabel": "本地存储动画"
+    },
+    "featured": {
+      "eyebrow": "精选",
+      "title": "NeuralMesh by WEKA",
+      "subtitle": "面向高要求 AI 工作负载的高 IOPS 存储",
+      "paragraphs": [
+        "Checkpoint、小文件、元数据密集型流水线都需要稳定低延迟。NeuralMesh 在高负载下仍能提供一致性能，适配需要 POSIX 语义和极高 IOPS 的分布式训练与数据密集型推理。",
+        "专用 NeuralMesh 集群提供完整租户隔离、专用加密密钥和 GPU 同位置部署，适合与 Kubernetes 工作流原生集成。"
+      ]
+    },
+    "bottomCta": {
+      "title": "面向 AI 的专用存储",
+      "description": "让计算、网络与存储协同运行，支撑 GenAI 的未来工作负载。",
+      "cta": "了解方案"
+    },
+    "footnote": "*可根据存储合同价值，免费完成一次最高 4.17 GB/美元的第三方云数据迁移，具体提供商由算力租赁确认。"
+  },
+  "CpuComputing": {
+    "metadata": {
+      "title": "CPU 计算 | 算力租赁",
+      "description": "查看 AMD EPYC 与 Intel Xeon CPU 计算规格，支持 GPU 加速和生成式 AI 集群工作负载。"
+    },
+    "hero": {
+      "title": "CPU 计算",
+      "description": "从 AI 基础设施中释放更多性能与灵活性。",
+      "videoLabel": "CPU 计算首屏动画"
+    },
+    "processors": {
+      "title": "新一代 AMD EPYC 与 Intel Xeon",
+      "description": "使用高性能 CPU 支撑 GPU 加速工作负载。",
+      "families": [
+        {
+          "title": "AMD EPYC Genoa",
+          "points": [
+            "提供高性能、高核心数与通用型配置，灵活适配不同工作负载。",
+            "相比通用 Milan 服务器，代际性能最高提升 26%。",
+            "单系统最高支持 1.5 TB 内存。",
+            "配备 NVIDIA BlueField DPU。"
+          ]
+        },
+        {
+          "title": "Intel Emerald Rapids",
+          "points": [
+            "相比上一代 Ice Lake 服务器，性能最高提升 28%。",
+            "采用铂金级处理器，提供面向关键任务的稳定性能。",
+            "单系统提供 512 GB 内存。",
+            "配备 NVIDIA BlueField DPU。"
+          ]
+        }
+      ]
+    },
+    "cluster": {
+      "title": "增强 GPU 集群性能",
+      "paragraph1": "使用强大且高效的 CPU，让 GPU 集群获得更高利用率与更稳定的整体性能。",
+      "paragraph2": "由 CPU 处理通用计算任务，让 GPU 专注于高强度训练、推理和生成式 AI 工作负载。",
+      "features": [
+        {
+          "title": "获得更高性能",
+          "description": "消除虚拟化带来的额外开销，发挥裸金属基础设施的性能优势。"
+        },
+        {
+          "title": "高速扩展运行",
+          "description": "在数秒内扩展到数十万 CPU 核心，支持最高 4.3 GHz+ 的加速频率。"
+        },
+        {
+          "title": "使用更快网络",
+          "description": "最高可接入 384 核与 200 Gbps 网络速度，支持超高速数据移动。"
+        }
+      ]
+    },
+    "genAi": {
+      "title": "面向 GenAI 集群的 CPU",
+      "paragraphs": [
+        "使用合适的 CPU 作为支撑层，让 GPU 专注于构建和运行大语言模型。",
+        "为数据预处理、数据分析和实例中的关键任务获得所需计算能力。"
+      ],
+      "videoLabel": "GenAI 集群 CPU 动画",
+      "cta": "立即开始"
+    }
+  },
+  "NetworkingServices": {
+    "metadata": {
+      "title": "网络服务 | 算力租赁",
+      "description": "面向 AI 的高性能网络连接，覆盖 InfiniBand 集群网络、VPC、Direct Connect 与多云连接能力。"
+    },
+    "hero": {
+      "title": "网络服务",
+      "description": "专为 AI 打造的高性能连接能力。",
+      "imageAlt": "网络服务机房连接示意图"
+    },
+    "infiniband": {
+      "title": "NVIDIA Quantum InfiniBand 集群网络",
+      "paragraph1": "获得面向超算规模的高性能多节点互联能力。",
+      "paragraph2": "我们与 NVIDIA 合作部署基于 NVIDIA Quantum InfiniBand 的集群网络，为 GenAI 提供行业领先性能。",
+      "features": [
+        {
+          "title": "领先性能",
+          "description": "为多节点训练和推理提供高带宽、低延迟互联能力。"
+        },
+        {
+          "title": "超大规模",
+          "description": "面向超级计算规模的集群网络，支持大规模 GPU 节点扩展。"
+        },
+        {
+          "title": "极速连接",
+          "description": "通过 NVIDIA Quantum InfiniBand 提供超高速节点间通信。"
+        },
+        {
+          "title": "优秀吞吐",
+          "description": "为数据密集型 AI 工作负载提供稳定、可预测的传输吞吐。"
+        },
+        {
+          "title": "更快进入市场",
+          "description": "减少网络调优和部署阻力，让团队更快启动 GenAI 集群。"
+        }
+      ]
+    },
+    "vpc": {
+      "title": "虚拟私有云",
+      "paragraph1": "创建虚拟化、加速型网络，用于管理由 NVIDIA BlueField-3 DPU 驱动的云资源。",
+      "paragraph2": "为 GenAI 安全、高效地连接计算、存储和更多资源。",
+      "features": [
+        {
+          "title": "增强安全性",
+          "description": "部署 VPC 网络，确保客户网络流量保持私有。"
+        },
+        {
+          "title": "优化 GPU 计算",
+          "description": "从 GPU 节点卸载、加速并隔离网络任务，让计算能力专注于 AI 工作负载。"
+        },
+        {
+          "title": "一致性能",
+          "description": "在 GPU 节点和存储集群之间获得稳定、可预测的带宽。"
+        },
+        {
+          "title": "混合云与多云策略",
+          "description": "通过 Direct Connect 连接本地网络或传统云资源。"
+        }
+      ]
+    },
+    "directConnect": {
+      "title": "Direct Connect",
+      "description": "专线连接和接入点覆盖主要地理市场与多个网络 POP，帮助团队快速、安全地访问数据。",
+      "map": {
+        "northAmerica": {
+          "label": "北美",
+          "alt": "北美 Direct Connect 网络节点地图"
+        },
+        "europe": {
+          "label": "欧洲",
+          "alt": "欧洲 Direct Connect 网络节点地图"
+        }
+      },
+      "features": [
+        {
+          "title": "闪电般快速",
+          "description": "端口速度最高可达 400 Gbps。"
+        },
+        {
+          "title": "灵活选项",
+          "description": "可通过专用端口连接，也可通过 Equinix 等现有运营商接入。"
+        },
+        {
+          "title": "成本友好",
+          "description": "无数据传输或出站流量费用，帮助团队控制网络成本。"
+        }
+      ]
+    },
+    "multiCloud": {
+      "title": "多云支持",
+      "description": "我们的网络服务面向多云需求构建。查看文档，了解更多连接方式与配置细节。",
+      "cta": "查看文档"
+    },
+    "bottomCta": {
+      "title": "面向 GenAI 的高速网络服务",
+      "description": "不要让低效网络拖慢 GPU。获得稳定、低延迟、高吞吐的 AI 网络连接能力。",
+      "cta": "立即开始"
+    }
   }
 }

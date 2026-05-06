@@ -2841,5 +2841,312 @@
       "primaryCta": "Start building",
       "secondaryCta": "Contact sales"
     }
+  },
+  "AiObjectStorage": {
+    "metadata": {
+      "title": "AI Object Storage | Compute Rental",
+      "description": "High-performance, secure, and reliable object storage for AI workloads, including training, fine-tuning, inference, and large-scale data migration."
+    },
+    "hero": {
+      "title": "AI Object Storage",
+      "description": "High-performance, secure, and reliable storage built for AI workloads.",
+      "videoLabel": "AI object storage hero animation"
+    },
+    "workloads": {
+      "title": "Built for AI workloads",
+      "paragraphs": [
+        "Do not let storage performance slow down your clusters.",
+        "Give containerized workloads and virtual servers higher-throughput, lower-latency access to data."
+      ],
+      "features": [
+        {
+          "title": "Feed data to GPUs faster",
+          "description": "GenAI models need large datasets and faster data supply. Process large-scale datasets reliably with less friction and shorten training wait times."
+        },
+        {
+          "title": "Resume from interruptions",
+          "description": "Critical checkpoints reduce delays after hardware interruptions so teams can continue from the latest progress after recovery."
+        },
+        {
+          "title": "Get enterprise-grade reliability",
+          "description": "Automated snapshots, restore, and retention policies help production jobs keep running while storage and compute stay decoupled."
+        },
+        {
+          "title": "Stay secure",
+          "description": "Data can be encrypted in transit and at rest, protected with access management, authentication, and role-based policies."
+        }
+      ]
+    },
+    "objectStorage": {
+      "title": "CoreWeave AI Object Storage",
+      "description": "Train, fine-tune, and deploy models faster with AI-native object storage while reducing copy costs and performance tradeoffs.",
+      "cta": "See how it works",
+      "videoLabel": "CoreWeave AI Object Storage module animation",
+      "steps": [
+        {
+          "title": "Local Object Transfer Accelerator (LOTA)",
+          "description": "Cache data beside GPU nodes so object data stays closer to compute, delivering near-local throughput up to 7 GB/s/GPU, lower latency, and higher cluster utilization."
+        },
+        {
+          "title": "Automated usage-based pricing",
+          "description": "Keep lower-frequency data at lower cost while still accessing it immediately when needed. No manual tiering, no multiple APIs, and clearer predictable billing."
+        },
+        {
+          "title": "Unified cross-region and cross-cloud data",
+          "description": "Use a single global dataset without replication to simplify operations, lower costs, and keep GPU resources highly utilized."
+        }
+      ],
+      "cards": [
+        {
+          "title": "Industry-leading performance",
+          "description": "Keep compute resources highly utilized with throughput up to 7 GB/s/GPU."
+        },
+        {
+          "title": "Simplified scaling",
+          "description": "One global dataset and complete observability make workloads easier to scale across locations."
+        },
+        {
+          "title": "Lower total cost of ownership",
+          "description": "Automated usage-based pricing for lower-frequency data helps reduce unnecessary migration and replication costs."
+        },
+        {
+          "title": "Enterprise reliability",
+          "description": "Authentication, durability, availability, and encryption at rest and in transit protect critical AI workloads."
+        }
+      ]
+    },
+    "migration": {
+      "title": "Zero Egress Migration (0EM)",
+      "description": "The 0EM program reduces the cost and complexity of large-scale data migration, helping you move directly from major clouds to AI Object Storage with no egress fees and no exit penalties where eligible.",
+      "cta": "Learn more",
+      "feeLabel": "egress fee",
+      "plans": [
+        {
+          "title": "Compute Rental 0EM Program",
+          "price": "$0.00/GB"
+        },
+        {
+          "title": "Traditional hyperscale cloud",
+          "price": "Up to $0.12/GB"
+        }
+      ],
+      "rows": [
+        "Major cloud data migration",
+        "Fully managed migration",
+        "End-to-end validation",
+        "No account shutdown required",
+        "Direct expert support",
+        "No egress fees",
+        "No vendor lock-in",
+        "No exit penalties"
+      ]
+    },
+    "distributed": {
+      "title": "Distributed file storage",
+      "description": "Distributed file storage helps teams centrally manage assets and support the parallel compute and shared data access that GenAI requires.",
+      "primaryCta": "View benchmarks",
+      "secondaryCta": "Optimize storage",
+      "imageLabel": "Distributed file storage diagram",
+      "cards": [
+        {
+          "title": "Network built for AI",
+          "description": "High-performance, ultra-low-latency networking is designed from the ground up for GenAI data access, training, deployment, and inference."
+        },
+        {
+          "title": "Strategic partnership",
+          "description": "The VAST partnership helps manage and protect large datasets while preserving POSIX semantics required for shared multi-instance access."
+        },
+        {
+          "title": "Fast access at scale",
+          "description": "Use PB-scale shared file systems to support large GPU clusters with up to 1 GB/s/GPU capability."
+        }
+      ]
+    },
+    "localStorage": {
+      "title": "Local storage",
+      "paragraphs": [
+        "Kubernetes deployments can access local storage. Depending on node type, temporary local storage can reach up to 60 TB.",
+        "All physical nodes include SSD or NVMe temporary local storage that can be written inside the container filesystem without creating additional volume claims.",
+        "These capabilities are available at no extra cost."
+      ],
+      "videoLabel": "Local storage animation"
+    },
+    "featured": {
+      "eyebrow": "Featured",
+      "title": "NeuralMesh by WEKA",
+      "subtitle": "High-IOPS storage for demanding AI workloads",
+      "paragraphs": [
+        "Checkpoints, small files, and metadata-heavy pipelines need consistently low latency. NeuralMesh keeps performance stable under load for distributed training and data-intensive inference that need POSIX semantics and very high IOPS.",
+        "Dedicated NeuralMesh clusters provide tenant isolation, dedicated encryption keys, and GPU co-location for native Kubernetes workflow integration."
+      ]
+    },
+    "bottomCta": {
+      "title": "Dedicated storage for AI",
+      "description": "Let compute, networking, and storage work together to support the future of GenAI workloads.",
+      "cta": "Explore solutions"
+    },
+    "footnote": "*Based on storage contract value, one third-party cloud data migration of up to 4.17 GB per USD may be provided at no cost. The specific provider is confirmed by Compute Rental."
+  },
+  "CpuComputing": {
+    "metadata": {
+      "title": "CPU Computing | Compute Rental",
+      "description": "Explore AMD EPYC and Intel Xeon CPU compute options that support GPU acceleration and generative AI cluster workloads."
+    },
+    "hero": {
+      "title": "CPU Computing",
+      "description": "Release more performance and flexibility inside AI infrastructure.",
+      "videoLabel": "CPU computing hero animation"
+    },
+    "processors": {
+      "title": "New-generation AMD EPYC and Intel Xeon",
+      "description": "Use high-performance CPUs to support GPU-accelerated workloads.",
+      "families": [
+        {
+          "title": "AMD EPYC Genoa",
+          "points": [
+            "High-performance, high-core-count general-purpose configurations adapt flexibly across workloads.",
+            "Up to 26% higher intergenerational performance compared with general-purpose Milan servers.",
+            "Up to 1.5 TB memory per system.",
+            "Equipped with NVIDIA BlueField DPU."
+          ]
+        },
+        {
+          "title": "Intel Emerald Rapids",
+          "points": [
+            "Up to 28% higher performance compared with the prior Ice Lake generation.",
+            "Platinum-class processors provide stable performance for critical workloads.",
+            "512 GB memory per system.",
+            "Equipped with NVIDIA BlueField DPU."
+          ]
+        }
+      ]
+    },
+    "cluster": {
+      "title": "Enhance GPU cluster performance",
+      "paragraph1": "Use powerful and efficient CPUs to improve GPU cluster utilization and overall stability.",
+      "paragraph2": "Let CPUs handle general compute tasks so GPUs can focus on training, inference, and generative AI workloads.",
+      "features": [
+        {
+          "title": "Get higher performance",
+          "description": "Remove virtualization overhead and use the performance advantages of bare-metal infrastructure."
+        },
+        {
+          "title": "Scale operations quickly",
+          "description": "Scale to hundreds of thousands of CPU cores in seconds, with accelerated frequency up to 4.3 GHz+."
+        },
+        {
+          "title": "Use faster networking",
+          "description": "Access up to 384 cores and 200 Gbps network speeds for high-speed data movement."
+        }
+      ]
+    },
+    "genAi": {
+      "title": "CPUs for GenAI clusters",
+      "paragraphs": [
+        "Use the right CPU support layer so GPUs can focus on building and running large language models.",
+        "Get compute for data preprocessing, analytics, and critical instance-level tasks."
+      ],
+      "videoLabel": "GenAI cluster CPU animation",
+      "cta": "Start now"
+    }
+  },
+  "NetworkingServices": {
+    "metadata": {
+      "title": "Networking Services | Compute Rental",
+      "description": "High-performance AI networking across InfiniBand cluster networks, VPC, Direct Connect, and multi-cloud connectivity."
+    },
+    "hero": {
+      "title": "Networking Services",
+      "description": "High-performance connectivity built specifically for AI.",
+      "imageAlt": "Networking services data center connectivity diagram"
+    },
+    "infiniband": {
+      "title": "NVIDIA Quantum InfiniBand cluster networking",
+      "paragraph1": "Access high-performance multi-node interconnect built for supercomputing scale.",
+      "paragraph2": "Our NVIDIA partnership supports NVIDIA Quantum InfiniBand cluster networks that deliver industry-leading performance for GenAI.",
+      "features": [
+        {
+          "title": "Leading performance",
+          "description": "High-bandwidth, low-latency interconnect for multi-node training and inference."
+        },
+        {
+          "title": "Massive scale",
+          "description": "Cluster networking built for supercomputing scale and large GPU node expansion."
+        },
+        {
+          "title": "Ultra-fast connectivity",
+          "description": "NVIDIA Quantum InfiniBand enables extremely fast node-to-node communication."
+        },
+        {
+          "title": "Excellent throughput",
+          "description": "Stable, predictable transfer throughput for data-intensive AI workloads."
+        },
+        {
+          "title": "Faster time to market",
+          "description": "Reduce network tuning and deployment friction so teams can launch GenAI clusters faster."
+        }
+      ]
+    },
+    "vpc": {
+      "title": "Virtual Private Cloud",
+      "paragraph1": "Create virtualized accelerated networks for cloud resources powered by NVIDIA BlueField-3 DPUs.",
+      "paragraph2": "Connect compute, storage, and more resources securely and efficiently for GenAI.",
+      "features": [
+        {
+          "title": "Enhanced security",
+          "description": "Deploy VPC networking so customer network traffic remains private."
+        },
+        {
+          "title": "Optimized GPU compute",
+          "description": "Offload, accelerate, and isolate networking tasks from GPU nodes so compute can focus on AI workloads."
+        },
+        {
+          "title": "Consistent performance",
+          "description": "Get stable, predictable bandwidth between GPU nodes and storage clusters."
+        },
+        {
+          "title": "Hybrid and multi-cloud strategy",
+          "description": "Connect on-premises networks or legacy cloud resources through Direct Connect."
+        }
+      ]
+    },
+    "directConnect": {
+      "title": "Direct Connect",
+      "description": "Private circuits and access points cover major geographic markets and multiple network POPs, giving teams fast and secure data access.",
+      "map": {
+        "northAmerica": {
+          "label": "North America",
+          "alt": "North America Direct Connect network node map"
+        },
+        "europe": {
+          "label": "Europe",
+          "alt": "Europe Direct Connect network node map"
+        }
+      },
+      "features": [
+        {
+          "title": "Lightning-fast ports",
+          "description": "Port speeds up to 400 Gbps."
+        },
+        {
+          "title": "Flexible options",
+          "description": "Connect through dedicated ports or existing carriers such as Equinix."
+        },
+        {
+          "title": "Cost friendly",
+          "description": "No data transfer or egress traffic fees, helping teams control networking costs."
+        }
+      ]
+    },
+    "multiCloud": {
+      "title": "Multi-cloud support",
+      "description": "Our networking services are built for multi-cloud needs. Read the docs to learn more about connectivity patterns and configuration details.",
+      "cta": "View docs"
+    },
+    "bottomCta": {
+      "title": "High-speed networking for GenAI",
+      "description": "Do not let inefficient networking slow down GPUs. Get stable, low-latency, high-throughput AI network connectivity.",
+      "cta": "Start now"
+    }
   }
 }
