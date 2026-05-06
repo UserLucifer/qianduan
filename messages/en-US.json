@@ -1536,5 +1536,138 @@
         ]
       }
     }
+  },
+  "Contact": {
+    "metadata": {
+      "title": "Contact us | Compute Rental",
+      "description": "Contact the Compute Rental team for enterprise GPU capacity, technical support, compliance materials, and partnership inquiries."
+    },
+    "hero": {
+      "badge": "Contact",
+      "title": "Route your compute request to the right team.",
+      "description": "Whether you need enterprise GPU reservations, technical support, compliance materials, or partnership help, share the context and we will route it to the right commercial, engineering, or security team.",
+      "faq": "FAQ"
+    },
+    "formPanel": {
+      "title": "Describe your request",
+      "description": "This form creates an email draft so you can keep the context and confirm before sending."
+    },
+    "channelsTitle": "Choose the fastest contact path",
+    "channelsDescription": "For signed-in users, rental, order, and finance issues can also be handled from the matching console page.",
+    "channels": {
+      "sales": {
+        "title": "Enterprise and pre-sales",
+        "description": "Capacity reservations, batch GPU procurement, dedicated networking, purchasing workflows, and enterprise contract support.",
+        "action": "Send a pre-sales request",
+        "subject": "Enterprise and pre-sales inquiry"
+      },
+      "support": {
+        "title": "Technical support",
+        "description": "Instance connectivity, billing orders, deployment environments, API calls, and production escalation paths.",
+        "action": "View support docs"
+      },
+      "compliance": {
+        "title": "Compliance and security materials",
+        "description": "Request SOC 2 reports, NDA workflows, security questionnaires, and data-processing documentation.",
+        "action": "Request materials",
+        "subject": "Compliance and security materials request"
+      }
+    },
+    "response": {
+      "badge": "Support flow",
+      "title": "How we respond from request to delivery",
+      "description": "Enterprise capacity, production incidents, and compliance requests follow different handling paths. The clearer the context, the faster the team can provide timing and next steps.",
+      "steps": {
+        "requirements": {
+          "title": "Confirm requirements",
+          "description": "We clarify GPU models, quantities, regions, network isolation, and rental duration."
+        },
+        "assessment": {
+          "title": "Assess the plan",
+          "description": "Commercial or engineering teams review inventory, pricing, delivery windows, and access patterns."
+        },
+        "launch": {
+          "title": "Support launch",
+          "description": "Production issues are escalated by support level, while enterprise customers can receive dedicated response paths."
+        }
+      }
+    },
+    "preparation": {
+      "title": "Information to prepare before contacting us",
+      "description": "If you are evaluating enterprise capacity or need technical support, including the following details can reduce back-and-forth confirmation.",
+      "items": [
+        "Target GPU model, card count, and expected usage duration",
+        "Workload type, such as training, inference, rendering, or API deployment",
+        "Whether private networking, fixed regions, or compliance materials are required",
+        "Expected launch timeline and budget range"
+      ]
+    },
+    "targets": {
+      "title": "Response targets",
+      "description": "Handled by request type and priority",
+      "items": {
+        "sales": {
+          "label": "Pre-sales and enterprise plans",
+          "value": "1 business day"
+        },
+        "incident": {
+          "label": "Production incident escalation",
+          "value": "24/7 coverage"
+        },
+        "compliance": {
+          "label": "Compliance and security materials",
+          "value": "Provided after NDA"
+        }
+      }
+    },
+    "form": {
+      "topics": {
+        "sales": "Enterprise and pre-sales",
+        "support": "Technical support",
+        "compliance": "Compliance and security materials",
+        "partnership": "Partnerships and channels"
+      },
+      "validation": {
+        "name": "Enter a contact name",
+        "email": "Enter a valid email address",
+        "company": "Company name must be 80 characters or fewer",
+        "messageMin": "Enter at least 10 characters",
+        "messageMax": "Keep the message within 1000 characters"
+      },
+      "fields": {
+        "name": {
+          "label": "Contact name",
+          "placeholder": "Your name"
+        },
+        "email": {
+          "label": "Work email"
+        },
+        "company": {
+          "label": "Company or team",
+          "placeholder": "Optional"
+        },
+        "topic": {
+          "label": "Contact type",
+          "placeholder": "Choose the type of help you need"
+        },
+        "message": {
+          "label": "Request details",
+          "placeholder": "For example: we need an 8-card H100 cluster, private networking, and monthly reserved pricing, or we need help debugging an instance connectivity issue."
+        }
+      },
+      "email": {
+        "subject": "[Compute Rental] {topic} - {name}",
+        "name": "Contact: {name}",
+        "email": "Email: {email}",
+        "company": "Company/team: {company}",
+        "topic": "Contact type: {topic}",
+        "messageTitle": "Request details:"
+      },
+      "toast": {
+        "emailDraft": "Email draft created. Confirm and send it in your email client."
+      },
+      "submit": "Create contact email",
+      "directEmail": "Send email directly"
+    }
   }
 }

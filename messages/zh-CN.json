@@ -1536,5 +1536,138 @@
         ]
       }
     }
+  },
+  "Contact": {
+    "metadata": {
+      "title": "联系我们 | 算力租赁",
+      "description": "联系算力租赁团队，获取企业 GPU 算力、技术支持、合规资料和合作咨询。"
+    },
+    "hero": {
+      "badge": "Contact",
+      "title": "让算力需求直接进入对应团队。",
+      "description": "无论是企业 GPU 资源预留、技术支持、合规资料申请，还是合作咨询，请留下清晰背景。我们会按需求类型分配给商务、工程或安全合规团队处理。",
+      "faq": "常见问题"
+    },
+    "formPanel": {
+      "title": "描述您的需求",
+      "description": "当前表单会生成邮件草稿，方便您保留上下文并确认发送。"
+    },
+    "channelsTitle": "选择最快的联系路径",
+    "channelsDescription": "已登录用户的租赁、订单和财务问题也可以从控制台进入对应页面处理。",
+    "channels": {
+      "sales": {
+        "title": "企业与售前咨询",
+        "description": "容量预留、批量 GPU、专属网络、采购流程和企业合同支持。",
+        "action": "发送售前需求",
+        "subject": "企业与售前咨询"
+      },
+      "support": {
+        "title": "技术支持",
+        "description": "实例连接、账单订单、部署环境、API 调用和故障升级路径。",
+        "action": "查看支持说明"
+      },
+      "compliance": {
+        "title": "合规与安全资料",
+        "description": "申请 SOC 2 报告、NDA 流程、安全问卷和数据处理说明。",
+        "action": "申请资料",
+        "subject": "合规与安全资料申请"
+      }
+    },
+    "response": {
+      "badge": "Support flow",
+      "title": "从需求到交付的响应方式",
+      "description": "对企业容量、生产故障和合规资料会采用不同的处理路径。信息越完整，团队越容易给出明确时间和下一步动作。",
+      "steps": {
+        "requirements": {
+          "title": "确认需求",
+          "description": "梳理 GPU 型号、数量、地域、网络隔离和租赁周期。"
+        },
+        "assessment": {
+          "title": "方案评估",
+          "description": "由商务或工程团队评估库存、价格、交付窗口和接入方式。"
+        },
+        "launch": {
+          "title": "上线支持",
+          "description": "生产问题按支持等级升级，企业客户可获得专属响应路径。"
+        }
+      }
+    },
+    "preparation": {
+      "title": "联系前建议准备的信息",
+      "description": "如果您正在评估企业级资源或需要技术支持，把以下信息一起发送，可以减少来回确认。",
+      "items": [
+        "目标 GPU 型号、卡数和预计使用周期",
+        "训练、推理、渲染或 API 部署等工作负载类型",
+        "是否需要私有网络、固定地域或合规资料",
+        "期望上线时间和预算约束"
+      ]
+    },
+    "targets": {
+      "title": "响应目标",
+      "description": "按问题类型分配处理优先级",
+      "items": {
+        "sales": {
+          "label": "售前与企业方案",
+          "value": "1 个工作日"
+        },
+        "incident": {
+          "label": "生产故障升级",
+          "value": "24/7 值守"
+        },
+        "compliance": {
+          "label": "合规与安全资料",
+          "value": "NDA 后提供"
+        }
+      }
+    },
+    "form": {
+      "topics": {
+        "sales": "企业与售前咨询",
+        "support": "技术支持",
+        "compliance": "合规与安全资料",
+        "partnership": "合作与渠道"
+      },
+      "validation": {
+        "name": "请输入联系人姓名",
+        "email": "请输入有效邮箱",
+        "company": "公司名称不超过 80 个字",
+        "messageMin": "请至少输入 10 个字",
+        "messageMax": "请控制在 1000 字以内"
+      },
+      "fields": {
+        "name": {
+          "label": "联系人",
+          "placeholder": "您的姓名"
+        },
+        "email": {
+          "label": "工作邮箱"
+        },
+        "company": {
+          "label": "公司/团队",
+          "placeholder": "可选"
+        },
+        "topic": {
+          "label": "联系类型",
+          "placeholder": "选择需要协助的方向"
+        },
+        "message": {
+          "label": "需求说明",
+          "placeholder": "例如：需要 8 卡 H100 集群、私有网络、月度预留价格，或需要排查实例连接问题。"
+        }
+      },
+      "email": {
+        "subject": "[算力租赁] {topic} - {name}",
+        "name": "联系人：{name}",
+        "email": "邮箱：{email}",
+        "company": "公司/团队：{company}",
+        "topic": "联系类型：{topic}",
+        "messageTitle": "需求说明："
+      },
+      "toast": {
+        "emailDraft": "已生成邮件草稿，请在邮件客户端中确认发送。"
+      },
+      "submit": "生成联系邮件",
+      "directEmail": "直接发送邮件"
+    }
   }
 }

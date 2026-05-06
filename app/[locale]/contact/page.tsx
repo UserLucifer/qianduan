@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import {
   ArrowRight,
@@ -20,62 +21,60 @@ import { ContactForm } from "./ContactForm";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { normalizeLocale } from "@/i18n/locales";
 
-export const metadata: Metadata = {
-  title: "联系我们 | 算力租赁",
-  description: "联系算力租赁团队，获取企业 GPU 算力、技术支持、合规资料和合作咨询。",
+type ContactPageProps = {
+  params: Promise<{ locale: string }>;
 };
 
-const contactChannels = [
+const contactChannelMeta = [
   {
-    title: "企业与售前咨询",
-    description: "容量预留、批量 GPU、专属网络、采购流程和企业合同支持。",
-    action: "发送售前需求",
-    href: "mailto:contact@example.com?subject=%E4%BC%81%E4%B8%9A%E4%B8%8E%E5%94%AE%E5%89%8D%E5%92%A8%E8%AF%A2",
+    key: "sales",
     icon: Building2,
+    type: "mail",
   },
   {
-    title: "技术支持",
-    description: "实例连接、账单订单、部署环境、API 调用和故障升级路径。",
-    action: "查看支持说明",
-    href: "/docs/support",
+    key: "support",
     icon: LifeBuoy,
+    type: "internal",
+    href: "/docs/support",
   },
   {
-    title: "合规与安全资料",
-    description: "申请 SOC 2 报告、NDA 流程、安全问卷和数据处理说明。",
-    action: "申请资料",
-    href: "mailto:contact@example.com?subject=%E5%90%88%E8%A7%84%E4%B8%8E%E5%AE%89%E5%85%A8%E8%B5%84%E6%96%99%E7%94%B3%E8%AF%B7",
+    key: "compliance",
     icon: ShieldCheck,
+    type: "mail",
   },
 ] as const;
 
-const responseSteps = [
-  {
-    title: "确认需求",
-    description: "梳理 GPU 型号、数量、地域、网络隔离和租赁周期。",
-    icon: MessageSquare,
-  },
-  {
-    title: "方案评估",
-    description: "由商务或工程团队评估库存、价格、交付窗口和接入方式。",
-    icon: FileText,
-  },
-  {
-    title: "上线支持",
-    description: "生产问题按支持等级升级，企业客户可获得专属响应路径。",
-    icon: Headphones,
-  },
+const responseStepMeta = [
+  { key: "requirements", icon: MessageSquare },
+  { key: "assessment", icon: FileText },
+  { key: "launch", icon: Headphones },
 ] as const;
 
-const preparationItems = [
-  "目标 GPU 型号、卡数和预计使用周期",
-  "训练、推理、渲染或 API 部署等工作负载类型",
-  "是否需要私有网络、固定地域或合规资料",
-  "期望上线时间和预算约束",
-];
+const responseTargetKeys = ["sales", "incident", "compliance"] as const;
 
-export default function ContactPage() {
+export async function generateMetadata({ params }: ContactPageProps): Promise<Metadata> {
+  const { locale } = await params;
+  const language = normalizeLocale(locale);
+  const t = await getTranslations({ locale: language, namespace: "Contact" });
+
+  return {
+    title: t("metadata.title"),
+    description: t("metadata.description"),
+  };
+}
+
+function getMailHref(subject: string) {
+  return `mailto:contact@example.com?subject=${encodeURIComponent(subject)}`;
+}
+
+export default async function ContactPage({ params }: ContactPageProps) {
+  const { locale } = await params;
+  const language = normalizeLocale(locale);
+  const t = await getTranslations({ locale: language, namespace: "Contact" });
+  const preparationItems = t.raw("preparation.items") as string[];
+
   return (
     <>
       <Header />
@@ -88,13 +87,13 @@ export default function ContactPage() {
                 variant="outline"
                 className="w-fit rounded-full border-[var(--card-border)] bg-[var(--surface)] px-3 py-1 text-[var(--badge-foreground)]"
               >
-                Contact
+                {t("hero.badge")}
               </Badge>
               <h1 className="mt-6 max-w-3xl text-4xl font-[510] leading-[1.04] text-[var(--foreground)] md:text-6xl">
-                让算力需求直接进入对应团队。
+                {t("hero.title")}
               </h1>
               <p className="mt-6 max-w-2xl text-base leading-7 text-[var(--muted)] md:text-lg">
-                无论是企业 GPU 资源预留、技术支持、合规资料申请，还是合作咨询，请留下清晰背景。我们会按需求类型分配给商务、工程或安全合规团队处理。
+                {t("hero.description")}
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Button asChild className="h-10 rounded-lg bg-[var(--accent)] text-white shadow-none hover:bg-[var(--accent-hover)]">
@@ -105,7 +104,7 @@ export default function ContactPage() {
                 </Button>
                 <Button asChild variant="outline" className="h-10 rounded-lg border-[var(--card-border)] bg-[var(--surface)] shadow-none">
                   <Link href="/docs/faq">
-                    常见问题
+                    {t("hero.faq")}
                     <BookOpen className="h-4 w-4" />
                   </Link>
                 </Button>
@@ -115,10 +114,10 @@ export default function ContactPage() {
             <Card className="border-[var(--card-border)] bg-[var(--surface-strong)] shadow-[var(--shadow-soft)]">
               <CardHeader className="border-b border-[var(--line)] p-6">
                 <CardTitle className="text-xl font-[590] text-[var(--foreground)]">
-                  描述您的需求
+                  {t("formPanel.title")}
                 </CardTitle>
                 <p className="text-sm leading-6 text-[var(--muted)]">
-                  当前表单会生成邮件草稿，方便您保留上下文并确认发送。
+                  {t("formPanel.description")}
                 </p>
               </CardHeader>
               <CardContent className="p-6">
@@ -131,20 +130,33 @@ export default function ContactPage() {
         <section className="mx-auto w-full max-w-[1200px] px-5 py-14 sm:px-6 md:py-20 lg:px-8">
           <div className="mb-8 max-w-2xl">
             <h2 className="text-2xl font-[510] leading-tight text-[var(--foreground)] md:text-3xl">
-              选择最快的联系路径
+              {t("channelsTitle")}
             </h2>
             <p className="mt-3 text-sm leading-6 text-[var(--muted)] md:text-base">
-              已登录用户的租赁、订单和账务问题也可以从控制台进入对应页面处理。
+              {t("channelsDescription")}
             </p>
           </div>
 
           <div className="grid gap-4 md:grid-cols-3">
-            {contactChannels.map((channel) => {
+            {contactChannelMeta.map((channel) => {
               const Icon = channel.icon;
+              const title = t(`channels.${channel.key}.title`);
+              const description = t(`channels.${channel.key}.description`);
+              const action = t(`channels.${channel.key}.action`);
+              const href =
+                channel.type === "mail"
+                  ? getMailHref(t(`channels.${channel.key}.subject`))
+                  : channel.href;
+              const actionContent = (
+                <>
+                  {action}
+                  <ArrowRight className="h-4 w-4" />
+                </>
+              );
 
               return (
                 <Card
-                  key={channel.title}
+                  key={channel.key}
                   className="border-[var(--card-border)] bg-[var(--surface)] shadow-none transition-colors hover:bg-[var(--surface-strong)]"
                 >
                   <CardContent className="flex h-full flex-col p-5">
@@ -152,16 +164,17 @@ export default function ContactPage() {
                       <Icon className="h-5 w-5" />
                     </div>
                     <h3 className="mt-5 text-lg font-[590] text-[var(--foreground)]">
-                      {channel.title}
+                      {title}
                     </h3>
                     <p className="mt-3 flex-1 text-sm leading-6 text-[var(--muted)]">
-                      {channel.description}
+                      {description}
                     </p>
                     <Button asChild variant="ghost" className="mt-5 h-9 justify-start px-0 text-[var(--accent)] hover:bg-transparent hover:text-[var(--accent-hover)]">
-                      <Link href={channel.href}>
-                        {channel.action}
-                        <ArrowRight className="h-4 w-4" />
-                      </Link>
+                      {channel.type === "mail" ? (
+                        <a href={href}>{actionContent}</a>
+                      ) : (
+                        <Link href={href}>{actionContent}</Link>
+                      )}
                     </Button>
                   </CardContent>
                 </Card>
@@ -177,23 +190,23 @@ export default function ContactPage() {
                 variant="outline"
                 className="rounded-full border-[var(--card-border)] bg-[var(--surface-strong)] px-3 py-1 text-[var(--muted)]"
               >
-                Support flow
+                {t("response.badge")}
               </Badge>
               <h2 className="mt-5 text-2xl font-[510] leading-tight text-[var(--foreground)] md:text-3xl">
-                从需求到交付的响应方式
+                {t("response.title")}
               </h2>
               <p className="mt-4 text-sm leading-6 text-[var(--muted)] md:text-base">
-                对企业容量、生产故障和合规资料会采用不同的处理路径。信息越完整，团队越容易给出明确时间和下一步动作。
+                {t("response.description")}
               </p>
             </div>
 
             <div className="grid gap-3">
-              {responseSteps.map((step, index) => {
+              {responseStepMeta.map((step, index) => {
                 const Icon = step.icon;
 
                 return (
                   <div
-                    key={step.title}
+                    key={step.key}
                     className="grid grid-cols-[auto_1fr] gap-4 rounded-xl border border-[var(--card-border)] bg-[var(--surface-strong)] p-4"
                   >
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--badge-background)] text-[var(--badge-foreground)]">
@@ -205,11 +218,11 @@ export default function ContactPage() {
                           0{index + 1}
                         </span>
                         <h3 className="text-base font-[590] text-[var(--foreground)]">
-                          {step.title}
+                          {t(`response.steps.${step.key}.title`)}
                         </h3>
                       </div>
                       <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-                        {step.description}
+                        {t(`response.steps.${step.key}.description`)}
                       </p>
                     </div>
                   </div>
@@ -222,10 +235,10 @@ export default function ContactPage() {
         <section className="mx-auto grid w-full max-w-[1200px] gap-8 px-5 py-14 sm:px-6 md:grid-cols-[1.1fr_0.9fr] md:py-20 lg:px-8">
           <div>
             <h2 className="text-2xl font-[510] leading-tight text-[var(--foreground)] md:text-3xl">
-              联系前建议准备的信息
+              {t("preparation.title")}
             </h2>
             <p className="mt-4 max-w-2xl text-sm leading-6 text-[var(--muted)] md:text-base">
-              如果您正在评估企业级资源或需要技术支持，把以下信息一起发送，可以减少来回确认。
+              {t("preparation.description")}
             </p>
             <div className="mt-7 grid gap-3 sm:grid-cols-2">
               {preparationItems.map((item) => (
@@ -247,23 +260,17 @@ export default function ContactPage() {
                   <Clock3 className="h-5 w-5" />
                 </div>
                 <div>
-                  <h3 className="font-[590] text-[var(--foreground)]">响应目标</h3>
-                  <p className="text-sm text-[var(--muted)]">按问题类型分配处理优先级</p>
+                  <h3 className="font-[590] text-[var(--foreground)]">{t("targets.title")}</h3>
+                  <p className="text-sm text-[var(--muted)]">{t("targets.description")}</p>
                 </div>
               </div>
               <div className="mt-6 space-y-4">
-                <div className="flex items-start justify-between gap-4 border-t border-[var(--line)] pt-4">
-                  <span className="text-sm text-[var(--muted)]">售前与企业方案</span>
-                  <span className="text-sm font-[590] text-[var(--foreground)]">1 个工作日</span>
-                </div>
-                <div className="flex items-start justify-between gap-4 border-t border-[var(--line)] pt-4">
-                  <span className="text-sm text-[var(--muted)]">生产故障升级</span>
-                  <span className="text-sm font-[590] text-[var(--foreground)]">24/7 值守</span>
-                </div>
-                <div className="flex items-start justify-between gap-4 border-t border-[var(--line)] pt-4">
-                  <span className="text-sm text-[var(--muted)]">合规与安全资料</span>
-                  <span className="text-sm font-[590] text-[var(--foreground)]">NDA 后提供</span>
-                </div>
+                {responseTargetKeys.map((key) => (
+                  <div key={key} className="flex items-start justify-between gap-4 border-t border-[var(--line)] pt-4">
+                    <span className="text-sm text-[var(--muted)]">{t(`targets.items.${key}.label`)}</span>
+                    <span className="text-sm font-[590] text-[var(--foreground)]">{t(`targets.items.${key}.value`)}</span>
+                  </div>
+                ))}
               </div>
             </CardContent>
           </Card>

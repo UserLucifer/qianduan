@@ -1,5 +1,7 @@
 "use client";
 
+import { useMemo } from "react";
+import { useTranslations } from "next-intl";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight, Send } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -25,31 +27,44 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
-const topicLabels = {
-  sales: "企业与售前咨询",
-  support: "技术支持",
-  compliance: "合规与安全资料",
-  partnership: "合作与渠道",
-} as const;
+const contactTopics = ["sales", "support", "compliance", "partnership"] as const;
 
-const contactSchema = z.object({
-  name: z.string().trim().min(2, "请输入联系人姓名"),
-  email: z.string().trim().email("请输入有效邮箱"),
-  company: z.string().trim().max(80, "公司名称不超过 80 个字").optional(),
-  topic: z.enum(["sales", "support", "compliance", "partnership"]),
-  message: z
-    .string()
-    .trim()
-    .min(10, "请至少输入 10 个字")
-    .max(1000, "请控制在 1000 字以内"),
-});
+type ContactTopic = (typeof contactTopics)[number];
 
-type ContactFormValues = z.infer<typeof contactSchema>;
+type ContactFormValues = {
+  name: string;
+  email: string;
+  company: string;
+  topic: ContactTopic;
+  message: string;
+};
 
 const fieldClassName =
   "h-11 rounded-lg border-[var(--card-border)] bg-[var(--surface)] text-[var(--foreground)] shadow-none placeholder:text-[var(--muted)] focus-visible:ring-[var(--accent)]";
 
 export function ContactForm() {
+  const t = useTranslations("Contact.form");
+  const topicLabels: Record<ContactTopic, string> = {
+    sales: t("topics.sales"),
+    support: t("topics.support"),
+    compliance: t("topics.compliance"),
+    partnership: t("topics.partnership"),
+  };
+  const contactSchema = useMemo(
+    () =>
+      z.object({
+        name: z.string().trim().min(2, t("validation.name")),
+        email: z.string().trim().email(t("validation.email")),
+        company: z.string().trim().max(80, t("validation.company")),
+        topic: z.enum(contactTopics),
+        message: z
+          .string()
+          .trim()
+          .min(10, t("validation.messageMin"))
+          .max(1000, t("validation.messageMax")),
+      }),
+    [t],
+  );
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactSchema),
     defaultValues: {
@@ -63,23 +78,26 @@ export function ContactForm() {
 
   function onSubmit(values: ContactFormValues) {
     const topicLabel = topicLabels[values.topic];
-    const subject = `[算力租赁] ${topicLabel} - ${values.company || values.name}`;
+    const subject = t("email.subject", {
+      topic: topicLabel,
+      name: values.company || values.name,
+    });
     const body = [
-      `联系人：${values.name}`,
-      `邮箱：${values.email}`,
-      values.company ? `公司/团队：${values.company}` : null,
-      `联系类型：${topicLabel}`,
+      t("email.name", { name: values.name }),
+      t("email.email", { email: values.email }),
+      values.company ? t("email.company", { company: values.company }) : null,
+      t("email.topic", { topic: topicLabel }),
       "",
-      "需求说明：",
+      t("email.messageTitle"),
       values.message,
     ]
       .filter(Boolean)
       .join("\n");
 
-    window.location.assign(`mailto:contact@example.com?subject=${encodeURIComponent(
-      subject,
-    )}&body=${encodeURIComponent(body)}`);
-    toast.success("已生成邮件草稿，请在邮件客户端中确认发送。");
+    window.location.assign(
+      `mailto:contact@example.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`,
+    );
+    toast.success(t("toast.emailDraft"));
   }
 
   return (
@@ -91,9 +109,9 @@ export function ContactForm() {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>联系人</FormLabel>
+                <FormLabel>{t("fields.name.label")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="您的姓名" {...field} className={fieldClassName} />
+                  <Input placeholder={t("fields.name.placeholder")} {...field} className={fieldClassName} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -105,7 +123,7 @@ export function ContactForm() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>工作邮箱</FormLabel>
+                <FormLabel>{t("fields.email.label")}</FormLabel>
                 <FormControl>
                   <Input
                     type="email"
@@ -126,9 +144,9 @@ export function ContactForm() {
             name="company"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>公司/团队</FormLabel>
+                <FormLabel>{t("fields.company.label")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="可选" {...field} className={fieldClassName} />
+                  <Input placeholder={t("fields.company.placeholder")} {...field} className={fieldClassName} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -140,17 +158,17 @@ export function ContactForm() {
             name="topic"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>联系类型</FormLabel>
+                <FormLabel>{t("fields.topic.label")}</FormLabel>
                 <Select value={field.value} onValueChange={field.onChange}>
                   <FormControl>
                     <SelectTrigger className={fieldClassName}>
-                      <SelectValue placeholder="选择需要协助的方向" />
+                      <SelectValue placeholder={t("fields.topic.placeholder")} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent className="border-[var(--card-border)] bg-background">
-                    {Object.entries(topicLabels).map(([value, label]) => (
+                    {contactTopics.map((value) => (
                       <SelectItem key={value} value={value}>
-                        {label}
+                        {topicLabels[value]}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -166,10 +184,10 @@ export function ContactForm() {
           name="message"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>需求说明</FormLabel>
+              <FormLabel>{t("fields.message.label")}</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="例如：需要 8 卡 H100 集群、私有网络、季度预留价格，或需要排查实例连接问题。"
+                  placeholder={t("fields.message.placeholder")}
                   {...field}
                   className="min-h-[150px] resize-none rounded-lg border-[var(--card-border)] bg-[var(--surface)] text-[var(--foreground)] shadow-none placeholder:text-[var(--muted)] focus-visible:ring-[var(--accent)]"
                 />
@@ -185,11 +203,11 @@ export function ContactForm() {
             className="h-11 rounded-lg bg-[var(--accent)] px-5 text-white shadow-none hover:bg-[var(--accent-hover)]"
           >
             <Send className="h-4 w-4" />
-            生成联系邮件
+            {t("submit")}
           </Button>
           <Button asChild type="button" variant="ghost" className="h-11 justify-start px-0 text-[var(--muted)] hover:bg-transparent hover:text-[var(--foreground)] sm:px-3">
             <a href="mailto:contact@example.com">
-              直接发送邮件
+              {t("directEmail")}
               <ArrowRight className="h-4 w-4" />
             </a>
           </Button>
