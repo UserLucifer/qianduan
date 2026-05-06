@@ -2077,5 +2077,355 @@
         "emailDraft": "已生成邮件草稿，请在邮件客户端中确认发送。"
       }
     }
+  },
+  "Financing": {
+    "metadata": {
+      "title": "GPU 融资 | 算力租赁",
+      "description": "连接 GPU 主机和基础设施运营方与理解平台收益、GPU 部署的融资合作伙伴。"
+    },
+    "hero": {
+      "title": "为 GPU 融资，让收益帮助偿还设备成本。",
+      "description": "我们帮助主机方对接专注 GPU 基础设施的融资合作伙伴。平台收益记录可以增强申请材料，一次提交即可让多个合作伙伴评估。",
+      "assurances": [
+        "无义务咨询",
+        "初步咨询不影响征信",
+        "无前置承诺"
+      ]
+    },
+    "steps": {
+      "title": "工作流程",
+      "description": "从咨询到设备资金到位，只需要三个步骤。",
+      "items": [
+        {
+          "title": "告诉我们你的需求",
+          "description": "填写 GPU 型号、时间表和预算。如果你已经在平台托管，收益历史可以帮助支持申请。"
+        },
+        {
+          "title": "我们匹配融资合作伙伴",
+          "description": "合作伙伴会评估你的资料并竞争提供方案。平台表现数据可以减少材料工作并加快审核。"
+        },
+        {
+          "title": "获得资金并开始产生收益",
+          "description": "融资通过后，将 GPU 部署到平台，用产生的收益支持还款。"
+        }
+      ]
+    },
+    "flywheel": {
+      "title": "GPU 融资飞轮",
+      "description": "融资购买硬件、部署上线、产生收益，再用表现记录支持更多容量扩展。",
+      "items": [
+        {
+          "title": "融资",
+          "description": "匹配基础设施融资合作伙伴"
+        },
+        {
+          "title": "部署",
+          "description": "让硬件在平台上线"
+        },
+        {
+          "title": "扩展",
+          "description": "收益记录可以支持更多融资"
+        },
+        {
+          "title": "收益",
+          "description": "从开发者需求中获得收入"
+        }
+      ]
+    },
+    "structures": {
+      "title": "融资结构",
+      "description": "融资合作伙伴可以围绕 GPU 基础设施投资定制方案。",
+      "videoLabel": "融资结构背景视频",
+      "cards": [
+        {
+          "title": "设备抵押租赁",
+          "description": "GPU 硬件本身可作为融资支持，适合正在扩展但商业信用记录还不充分的主机方。"
+        },
+        {
+          "title": "收益型贷款",
+          "description": "还款可与平台收益挂钩。收益增长时还款更快，需求放缓时付款结构可更灵活。"
+        },
+        {
+          "title": "传统设备融资",
+          "description": "固定期限设备贷款，付款节奏可预测，适合希望锁定成本的成熟运营方。"
+        },
+        {
+          "title": "售后回租",
+          "description": "已经拥有 GPU 硬件时，可以将设备出售给融资合作伙伴再租回，释放资金同时保持机器运行。"
+        }
+      ]
+    },
+    "certification": {
+      "title": "交付内容：平台认证",
+      "description": "每台设备部署前都可以通过我们的 GPU 验证流程，订单可附带认证结果，便于融资审核和运维规划。",
+      "items": [
+        {
+          "title": "烧机测试",
+          "description": "满载 72 小时压力测试"
+        },
+        {
+          "title": "显存验证",
+          "description": "完整显存检查，无缺陷"
+        },
+        {
+          "title": "基准评分",
+          "description": "性能与参考结果比对"
+        },
+        {
+          "title": "散热剖面",
+          "description": "持续负载下的冷却表现已确认"
+        }
+      ]
+    },
+    "cta": {
+      "cards": [
+        {
+          "title": "需要先采购硬件吗？",
+          "description": "GPU 融资可以与硬件采购配合。全新和认证翻新设备都可以按平台托管需求准备。",
+          "cta": "洽谈硬件"
+        },
+        {
+          "title": "准备扩展你的托管业务了吗？",
+          "description": "通过筛选过的供应商、融资合作伙伴，或两者结合来扩大 GPU 基础设施。",
+          "cta": "联系销售"
+        }
+      ]
+    }
+  },
+  "DataCenter": {
+    "metadata": {
+      "title": "数据中心认证 | 算力租赁",
+      "description": "申请数据中心认证，为专业 GPU 托管获得信任标签、优先展示和专属支持。"
+    },
+    "hero": {
+      "title": "成为认证数据中心",
+      "description": "在专业管理的机房中运行 5 台以上 GPU 服务器？申请认证数据中心状态，获得蓝色信任标签、平台优先展示和更多客户流量。",
+      "assurances": [
+        "蓝色信任标签",
+        "优先展示",
+        "专属支持"
+      ]
+    },
+    "benefits": {
+      "title": "为什么要获得认证？",
+      "description": "认证数据中心会获得可见的信任标识，以及平台算法层面的展示优势。",
+      "cards": [
+        {
+          "title": "蓝色信任标签",
+          "description": "你的供应会在平台显示已认证的蓝色标签，向租户传达专业级基础设施能力。"
+        },
+        {
+          "title": "优先展示",
+          "description": "认证机器会在搜索结果中自动获得更高排序，让企业客户更容易先看到你。"
+        },
+        {
+          "title": "更多流量",
+          "description": "由于设备质量和可靠性更高，平台会主动将更多用户流量导向认证主机。"
+        },
+        {
+          "title": "专属支持",
+          "description": "获得运营团队的直接支持，用于上线、排障和日常运营协作。"
+        }
+      ]
+    },
+    "requirements": {
+      "title": "需要满足什么条件",
+      "description": "你在专业环境中提供 GPU 硬件。平台会为机器展示蓝色信任标签并优先排序，客户租用 GPU 后，你按使用量获得收益。",
+      "cards": [
+        {
+          "title": "专业环境",
+          "description": "服务器托管在专业管理的数据中心设施中，具备可靠的电力、冷却和网络基础设施。"
+        },
+        {
+          "title": "至少 5 台 GPU 服务器",
+          "description": "至少 5 台服务器配备旗舰级 GPU 硬件，例如 A100、H100、H200、RTX 4090 或 RTX 5090。"
+        },
+        {
+          "title": "企业主体已验证",
+          "description": "设备由注册企业拥有，所有者完成身份验证并签署数据中心托管协议。"
+        },
+        {
+          "title": "安全标准",
+          "description": "鼓励提供 ISO 27001、SOC 2 或同等认证，这些材料会增强申请可信度。"
+        }
+      ]
+    },
+    "bottomCta": {
+      "title": "准备扩展你的托管业务了吗？",
+      "description": "了解融资方案来扩大 GPU 资源池，或通过我们筛选过的供应商网络采购认证硬件。",
+      "primaryCta": "了解融资",
+      "secondaryCta": "采购硬件"
+    },
+    "certificationForm": {
+      "title": "申请认证",
+      "description": "告诉我们你的设施情况。我们通常会在 2 个工作日内审核申请。",
+      "requiredMark": "*",
+      "buttons": {
+        "back": "返回",
+        "continue": "继续",
+        "submit": "发送邮件"
+      },
+      "sections": {
+        "facility": "你的设施",
+        "operations": "运维与标准",
+        "contact": "联系人与邮件草稿"
+      },
+      "fields": {
+        "facilityType": {
+          "label": "设施类型",
+          "placeholder": "请选择"
+        },
+        "locations": {
+          "label": "位置",
+          "placeholder": "例如：Dallas, TX / Frankfurt, DE"
+        },
+        "totalServers": {
+          "label": "当前 GPU 服务器数量",
+          "placeholder": "请选择"
+        },
+        "gpuModels": {
+          "label": "已部署 GPU 型号"
+        },
+        "plannedCapacity": {
+          "label": "未来 6 个月计划新增容量",
+          "placeholder": "请选择"
+        },
+        "connectivity": {
+          "label": "网络能力",
+          "placeholder": "请选择"
+        },
+        "powerCapacity": {
+          "label": "供电容量",
+          "placeholder": "请选择"
+        },
+        "supportCoverage": {
+          "label": "支持覆盖",
+          "placeholder": "请选择"
+        },
+        "certifications": {
+          "label": "已有认证"
+        },
+        "operationsNotes": {
+          "label": "运维说明",
+          "placeholder": "例如冷却冗余、运营商线路、远程协助、事件响应或其他设施细节。"
+        },
+        "name": {
+          "label": "联系人姓名",
+          "placeholder": "您的姓名"
+        },
+        "email": {
+          "label": "工作邮箱",
+          "placeholder": "name@company.com"
+        },
+        "company": {
+          "label": "公司",
+          "placeholder": "公司名称"
+        },
+        "message": {
+          "label": "补充说明",
+          "placeholder": "告诉我们你希望认证的内容、目标上线时间，以及审核团队需要了解的其他信息。"
+        }
+      },
+      "options": {
+        "gpuModels": {
+          "b200": "B200",
+          "h200": "H200",
+          "h100Sxm": "H100 SXM",
+          "h100Pcie": "H100 PCIe",
+          "a10080": "A100 80GB",
+          "a10040": "A100 40GB",
+          "l40s": "L40S",
+          "rtx5090": "RTX 5090",
+          "rtx4090": "RTX 4090",
+          "rtx3090": "RTX 3090",
+          "other": "其他"
+        },
+        "facilityTypes": {
+          "colocation": "托管数据中心",
+          "privateDataCenter": "自有数据中心",
+          "gpuFarm": "GPU 集群机房",
+          "enterpriseLab": "企业实验室",
+          "otherManagedFacility": "其他专业管理设施"
+        },
+        "serverCounts": {
+          "servers5_16": "5-16",
+          "servers17_64": "17-64",
+          "servers65_256": "65-256",
+          "servers257_1000": "257-1000",
+          "servers1000Plus": "1000+"
+        },
+        "plannedCapacity": {
+          "none": "暂无计划",
+          "servers1_16": "1-16 台服务器",
+          "servers17_64": "17-64 台服务器",
+          "servers65Plus": "65 台以上服务器"
+        },
+        "connectivity": {
+          "gbps10": "10 Gbps",
+          "gbps25": "25 Gbps",
+          "gbps100": "100 Gbps",
+          "gbps400": "400 Gbps",
+          "multipleCarriers": "多运营商"
+        },
+        "power": {
+          "under50kw": "50 kW 以下",
+          "kw50_250": "50-250 kW",
+          "kw250_1mw": "250 kW-1 MW",
+          "mw1Plus": "1 MW 以上"
+        },
+        "support": {
+          "businessHours": "工作时间",
+          "onCall247": "7x24 值班",
+          "dedicatedNoc": "专属 NOC",
+          "coloPartner": "由托管合作方管理"
+        },
+        "certifications": {
+          "soc2": "SOC 2",
+          "iso27001": "ISO 27001",
+          "tier3Plus": "Tier III+",
+          "enterpriseSla": "企业 SLA"
+        }
+      },
+      "validation": {
+        "facilityType": "请选择设施类型。",
+        "locations": "请输入机房位置。",
+        "totalServers": "请选择当前 GPU 服务器数量。",
+        "gpuModels": "请选择已部署的 GPU 型号。",
+        "plannedCapacity": "请选择计划新增容量。",
+        "connectivity": "请选择网络能力。",
+        "powerCapacity": "请选择供电容量。",
+        "supportCoverage": "请选择支持覆盖。",
+        "operationsNotes": "说明请控制在 800 字以内。",
+        "name": "请输入联系人姓名。",
+        "email": "请输入有效邮箱。",
+        "company": "请输入公司名称。",
+        "messageMin": "请至少输入 10 个字。",
+        "messageMax": "请控制在 1000 字以内。"
+      },
+      "summary": {
+        "facilityType": "设施类型",
+        "locations": "位置",
+        "totalServers": "GPU 服务器",
+        "gpuModels": "GPU 型号",
+        "plannedCapacity": "计划容量",
+        "connectivity": "网络能力",
+        "powerCapacity": "供电",
+        "supportCoverage": "支持",
+        "notProvided": "未填写"
+      },
+      "email": {
+        "subject": "[算力租赁] 数据中心认证申请 - {company}",
+        "name": "联系人：{value}",
+        "email": "邮箱：{value}",
+        "company": "公司：{value}",
+        "facilityTitle": "设施信息：",
+        "operationsTitle": "运维与合规：",
+        "summaryLine": "{label}：{value}",
+        "messageTitle": "补充说明："
+      },
+      "toast": {
+        "emailDraft": "已生成邮件草稿，请在邮件客户端中确认发送。"
+      }
+    }
   }
 }

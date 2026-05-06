@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { normalizeLocale } from "@/i18n/locales";
 import {
   ArrowRight,
   BadgeCheck,
@@ -19,10 +21,13 @@ import Header from "@/components/marketing/Header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
-export const metadata: Metadata = {
-  title: "数据中心认证 | 算力租赁",
-  description:
-    "申请数据中心认证，为专业托管 GPU 服务器获得信任标签、优先展示和专属支持。",
+type DataCenterPageProps = {
+  params: Promise<{ locale: string }>;
+};
+
+type CardCopy = {
+  title: string;
+  description: string;
 };
 
 const requirementsVideo =
@@ -33,71 +38,28 @@ const ctaImage =
 const shellClass =
   "mx-auto w-[calc(100%-40px)] max-w-[1240px] max-[720px]:w-[calc(100%-24px)]";
 
-const assurances = ["Blue trust label", "Priority placement", "Dedicated support"];
+const benefitIcons = [BadgeCheck, TrendingUp, LineChart, Headphones] as const;
+const requirementIcons = [Server, BadgeCheck, ShieldCheck, Lock] as const;
 
-const benefits: Array<{
-  title: string;
-  description: string;
-  icon: LucideIcon;
-}> = [
-  {
-    title: "Blue Trust Label",
-    description:
-      "Your offers display a verified blue label on the platform, signaling professional-grade infrastructure to renters.",
-    icon: BadgeCheck,
-  },
-  {
-    title: "Priority Placement",
-    description:
-      "Certified machines are auto-sorted higher in search results, so enterprise customers find you first.",
-    icon: TrendingUp,
-  },
-  {
-    title: "Increased Traffic",
-    description:
-      "We actively direct more user flow to certified hosts because of the quality and reliability of their equipment.",
-    icon: LineChart,
-  },
-  {
-    title: "Dedicated Support",
-    description:
-      "Get direct access to the operations team for onboarding, troubleshooting, and day-to-day support.",
-    icon: Headphones,
-  },
-];
+export async function generateMetadata({ params }: DataCenterPageProps): Promise<Metadata> {
+  const { locale } = await params;
+  const language = normalizeLocale(locale);
+  const t = await getTranslations({ locale: language, namespace: "DataCenter" });
 
-const requirements: Array<{
-  title: string;
-  description: string;
-  icon: LucideIcon;
-}> = [
-  {
-    title: "Professional Environment",
-    description:
-      "Servers housed in a professionally managed data center facility with reliable power, cooling, and network infrastructure.",
-    icon: Server,
-  },
-  {
-    title: "Minimum 5 GPU Servers",
-    description:
-      "At least 5 servers equipped with flagship-class GPU hardware such as A100, H100, H200, RTX 4090 or RTX 5090.",
-    icon: BadgeCheck,
-  },
-  {
-    title: "Verified Business",
-    description:
-      "Equipment owned by a registered business. Owners complete identity verification and sign the Data Center Hosting Agreement.",
-    icon: ShieldCheck,
-  },
-  {
-    title: "Security Standards",
-    description:
-      "Certifications like ISO 27001, SOC 2, or equivalent are encouraged and strengthen the application.",
-    icon: Lock,
-  },
-];
+  return {
+    title: t("metadata.title"),
+    description: t("metadata.description"),
+  };
+}
 
-export default function DataCenterPage() {
+export default async function DataCenterPage({ params }: DataCenterPageProps) {
+  const { locale } = await params;
+  const language = normalizeLocale(locale);
+  const t = await getTranslations({ locale: language, namespace: "DataCenter" });
+  const assurances = t.raw("hero.assurances") as string[];
+  const benefits = t.raw("benefits.cards") as CardCopy[];
+  const requirements = t.raw("requirements.cards") as CardCopy[];
+
   return (
     <>
       <Header />
@@ -113,13 +75,10 @@ export default function DataCenterPage() {
             <div className="grid gap-10 px-6 py-10 sm:px-10 sm:py-14 lg:grid-cols-[0.95fr_1fr] lg:px-14 lg:py-20">
               <div className="flex flex-col justify-center">
                 <h1 className="max-w-[620px] text-4xl font-semibold leading-[1.05] text-[#f7f8f8] sm:text-5xl lg:text-6xl">
-                  Become a Certified Data Center
+                  {t("hero.title")}
                 </h1>
                 <p className="mt-7 max-w-[660px] text-base leading-7 text-[#d0d6e0] sm:text-lg">
-                  Run 5+ GPU servers in a professionally managed facility?
-                  Apply for Certified Data Center status to earn a blue trust
-                  label, priority platform placement, and increased customer
-                  traffic.
+                  {t("hero.description")}
                 </p>
 
                 <ul className="mt-8 space-y-4 text-sm font-semibold text-[#d0d6e0]">
@@ -141,17 +100,16 @@ export default function DataCenterPage() {
           <div className={shellClass}>
             <div className="mx-auto max-w-[780px] text-center">
               <h2 className="text-3xl font-semibold leading-tight text-[#f7f8f8] sm:text-5xl">
-                Why Get Certified?
+                {t("benefits.title")}
               </h2>
               <p className="mt-5 text-base leading-7 text-[#d0d6e0]">
-                Certified Data Centers receive visible trust signals and
-                algorithmic advantages on the platform.
+                {t("benefits.description")}
               </p>
             </div>
 
             <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {benefits.map((item) => {
-                const Icon = item.icon;
+              {benefits.map((item, index) => {
+                const Icon = benefitIcons[index] as LucideIcon;
 
                 return (
                   <Card
@@ -193,18 +151,16 @@ export default function DataCenterPage() {
             <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(8,9,10,0.34),rgba(8,9,10,0.82))]" />
             <div className="mx-auto max-w-[780px] text-center">
               <h2 className="text-3xl font-semibold leading-tight text-[#f7f8f8] sm:text-5xl">
-                What It Takes
+                {t("requirements.title")}
               </h2>
               <p className="mt-5 text-base leading-7 text-[#d0d6e0]">
-                You provide GPU hardware in a professional environment. We list
-                your machines with a blue trust label and prioritize them on the
-                platform. Clients rent your GPUs, and you earn based on usage.
+                {t("requirements.description")}
               </p>
             </div>
 
             <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {requirements.map((item) => {
-                const Icon = item.icon;
+              {requirements.map((item, index) => {
+                const Icon = requirementIcons[index] as LucideIcon;
 
                 return (
                   <Card
@@ -235,12 +191,11 @@ export default function DataCenterPage() {
                 backgroundImage: `linear-gradient(180deg, rgba(8,9,10,0.48), rgba(8,9,10,0.76)), url("${ctaImage}")`,
               }}
             >
-
               <h2 className="text-3xl font-semibold leading-tight text-[#f7f8f8] sm:text-5xl">
-                准备好扩展您的托管业务了吗？
+                {t("bottomCta.title")}
               </h2>
               <p className="mx-auto mt-5 max-w-[760px] text-base leading-7 text-[#d0d6e0]">
-                探索融资以扩大您的 GPU 车队，或通过我们经过审核的供应商网络采购认证硬件。
+                {t("bottomCta.description")}
               </p>
               <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
                 <Button
@@ -248,7 +203,7 @@ export default function DataCenterPage() {
                   className="h-10 rounded-[6px] bg-[#5e6ad2] px-5 text-sm font-semibold text-white hover:bg-[#7170ff]"
                 >
                   <Link href="/financing">
-                    探索融资
+                    {t("bottomCta.primaryCta")}
                     <ArrowRight className="h-4 w-4" />
                   </Link>
                 </Button>
@@ -257,7 +212,7 @@ export default function DataCenterPage() {
                   variant="outline"
                   className="h-10 rounded-[6px] border-white/25 bg-white/[0.02] px-5 text-sm font-semibold text-[#f7f8f8] hover:bg-white/[0.06] hover:text-[#f7f8f8]"
                 >
-                  <Link href="/hardware">源硬件</Link>
+                  <Link href="/hardware">{t("bottomCta.secondaryCta")}</Link>
                 </Button>
               </div>
             </div>

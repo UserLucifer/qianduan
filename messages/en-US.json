@@ -2077,5 +2077,355 @@
         "emailDraft": "Email draft created. Please confirm and send it in your email client."
       }
     }
+  },
+  "Financing": {
+    "metadata": {
+      "title": "GPU Financing | Compute Rental",
+      "description": "Connect GPU hosts and infrastructure operators with financing partners who understand platform revenue and GPU deployments."
+    },
+    "hero": {
+      "title": "Finance GPUs. Let revenue help pay for them.",
+      "description": "We connect hosts with financing partners focused on GPU infrastructure. Your platform revenue can strengthen the application, and one inquiry can be reviewed by multiple partners.",
+      "assurances": [
+        "No-obligation inquiry",
+        "No credit impact to start",
+        "No upfront commitment"
+      ]
+    },
+    "steps": {
+      "title": "How it works",
+      "description": "Three steps from inquiry to funded hardware.",
+      "items": [
+        {
+          "title": "Tell us what you need",
+          "description": "Share the GPU models, timeline, and budget. If you already host on the platform, your earnings history can help support the request."
+        },
+        {
+          "title": "We match financing partners",
+          "description": "Partners review the request and compete for your business. Platform performance data can reduce paperwork and speed up underwriting."
+        },
+        {
+          "title": "Fund hardware and start earning",
+          "description": "After financing is approved, deploy the GPUs on the platform and use generated revenue to support repayment."
+        }
+      ]
+    },
+    "flywheel": {
+      "title": "The GPU financing flywheel",
+      "description": "Finance hardware, deploy it, earn revenue, and use that performance to fund more capacity.",
+      "items": [
+        {
+          "title": "Finance",
+          "description": "Match with infrastructure financing partners"
+        },
+        {
+          "title": "Deploy",
+          "description": "Bring hardware online on the platform"
+        },
+        {
+          "title": "Expand",
+          "description": "Revenue history can support more financing"
+        },
+        {
+          "title": "Earn",
+          "description": "Generate revenue from developers"
+        }
+      ]
+    },
+    "structures": {
+      "title": "Financing structures",
+      "description": "Financing partners can tailor structures around GPU infrastructure investments.",
+      "videoLabel": "Financing structure background video",
+      "cards": [
+        {
+          "title": "Equipment-backed lease",
+          "description": "The GPU hardware supports the financing. This can fit hosts that are scaling but do not yet have long business credit histories."
+        },
+        {
+          "title": "Revenue-based loan",
+          "description": "Repayment can align with platform revenue. When earnings grow, repayment can move faster; when demand softens, payment structure may adapt."
+        },
+        {
+          "title": "Traditional equipment financing",
+          "description": "Fixed-term equipment loans with predictable payments. This can fit mature operators that want cost certainty."
+        },
+        {
+          "title": "Sale-leaseback",
+          "description": "Already own GPU hardware? Sell equipment to a financing partner and lease it back to release capital while keeping machines online."
+        }
+      ]
+    },
+    "certification": {
+      "title": "What you receive: platform certification",
+      "description": "Each device can pass our GPU verification flow before deployment. Orders can include certification results for finance review and operations planning.",
+      "items": [
+        {
+          "title": "Burn-in test",
+          "description": "72 hours of full-load stress testing"
+        },
+        {
+          "title": "Memory verification",
+          "description": "Complete memory checks with no defects"
+        },
+        {
+          "title": "Benchmark score",
+          "description": "Performance compared with reference results"
+        },
+        {
+          "title": "Thermal profile",
+          "description": "Cooling behavior confirmed under sustained load"
+        }
+      ]
+    },
+    "cta": {
+      "cards": [
+        {
+          "title": "Need to source hardware first?",
+          "description": "GPU financing can be paired with hardware sourcing. New and certified refurbished units can be prepared for platform hosting.",
+          "cta": "Talk hardware"
+        },
+        {
+          "title": "Ready to expand your hosting?",
+          "description": "Use vetted suppliers, financing partners, or both to grow your GPU infrastructure.",
+          "cta": "Contact sales"
+        }
+      ]
+    }
+  },
+  "DataCenter": {
+    "metadata": {
+      "title": "Data Center Certification | Compute Rental",
+      "description": "Apply for data center certification to earn a trust label, priority placement, and dedicated support for professional GPU hosting."
+    },
+    "hero": {
+      "title": "Become a Certified Data Center",
+      "description": "Run 5+ GPU servers in a professionally managed facility? Apply for Certified Data Center status to earn a blue trust label, priority platform placement, and increased customer traffic.",
+      "assurances": [
+        "Blue trust label",
+        "Priority placement",
+        "Dedicated support"
+      ]
+    },
+    "benefits": {
+      "title": "Why get certified?",
+      "description": "Certified Data Centers receive visible trust signals and algorithmic advantages on the platform.",
+      "cards": [
+        {
+          "title": "Blue Trust Label",
+          "description": "Your offers display a verified blue label on the platform, signaling professional-grade infrastructure to renters."
+        },
+        {
+          "title": "Priority Placement",
+          "description": "Certified machines are auto-sorted higher in search results, so enterprise customers find you first."
+        },
+        {
+          "title": "Increased Traffic",
+          "description": "We actively direct more user flow to certified hosts because of the quality and reliability of their equipment."
+        },
+        {
+          "title": "Dedicated Support",
+          "description": "Get direct access to the operations team for onboarding, troubleshooting, and day-to-day support."
+        }
+      ]
+    },
+    "requirements": {
+      "title": "What it takes",
+      "description": "You provide GPU hardware in a professional environment. We list your machines with a blue trust label and prioritize them on the platform. Clients rent your GPUs, and you earn based on usage.",
+      "cards": [
+        {
+          "title": "Professional Environment",
+          "description": "Servers housed in a professionally managed data center facility with reliable power, cooling, and network infrastructure."
+        },
+        {
+          "title": "Minimum 5 GPU Servers",
+          "description": "At least 5 servers equipped with flagship-class GPU hardware such as A100, H100, H200, RTX 4090, or RTX 5090."
+        },
+        {
+          "title": "Verified Business",
+          "description": "Equipment owned by a registered business. Owners complete identity verification and sign the Data Center Hosting Agreement."
+        },
+        {
+          "title": "Security Standards",
+          "description": "Certifications like ISO 27001, SOC 2, or equivalent are encouraged and strengthen the application."
+        }
+      ]
+    },
+    "bottomCta": {
+      "title": "Ready to scale your hosting business?",
+      "description": "Explore financing to expand your GPU fleet, or source certified hardware through our vetted supplier network.",
+      "primaryCta": "Explore financing",
+      "secondaryCta": "Source hardware"
+    },
+    "certificationForm": {
+      "title": "Apply for Certification",
+      "description": "Tell us about your facility. We review applications within 2 business days.",
+      "requiredMark": "*",
+      "buttons": {
+        "back": "Back",
+        "continue": "Continue",
+        "submit": "Email Us"
+      },
+      "sections": {
+        "facility": "Your Facility",
+        "operations": "Operations & Standards",
+        "contact": "Contact & Email Draft"
+      },
+      "fields": {
+        "facilityType": {
+          "label": "Facility Type",
+          "placeholder": "Select"
+        },
+        "locations": {
+          "label": "Location(s)",
+          "placeholder": "e.g. Dallas, TX / Frankfurt, DE"
+        },
+        "totalServers": {
+          "label": "Total GPU Servers (current)",
+          "placeholder": "Select"
+        },
+        "gpuModels": {
+          "label": "GPU Models Deployed"
+        },
+        "plannedCapacity": {
+          "label": "Additional Capacity Planned (next 6 months)",
+          "placeholder": "Select"
+        },
+        "connectivity": {
+          "label": "Connectivity",
+          "placeholder": "Select"
+        },
+        "powerCapacity": {
+          "label": "Power Capacity",
+          "placeholder": "Select"
+        },
+        "supportCoverage": {
+          "label": "Support Coverage",
+          "placeholder": "Select"
+        },
+        "certifications": {
+          "label": "Certifications in Place"
+        },
+        "operationsNotes": {
+          "label": "Operational Notes",
+          "placeholder": "Cooling redundancy, carrier mix, remote hands, incident response, or any other facility details."
+        },
+        "name": {
+          "label": "Contact Name",
+          "placeholder": "Your name"
+        },
+        "email": {
+          "label": "Work Email",
+          "placeholder": "name@company.com"
+        },
+        "company": {
+          "label": "Company",
+          "placeholder": "Company name"
+        },
+        "message": {
+          "label": "Message",
+          "placeholder": "Tell us what you want certified, target launch timing, and anything the review team should know."
+        }
+      },
+      "options": {
+        "gpuModels": {
+          "b200": "B200",
+          "h200": "H200",
+          "h100Sxm": "H100 SXM",
+          "h100Pcie": "H100 PCIe",
+          "a10080": "A100 80GB",
+          "a10040": "A100 40GB",
+          "l40s": "L40S",
+          "rtx5090": "RTX 5090",
+          "rtx4090": "RTX 4090",
+          "rtx3090": "RTX 3090",
+          "other": "Other"
+        },
+        "facilityTypes": {
+          "colocation": "Colocation data center",
+          "privateDataCenter": "Private data center",
+          "gpuFarm": "GPU farm",
+          "enterpriseLab": "Enterprise lab",
+          "otherManagedFacility": "Other managed facility"
+        },
+        "serverCounts": {
+          "servers5_16": "5-16",
+          "servers17_64": "17-64",
+          "servers65_256": "65-256",
+          "servers257_1000": "257-1000",
+          "servers1000Plus": "1000+"
+        },
+        "plannedCapacity": {
+          "none": "No current plan",
+          "servers1_16": "1-16 servers",
+          "servers17_64": "17-64 servers",
+          "servers65Plus": "65+ servers"
+        },
+        "connectivity": {
+          "gbps10": "10 Gbps",
+          "gbps25": "25 Gbps",
+          "gbps100": "100 Gbps",
+          "gbps400": "400 Gbps",
+          "multipleCarriers": "Multiple carriers"
+        },
+        "power": {
+          "under50kw": "Under 50 kW",
+          "kw50_250": "50-250 kW",
+          "kw250_1mw": "250 kW-1 MW",
+          "mw1Plus": "1 MW+"
+        },
+        "support": {
+          "businessHours": "Business hours",
+          "onCall247": "24/7 on-call",
+          "dedicatedNoc": "Dedicated NOC",
+          "coloPartner": "Managed by colo partner"
+        },
+        "certifications": {
+          "soc2": "SOC 2",
+          "iso27001": "ISO 27001",
+          "tier3Plus": "Tier III+",
+          "enterpriseSla": "Enterprise SLA"
+        }
+      },
+      "validation": {
+        "facilityType": "Please select a facility type.",
+        "locations": "Please enter the facility location.",
+        "totalServers": "Please select the current GPU server count.",
+        "gpuModels": "Please select deployed GPU models.",
+        "plannedCapacity": "Please select planned capacity.",
+        "connectivity": "Please select network capability.",
+        "powerCapacity": "Please select power capacity.",
+        "supportCoverage": "Please select support coverage.",
+        "operationsNotes": "Please keep notes within 800 characters.",
+        "name": "Please enter a contact name.",
+        "email": "Please enter a valid email address.",
+        "company": "Please enter a company name.",
+        "messageMin": "Please enter at least 10 characters.",
+        "messageMax": "Please keep the message within 1,000 characters."
+      },
+      "summary": {
+        "facilityType": "Facility type",
+        "locations": "Locations",
+        "totalServers": "GPU servers",
+        "gpuModels": "GPU models",
+        "plannedCapacity": "Planned capacity",
+        "connectivity": "Connectivity",
+        "powerCapacity": "Power",
+        "supportCoverage": "Support",
+        "notProvided": "Not provided"
+      },
+      "email": {
+        "subject": "[Compute Rental] Data center certification application - {company}",
+        "name": "Contact: {value}",
+        "email": "Email: {value}",
+        "company": "Company: {value}",
+        "facilityTitle": "Facility information:",
+        "operationsTitle": "Operations and compliance:",
+        "summaryLine": "{label}: {value}",
+        "messageTitle": "Message:"
+      },
+      "toast": {
+        "emailDraft": "Email draft created. Please confirm and send it in your email client."
+      }
+    }
   }
 }
