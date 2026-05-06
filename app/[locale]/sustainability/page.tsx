@@ -1,71 +1,91 @@
-"use client";
+import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
+import Header from "@/components/marketing/Header";
+import Footer from "@/components/marketing/Footer";
+import { normalizeLocale } from "@/i18n/locales";
+import "./sustainability.css";
 
-import Header from '@/components/marketing/Header';
-import Footer from '@/components/marketing/Footer';
-import './sustainability.css';
+type SustainabilityPageProps = {
+  params: Promise<{ locale: string }>;
+};
 
-export default function SustainabilityPage() {
+type StatCopy = {
+  value: string;
+  subtitle: string;
+  description: string;
+};
+
+type SocialCardCopy = {
+  title: string;
+  href: string;
+  link: string;
+};
+
+export async function generateMetadata({ params }: SustainabilityPageProps): Promise<Metadata> {
+  const { locale } = await params;
+  const language = normalizeLocale(locale);
+  const t = await getTranslations({ locale: language, namespace: "Sustainability" });
+
+  return {
+    title: t("metadata.title"),
+    description: t("metadata.description"),
+  };
+}
+
+export default async function SustainabilityPage({ params }: SustainabilityPageProps) {
+  const { locale } = await params;
+  const language = normalizeLocale(locale);
+  const t = await getTranslations({ locale: language, namespace: "Sustainability" });
+  const stats = t.raw("stats.items") as StatCopy[];
+  const socialCards = t.raw("social.cards") as SocialCardCopy[];
+
   return (
     <>
       <Header />
-      
-      {/* Module 1: Hero Banner */}
+
       <section className="sustainability-hero">
         <div className="sustainability-hero__bg" />
         <div className="sustainability-hero__overlay" />
         <div className="sustainability-hero__content">
-          <h1 className="sustainability-hero__title">企业可持续发展</h1>
+          <h1 className="sustainability-hero__title">{t("hero.title")}</h1>
           <p className="sustainability-hero__text">
-            我们在 AI 和加速计算方面的创新正在为环境责任设定新标准，同时助力打造更环保、更可持续的未来。
+            {t("hero.text")}
           </p>
         </div>
       </section>
 
-      {/* Module 2: Stats */}
       <section className="sustainability-stats">
         <div className="shell">
-          <h2 className="sustainability-stats__title">能源、效率和气候</h2>
+          <h2 className="sustainability-stats__title">{t("stats.title")}</h2>
           <div className="sustainability-stats__grid">
-            <div className="stat-item">
-              <div className="stat-item__value">#1</div>
-              <div className="stat-item__subtitle">最高效的超级计算机</div>
-              <div className="stat-item__description">
-                NVIDIA 为 2024 年 11 月 Green500 榜单上的顶级超级计算机提供支持。
+            {stats.map((stat) => (
+              <div key={stat.subtitle} className="stat-item">
+                <div className="stat-item__value">{stat.value}</div>
+                <div className="stat-item__subtitle">{stat.subtitle}</div>
+                <div className="stat-item__description">
+                  {stat.description}
+                </div>
               </div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-item__value">50x+</div>
-              <div className="stat-item__subtitle">更高的能效</div>
-              <div className="stat-item__description">
-                对于 LLM AI 推理工作负载，NVIDIA Blackwell GPU 的能效通常比传统 CPU 高 50 倍以上。
-              </div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-item__value">30%</div>
-              <div className="stat-item__subtitle">更低的功耗</div>
-              <div className="stat-item__description">
-                NVIDIA DPU 可以通过从效率较低的 CPU 中卸载基本的数据中心网络和基础设施功能来降低功耗。
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Module 3: Renewable Energy Target */}
       <section className="sustainability-target">
         <div className="shell">
           <div className="sustainability-target__layout">
             <div className="sustainability-target__content">
-              <h2 className="sustainability-target__title">实现 100% 可再生电力</h2>
+              <h2 className="sustainability-target__title">{t("target.title")}</h2>
               <p className="sustainability-target__text">
-                2025 财年，我们已实现并将持续保持由我们运营控制的办公场所和数据中心 100% 使用可再生电力。通过履行这一承诺，我们正在努力按照流行的气候科学标准管理范围 1 和 2 排放，将温室气体足迹中的范围 2 基于市场的基础排放减少至零。
+                {t("target.text")}
               </p>
             </div>
             <div className="sustainability-target__image-container">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img 
-                src="/images/renewable-energy-progress.svg" 
-                alt="Progress on Our Renewable Electricity Target" 
+              <img
+                src="/images/renewable-energy-progress.svg"
+                alt={t("target.imageAlt")}
                 className="sustainability-target__image"
               />
             </div>
@@ -73,38 +93,34 @@ export default function SustainabilityPage() {
         </div>
       </section>
 
-      {/* Module 4: Social Impact */}
       <section className="sustainability-social">
         <div className="shell">
-          <h2 className="sustainability-social__title">社会影响</h2>
+          <h2 className="sustainability-social__title">{t("social.title")}</h2>
           <div className="sustainability-social__grid">
-            <div className="social-card">
-              <h3 className="social-card__title">向所有人开放机会</h3>
-              <a href="/diversity-and-inclusion" className="social-card__link">在 NVIDIA 探索包容性 &gt;</a>
-            </div>
-            <div className="social-card">
-              <h3 className="social-card__title">回馈社区</h3>
-              <a href="/foundation" className="social-card__link">了解我们的基金会 &gt;</a>
-            </div>
+            {socialCards.map((card) => (
+              <div key={card.href} className="social-card">
+                <h3 className="social-card__title">{card.title}</h3>
+                <Link href={card.href} className="social-card__link">{card.link}</Link>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Module 5: Careers */}
       <section className="sustainability-careers">
         <div className="shell">
           <div className="sustainability-careers__layout">
             <div className="sustainability-careers__content">
-              <h2 className="sustainability-careers__title">员工们在这里实现他们的毕生事业</h2>
+              <h2 className="sustainability-careers__title">{t("careers.title")}</h2>
               <p className="sustainability-careers__text">
-                我们在 Glassdoor 的“2025 年最佳工作场所”榜单中排名第 4 位。我们的员工愿意长期留在这里工作；大约五分之一的员工已在 NVIDIA 工作了十年或更长时间。
+                {t("careers.text")}
               </p>
             </div>
             <div className="sustainability-careers__image-container">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img 
-                src="/images/glassdoors-best-places-to-work-2025-logo-regular.svg" 
-                alt="Glassdoor Best Places to Work 2025" 
+              <img
+                src="/images/glassdoors-best-places-to-work-2025-logo-regular.svg"
+                alt={t("careers.imageAlt")}
                 className="sustainability-careers__image"
               />
             </div>

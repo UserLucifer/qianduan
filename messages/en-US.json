@@ -3955,5 +3955,201 @@
         }
       ]
     }
+  },
+  "Foundation": {
+    "metadata": {
+      "title": "Foundation | Compute Rental",
+      "description": "Learn how the foundation helps employees give back to their communities through giving, volunteering, mentorship, and crisis response."
+    },
+    "hero": {
+      "title": "About Our Foundation"
+    },
+    "intro": {
+      "title": "Supporting employees as they give back to communities",
+      "text": "Communities are where we live and work. Our employees are passionate about making meaningful contributions where they can help. Through the Inspire 365 program, the foundation turns that passion into action and makes it easier for every employee to take part in community service."
+    },
+    "quote": {
+      "text": "Inspire 365 is one of the reasons this is such an exceptional place to work.",
+      "attribution": "— Nina L., Office Manager"
+    },
+    "inspire": {
+      "title": "Inspire 365",
+      "subtitle": "We provide flexible ways for employees to support causes they care about, from giving and volunteering to skills-based service, mentorship, community programs, and crisis response.",
+      "cards": [
+        {
+          "title": "Giving",
+          "desc": "Employees can support eligible organizations through donation matching and annual giving opportunities."
+        },
+        {
+          "title": "Skills-based volunteering",
+          "desc": "Employees are encouraged to contribute their professional skills and time to organizations that can benefit from their expertise."
+        },
+        {
+          "title": "New employee grants",
+          "desc": "New employees can begin their community impact journey early through grants that introduce them to the foundation program."
+        },
+        {
+          "title": "Champion-led events",
+          "desc": "Volunteer leaders organize community events, wellness activities, and team service opportunities that connect employees around shared causes."
+        },
+        {
+          "title": "Missions",
+          "desc": "Regional programs help employees find local organizations, volunteer opportunities, and high-impact community initiatives."
+        },
+        {
+          "title": "Charitable team building",
+          "desc": "Teams can take part in structured charitable activities that combine collaboration with community impact."
+        },
+        {
+          "title": "Mentoring and coaching",
+          "desc": "Employees can use their knowledge and experience to mentor students, nonprofit partners, and community members."
+        },
+        {
+          "title": "Disaster and crisis response",
+          "desc": "Employees can support relief efforts when communities face disasters, humanitarian crises, and urgent local needs."
+        }
+      ]
+    }
+  },
+  "DiversityInclusion": {
+    "metadata": {
+      "title": "Diversity, Inclusion, and Belonging | Compute Rental",
+      "description": "Learn how diversity, inclusion, and belonging help teams create opportunity, support employees, and build a more inclusive workplace."
+    },
+    "hero": {
+      "title": "Diversity, inclusion, and belonging: unlocking our full potential"
+    },
+    "intro": {
+      "title": "Unlimited opportunity for everyone",
+      "text": "Solving the world’s biggest challenges requires new ideas shaped by different perspectives, backgrounds, and cultures. That diversity drives innovation and creativity, creating opportunity for everyone committed to turning ideas into reality. Everyone has a voice, and everyone belongs."
+    },
+    "pillars": {
+      "title": "Creating the future together",
+      "items": [
+        {
+          "title": "Connecting with great talent",
+          "description": "We want to attract outstanding global talent that reflects a wide range of perspectives. We improve recruiting processes, create more inclusive job descriptions, and help candidates meet employees from communities they identify with during the interview experience.",
+          "quote": "“I felt welcomed from the start and received the support and encouragement I needed to succeed. Wherever you come from, you are part of the team.”",
+          "attribution": "— Manuel, Recruiting"
+        },
+        {
+          "title": "Exploring allyship at work",
+          "description": "We work to create an environment where underrepresented groups feel empowered. Through the CARE Allyship program, employees learn how to recognize the power of diversity and inclusion and take action to help others succeed.",
+          "quote": "“The allyship program taught me to pay closer attention to the needs of underrepresented groups and to create space for people to be seen and heard.”",
+          "attribution": "— Thiru, Software"
+        },
+        {
+          "title": "Navigating everyday work",
+          "description": "We encourage and support employees who are ready to take on new challenges. Tailored mentoring, job-shadowing experiences, and leadership development opportunities help people explore what is possible.",
+          "quote": "“The company created the conditions for me to thrive and strengthened the employee experience through inclusion and belonging.”",
+          "attribution": "— Marc, Diversity, Inclusion, and Belonging"
+        }
+      ]
+    },
+    "featured": {
+      "quote": "For the first time in my career, I can be myself without pretending to be someone else to succeed. As a proud Black refugee, this has been the happiest chapter of my career. Bringing my whole self to work has always been a dream.",
+      "attribution": "— Veronica, Product Security"
+    },
+    "support": {
+      "title": "Supporting what matters",
+      "items": [
+        {
+          "title": "Listening to employee needs",
+          "text": "Employees matter most. We adapt to different needs and support people at every stage of their personal and professional growth."
+        },
+        {
+          "title": "Committed to excellence",
+          "text": "We believe that when employees and their families are supported, people can bring their best selves to work every day."
+        }
+      ],
+      "quote": "When I arrived, I was activated for deployment. The support provided to me and my family was game-changing, and I will never forget it.",
+      "attribution": "— Sam, Data Center"
+    },
+    "opportunities": {
+      "title": "Unlimited ways to participate",
+      "items": [
+        {
+          "title": "Connect with others",
+          "text": "Community resource groups play an important role in the employee experience, from leading celebrations to advocacy and culture building. We support groups focused on identity, neurodiversity, caregivers, working parents, and more.",
+          "list": [
+            "Arab and Allies Network",
+            "NV Pride",
+            "Asian and Pacific Islander and Allies",
+            "Disabled Employees Network",
+            "Black Employee Network",
+            "South Asians and Allies",
+            "Early Career Network",
+            "Veterans Network",
+            "Hispanic and Latinx Network",
+            "Women in Technology"
+          ],
+          "quote": "“As a co-lead for ADHD employees, I have experienced what it means for neurodiverse people to be seen and included. Neurodiversity helps me see how different parts connect to create world-class experiences.”",
+          "attribution": "— Nate, IT"
+        },
+        {
+          "title": "Build a more inclusive workplace",
+          "text": "We partner with diverse student organizations across campuses, including minority-serving institutions, historically Black colleges and universities, and Hispanic-serving institutions. We also work with organizations such as AnitaB.org, Latinas in Tech, Women in Machine Learning, NSBE, and SHPE."
+        }
+      ]
+    },
+    "commitment": {
+      "title": "Our commitment to progress",
+      "text": "We focus on hiring a representative workforce. In recent years, we have achieved pay equity and continue to improve related practices, including fairness in hiring, development, promotion, and rewards."
+    }
+  },
+  "Sustainability": {
+    "metadata": {
+      "title": "Corporate Sustainability | Compute Rental",
+      "description": "Explore sustainability commitments around energy efficiency, renewable electricity, social impact, and employee experience."
+    },
+    "hero": {
+      "title": "Corporate Sustainability",
+      "text": "Innovation in AI and accelerated computing is setting new standards for environmental responsibility while helping build a greener, more sustainable future."
+    },
+    "stats": {
+      "title": "Energy, efficiency, and climate",
+      "items": [
+        {
+          "value": "#1",
+          "subtitle": "Most efficient supercomputer",
+          "description": "NVIDIA powers the top supercomputer on the November 2024 Green500 list."
+        },
+        {
+          "value": "50x+",
+          "subtitle": "Higher energy efficiency",
+          "description": "For LLM AI inference workloads, NVIDIA Blackwell GPUs can be more than 50 times as energy efficient as traditional CPUs."
+        },
+        {
+          "value": "30%",
+          "subtitle": "Lower power consumption",
+          "description": "NVIDIA DPUs can reduce power use by offloading essential data center networking and infrastructure functions from less efficient CPUs."
+        }
+      ]
+    },
+    "target": {
+      "title": "Achieving 100% renewable electricity",
+      "text": "In fiscal year 2025, office locations and data centers under our operational control reached 100% renewable electricity, and we intend to maintain that standard. This commitment helps manage Scope 1 and Scope 2 emissions according to widely used climate science standards and reduce market-based Scope 2 emissions to zero.",
+      "imageAlt": "Progress on our renewable electricity target"
+    },
+    "social": {
+      "title": "Social impact",
+      "cards": [
+        {
+          "title": "Opening opportunity to everyone",
+          "href": "/diversity-and-inclusion",
+          "link": "Explore inclusion >"
+        },
+        {
+          "title": "Giving back to communities",
+          "href": "/foundation",
+          "link": "Learn about the foundation >"
+        }
+      ]
+    },
+    "careers": {
+      "title": "Employees build their life’s work here",
+      "text": "We ranked No. 4 on Glassdoor’s 2025 Best Places to Work list. Employees choose to stay and grow here; roughly one in five employees has worked here for ten years or longer.",
+      "imageAlt": "Glassdoor Best Places to Work 2025"
+    }
   }
 }
