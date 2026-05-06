@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, type ReactNode } from "react";
+import { useTranslations } from "next-intl";
 import { Loader2 } from "lucide-react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { Button } from "@/components/ui/button";
@@ -28,7 +29,7 @@ export function DataTable<T extends object>({
   data,
   rowKey,
   loading = false,
-  emptyText = "暂无数据",
+  emptyText,
   pageNo,
   pageSize,
   total,
@@ -44,6 +45,7 @@ export function DataTable<T extends object>({
   total?: number;
   onPageChange?: (pageNo: number) => void;
 }) {
+  const t = useTranslations("DataTable");
   const pageCount = pageNo && pageSize && total ? Math.max(1, Math.ceil(total / pageSize)) : 1;
   const canPrevious = Boolean(pageNo && pageNo > 1);
   const canNext = Boolean(pageNo && pageNo < pageCount);
@@ -54,7 +56,7 @@ export function DataTable<T extends object>({
   const virtualizer = useVirtualizer({
     count: isVirtual ? data.length : 0,
     getScrollElement: () => parentRef.current,
-    estimateSize: () => 53, // 预估每行高度 53px
+    estimateSize: () => 53,
     overscan: 5,
   });
 
@@ -112,14 +114,14 @@ export function DataTable<T extends object>({
               <TableCell colSpan={columns.length} className="h-32 text-center text-muted-foreground">
                 <span className="inline-flex items-center gap-2 text-sm">
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  数据加载中
+                  {t("loading")}
                 </span>
               </TableCell>
             </TableRow>
           ) : data.length === 0 ? (
             <TableRow className="border-border hover:bg-transparent">
               <TableCell colSpan={columns.length} className="h-32 text-center text-sm text-muted-foreground">
-                {emptyText}
+                {emptyText ?? t("empty")}
               </TableCell>
             </TableRow>
           ) : isVirtual ? (
@@ -147,7 +149,7 @@ export function DataTable<T extends object>({
       {pageNo && pageSize && typeof total === "number" && onPageChange ? (
         <div className="flex flex-col gap-3 border-t border-border px-4 py-4 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
           <span className="font-medium">
-            第 {pageNo} / {pageCount} 页，共 {total} 条数据
+            {t("pageSummary", { pageNo, pageCount, total })}
           </span>
           <div className="flex items-center gap-2">
             <Button
@@ -157,7 +159,7 @@ export function DataTable<T extends object>({
               disabled={!canPrevious}
               onClick={() => onPageChange(pageNo - 1)}
             >
-              上一页
+              {t("previousPage")}
             </Button>
             <Button
               variant="outline"
@@ -166,7 +168,7 @@ export function DataTable<T extends object>({
               disabled={!canNext}
               onClick={() => onPageChange(pageNo + 1)}
             >
-              下一页
+              {t("nextPage")}
             </Button>
           </div>
         </div>

@@ -8,6 +8,7 @@ import {
   shouldClearAuthSession,
 } from "@/lib/api-errors";
 import { clearUserAuthSession, getUserAccessToken } from "@/lib/auth-session";
+import { getClientLocale, localizePathname, stripLocaleFromPathname } from "@/i18n/locales";
 
 /**
  * 通用 Fetcher 函数，为 Spring Boot 后端设计
@@ -18,6 +19,7 @@ export async function apiFetcher<T>(url: string, options: RequestInit = {}): Pro
 
   const defaultHeaders: Record<string, string> = {
     'Content-Type': 'application/json',
+    'Accept-Language': getClientLocale(),
   };
 
   if (token) {
@@ -38,8 +40,8 @@ export async function apiFetcher<T>(url: string, options: RequestInit = {}): Pro
   if (isApiResponseLike(responseData) && !isSuccessApiCode(responseData.code)) {
     if (shouldClearAuthSession(responseData.code, response.status) && typeof window !== "undefined") {
       clearUserAuthSession();
-      if (window.location.pathname !== "/login") {
-        window.location.href = "/login";
+      if (stripLocaleFromPathname(window.location.pathname) !== "/login") {
+        window.location.href = localizePathname("/login", getClientLocale());
       }
     }
 
@@ -56,8 +58,8 @@ export async function apiFetcher<T>(url: string, options: RequestInit = {}): Pro
     // 处理常见的 HTTP 错误
     if (shouldClearAuthSession(undefined, response.status) && typeof window !== "undefined") {
       clearUserAuthSession();
-      if (window.location.pathname !== "/login") {
-        window.location.href = "/login";
+      if (stripLocaleFromPathname(window.location.pathname) !== "/login") {
+        window.location.href = localizePathname("/login", getClientLocale());
       }
     }
 

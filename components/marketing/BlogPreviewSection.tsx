@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { getBlogPosts } from "@/api/blog";
@@ -6,7 +6,8 @@ import type { BlogPostResponse } from "@/api/blog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { formatDate } from "@/lib/format";
+import { normalizeLocale } from "@/i18n/locales";
+import { getTranslations } from "next-intl/server";
 
 type BlogPreviewPost = {
   id: string;
@@ -18,59 +19,92 @@ type BlogPreviewPost = {
   href: string;
 };
 
-const fallbackPosts: BlogPreviewPost[] = [
+type FallbackPostCopy = {
+  title: string;
+  summary: string;
+  category: string;
+};
+
+const fallbackPostMeta = [
   {
     id: "gpu-rental-training",
-    title: "GPU 租赁如何缩短模型训练排队时间",
-    summary: "从实例规格、显存容量到节点交付节奏，梳理训练任务上线前最需要确认的算力指标。",
-    category: "算力实践",
-    date: "2026年05月05日",
+    date: "2026-05-05",
     image: "/images/home/下载.png",
     href: "/blog",
   },
   {
     id: "inference-readiness",
-    title: "推理业务上线前需要确认的基础设施指标",
-    summary: "围绕吞吐、延迟、弹性扩缩容和网络稳定性，建立更清晰的 AI 推理资源评估方式。",
-    category: "AI 推理",
-    date: "2026年04月28日",
+    date: "2026-04-28",
     image: "/images/home/3.webp",
     href: "/blog",
   },
   {
     id: "gpu-cluster-reliability",
-    title: "构建高稳定 GPU 集群的三条经验",
-    summary: "把安全、监控和资源隔离前置到架构设计阶段，让关键工作负载具备持续运行能力。",
-    category: "基础设施",
-    date: "2026年04月16日",
+    date: "2026-04-16",
     image: "/images/home/hub-ml.png",
     href: "/blog",
   },
 ];
 
-const fallbackImages = fallbackPosts.map((post) => post.image);
+const fallbackImages = fallbackPostMeta.map((post) => post.image);
 
-function toPreviewPost(post: BlogPostResponse, index: number): BlogPreviewPost {
-  const date = formatDate(post.publishedAt ?? post.createdAt);
+function formatPreviewDate(value: string | undefined, locale: string) {
+  if (!value) return "-";
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "-";
+
+  return new Intl.DateTimeFormat(locale, {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }).format(date);
+}
+
+function createFallbackPosts(copy: FallbackPostCopy[], locale: string): BlogPreviewPost[] {
+  return fallbackPostMeta.map((post, index) => ({
+    ...post,
+    ...copy[index],
+    date: formatPreviewDate(post.date, locale),
+  }));
+}
+
+function toPreviewPost(
+  post: BlogPostResponse,
+  index: number,
+  locale: string,
+  fallbackPosts: BlogPreviewPost[],
+  defaultSummary: string,
+  defaultCategory: string,
+): BlogPreviewPost {
+  const date = formatPreviewDate(post.publishedAt ?? post.createdAt, locale);
 
   return {
     id: String(post.id),
     title: post.title,
-    summary: post.summary?.trim() || fallbackPosts[index]?.summary || "阅读更多算力租赁与 AI 基础设施实践。",
-    category: post.categoryName || fallbackPosts[index]?.category || "博客",
+    summary: post.summary?.trim() || fallbackPosts[index]?.summary || defaultSummary,
+    category: post.categoryName || fallbackPosts[index]?.category || defaultCategory,
     date: date === "-" ? fallbackPosts[index]?.date || "" : date,
     image: post.coverImageUrl || fallbackImages[index % fallbackImages.length],
     href: `/blog/${post.id}`,
   };
 }
 
-async function loadPreviewPosts(): Promise<BlogPreviewPost[]> {
+async function loadPreviewPosts(
+  locale: string,
+  fallbackPosts: BlogPreviewPost[],
+  defaultSummary: string,
+  defaultCategory: string,
+): Promise<BlogPreviewPost[]> {
+  const language = normalizeLocale(locale);
+
   try {
     const response = await getBlogPosts(
       {
         pageNo: 1,
         pageSize: 3,
         publish_status: 1,
+        language,
       },
       { timeout: 2500 },
     );
@@ -80,14 +114,19 @@ async function loadPreviewPosts(): Promise<BlogPreviewPost[]> {
       return fallbackPosts;
     }
 
-    return records.slice(0, 3).map(toPreviewPost);
+    return records
+      .slice(0, 3)
+      .map((post, index) => toPreviewPost(post, index, language, fallbackPosts, defaultSummary, defaultCategory));
   } catch {
     return fallbackPosts;
   }
 }
 
-export default async function BlogPreviewSection() {
-  const posts = await loadPreviewPosts();
+export default async function BlogPreviewSection({ locale }: { locale?: string }) {
+  const language = normalizeLocale(locale);
+  const t = await getTranslations({ locale: language, namespace: "MarketingHome.blogPreview" });
+  const fallbackPosts = createFallbackPosts(t.raw("fallbackPosts") as FallbackPostCopy[], language);
+  const posts = await loadPreviewPosts(language, fallbackPosts, t("defaultSummary"), t("defaultCategory"));
 
   return (
     <section className="relative left-1/2 right-1/2 w-screen -ml-[50vw] -mr-[50vw] border-t border-[var(--line)] bg-[var(--background)] py-20 text-[var(--foreground)] sm:py-24 lg:py-28">
@@ -95,10 +134,10 @@ export default async function BlogPreviewSection() {
         <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div className="max-w-xl">
             <h2 className="text-3xl font-[590] leading-tight tracking-normal md:text-5xl">
-              阅读最新博客
+              {t("title")}
             </h2>
             <p className="mt-4 max-w-md text-sm leading-6 text-[var(--muted)] md:text-base">
-              获取算力租赁、GPU 集群和 AI 基础设施的最新实践与产品洞察。
+              {t("subtitle")}
             </p>
           </div>
           <Button
@@ -107,7 +146,7 @@ export default async function BlogPreviewSection() {
             className="w-fit border-[var(--card-border)] bg-[var(--surface)] text-[var(--foreground)] shadow-none hover:bg-[var(--surface-strong)]"
           >
             <Link href="/blog">
-              查看全部
+              {t("viewAll")}
               <ArrowRight className="h-4 w-4" />
             </Link>
           </Button>
@@ -149,7 +188,7 @@ export default async function BlogPreviewSection() {
                   className="mt-5 h-auto justify-start p-0 text-xs font-[590] uppercase tracking-normal text-[var(--foreground)] hover:text-[var(--accent)]"
                 >
                   <Link href={post.href}>
-                    继续阅读
+                    {t("readMore")}
                     <ArrowRight className="h-3.5 w-3.5" />
                   </Link>
                 </Button>

@@ -1,0 +1,848 @@
+{
+  "Common": {
+    "brand": "Compute Rental",
+    "login": "Log in",
+    "logout": "Log out",
+    "console": "Console",
+    "dashboard": "Dashboard",
+    "accountSettings": "Account settings",
+    "unnamedUser": "Unnamed user",
+    "account": "Account"
+  },
+  "LocaleSwitcher": {
+    "label": "Language",
+    "zh-CN": "中文",
+    "en-US": "English"
+  },
+  "Metadata": {
+    "title": "Compute Rental Frontend",
+    "description": "A compute rental frontend built with Next.js"
+  },
+  "ThemeToggle": {
+    "ariaLabel": "Toggle color theme"
+  },
+  "NotFound": {
+    "title": "Page Not Found",
+    "description": "The page you are looking for may have been removed, renamed, or is temporarily unavailable.",
+    "home": "Back to home"
+  },
+  "MarketingHeader": {
+    "mainNav": "Main navigation",
+    "products": "Products",
+    "useCases": "Use Cases",
+    "solutions": "Solutions",
+    "hosting": "Hosting",
+    "rental": "Rental",
+    "company": "Company",
+    "blog": "Blog",
+    "helpCenter": "Help Center"
+  },
+  "Footer": {
+    "tagline": "A high-performance AI compute scheduling platform built around token economics, giving global developers compute resources they can use immediately.",
+    "companyInfo": "Company",
+    "resources": "Resources",
+    "legal": "Legal",
+    "help": "Help",
+    "about": "About us",
+    "sustainability": "Sustainability",
+    "solutions": "Solutions",
+    "financing": "Financing",
+    "hardware": "Hardware",
+    "useCases": "Use Cases",
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy",
+    "compliance": "Compliance",
+    "vulnerabilityDisclosure": "Vulnerability Disclosure",
+    "dataProcessing": "Data Processing",
+    "docs": "Documentation",
+    "blog": "Blog",
+    "contact": "Contact us",
+    "copyright": "© {year} Compute Rental. All rights reserved.",
+    "status": "All systems operational"
+  },
+  "MobileMarketingNav": {
+    "openMenu": "Open navigation menu",
+    "closeMenu": "Close navigation menu",
+    "title": "Mobile navigation",
+    "description": "Open product, use case, solution, hosting, company, and account links.",
+    "login": "Log in",
+    "dashboard": "Dashboard",
+    "accountSettings": "Account settings",
+    "logout": "Log out",
+    "unnamedUser": "Unnamed user",
+    "groups": {
+      "products": {
+        "title": "Products",
+        "items": {
+          "gpuComputing": {
+            "name": "GPU Computing",
+            "description": "Browse GPU instances and compute specifications"
+          },
+          "rental": {
+            "name": "Rental",
+            "description": "Choose available resources and place orders on demand"
+          },
+          "infrastructureControl": {
+            "name": "Infrastructure Control",
+            "description": "Managed clusters, networking, and runtime control"
+          },
+          "dataStorage": {
+            "name": "Data & Storage",
+            "description": "Object storage and high-performance data paths"
+          }
+        }
+      },
+      "useCases": {
+        "title": "Use Cases",
+        "items": {
+          "textGeneration": {
+            "name": "AI Text Generation",
+            "description": "Content, knowledge-base, and text workloads"
+          },
+          "imageVideo": {
+            "name": "AI Image + Video Generation",
+            "description": "Batch AIGC generation workflows"
+          },
+          "agents": {
+            "name": "AI Agents",
+            "description": "Agent task execution and orchestration"
+          },
+          "all": {
+            "name": "All use cases",
+            "description": "View the full use case catalog"
+          }
+        }
+      },
+      "solutions": {
+        "title": "Solutions",
+        "items": {
+          "llmTraining": {
+            "name": "LLM Training",
+            "description": "Bare-metal GPU clusters"
+          },
+          "inference": {
+            "name": "High-Concurrency Inference",
+            "description": "Low-latency elastic API deployment"
+          },
+          "startups": {
+            "name": "AIGC Startups",
+            "description": "Resource plans for startup teams"
+          },
+          "enterprise": {
+            "name": "Enterprise Solutions",
+            "description": "Dedicated networking, storage, and support"
+          }
+        }
+      },
+      "hosting": {
+        "title": "Hosting",
+        "items": {
+          "hosting": {
+            "name": "Hosting",
+            "description": "Publish GPU hosts and manage customers, support, billing, and transactions"
+          },
+          "dataCenter": {
+            "name": "Data Center",
+            "description": "Apply for certified data center status and preferred placement"
+          },
+          "financing": {
+            "name": "Financing",
+            "description": "Match GPU hosts with financing and hardware purchasing support"
+          },
+          "hardware": {
+            "name": "Hardware",
+            "description": "Purchase certified GPU servers preconfigured for platform availability"
+          }
+        }
+      },
+      "company": {
+        "title": "Company",
+        "items": {
+          "about": {
+            "name": "About us",
+            "description": "Team, mission, and platform direction"
+          },
+          "sustainability": {
+            "name": "Sustainability",
+            "description": "Energy efficiency and long-term responsibility"
+          },
+          "enterprise": {
+            "name": "Enterprise Solutions",
+            "description": "Custom resources for larger teams"
+          }
+        }
+      }
+    },
+    "directLinks": {
+      "rental": "Rental",
+      "blog": "Blog",
+      "helpCenter": "Help Center",
+      "enterprise": "Enterprise consulting"
+    }
+  },
+  "DashboardNav": {
+    "brand": "GPU Console",
+    "groups": {
+      "overview": "Overview",
+      "compute": "Compute Resources",
+      "finance": "Finance Center",
+      "growth": "Referral Revenue",
+      "account": "Account Settings"
+    },
+    "items": {
+      "dashboard": "Dashboard",
+      "analytics": "Analytics",
+      "products": "Product Hall",
+      "orders": "My Instances",
+      "api": "API Management",
+      "wallet": "My Wallet",
+      "recharge": "Recharge",
+      "withdraw": "Withdraw",
+      "billing": "Billing Details",
+      "profits": "Compute Revenue",
+      "team": "My Team",
+      "commissions": "Commission Details",
+      "settlements": "Settlement Records",
+      "notifications": "Notifications",
+      "settings": "Profile Settings"
+    }
+  },
+  "DashboardHeader": {
+    "pageFallback": "Dashboard",
+    "quickSearch": "Quick search...",
+    "publicNav": "Public site navigation",
+    "openPublicNav": "Open public site navigation",
+    "siteNav": "Site navigation",
+    "accountFallback": "Account",
+    "personalCenter": "Profile",
+    "billingRecords": "Billing records",
+    "wallet": "My wallet",
+    "logout": "Log out",
+    "public": {
+      "home": "Home",
+      "blog": "Blog",
+      "docs": "Documentation"
+    }
+  },
+  "AdminNav": {
+    "brand": "Admin",
+    "subtitle": "Admin Control Panel",
+    "groups": {
+      "operations": "Operations",
+      "users": "Users",
+      "finance": "Finance",
+      "compute": "Compute Scheduling",
+      "system": "System"
+    },
+    "items": {
+      "dashboard": "Dashboard",
+      "wallets": "Asset Management",
+      "logs": "Audit Logs",
+      "users": "Customers",
+      "team": "Team Topology",
+      "recharge": "Recharge Review",
+      "withdraw": "Withdrawal Review",
+      "profits": "Revenue Reconciliation",
+      "commissions": "Commissions",
+      "settlements": "Settlement Work Orders",
+      "orders": "Rental Orders",
+      "api": "API Credentials",
+      "products": "Product Library",
+      "models": "Model Parameters",
+      "gpu": "GPU Models",
+      "regions": "Node Regions",
+      "rules": "Cycle Strategies",
+      "management": "Admin Permissions",
+      "notifications": "Global Announcements",
+      "content": "Content Publishing",
+      "docs": "Documentation System",
+      "config": "System Parameters",
+      "scheduler": "Async Scheduling"
+    }
+  },
+  "AdminHeader": {
+    "searchPlaceholder": "Search users, orders, transactions, or settings",
+    "switchTheme": "Switch to {theme} theme",
+    "darkTheme": "dark",
+    "lightTheme": "light",
+    "adminFallback": "Admin",
+    "logout": "Log out",
+    "breadcrumbs": {
+      "admins": "Admin",
+      "dashboard": "Dashboard",
+      "management": "User Management",
+      "wallets": "Wallet Management",
+      "recharge": "Recharge Review",
+      "withdraw": "Withdrawal Review",
+      "orders": "Rental Orders",
+      "api": "API Credentials",
+      "profits": "Revenue Records",
+      "commissions": "Commission Records",
+      "settlements": "Settlement Orders",
+      "team": "Team Relations",
+      "products": "Product Catalog",
+      "models": "AI Models",
+      "gpu": "GPU Models",
+      "regions": "Regions",
+      "rules": "Cycle Rules",
+      "content": "Content Management",
+      "notifications": "Notification Management",
+      "config": "System Configuration",
+      "scheduler": "Scheduled Tasks",
+      "logs": "Operation Logs"
+    }
+  },
+  "AdminTranslations": {
+    "button": "Translate",
+    "notificationTitle": "Notification Translations",
+    "rechargeChannelTitle": "Recharge Channel Translations",
+    "regionTitle": "Region Translations",
+    "gpuModelTitle": "GPU Model Translations",
+    "productTitle": "Product Translations",
+    "aiModelTitle": "AI Model Translations",
+    "cycleRuleTitle": "Rental Cycle Translations",
+    "blogCategoryTitle": "Blog Category Translations",
+    "blogTagTitle": "Blog Tag Translations",
+    "blogPostTitle": "Blog Post Translations",
+    "description": "Maintain Chinese and English display content. Saving Chinese also syncs the default main-table fields; saving English only updates the translation table.",
+    "configured": "Configured",
+    "notConfigured": "Not configured",
+    "chinese": "中文",
+    "english": "English",
+    "notificationTitleField": "Notification title",
+    "notificationContentField": "Notification content",
+    "channelName": "Channel display name",
+    "accountName": "Account name",
+    "regionName": "Region name",
+    "modelName": "Model name",
+    "gpuModelName": "GPU model name",
+    "vendorName": "Vendor name",
+    "productName": "Product name",
+    "cycleName": "Rental cycle name",
+    "categoryName": "Category name",
+    "tagName": "Tag name",
+    "blogTitle": "Post title",
+    "blogSummary": "Post summary",
+    "blogContent": "Markdown content",
+    "save": "Save {language}",
+    "saving": "Saving...",
+    "loading": "Loading translations...",
+    "emptyHint": "This language is not configured yet. Public APIs will fallback to Chinese according to backend rules.",
+    "cancel": "Cancel"
+  },
+  "Docs": {
+    "brandShort": "C",
+    "searchPlaceholder": "Search docs...",
+    "support": "Support",
+    "systemHome": "System home",
+    "pricing": "Pricing",
+    "blog": "Blog",
+    "docsNav": "Docs navigation",
+    "docsCenter": "Documentation",
+    "views": "{count} views",
+    "emptyArticle": "This document does not have body content yet.",
+    "nextArticle": "Next article",
+    "docsBrand": "Compute Rental Docs",
+    "backToSection": "Back to {section}",
+    "searchResults": "Search results",
+    "sectionHome": "Section home",
+    "description": "Find platform setup guides, product instructions, API documentation, and answers to common operations questions.",
+    "noDocs": "No documents found",
+    "noDocsDescription": "Try a different keyword or category. Published documents will appear here when available.",
+    "clearFilters": "Clear filters",
+    "pageSummary": "Page {pageNo} of {pageCount}, {total} total",
+    "previousPage": "Previous",
+    "nextPage": "Next",
+    "sections": {
+      "guide": "Guide",
+      "integration": "Integrations",
+      "faq": "FAQ",
+      "support": "Support"
+    }
+  },
+  "DataTable": {
+    "empty": "No data",
+    "loading": "Loading data",
+    "pageSummary": "Page {pageNo} of {pageCount}, {total} records",
+    "previousPage": "Previous",
+    "nextPage": "Next"
+  },
+  "SearchPanel": {
+    "filters": "Filters",
+    "reset": "Reset",
+    "search": "Search"
+  },
+  "MegaMenus": {
+    "product": {
+      "catalog": "Product Catalog",
+      "categoryDescription": "Choose cloud compute, storage, and runtime control modules by capability.",
+      "defaultItemDescription": "View related specifications and available resources.",
+      "categories": {
+        "foundation": {
+          "name": "Infrastructure",
+          "featuredTitle": "Compute Rental earns SemiAnalysis Platinum status",
+          "featuredDescription": "The only AI cloud provider to earn Platinum twice. See why Compute Rental is a core cloud for AI.",
+          "items": {
+            "gpuComputing": "GPU Computing",
+            "cpuComputing": "CPU Computing",
+            "bareMetal": "Bare Metal Servers",
+            "networking": "Networking"
+          }
+        },
+        "dataStorage": {
+          "name": "Data & Storage",
+          "featuredTitle": "Zero-egress data migration (0EM)",
+          "featuredDescription": "Move data to Compute Rental without fees or lock-in, guided by experts into high-performance AI object storage.",
+          "items": {
+            "objectStorage": "AI Object Storage",
+            "vastStorage": "Dedicated VAST Storage",
+            "distributedFile": "Distributed File Storage",
+            "localStorage": "Local Storage"
+          }
+        },
+        "infrastructureControl": {
+          "name": "Infrastructure Control",
+          "featuredTitle": "Defining the AI core cloud",
+          "featuredDescription": "Explore how Compute Rental's AI core cloud redefines infrastructure.",
+          "items": {
+            "managedKubernetes": "Managed Kubernetes"
+          }
+        },
+        "runtimeAcceleration": {
+          "name": "Runtime Acceleration",
+          "featuredTitle": "MLPerf v5.0 benchmark results",
+          "featuredDescription": "Compute Rental keeps setting records in MLPerf benchmarks, leading the industry in AI training and inference performance.",
+          "items": {
+            "sunk": "SUNK",
+            "sunkAnywhere": "SUNK Anywhere",
+            "serverlessRl": "Serverless RL"
+          }
+        },
+        "modelAgent": {
+          "name": "Model & Agent Development",
+          "featuredTitle": "Compute Rental ARENA",
+          "featuredDescription": "Run real AI workloads on dedicated infrastructure to validate performance, scale, and cost before production.",
+          "items": {
+            "training": "Training",
+            "fineTuning": "Fine-tuning",
+            "inference": "Inference",
+            "monitoring": "Monitoring"
+          }
+        },
+        "missionControl": {
+          "name": "Mission Control",
+          "featuredTitle": "Mission Control: the standard for large AI operations",
+          "featuredDescription": "Mission Control combines observability, security audit visibility, and automated operations to keep AI infrastructure reliable and transparent.",
+          "items": {
+            "missionControl": "Mission Control",
+            "fleetLifecycle": "Fleet lifecycle controller",
+            "nodeLifecycle": "Node lifecycle controller",
+            "observability": "Observability"
+          }
+        }
+      }
+    },
+    "useCases": {
+      "title": "Use Cases",
+      "sideTitle": "Workload map",
+      "sideDescription": "From generative AI to graphics rendering, choose GPU resources and deployment patterns by workload.",
+      "viewAll": "View all use cases",
+      "items": {
+        "textGeneration": {
+          "name": "AI Text Generation",
+          "description": "Customer support, content, and knowledge-base generation"
+        },
+        "imageVideo": {
+          "name": "AI Image + Video Generation",
+          "description": "Batch generation and creative production"
+        },
+        "agents": {
+          "name": "AI Agents",
+          "description": "Multi-step task orchestration and execution"
+        },
+        "fineTuning": {
+          "name": "AI Fine-Tuning",
+          "description": "Fast adaptation for domain models"
+        },
+        "batchData": {
+          "name": "Batch Data Processing",
+          "description": "High-throughput offline task processing"
+        },
+        "audio": {
+          "name": "Audio Transcription",
+          "description": "Speech recognition and content archiving"
+        },
+        "virtualComputing": {
+          "name": "Virtual Computing",
+          "description": "Elastic workstations and remote desktops"
+        },
+        "gpuProgramming": {
+          "name": "GPU Programming",
+          "description": "CUDA development and performance tuning"
+        },
+        "rendering": {
+          "name": "Graphics Rendering",
+          "description": "Render farms and 3D production"
+        }
+      }
+    },
+    "solutions": {
+      "byScenario": "Solutions by Scenario",
+      "byIndustry": "By Industry",
+      "ctaDescription": "Explore compute acceleration plans tailored for your industry and growth goals.",
+      "ctaLink": "Get a custom plan ->",
+      "categories": {
+        "training": "AI Training",
+        "inference": "AI Inference",
+        "compute": "Specialized Compute"
+      },
+      "items": {
+        "llmTraining": {
+          "name": "LLM Training",
+          "description": "Bare-metal GPU clusters"
+        },
+        "agents": {
+          "name": "Agent Development",
+          "description": "Support complex agent iteration"
+        },
+        "highConcurrency": {
+          "name": "High-Concurrency Inference",
+          "description": "Low-latency elastic API deployment"
+        },
+        "aigc": {
+          "name": "AIGC Generation",
+          "description": "Optimized for image and video generation"
+        },
+        "graphics": {
+          "name": "Graphics Rendering",
+          "description": "Cloud elastic render farms"
+        },
+        "scientific": {
+          "name": "Scientific Computing",
+          "description": "Compute-intensive simulation workloads"
+        }
+      },
+      "industries": {
+        "startups": "AIGC Startups",
+        "research": "Research & Universities",
+        "auto": "Autonomous Driving",
+        "gaming": "Gaming & Digital Entertainment"
+      }
+    },
+    "hosting": {
+      "title": "Hosting",
+      "sideTitle": "Hardware and financing support",
+      "sideDescription": "From GPU server purchasing to financing plans, help your team prepare resources more efficiently.",
+      "sideLink": "View hardware ->",
+      "items": {
+        "hosting": {
+          "name": "Hosting",
+          "description": "Publish GPU hosts and manage customers, support, billing, and transaction flow"
+        },
+        "dataCenter": {
+          "name": "Data Center",
+          "description": "Apply for certified data center status, trust labels, and preferred placement"
+        },
+        "financing": {
+          "name": "Financing",
+          "description": "Match GPU hosts with financing and hardware purchasing support"
+        },
+        "hardware": {
+          "name": "Hardware",
+          "description": "Purchase certified GPU servers preconfigured for platform availability"
+        }
+      }
+    },
+    "company": {
+      "title": "Company",
+      "sideTitle": "Partnership inquiry",
+      "sideDescription": "Need dedicated resource pools, network isolation, or purchasing support for your team? Start an enterprise inquiry.",
+      "contact": "Contact us",
+      "items": {
+        "about": {
+          "name": "About us",
+          "description": "Learn about the team, mission, and infrastructure direction"
+        },
+        "sustainability": {
+          "name": "Sustainability",
+          "description": "Review energy efficiency and long-term operating responsibility"
+        },
+        "enterprise": {
+          "name": "Enterprise Solutions",
+          "description": "Custom networking, storage, and support for larger teams"
+        }
+      }
+    }
+  },
+  "BlogCard": {
+    "noImage": "No Image"
+  },
+  "MarketingHome": {
+    "hero": {
+      "badge": "Compute Rental",
+      "label": "GPU / Training / Inference",
+      "title": "Rent reliable compute on demand, delivered as directly as core infrastructure.",
+      "description": "Browse our compute catalog and choose GPU instances for AI training, inference, and production workloads."
+    },
+    "logoCarousel": {
+      "defaultText": "More than 10,000 companies, from startups to Fortune 500 enterprises, run workloads on our platform."
+    },
+    "productList": {
+      "title": "Live GPU infrastructure",
+      "subtitle": "Transparent access to 20,000+ GPUs with on-demand rental, real-time availability, and fast delivery.",
+      "demand": {
+        "high": "High",
+        "medium": "Med",
+        "low": "Low"
+      },
+      "priceUnit": "/hr",
+      "priceRange": "{min} - {max}/hr range",
+      "rent": "Rent",
+      "viewAll": "View all GPUs"
+    },
+    "features": {
+      "title": "Explore our GPU cloud services",
+      "subtitle": "From server selection to token output and yield visibility, the key signals are surfaced directly.",
+      "items": [
+        {
+          "title": "Choose by workload return",
+          "description": "Compare machines by how they perform in real AI scenarios, so the right rental choice is easier to see."
+        },
+        {
+          "title": "Match popular AI tasks",
+          "description": "Allocate server resources for text, image, video, speech, and other high-demand AI workloads."
+        },
+        {
+          "title": "Track token performance",
+          "description": "Monitor token throughput and job behavior in real time, with clearer evidence for each choice."
+        },
+        {
+          "title": "See cost and output clearly",
+          "description": "Keep the critical numbers visible, from rental spend to actual runtime output."
+        },
+        {
+          "title": "Let the platform schedule runtime",
+          "description": "Reduce idle capacity and switching losses so servers stay focused on real workloads."
+        },
+        {
+          "title": "Start with less overhead",
+          "description": "You focus on model fit and return; the platform handles access and runtime workflow."
+        }
+      ]
+    },
+    "useCases": {
+      "title": "Broad AI workload support",
+      "subtitle": "Whether you run training, inference, or rendering, we provide compute resources matched to the workload.",
+      "viewAll": "View all use cases",
+      "learnMore": "Learn more",
+      "items": [
+        {
+          "title": "AI text generation",
+          "desc": "Deploy large language models for content generation, conversational AI, and code assistance."
+        },
+        {
+          "title": "AI image and video generation",
+          "desc": "Run Stable Diffusion or video-generation models to unblock creative production workflows."
+        },
+        {
+          "title": "AI agents",
+          "desc": "Build autonomous AI agents for task automation and workflow orchestration."
+        }
+      ]
+    },
+    "engines": {
+      "title": "The engines of superintelligence",
+      "subtitle": "Experience next-generation AI infrastructure with high-performance GPU clusters built for the most demanding workloads.",
+      "items": [
+        {
+          "title": "NVIDIA VR200 NVL72",
+          "description": "Rack-scale systems optimized for agentic AI."
+        },
+        {
+          "title": "NVIDIA GB300 NVL72",
+          "description": "Rack-scale systems optimized for AI inference."
+        },
+        {
+          "title": "NVIDIA HGX B300",
+          "description": "Peak performance per watt for maximum training uptime."
+        },
+        {
+          "title": "NVIDIA HGX B200",
+          "description": "Versatile infrastructure for fine-tuning and inference."
+        }
+      ]
+    },
+    "workloads": {
+      "title": "Built for AI workloads",
+      "subtitle": "We bring performance, scale, and operational expertise together so AI teams can move from ambition to execution faster.",
+      "items": [
+        {
+          "title": "Move to market faster",
+          "number": "10X",
+          "subtext": "Faster inference startup",
+          "hoverBullets": [
+            "Use a full-stack AI-native cloud platform to access NVIDIA GPUs at leading speed and scale, shorten development cycles, and bring solutions to market sooner.",
+            "Our Kubernetes-native development experience combines bare-metal infrastructure, automated provisioning, and support for leading workload orchestration frameworks."
+          ]
+        },
+        {
+          "title": "Industry-leading performance\nand efficiency",
+          "number": "96%",
+          "subtext": "Cluster throughput",
+          "hoverBullets": [
+            "Reduce interruptions, improve cluster utilization, and resolve issues near real time so teams stay productive and focused on innovation.",
+            "Resilient infrastructure, disciplined node lifecycle management, deep observability, and 24/7 engineering support help keep critical workloads moving."
+          ]
+        },
+        {
+          "title": "Real-time reliability\nand resilience",
+          "number": "50%",
+          "subtext": "Fewer daily interruptions",
+          "hoverBullets": [
+            "Accelerate training and inference on production-ready high-performance clusters designed for maximum reliability and better total cost of ownership.",
+            "Access advanced compute, storage, and networking with strict health checks and automated lifecycle management, so AI workloads can run in hours instead of weeks."
+          ]
+        }
+      ]
+    },
+    "testimonials": {
+      "title": "Trusted by leading AI innovators",
+      "slideAria": "Go to testimonial {index}",
+      "items": [
+        {
+          "quote": "CoreWeave's ability to provide reliable, cutting-edge hardware has consistently met the needs of our critical workloads. We also value how they tailor solutions to our unique requirements, helping us optimize performance and respond to fast-moving markets.",
+          "author": "Craig Falls",
+          "title": "Head of Quantitative Research",
+          "company": "Jane Street"
+        },
+        {
+          "quote": "CoreWeave was one of our earliest and largest compute partners. They helped us build hyperscale compute clusters, support the creation of widely known models, and deliver these systems at the scale our customers need.",
+          "author": "Sam Altman",
+          "title": "CEO",
+          "company": "OpenAI"
+        },
+        {
+          "quote": "We work closely with the CoreWeave team to build infrastructure together. As we continue shipping frontier models, their clusters have remained first class in reliability and stability.",
+          "author": "Arthur Mensch",
+          "title": "Founder and CEO",
+          "company": "Mistral AI"
+        },
+        {
+          "quote": "Our partnership with CoreWeave has significantly accelerated our model training cycles. Their API-first infrastructure is stable, highly scalable, and exactly what modern AI workflows require.",
+          "author": "Alexandr Wang",
+          "title": "CEO",
+          "company": "Scale AI"
+        },
+        {
+          "quote": "CoreWeave provides high-performance GPU instances that let us deploy large open-source models efficiently. Their stable network helps keep our models available to the community.",
+          "author": "Clem Delangue",
+          "title": "CEO",
+          "company": "Hugging Face"
+        },
+        {
+          "quote": "Building advanced Claude models requires large-scale, uninterrupted compute. CoreWeave's infrastructure provides exactly that, letting our researchers focus on algorithmic breakthroughs.",
+          "author": "Dario Amodei",
+          "title": "CEO",
+          "company": "Anthropic"
+        }
+      ]
+    },
+    "enterprise": {
+      "badge": "Enterprise-grade",
+      "title": "Enterprise-ready from day one",
+      "subtitle": "Built for scale, security, and reliability so demanding workloads can run with confidence.",
+      "items": [
+        {
+          "title": "99.9% uptime",
+          "description": "Run critical workloads with confidence on infrastructure designed for industry-leading reliability."
+        },
+        {
+          "title": "Secure by default",
+          "description": "Independently audited controls and end-to-end data protection support enterprise security requirements."
+        },
+        {
+          "title": "Scale to thousands of GPUs",
+          "description": "Use infrastructure that can expand with your team and adapt quickly as demand changes."
+        }
+      ]
+    },
+    "faq": {
+      "title": "Frequently asked questions",
+      "subtitle": "Key details about compute rental, product resources, and billing.",
+      "items": [
+        {
+          "question": "What types of GPUs can I rent?",
+          "answer": "We offer a range of high-performance GPU resources, including NVIDIA H100, A100, RTX 4090, and similar options for AI training, inference, and compute tasks at different scales."
+        },
+        {
+          "question": "How does billing work?",
+          "answer": "The platform uses transparent usage-based billing, typically charged by actual runtime with no hidden fees. Long-term or steady workloads can also use more suitable pricing plans."
+        },
+        {
+          "question": "Is there a minimum rental duration?",
+          "answer": "There is no strict minimum rental limit. You can start instances on demand for short experiments or keep them running for production workloads."
+        },
+        {
+          "question": "What technical support is available?",
+          "answer": "We provide support for compute infrastructure and help with deployment, connectivity, runtime issues, resource usage, and practical optimization."
+        },
+        {
+          "question": "Can compute resources scale dynamically?",
+          "answer": "Yes. You can choose and adjust GPU nodes from the console as workloads change, matching resource scale to training, inference, or batch-processing needs."
+        }
+      ]
+    },
+    "hub": {
+      "title": "AI Builder Hub",
+      "badge": "Open access",
+      "subtitle": "A workspace for discovering, testing, collaborating on, and shipping machine learning projects, with evaluation, dataset review, and project sharing in one flow.",
+      "items": [
+        {
+          "title": "Create with machine learning",
+          "description": "Use built-in machine learning workflows such as model evaluation and dataset review.",
+          "alt": "Create with machine learning"
+        },
+        {
+          "title": "Collaborate",
+          "description": "A Git-based workflow designed around shared development and review.",
+          "alt": "Collaborate"
+        },
+        {
+          "title": "Learn by experimenting",
+          "description": "Learn through hands-on experiments and strong community examples.",
+          "alt": "Learn by experimenting"
+        },
+        {
+          "title": "Build your ML portfolio",
+          "description": "Share your work with the world and build a visible machine learning profile.",
+          "alt": "Build your ML portfolio"
+        }
+      ]
+    },
+    "blogPreview": {
+      "title": "Latest from the blog",
+      "subtitle": "Practical guidance and product insights on compute rental, GPU clusters, and AI infrastructure.",
+      "viewAll": "View all",
+      "readMore": "Continue reading",
+      "defaultSummary": "Read more practices for compute rental and AI infrastructure.",
+      "defaultCategory": "Blog",
+      "fallbackPosts": [
+        {
+          "title": "How GPU rental reduces model-training wait time",
+          "summary": "A practical checklist of instance specs, memory capacity, and delivery timing to confirm before training goes live.",
+          "category": "Compute Practice"
+        },
+        {
+          "title": "Infrastructure checks before launching inference",
+          "summary": "Evaluate throughput, latency, elastic scaling, and network stability before putting AI inference into production.",
+          "category": "AI Inference"
+        },
+        {
+          "title": "Three practices for reliable GPU clusters",
+          "summary": "Move security, monitoring, and resource isolation into the architecture stage so key workloads can keep running.",
+          "category": "Infrastructure"
+        }
+      ]
+    }
+  }
+}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Edit2, CheckCircle2, XCircle } from "lucide-react";
+import { Plus, Edit2, CheckCircle2, XCircle, Languages } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { 
@@ -20,9 +20,10 @@ import { toErrorMessage } from "@/lib/format";
 interface CategoryManagerProps {
   items: BlogCategory[];
   onRefresh: () => void;
+  onTranslate?: (item: BlogCategory) => void;
 }
 
-export function CategoryManager({ items, onRefresh }: CategoryManagerProps) {
+export function CategoryManager({ items, onRefresh, onTranslate }: CategoryManagerProps) {
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -90,6 +91,11 @@ export function CategoryManager({ items, onRefresh }: CategoryManagerProps) {
               <Button type="button" variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleUpdate(item.id, item.categoryName)}>
                 <Edit2 className="h-3 w-3 text-primary" />
               </Button>
+              {onTranslate ? (
+                <Button type="button" variant="ghost" size="icon" className="h-7 w-7" title="翻译" aria-label="翻译" onClick={() => onTranslate(item)}>
+                  <Languages className="h-3 w-3 text-blue-500" />
+                </Button>
+              ) : null}
             </div>
           </div>
         ))}
@@ -101,9 +107,10 @@ export function CategoryManager({ items, onRefresh }: CategoryManagerProps) {
 interface TagManagerProps {
   items: BlogTag[];
   onRefresh: () => void;
+  onTranslate?: (item: BlogTag) => void;
 }
 
-export function TagManager({ items, onRefresh }: TagManagerProps) {
+export function TagManager({ items, onRefresh, onTranslate }: TagManagerProps) {
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -171,6 +178,11 @@ export function TagManager({ items, onRefresh }: TagManagerProps) {
               <Button type="button" variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleUpdate(item.id, item.tagName)}>
                 <Edit2 className="h-3 w-3 text-primary" />
               </Button>
+              {onTranslate ? (
+                <Button type="button" variant="ghost" size="icon" className="h-7 w-7" title="翻译" aria-label="翻译" onClick={() => onTranslate(item)}>
+                  <Languages className="h-3 w-3 text-blue-500" />
+                </Button>
+              ) : null}
             </div>
           </div>
         ))}

@@ -1,4 +1,5 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
+import { getTranslations } from "next-intl/server";
 import { ArrowRight, BookOpen, Eye } from "lucide-react";
 import {
   getDocsArticles,
@@ -14,10 +15,9 @@ import {
 import { DocsArticleContent } from "@/components/docs/DocsArticleContent";
 import { DocsCopyButton } from "@/components/docs/DocsCopyButton";
 import { DocsFrame, articleHref } from "@/components/docs/DocsFrame";
-import { DOCS_DEFAULT_LANGUAGE, docsSectionLabel, normalizeDocsLanguage, withDocsLanguage } from "@/components/docs/sections";
+import { docsSectionLabel, normalizeDocsLanguage, withDocsLanguage } from "@/components/docs/sections";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { formatDate } from "@/lib/format";
 
 export type DocsSectionSearchParams = {
   pageNo?: string;
@@ -63,7 +63,6 @@ function buildPageHref({
   const params = new URLSearchParams();
   if (pageNo > 1) params.set("pageNo", String(pageNo));
   if (categoryId) params.set("category_id", String(categoryId));
-  if (language !== DOCS_DEFAULT_LANGUAGE) params.set("language", language);
   if (keyword) params.set("keyword", keyword);
   const query = params.toString();
   return query ? `${baseHref}?${query}` : baseHref;
@@ -77,20 +76,34 @@ function getNextArticle(articles: DocsArticle[], currentArticle: DocsArticle | n
     : articles.find((item) => item.id !== currentArticle.id);
 }
 
+function formatDocDate(value: string | null | undefined, language: string) {
+  if (!value) return "-";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "-";
+  return new Intl.DateTimeFormat(language, {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(date);
+}
+
 export async function DocsSectionPage({
   section,
   baseHref,
+  locale,
   searchParams,
 }: {
   section: DocsSection;
   baseHref: string;
+  locale?: string;
   searchParams?: Promise<DocsSectionSearchParams>;
 }) {
   const resolvedSearchParams = await searchParams;
   const pageNo = toOptionalNumber(resolvedSearchParams?.pageNo) ?? 1;
   const pageSize = toOptionalNumber(resolvedSearchParams?.pageSize) ?? 10;
   const categoryId = toOptionalNumber(resolvedSearchParams?.category_id);
-  const language = normalizeDocsLanguage(resolvedSearchParams?.language);
+  const language = normalizeDocsLanguage(locale ?? resolvedSearchParams?.language);
+  const t = await getTranslations({ locale: language, namespace: "Docs" });
   const keyword = resolvedSearchParams?.keyword?.trim();
   const isFilteredView = Boolean(keyword || categoryId || pageNo > 1);
 
@@ -112,7 +125,7 @@ export async function DocsSectionPage({
   const selectedCategory = categoryId
     ? flattenCategories(categories).find((category) => category.id === categoryId)
     : undefined;
-  const sectionLabel = docsSectionLabel(section);
+  const sectionLabel = docsSectionLabel(section, language);
   const canPrevious = page.pageNo > 1;
   const pageCount = Math.max(1, Math.ceil(page.total / page.pageSize));
   const canNext = page.pageNo < pageCount;
@@ -145,13 +158,13 @@ export async function DocsSectionPage({
         <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
           <div>
             <p className="text-sm font-semibold text-[#4770FF]">
-              {keyword ? "搜索结果" : selectedCategory?.categoryName ?? sectionLabel}
+              {keyword ? t("searchResults") : selectedCategory?.categoryName ?? sectionLabel}
             </p>
             <h1 className="mt-4 text-4xl font-bold tracking-tight text-foreground md:text-5xl">
-              文档中心
+              {t("docsCenter")}
             </h1>
             <p className="mt-3 max-w-2xl text-lg leading-8 text-muted-foreground">
-              查找平台配置指南、产品使用说明、API 文档和常见运营问题答案。
+              {t("description")}
             </p>
           </div>
           <DocsCopyButton />
@@ -175,11 +188,11 @@ export async function DocsSectionPage({
                       ) : null}
                       {article.isSectionHome === 1 ? (
                         <Badge variant="outline" className="rounded-full border-[#4770FF]/20 bg-[#EAEFFF] font-normal text-[#4770FF]">
-                          分区首页
+                          {t("sectionHome")}
                         </Badge>
                       ) : null}
                       <span className="text-xs text-muted-foreground">
-                        {formatDate(article.publishedAt ?? article.createdAt)}
+                        {formatDocDate(article.publishedAt ?? article.createdAt, language)}
                       </span>
                     </div>
                     <h2 className="mt-3 text-xl font-semibold tracking-tight text-foreground group-hover:text-[#4770FF]">
@@ -194,7 +207,7 @@ export async function DocsSectionPage({
                   <div className="flex shrink-0 items-center gap-4 text-xs text-muted-foreground">
                     <span className="inline-flex items-center gap-1">
                       <Eye className="h-3.5 w-3.5" />
-                      {article.viewCount ?? 0} 次浏览
+                      {t("views", { count: article.viewCount ?? 0 })}
                     </span>
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </div>
@@ -204,12 +217,12 @@ export async function DocsSectionPage({
           ) : (
             <div className="flex min-h-[320px] flex-col items-center justify-center rounded-xl border border-dashed border-border p-10 text-center">
               <BookOpen className="h-9 w-9 text-muted-foreground" />
-              <h2 className="mt-4 text-lg font-semibold text-foreground">未找到文档</h2>
+              <h2 className="mt-4 text-lg font-semibold text-foreground">{t("noDocs")}</h2>
               <p className="mt-2 max-w-md text-sm leading-6 text-muted-foreground">
-                请尝试更换关键词或分类。已发布文档可用后会显示在这里。
+                {t("noDocsDescription")}
               </p>
               <Button asChild variant="outline" className="mt-6">
-                <Link href={withDocsLanguage(baseHref, language)}>清除筛选</Link>
+                <Link href={withDocsLanguage(baseHref, language)}>{t("clearFilters")}</Link>
               </Button>
             </div>
           )}
@@ -218,29 +231,29 @@ export async function DocsSectionPage({
         {page.total > page.pageSize ? (
           <div className="mt-10 flex items-center justify-between border-t border-border pt-6 text-sm text-muted-foreground">
             <span>
-              第 {page.pageNo} / {pageCount} 页，共 {page.total} 条
+              {t("pageSummary", { pageNo: page.pageNo, pageCount, total: page.total })}
             </span>
             <div className="flex items-center gap-2">
               {canPrevious ? (
                 <Button asChild variant="outline" size="sm">
                   <Link href={buildPageHref({ baseHref, pageNo: page.pageNo - 1, keyword, categoryId, language })}>
-                    上一页
+                    {t("previousPage")}
                   </Link>
                 </Button>
               ) : (
                 <Button variant="outline" size="sm" disabled>
-                  上一页
+                  {t("previousPage")}
                 </Button>
               )}
               {canNext ? (
                 <Button asChild variant="outline" size="sm">
                   <Link href={buildPageHref({ baseHref, pageNo: page.pageNo + 1, keyword, categoryId, language })}>
-                    下一页
+                    {t("nextPage")}
                   </Link>
                 </Button>
               ) : (
                 <Button variant="outline" size="sm" disabled>
-                  下一页
+                  {t("nextPage")}
                 </Button>
               )}
             </div>

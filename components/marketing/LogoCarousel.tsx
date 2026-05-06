@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import {
   SiShopify,
   SiAccenture,
@@ -20,6 +21,7 @@ interface LogoCarouselProps {
 }
 
 export default function LogoCarousel({ title, subtitle }: LogoCarouselProps) {
+  const t = useTranslations("MarketingHome.logoCarousel");
   const logos = [
     { name: "Scale", content: <span className="logo-text" style={{ textTransform: 'lowercase' }}>scale</span> },
     {
@@ -119,7 +121,7 @@ export default function LogoCarousel({ title, subtitle }: LogoCarouselProps) {
           </div>
         ) : (
           <p>
-            <span style={{ opacity: 0.5 }}>超过一万家公司，从初创企业到财富500强，都在我们的平台上运营业务.</span>
+            <span style={{ opacity: 0.5 }}>{t("defaultText")}</span>
           </p>
         )}
       </div>

@@ -1,6 +1,7 @@
 import { apiGet, apiPost } from "./http";
 import type {
   CreateRechargeOrderRequest,
+  LocaleQuery,
   PageResult,
   RechargeChannelResponse,
   RechargeOrderQueryRequest,
@@ -14,8 +15,8 @@ export type {
   RechargeOrderResponse,
 };
 
-export const getRechargeChannels = () =>
-  apiGet<RechargeChannelResponse[]>("/api/recharge/channels");
+export const getRechargeChannels = (params: LocaleQuery = {}) =>
+  apiGet<RechargeChannelResponse[]>("/api/recharge/channels", { params });
 
 export const createRechargeOrder = (data: CreateRechargeOrderRequest) =>
   apiPost<RechargeOrderResponse, CreateRechargeOrderRequest>("/api/recharge/orders", data);

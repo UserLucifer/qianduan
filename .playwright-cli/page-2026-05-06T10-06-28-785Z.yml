@@ -1,0 +1,18 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - generic [ref=e7]: 管理员登录
+        - generic [ref=e8]: 输入管理员账号和密码登录后台系统
+      - generic [ref=e11]:
+        - generic [ref=e12]:
+          - generic [ref=e13]: 管理员账号
+          - textbox "管理员账号" [ref=e14]:
+            - /placeholder: 请输入管理员账号
+        - generic [ref=e15]:
+          - generic [ref=e16]: 密码
+          - textbox "密码" [ref=e17]
+        - button "登录" [ref=e18] [cursor=pointer]
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e24] [cursor=pointer]:
+    - img [ref=e25]

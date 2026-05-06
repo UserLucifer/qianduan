@@ -1,9 +1,10 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { AnimatePresence, motion } from 'framer-motion';
+import { useState } from "react";
+import { useTranslations } from "next-intl";
+import Image from "next/image";
+import { Link } from "@/i18n/navigation";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   Activity,
   ArrowRight,
@@ -13,136 +14,126 @@ import {
   Database,
   Target,
   Zap,
-  type LucideIcon
-} from 'lucide-react';
+  type LucideIcon,
+} from "lucide-react";
 
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import MarketingMegaMenu from './MarketingMegaMenu';
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import MarketingMegaMenu from "./MarketingMegaMenu";
 
 type ProductSubItem = {
-  name: string;
+  key: string;
   href: string;
   items?: string[];
 };
 
 type ProductCategory = {
   id: string;
-  name: string;
+  messageKey: string;
   icon: LucideIcon;
   subItems: ProductSubItem[];
   featured: {
-    title: string;
-    description: string;
     image: string;
   };
 };
 
 const productCategories: ProductCategory[] = [
   {
-    id: 'foundation',
-    name: '基础架构',
+    id: "foundation",
+    messageKey: "foundation",
     icon: Cpu,
     subItems: [
-      { name: 'GPU 计算', href: '/gpu-computing', items: ['NVIDIA Blackwell', 'NVIDIA Hopper', 'NVIDIA Ada Lovelace'] },
-      { name: 'CPU 计算', href: '/cpu-computing' },
-      { name: '裸金属服务器', href: '/bare-metal-servers' },
-      { name: '网络', href: '/networking-services' }
+      { key: "gpuComputing", href: "/gpu-computing", items: ["NVIDIA Blackwell", "NVIDIA Hopper", "NVIDIA Ada Lovelace"] },
+      { key: "cpuComputing", href: "/cpu-computing" },
+      { key: "bareMetal", href: "/bare-metal-servers" },
+      { key: "networking", href: "/networking-services" },
     ],
     featured: {
-      title: '算力租赁荣获 SemiAnalysis 铂金级',
-      description: '唯一两度获得铂金评级的 AI 云服务商，了解为何算力租赁是 AI 的核心云。',
-      image: '/images/navagation/1.jpg'
-    }
+      image: "/images/navagation/1.jpg",
+    },
   },
   {
-    id: 'data-storage',
-    name: '数据与存储',
+    id: "data-storage",
+    messageKey: "dataStorage",
     icon: Database,
     subItems: [
-      { name: 'AI 对象存储', href: '/ai-object-storage' },
-      { name: '专用 VAST 存储', href: '/dedicated-vast-storage' },
-      { name: '分布式文件存储', href: '/ai-object-storage#distributed-file-storage' },
-      { name: '本地存储', href: '/ai-object-storage#local-storage' }
+      { key: "objectStorage", href: "/ai-object-storage" },
+      { key: "vastStorage", href: "/dedicated-vast-storage" },
+      { key: "distributedFile", href: "/ai-object-storage#distributed-file-storage" },
+      { key: "localStorage", href: "/ai-object-storage#local-storage" },
     ],
     featured: {
-      title: '零流出数据迁移 (0EM)',
-      description: '免费、无锁定地将数据迁移到算力租赁，由专家引导传输至高性能 AI 对象存储。',
-      image: '/images/navagation/2.jpg'
-    }
+      image: "/images/navagation/2.jpg",
+    },
   },
   {
-    id: 'infrastructure-control',
-    name: '基础架构控制',
+    id: "infrastructure-control",
+    messageKey: "infrastructureControl",
     icon: Cloud,
     subItems: [
-      { name: '托管 Kubernetes', href: '/managed-kubernetes' }
+      { key: "managedKubernetes", href: "/managed-kubernetes" },
     ],
     featured: {
-      title: '定义 AI 核心云',
-      description: '探索算力租赁的 AI 核心云如何重新定义基础架构。',
-      image: '/images/navagation/3.jpg'
-    }
+      image: "/images/navagation/3.jpg",
+    },
   },
   {
-    id: 'runtime-acceleration',
-    name: '运行加速',
+    id: "runtime-acceleration",
+    messageKey: "runtimeAcceleration",
     icon: Zap,
     subItems: [
-      { name: 'SUNK', href: '/sunk' },
-      { name: 'SUNK Anywhere', href: '/sunk-anywhere' },
-      { name: 'Serverless RL', href: 'https://wandb.ai/site/serverless-rl/?utm_source=coreweave.com&utm_medium=site' }
+      { key: "sunk", href: "/sunk" },
+      { key: "sunkAnywhere", href: "/sunk-anywhere" },
+      { key: "serverlessRl", href: "https://wandb.ai/site/serverless-rl/?utm_source=coreweave.com&utm_medium=site" },
     ],
     featured: {
-      title: 'MLPerf v5.0 测试结果',
-      description: '算力租赁在 MLPerf 基准测试中持续刷新纪录，在 AI 训练与推理性能方面处于行业领先地位。',
-      image: '/images/navagation/4.jpg'
-    }
+      image: "/images/navagation/4.jpg",
+    },
   },
   {
-    id: 'model-agent-development',
-    name: '模型与代理开发',
+    id: "model-agent-development",
+    messageKey: "modelAgent",
     icon: Target,
     subItems: [
-      { name: '训练', href: 'https://wandb.ai/site/models/?utm_source=coreweave.com&utm_medium=site' },
-      { name: '微调', href: 'https://wandb.ai/site/wb-training/?utm_source=coreweave.com&utm_medium=site' },
-      { name: '推理', href: 'https://wandb.ai/site/inference/?utm_source=coreweave.com&utm_medium=site#' },
-      { name: '监控', href: 'https://wandb.ai/site/weave/?utm_source=coreweave.com&utm_medium=site' }
+      { key: "training", href: "https://wandb.ai/site/models/?utm_source=coreweave.com&utm_medium=site" },
+      { key: "fineTuning", href: "https://wandb.ai/site/wb-training/?utm_source=coreweave.com&utm_medium=site" },
+      { key: "inference", href: "https://wandb.ai/site/inference/?utm_source=coreweave.com&utm_medium=site#" },
+      { key: "monitoring", href: "https://wandb.ai/site/weave/?utm_source=coreweave.com&utm_medium=site" },
     ],
     featured: {
-      title: '算力租赁 ARENA',
-      description: '在专用基础架构上运行真实的 AI 工作负载，在投入生产前验证性能、规模和成本。',
-      image: '/images/navagation/5.avif'
-    }
+      image: "/images/navagation/5.avif",
+    },
   },
   {
-    id: 'mission-control',
-    name: '任务控制',
+    id: "mission-control",
+    messageKey: "missionControl",
     icon: Activity,
     subItems: [
-      { name: 'Mission Control', href: '/mission-control' },
-      { name: 'Fleet lifecycle controller', href: '/mission-control#fleet-lifecycle-controller' },
-      { name: 'Node lifecycle controller', href: '/mission-control#node-lifecycle-controller' },
-      { name: 'Observability', href: '/observability' }
+      { key: "missionControl", href: "/mission-control" },
+      { key: "fleetLifecycle", href: "/mission-control#fleet-lifecycle-controller" },
+      { key: "nodeLifecycle", href: "/mission-control#node-lifecycle-controller" },
+      { key: "observability", href: "/observability" },
     ],
     featured: {
-      title: 'Mission Control: 大型 AI 运行标准',
-      description: 'Mission Control 将可观测性、安全审计可见性和自动化操作结合在一起，保持 AI 基础架构的可靠与透明。',
-      image: '/images/navagation/6.jpg'
-    }
-  }
+      image: "/images/navagation/6.jpg",
+    },
+  },
 ];
 
 export default function ProductMegaMenu() {
   const [activeCategory, setActiveCategory] = useState(productCategories[0]);
+  const t = useTranslations("MegaMenus.product");
   const ActiveIcon = activeCategory.icon;
+
+  const categoryName = (category: ProductCategory) => t(`categories.${category.messageKey}.name`);
+  const featuredTitle = t(`categories.${activeCategory.messageKey}.featuredTitle`);
 
   return (
     <MarketingMegaMenu className="w-[1080px] items-stretch">
       <aside className="w-64 shrink-0 border-r border-border/50 bg-muted/20 p-4">
         <div className="px-3 pb-4">
           <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-            产品目录
+            {t("catalog")}
           </h3>
         </div>
         <div className="flex flex-col gap-1">
@@ -155,14 +146,14 @@ export default function ProductMegaMenu() {
                 type="button"
                 variant="ghost"
                 className={cn(
-                  'h-auto w-full justify-start gap-3 rounded-lg px-3 py-3 text-left text-sm font-medium text-muted-foreground transition-colors hover:bg-accent/50 hover:text-foreground',
-                  activeCategory.id === category.id && 'bg-accent/60 text-foreground'
+                  "h-auto w-full justify-start gap-3 rounded-lg px-3 py-3 text-left text-sm font-medium text-muted-foreground transition-colors hover:bg-accent/50 hover:text-foreground",
+                  activeCategory.id === category.id && "bg-accent/60 text-foreground",
                 )}
                 onFocus={() => setActiveCategory(category)}
                 onMouseEnter={() => setActiveCategory(category)}
               >
                 <Icon className="h-4 w-4 shrink-0" />
-                <span className="min-w-0 flex-1 truncate">{category.name}</span>
+                <span className="min-w-0 flex-1 truncate">{categoryName(category)}</span>
                 <ChevronRight className="h-4 w-4 shrink-0 opacity-50" />
               </Button>
             );
@@ -186,10 +177,10 @@ export default function ProductMegaMenu() {
               </div>
               <div>
                 <h4 className="text-sm font-semibold text-foreground">
-                  {activeCategory.name}
+                  {categoryName(activeCategory)}
                 </h4>
                 <p className="mt-1 text-xs text-muted-foreground">
-                  按能力选择云端算力、存储与运行控制模块。
+                  {t("categoryDescription")}
                 </p>
               </div>
             </div>
@@ -197,31 +188,28 @@ export default function ProductMegaMenu() {
             <div className="grid grid-cols-2 gap-3">
               {activeCategory.subItems.map((sub) => (
                 <Link
-                  key={sub.name}
+                  key={sub.key}
                   href={sub.href}
                   prefetch={false}
                   className="group rounded-lg border border-transparent p-3 transition-colors hover:border-border/60 hover:bg-accent/50"
                 >
                   <div className="flex items-center justify-between gap-3">
                     <span className="text-sm font-semibold text-foreground">
-                      {sub.name}
+                      {t(`categories.${activeCategory.messageKey}.items.${sub.key}`)}
                     </span>
                     <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground transition-colors group-hover:text-foreground" />
                   </div>
                   {sub.items ? (
                     <div className="mt-3 flex flex-wrap gap-2">
                       {sub.items.map((item) => (
-                        <span
-                          key={item}
-                          className="rounded-md bg-muted px-2 py-1 text-xs text-muted-foreground"
-                        >
+                        <span key={item} className="rounded-md bg-muted px-2 py-1 text-xs text-muted-foreground">
                           {item}
                         </span>
                       ))}
                     </div>
                   ) : (
                     <p className="mt-2 text-xs leading-snug text-muted-foreground">
-                      查看相关规格与可用资源。
+                      {t("defaultItemDescription")}
                     </p>
                   )}
                 </Link>
@@ -244,7 +232,7 @@ export default function ProductMegaMenu() {
             <div className="relative aspect-[16/10] overflow-hidden rounded-lg border border-border/50">
               <Image
                 src={activeCategory.featured.image}
-                alt={activeCategory.featured.title}
+                alt={featuredTitle}
                 fill
                 sizes="320px"
                 className="object-cover"
@@ -252,10 +240,10 @@ export default function ProductMegaMenu() {
             </div>
             <div className="pt-5">
               <h4 className="text-sm font-semibold leading-snug text-foreground">
-                {activeCategory.featured.title}
+                {featuredTitle}
               </h4>
               <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
-                {activeCategory.featured.description}
+                {t(`categories.${activeCategory.messageKey}.featuredDescription`)}
               </p>
             </div>
           </motion.div>

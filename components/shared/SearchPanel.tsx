@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { ChevronDown, RotateCcw, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -19,6 +20,7 @@ export function SearchPanel({
   defaultCollapsed?: boolean;
 }) {
   const [collapsed, setCollapsed] = useState(defaultCollapsed);
+  const t = useTranslations("SearchPanel");
 
 
   return (
@@ -34,7 +36,7 @@ export function SearchPanel({
             aria-expanded={!collapsed}
           >
             <Search className="h-4 w-4 text-muted-foreground" />
-            筛选条件
+            {t("filters")}
             <ChevronDown className={cn("h-3.5 w-3.5 text-muted-foreground transition-transform", !collapsed && "rotate-180")} />
           </Button>
           <div className="flex items-center gap-2">
@@ -46,7 +48,7 @@ export function SearchPanel({
               onClick={onReset}
             >
               <RotateCcw className="mr-2 h-3.5 w-3.5" />
-              重置
+              {t("reset")}
             </Button>
             <Button
               type="button"
@@ -55,7 +57,7 @@ export function SearchPanel({
               onClick={onSearch}
             >
               <Search className="mr-2 h-3.5 w-3.5" />
-              查询
+              {t("search")}
             </Button>
           </div>
         </div>

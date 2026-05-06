@@ -1,6 +1,7 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import {
   BrainCircuit,
   CarFront,
@@ -11,86 +12,68 @@ import {
   Layers,
   Rocket,
   Video,
-  Zap
-} from 'lucide-react';
+  Zap,
+  type LucideIcon,
+} from "lucide-react";
 
-import MarketingMegaMenu from './MarketingMegaMenu';
+import MarketingMegaMenu from "./MarketingMegaMenu";
 
-const useCaseCategories = [
+type SolutionItem = {
+  key: string;
+  icon: LucideIcon;
+  href: string;
+};
+
+const useCaseCategories: Array<{
+  key: string;
+  items: SolutionItem[];
+}> = [
   {
-    title: 'AI 训练',
+    key: "training",
     items: [
-      {
-        name: '大模型训练',
-        description: '提供裸金属 GPU 集群',
-        icon: BrainCircuit,
-        href: '/solutions/llm-training'
-      },
-      {
-        name: '智能体开发',
-        description: '支持复杂智能体迭代',
-        icon: Cpu,
-        href: '/solutions/ai-agents'
-      }
-    ]
+      { key: "llmTraining", icon: BrainCircuit, href: "/solutions/llm-training" },
+      { key: "agents", icon: Cpu, href: "/solutions/ai-agents" },
+    ],
   },
   {
-    title: 'AI 推理',
+    key: "inference",
     items: [
-      {
-        name: '高并发推理',
-        description: '低延迟的弹性 API 部署',
-        icon: Zap,
-        href: '/solutions/high-concurrency-inference'
-      },
-      {
-        name: 'AIGC 生成',
-        description: '专为图像/视频生成优化',
-        icon: Video,
-        href: '/solutions/aigc-generation'
-      }
-    ]
+      { key: "highConcurrency", icon: Zap, href: "/solutions/high-concurrency-inference" },
+      { key: "aigc", icon: Video, href: "/solutions/aigc-generation" },
+    ],
   },
   {
-    title: '专用计算',
+    key: "compute",
     items: [
-      {
-        name: '图形渲染',
-        description: '云端弹性渲染农场',
-        icon: Layers,
-        href: '/solutions/graphic-rendering'
-      },
-      {
-        name: '科学计算',
-        description: '高密集型仿真计算',
-        icon: FlaskConical,
-        href: '/solutions/scientific-computing'
-      }
-    ]
-  }
+      { key: "graphics", icon: Layers, href: "/solutions/graphic-rendering" },
+      { key: "scientific", icon: FlaskConical, href: "/solutions/scientific-computing" },
+    ],
+  },
 ];
 
 const industryItems = [
-  { name: 'AIGC 初创企业', icon: Rocket, href: '/solutions/aigc-startups' },
-  { name: '科研与高校', icon: GraduationCap, href: '/solutions/research' },
-  { name: '自动驾驶', icon: CarFront, href: '/solutions/autonomous-driving' },
-  { name: '游戏与数字娱乐', icon: Gamepad2, href: '/solutions/gaming' }
+  { key: "startups", icon: Rocket, href: "/solutions/aigc-startups" },
+  { key: "research", icon: GraduationCap, href: "/solutions/research" },
+  { key: "auto", icon: CarFront, href: "/solutions/autonomous-driving" },
+  { key: "gaming", icon: Gamepad2, href: "/solutions/gaming" },
 ];
 
 export default function SolutionsMegaMenu() {
+  const t = useTranslations("MegaMenus.solutions");
+
   return (
     <MarketingMegaMenu className="items-stretch">
       <main className="w-2/3 p-8">
         <div className="mb-6">
           <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-            按场景解决方案
+            {t("byScenario")}
           </h3>
         </div>
         <div className="grid grid-cols-3 gap-6">
           {useCaseCategories.map((category) => (
-            <div key={category.title} className="space-y-4">
+            <div key={category.key} className="space-y-4">
               <h4 className="border-b border-border/50 pb-2 text-xs font-medium text-muted-foreground/80">
-                {category.title}
+                {t(`categories.${category.key}`)}
               </h4>
               <div className="space-y-3">
                 {category.items.map((item) => {
@@ -98,7 +81,7 @@ export default function SolutionsMegaMenu() {
 
                   return (
                     <Link
-                      key={item.name}
+                      key={item.key}
                       href={item.href}
                       prefetch={false}
                       className="group block rounded-lg p-2 transition-colors hover:bg-accent/50"
@@ -109,10 +92,10 @@ export default function SolutionsMegaMenu() {
                         </div>
                         <div>
                           <div className="text-sm font-semibold leading-tight text-foreground">
-                            {item.name}
+                            {t(`items.${item.key}.name`)}
                           </div>
                           <div className="mt-1 text-xs leading-snug text-muted-foreground">
-                            {item.description}
+                            {t(`items.${item.key}.description`)}
                           </div>
                         </div>
                       </div>
@@ -128,7 +111,7 @@ export default function SolutionsMegaMenu() {
       <aside className="flex w-1/3 flex-col bg-muted/30 p-8">
         <div className="mb-6">
           <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-            按行业
+            {t("byIndustry")}
           </h3>
         </div>
         <div className="flex flex-col gap-2">
@@ -137,14 +120,14 @@ export default function SolutionsMegaMenu() {
 
             return (
               <Link
-                key={item.name}
+                key={item.key}
                 href={item.href}
                 prefetch={false}
                 className="group flex items-center gap-3 rounded-lg p-3 transition-colors hover:bg-accent/50"
               >
                 <Icon className="h-4 w-4 shrink-0 text-muted-foreground transition-colors group-hover:text-foreground" />
                 <span className="text-sm font-medium text-foreground">
-                  {item.name}
+                  {t(`industries.${item.key}`)}
                 </span>
               </Link>
             );
@@ -154,14 +137,14 @@ export default function SolutionsMegaMenu() {
         <div className="mt-auto pt-8">
           <div className="rounded-xl border border-border/50 bg-background/50 p-4">
             <p className="text-xs leading-relaxed text-muted-foreground">
-              探索专为您行业定制的算力加速方案，助力业务快速增长。
+              {t("ctaDescription")}
             </p>
             <Link
               href="/contact"
               prefetch={false}
               className="mt-3 inline-flex items-center text-xs font-semibold text-primary hover:underline"
             >
-              获取定制方案 →
+              {t("ctaLink")}
             </Link>
           </div>
         </div>

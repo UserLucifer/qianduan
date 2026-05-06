@@ -17,6 +17,17 @@ export interface PageQuery {
   pageSize?: number;
 }
 
+export type SupportedLocale = "zh-CN" | "en-US";
+
+export interface LocaleQuery {
+  language?: SupportedLocale;
+}
+
+export interface LocaleAwareResponse {
+  locale?: SupportedLocale;
+  requestedLocale?: SupportedLocale;
+  localeFallback?: boolean;
+}
 
 export interface UserProfile {
   id: number;
@@ -66,7 +77,7 @@ export interface ResetPasswordRequest {
   newPassword: string;
 }
 
-export interface ProductResponse {
+export interface ProductResponse extends LocaleAwareResponse {
   id: number;
   productCode: string;
   productName: string;
@@ -99,12 +110,12 @@ export interface ProductResponse {
   updatedAt?: string;
 }
 
-export interface ProductQueryRequest extends PageQuery {
+export interface ProductQueryRequest extends PageQuery, LocaleQuery {
   regionId?: number;
   gpuModelId?: number;
 }
 
-export interface AiModelResponse {
+export interface AiModelResponse extends LocaleAwareResponse {
   id: number;
   modelCode: string;
   modelName: string;
@@ -119,7 +130,7 @@ export interface AiModelResponse {
   updatedAt?: string;
 }
 
-export interface GpuModelResponse {
+export interface GpuModelResponse extends LocaleAwareResponse {
   id: number;
   modelCode: string;
   modelName: string;
@@ -129,7 +140,7 @@ export interface GpuModelResponse {
   updatedAt?: string;
 }
 
-export interface RegionResponse {
+export interface RegionResponse extends LocaleAwareResponse {
   id: number;
   regionCode: string;
   regionName: string;
@@ -139,7 +150,7 @@ export interface RegionResponse {
   updatedAt?: string;
 }
 
-export interface RentalCycleRuleResponse {
+export interface RentalCycleRuleResponse extends LocaleAwareResponse {
   id: number;
   cycleCode: string;
   cycleName: string;
@@ -158,7 +169,7 @@ export interface RentalEstimateRequest {
   cycleRuleId: number;
 }
 
-export interface RentalEstimateResponse {
+export interface RentalEstimateResponse extends LocaleAwareResponse {
   productId: number;
   productName: string;
   aiModelId: number;
@@ -321,7 +332,7 @@ export interface WalletTransactionQueryRequest extends PageQuery {
   endTime?: string;
 }
 
-export interface RechargeChannelResponse {
+export interface RechargeChannelResponse extends LocaleAwareResponse {
   channelId: number;
   channelCode: string;
   channelName: string;
@@ -521,7 +532,7 @@ export interface SettlementOrderQueryRequest extends PageQuery {
   endTime?: string;
 }
 
-export interface SysNotification {
+export interface SysNotification extends LocaleAwareResponse {
   id: number;
   userId?: number;
   title: string;
@@ -535,7 +546,7 @@ export interface SysNotification {
   createdAt: string;
 }
 
-export interface NotificationQueryRequest extends PageQuery {
+export interface NotificationQueryRequest extends PageQuery, LocaleQuery {
   read_status?: number;
   notification_type?: string;
   biz_type?: string;
@@ -904,7 +915,7 @@ export interface BlogTag {
   updatedAt?: string;
 }
 
-export interface BlogCategoryResponse {
+export interface BlogCategoryResponse extends LocaleAwareResponse {
   id: number;
   categoryName: string;
   sortNo?: number;
@@ -913,7 +924,7 @@ export interface BlogCategoryResponse {
   updatedAt?: string;
 }
 
-export interface BlogTagResponse {
+export interface BlogTagResponse extends LocaleAwareResponse {
   id: number;
   tagName: string;
   sortNo?: number;
@@ -922,7 +933,7 @@ export interface BlogTagResponse {
   updatedAt?: string;
 }
 
-export interface BlogPostResponse {
+export interface BlogPostResponse extends LocaleAwareResponse {
   id: number;
   categoryId?: number;
   categoryName?: string;
@@ -942,7 +953,7 @@ export interface BlogPostResponse {
   updatedAt?: string;
 }
 
-export interface BlogPostQueryRequest extends PageQuery {
+export interface BlogPostQueryRequest extends PageQuery, LocaleQuery {
   category_id?: number;
   tag_id?: number;
   publish_status?: number;
@@ -1070,6 +1081,159 @@ export interface AdminRechargeChannelResponse {
   status: number;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface RegionTranslationResponse {
+  regionId: number;
+  locale: SupportedLocale;
+  regionName?: string;
+  configured?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface RegionTranslationRequest {
+  locale: SupportedLocale;
+  regionName?: string;
+}
+
+export interface GpuModelTranslationResponse {
+  gpuModelId: number;
+  locale: SupportedLocale;
+  modelName?: string;
+  configured?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface GpuModelTranslationRequest {
+  locale: SupportedLocale;
+  modelName?: string;
+}
+
+export interface ProductTranslationResponse {
+  productId: number;
+  productCode: string;
+  locale: SupportedLocale;
+  productName?: string;
+  configured?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface ProductTranslationRequest {
+  locale: SupportedLocale;
+  productName?: string;
+}
+
+export interface AiModelTranslationResponse {
+  aiModelId: number;
+  modelCode: string;
+  locale: SupportedLocale;
+  modelName?: string;
+  vendorName?: string;
+  configured?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface AiModelTranslationRequest {
+  locale: SupportedLocale;
+  modelName?: string;
+  vendorName?: string;
+}
+
+export interface RentalCycleRuleTranslationResponse {
+  cycleRuleId: number;
+  cycleCode: string;
+  locale: SupportedLocale;
+  cycleName?: string;
+  configured?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface RentalCycleRuleTranslationRequest {
+  locale: SupportedLocale;
+  cycleName?: string;
+}
+
+export interface BlogCategoryTranslationResponse {
+  categoryId: number;
+  locale: SupportedLocale;
+  categoryName?: string;
+  configured?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface BlogCategoryTranslationRequest {
+  locale: SupportedLocale;
+  categoryName?: string;
+}
+
+export interface BlogTagTranslationResponse {
+  tagId: number;
+  locale: SupportedLocale;
+  tagName?: string;
+  configured?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface BlogTagTranslationRequest {
+  locale: SupportedLocale;
+  tagName?: string;
+}
+
+export interface BlogPostTranslationResponse {
+  postId: number;
+  locale: SupportedLocale;
+  title?: string;
+  summary?: string;
+  contentMarkdown?: string;
+  configured?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface BlogPostTranslationRequest {
+  locale: SupportedLocale;
+  title?: string;
+  summary?: string;
+  contentMarkdown?: string;
+}
+
+export interface NotificationTranslationResponse {
+  notificationId: number;
+  locale: SupportedLocale;
+  title?: string;
+  content?: string;
+  configured?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface NotificationTranslationRequest {
+  locale: SupportedLocale;
+  title?: string;
+  content?: string;
+}
+
+export interface RechargeChannelTranslationResponse {
+  channelId: number;
+  locale: SupportedLocale;
+  channelName?: string;
+  accountName?: string;
+  configured?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface RechargeChannelTranslationRequest {
+  locale: SupportedLocale;
+  channelName?: string;
+  accountName?: string;
 }
 
 export interface AdminRechargeChannelQuery extends PageQuery {

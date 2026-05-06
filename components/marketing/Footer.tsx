@@ -1,8 +1,13 @@
-import Link from 'next/link';
-import './Footer.css';
+"use client";
+
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
+import "./Footer.css";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const t = useTranslations("Footer");
+  const common = useTranslations("Common");
 
   return (
     <footer className="site-footer">
@@ -10,49 +15,47 @@ export default function Footer() {
         <div className="site-footer__grid">
           <div className="site-footer__brand-col">
             <Link href="/" className="site-footer__brand">
-              算力租赁
+              {common("brand")}
             </Link>
-            <p className="site-footer__tagline">
-              基于 Token 经济的高性能 AI 算力调度平台，为全球开发者提供即时可用的计算资源。
-            </p>
+            <p className="site-footer__tagline">{t("tagline")}</p>
           </div>
 
           <div className="site-footer__links-grid">
             <div className="site-footer__col">
-              <h3 className="site-footer__title">公司信息</h3>
+              <h3 className="site-footer__title">{t("companyInfo")}</h3>
               <div className="site-footer__links">
-                <Link href="/about" className="site-footer__link">关于我们</Link>
-                <Link href="/sustainability" className="site-footer__link">企业可持续发展</Link>
-                <Link href="/enterprise" className="site-footer__link">解决方案</Link>
-                <Link href="/financing" className="site-footer__link">融资</Link>
-                <Link href="/hardware" className="site-footer__link">硬件</Link>
+                <Link href="/about" className="site-footer__link">{t("about")}</Link>
+                <Link href="/sustainability" className="site-footer__link">{t("sustainability")}</Link>
+                <Link href="/enterprise" className="site-footer__link">{t("solutions")}</Link>
+                <Link href="/financing" className="site-footer__link">{t("financing")}</Link>
+                <Link href="/hardware" className="site-footer__link">{t("hardware")}</Link>
               </div>
             </div>
 
             <div className="site-footer__col">
-              <h3 className="site-footer__title">资源</h3>
+              <h3 className="site-footer__title">{t("resources")}</h3>
               <div className="site-footer__links">
-                <Link href="/use-cases" className="site-footer__link">产品用例</Link>
+                <Link href="/use-cases" className="site-footer__link">{t("useCases")}</Link>
               </div>
             </div>
 
             <div className="site-footer__col">
-              <h3 className="site-footer__title">条款</h3>
+              <h3 className="site-footer__title">{t("legal")}</h3>
               <div className="site-footer__links">
-                <Link href="/terms" className="site-footer__link">服务条款</Link>
-                <Link href="/privacy" className="site-footer__link">隐私政策</Link>
-                <Link href="/compliance" className="site-footer__link">合规</Link>
-                <Link href="/vulnerability-disclosure" className="site-footer__link">漏洞披露</Link>
-                <Link href="/data-processing" className="site-footer__link">数据处理</Link>
+                <Link href="/terms" className="site-footer__link">{t("terms")}</Link>
+                <Link href="/privacy" className="site-footer__link">{t("privacy")}</Link>
+                <Link href="/compliance" className="site-footer__link">{t("compliance")}</Link>
+                <Link href="/vulnerability-disclosure" className="site-footer__link">{t("vulnerabilityDisclosure")}</Link>
+                <Link href="/data-processing" className="site-footer__link">{t("dataProcessing")}</Link>
               </div>
             </div>
 
             <div className="site-footer__col">
-              <h3 className="site-footer__title">帮助</h3>
+              <h3 className="site-footer__title">{t("help")}</h3>
               <div className="site-footer__links">
-                <Link href="/docs" className="site-footer__link">文档中心</Link>
-                <Link href="/blog" className="site-footer__link">博客</Link>
-                <Link href="/contact" className="site-footer__link">联系我们</Link>
+                <Link href="/docs" className="site-footer__link">{t("docs")}</Link>
+                <Link href="/blog" className="site-footer__link">{t("blog")}</Link>
+                <Link href="/contact" className="site-footer__link">{t("contact")}</Link>
               </div>
             </div>
           </div>
@@ -60,11 +63,11 @@ export default function Footer() {
 
         <div className="site-footer__bottom">
           <div className="site-footer__copyright">
-            © {currentYear} 算力租赁. All rights reserved.
+            {t("copyright", { year: currentYear })}
           </div>
           <div className="site-footer__status">
             <span className="status-dot"></span>
-            All systems operational
+            {t("status")}
           </div>
         </div>
       </div>

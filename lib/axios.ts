@@ -8,6 +8,7 @@ import {
   shouldClearAuthSession,
 } from "@/lib/api-errors";
 import { clearUserAuthSession, getUserAccessToken } from "@/lib/auth-session";
+import { getClientLocale, localizePathname, stripLocaleFromPathname } from "@/i18n/locales";
 
 const apiBaseURL =
   process.env.NEXT_PUBLIC_API_BASE_URL ||
@@ -35,15 +36,15 @@ function clearAuthSession(scope: ClientScope) {
   if (scope === "admin") {
     localStorage.removeItem("admin_access_token");
     localStorage.removeItem("adminAccessToken");
-    if (window.location.pathname !== "/admins/login") {
-      window.location.href = "/admins/login";
+    if (stripLocaleFromPathname(window.location.pathname) !== "/admins/login") {
+      window.location.href = localizePathname("/admins/login", getClientLocale());
     }
     return;
   }
 
   clearUserAuthSession();
-  if (window.location.pathname !== "/login") {
-    window.location.href = "/login";
+  if (stripLocaleFromPathname(window.location.pathname) !== "/login") {
+    window.location.href = localizePathname("/login", getClientLocale());
   }
 }
 
@@ -125,6 +126,7 @@ const userAxiosClient = axios.create(baseConfig);
 userAxiosClient.interceptors.request.use(
   (config) => {
     if (typeof window !== "undefined") {
+      config.headers["Accept-Language"] = getClientLocale();
       const token = getUserAccessToken();
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
@@ -150,6 +152,7 @@ export const adminAxiosClient = axios.create(baseConfig);
 adminAxiosClient.interceptors.request.use(
   (config) => {
     if (typeof window !== "undefined") {
+      config.headers["Accept-Language"] = getClientLocale();
       const token = localStorage.getItem("admin_access_token") || localStorage.getItem("adminAccessToken");
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;

@@ -1,0 +1,848 @@
+{
+  "Common": {
+    "brand": "算力租赁",
+    "login": "登录",
+    "logout": "退出登录",
+    "console": "控制台",
+    "dashboard": "控制面板",
+    "accountSettings": "账户设置",
+    "unnamedUser": "未命名用户",
+    "account": "账户"
+  },
+  "LocaleSwitcher": {
+    "label": "语言",
+    "zh-CN": "中文",
+    "en-US": "English"
+  },
+  "Metadata": {
+    "title": "算力租赁前端",
+    "description": "基于 Next.js 的算力租赁前端项目"
+  },
+  "ThemeToggle": {
+    "ariaLabel": "切换明暗主题"
+  },
+  "NotFound": {
+    "title": "页面未找到",
+    "description": "您访问的页面可能已经被移除、重命名或暂时不可用。",
+    "home": "返回首页"
+  },
+  "MarketingHeader": {
+    "mainNav": "主导航",
+    "products": "产品",
+    "useCases": "产品用例",
+    "solutions": "解决方案",
+    "hosting": "托管",
+    "rental": "租赁",
+    "company": "公司",
+    "blog": "博客",
+    "helpCenter": "帮助中心"
+  },
+  "Footer": {
+    "tagline": "基于 Token 经济的高性能 AI 算力调度平台，为全球开发者提供即时可用的计算资源。",
+    "companyInfo": "公司信息",
+    "resources": "资源",
+    "legal": "条款",
+    "help": "帮助",
+    "about": "关于我们",
+    "sustainability": "企业可持续发展",
+    "solutions": "解决方案",
+    "financing": "融资",
+    "hardware": "硬件",
+    "useCases": "产品用例",
+    "terms": "服务条款",
+    "privacy": "隐私政策",
+    "compliance": "合规",
+    "vulnerabilityDisclosure": "漏洞披露",
+    "dataProcessing": "数据处理",
+    "docs": "文档中心",
+    "blog": "博客",
+    "contact": "联系我们",
+    "copyright": "© {year} 算力租赁. All rights reserved.",
+    "status": "All systems operational"
+  },
+  "MobileMarketingNav": {
+    "openMenu": "打开导航菜单",
+    "closeMenu": "关闭导航菜单",
+    "title": "移动端导航",
+    "description": "打开产品、产品用例、解决方案、托管、公司和账户入口。",
+    "login": "登录",
+    "dashboard": "控制面板",
+    "accountSettings": "账户设置",
+    "logout": "退出登录",
+    "unnamedUser": "未命名用户",
+    "groups": {
+      "products": {
+        "title": "产品",
+        "items": {
+          "gpuComputing": {
+            "name": "GPU 计算",
+            "description": "浏览 GPU 实例和算力规格"
+          },
+          "rental": {
+            "name": "租赁",
+            "description": "按需选择可用资源并下单"
+          },
+          "infrastructureControl": {
+            "name": "基础架构控制",
+            "description": "托管集群、网络和运行控制"
+          },
+          "dataStorage": {
+            "name": "数据与存储",
+            "description": "对象存储与高性能数据路径"
+          }
+        }
+      },
+      "useCases": {
+        "title": "产品用例",
+        "items": {
+          "textGeneration": {
+            "name": "AI 文本生成",
+            "description": "内容、知识库与文本任务"
+          },
+          "imageVideo": {
+            "name": "AI 图像+视频生成",
+            "description": "AIGC 批量生成工作流"
+          },
+          "agents": {
+            "name": "人工智能代理",
+            "description": "智能体任务执行与编排"
+          },
+          "all": {
+            "name": "全部用例",
+            "description": "查看完整用例列表"
+          }
+        }
+      },
+      "solutions": {
+        "title": "解决方案",
+        "items": {
+          "llmTraining": {
+            "name": "大模型训练",
+            "description": "裸金属 GPU 集群"
+          },
+          "inference": {
+            "name": "高并发推理",
+            "description": "低延迟弹性 API 部署"
+          },
+          "startups": {
+            "name": "AIGC 初创企业",
+            "description": "面向初创团队的资源方案"
+          },
+          "enterprise": {
+            "name": "企业解决方案",
+            "description": "专属网络、存储和支持"
+          }
+        }
+      },
+      "hosting": {
+        "title": "托管",
+        "items": {
+          "hosting": {
+            "name": "托管",
+            "description": "发布 GPU 主机并获得客户、支持、账单和交易流"
+          },
+          "dataCenter": {
+            "name": "数据中心",
+            "description": "申请认证数据中心，获得信任标签和优先展示"
+          },
+          "financing": {
+            "name": "融资",
+            "description": "为 GPU 主机匹配融资与硬件采购支持"
+          },
+          "hardware": {
+            "name": "硬件",
+            "description": "采购认证 GPU 服务器并预配置为平台可用状态"
+          }
+        }
+      },
+      "company": {
+        "title": "公司",
+        "items": {
+          "about": {
+            "name": "关于我们",
+            "description": "团队、使命和平台方向"
+          },
+          "sustainability": {
+            "name": "可持续发展",
+            "description": "能源效率与长期责任"
+          },
+          "enterprise": {
+            "name": "企业解决方案",
+            "description": "为大型团队定制资源"
+          }
+        }
+      }
+    },
+    "directLinks": {
+      "rental": "租赁",
+      "blog": "博客",
+      "helpCenter": "帮助中心",
+      "enterprise": "企业咨询"
+    }
+  },
+  "DashboardNav": {
+    "brand": "GPU 控制台",
+    "groups": {
+      "overview": "概览",
+      "compute": "算力资源",
+      "finance": "财务中心",
+      "growth": "推广收益",
+      "account": "账户设置"
+    },
+    "items": {
+      "dashboard": "控制台",
+      "analytics": "数据分析",
+      "products": "产品大厅",
+      "orders": "我的实例",
+      "api": "API 管理",
+      "wallet": "我的钱包",
+      "recharge": "充值中心",
+      "withdraw": "提现申请",
+      "billing": "账单明细",
+      "profits": "算力收益",
+      "team": "我的团队",
+      "commissions": "佣金明细",
+      "settlements": "结算记录",
+      "notifications": "消息通知",
+      "settings": "个人设置"
+    }
+  },
+  "DashboardHeader": {
+    "pageFallback": "控制台",
+    "quickSearch": "快速搜索...",
+    "publicNav": "公共站点导航",
+    "openPublicNav": "打开公共站点导航",
+    "siteNav": "站点导航",
+    "accountFallback": "账户",
+    "personalCenter": "个人中心",
+    "billingRecords": "账单记录",
+    "wallet": "我的钱包",
+    "logout": "退出登录",
+    "public": {
+      "home": "首页",
+      "blog": "博客",
+      "docs": "文档中心"
+    }
+  },
+  "AdminNav": {
+    "brand": "管理后台",
+    "subtitle": "Admin Control Panel",
+    "groups": {
+      "operations": "运营大盘",
+      "users": "用户体系",
+      "finance": "财务结算",
+      "compute": "算力调度",
+      "system": "系统基座"
+    },
+    "items": {
+      "dashboard": "数据概览",
+      "wallets": "资产管理",
+      "logs": "操作审计",
+      "users": "客户名单",
+      "team": "团队拓扑",
+      "recharge": "充值审核",
+      "withdraw": "提现审核",
+      "profits": "收益对账",
+      "commissions": "佣金明细",
+      "settlements": "结算工单",
+      "orders": "租赁订单",
+      "api": "API 凭证",
+      "products": "产品库",
+      "models": "模型参数",
+      "gpu": "GPU 型号",
+      "regions": "节点区域",
+      "rules": "周期策略",
+      "management": "管理权限",
+      "notifications": "全局公告",
+      "content": "内容发布",
+      "docs": "文档系统",
+      "config": "系统参数",
+      "scheduler": "异步调度"
+    }
+  },
+  "AdminHeader": {
+    "searchPlaceholder": "搜索用户、订单、流水或配置",
+    "switchTheme": "切换到{theme}主题",
+    "darkTheme": "暗色",
+    "lightTheme": "明亮",
+    "adminFallback": "管理员",
+    "logout": "退出登录",
+    "breadcrumbs": {
+      "admins": "管理后台",
+      "dashboard": "数据总览",
+      "management": "用户管理",
+      "wallets": "钱包管理",
+      "recharge": "充值审核",
+      "withdraw": "提现审核",
+      "orders": "租赁订单",
+      "api": "API 凭证",
+      "profits": "收益记录",
+      "commissions": "佣金记录",
+      "settlements": "结算订单",
+      "team": "团队关系",
+      "products": "产品目录",
+      "models": "AI 模型",
+      "gpu": "GPU 型号",
+      "regions": "机房地区",
+      "rules": "周期规则",
+      "content": "内容管理",
+      "notifications": "通知管理",
+      "config": "系统配置",
+      "scheduler": "调度任务",
+      "logs": "操作日志"
+    }
+  },
+  "AdminTranslations": {
+    "button": "翻译",
+    "notificationTitle": "通知翻译维护",
+    "rechargeChannelTitle": "充值渠道翻译维护",
+    "regionTitle": "地区翻译维护",
+    "gpuModelTitle": "GPU 型号翻译维护",
+    "productTitle": "产品翻译维护",
+    "aiModelTitle": "AI 模型翻译维护",
+    "cycleRuleTitle": "租赁周期翻译维护",
+    "blogCategoryTitle": "博客分类翻译维护",
+    "blogTagTitle": "博客标签翻译维护",
+    "blogPostTitle": "博客文章翻译维护",
+    "description": "维护中文和英文展示内容。保存中文会同步默认主表字段，保存英文只更新翻译表。",
+    "configured": "已配置",
+    "notConfigured": "未配置",
+    "chinese": "中文",
+    "english": "English",
+    "notificationTitleField": "通知标题",
+    "notificationContentField": "通知内容",
+    "channelName": "渠道展示名",
+    "accountName": "收款名称",
+    "regionName": "地区名称",
+    "modelName": "模型名称",
+    "gpuModelName": "GPU 型号名称",
+    "vendorName": "厂商名称",
+    "productName": "产品名称",
+    "cycleName": "租赁周期名称",
+    "categoryName": "分类名称",
+    "tagName": "标签名称",
+    "blogTitle": "文章标题",
+    "blogSummary": "文章摘要",
+    "blogContent": "Markdown 正文",
+    "save": "保存{language}",
+    "saving": "保存中...",
+    "loading": "加载翻译中...",
+    "emptyHint": "该语言尚未配置，公开接口会按后端规则回退中文。",
+    "cancel": "取消"
+  },
+  "Docs": {
+    "brandShort": "算",
+    "searchPlaceholder": "搜索文档...",
+    "support": "支持",
+    "systemHome": "系统主页",
+    "pricing": "定价",
+    "blog": "博客",
+    "docsNav": "文档导航",
+    "docsCenter": "文档中心",
+    "views": "{count} 次浏览",
+    "emptyArticle": "该文档暂无正文内容。",
+    "nextArticle": "下一篇",
+    "docsBrand": "算力租赁文档",
+    "backToSection": "返回{section}",
+    "searchResults": "搜索结果",
+    "sectionHome": "分区首页",
+    "description": "查找平台配置指南、产品使用说明、API 文档和常见运营问题答案。",
+    "noDocs": "未找到文档",
+    "noDocsDescription": "请尝试更换关键词或分类。已发布文档可用后会显示在这里。",
+    "clearFilters": "清除筛选",
+    "pageSummary": "第 {pageNo} / {pageCount} 页，共 {total} 条",
+    "previousPage": "上一页",
+    "nextPage": "下一页",
+    "sections": {
+      "guide": "向导",
+      "integration": "集成",
+      "faq": "常见问题",
+      "support": "支持"
+    }
+  },
+  "DataTable": {
+    "empty": "暂无数据",
+    "loading": "数据加载中",
+    "pageSummary": "第 {pageNo} / {pageCount} 页，共 {total} 条数据",
+    "previousPage": "上一页",
+    "nextPage": "下一页"
+  },
+  "SearchPanel": {
+    "filters": "筛选条件",
+    "reset": "重置",
+    "search": "查询"
+  },
+  "MegaMenus": {
+    "product": {
+      "catalog": "产品目录",
+      "categoryDescription": "按能力选择云端算力、存储与运行控制模块。",
+      "defaultItemDescription": "查看相关规格与可用资源。",
+      "categories": {
+        "foundation": {
+          "name": "基础架构",
+          "featuredTitle": "算力租赁荣获 SemiAnalysis 铂金级",
+          "featuredDescription": "唯一两度获得铂金评级的 AI 云服务商，了解为什么算力租赁是 AI 的核心云。",
+          "items": {
+            "gpuComputing": "GPU 计算",
+            "cpuComputing": "CPU 计算",
+            "bareMetal": "裸金属服务器",
+            "networking": "网络"
+          }
+        },
+        "dataStorage": {
+          "name": "数据与存储",
+          "featuredTitle": "零流出数据迁移 (0EM)",
+          "featuredDescription": "免费、无锁定地将数据迁移到算力租赁，由专家引导传输至高性能 AI 对象存储。",
+          "items": {
+            "objectStorage": "AI 对象存储",
+            "vastStorage": "专用 VAST 存储",
+            "distributedFile": "分布式文件存储",
+            "localStorage": "本地存储"
+          }
+        },
+        "infrastructureControl": {
+          "name": "基础架构控制",
+          "featuredTitle": "定义 AI 核心云",
+          "featuredDescription": "探索算力租赁的 AI 核心云如何重新定义基础架构。",
+          "items": {
+            "managedKubernetes": "托管 Kubernetes"
+          }
+        },
+        "runtimeAcceleration": {
+          "name": "运行加速",
+          "featuredTitle": "MLPerf v5.0 测试结果",
+          "featuredDescription": "算力租赁在 MLPerf 基准测试中持续刷新纪录，在 AI 训练与推理性能方面处于行业领先地位。",
+          "items": {
+            "sunk": "SUNK",
+            "sunkAnywhere": "SUNK Anywhere",
+            "serverlessRl": "Serverless RL"
+          }
+        },
+        "modelAgent": {
+          "name": "模型与代理开发",
+          "featuredTitle": "算力租赁 ARENA",
+          "featuredDescription": "在专用基础架构上运行真实的 AI 工作负载，在投入生产前验证性能、规模和成本。",
+          "items": {
+            "training": "训练",
+            "fineTuning": "微调",
+            "inference": "推理",
+            "monitoring": "监控"
+          }
+        },
+        "missionControl": {
+          "name": "任务控制",
+          "featuredTitle": "Mission Control: 大型 AI 运行标准",
+          "featuredDescription": "Mission Control 将可观测性、安全审计可见性和自动化操作结合在一起，保持 AI 基础架构的可靠与透明。",
+          "items": {
+            "missionControl": "Mission Control",
+            "fleetLifecycle": "Fleet lifecycle controller",
+            "nodeLifecycle": "Node lifecycle controller",
+            "observability": "Observability"
+          }
+        }
+      }
+    },
+    "useCases": {
+      "title": "产品用例",
+      "sideTitle": "工作负载地图",
+      "sideDescription": "从生成式 AI 到图形渲染，按实际工作负载选择合适的 GPU 资源和部署方式。",
+      "viewAll": "查看全部用例",
+      "items": {
+        "textGeneration": {
+          "name": "AI 文本生成",
+          "description": "面向客服、内容和知识库生成"
+        },
+        "imageVideo": {
+          "name": "AI 图像+视频生成",
+          "description": "批量生成与创意制作"
+        },
+        "agents": {
+          "name": "人工智能代理",
+          "description": "多步骤任务编排与执行"
+        },
+        "fineTuning": {
+          "name": "AI 微调",
+          "description": "领域模型快速适配"
+        },
+        "batchData": {
+          "name": "批量数据处理",
+          "description": "高吞吐离线任务处理"
+        },
+        "audio": {
+          "name": "音频转文本转录",
+          "description": "语音识别与内容归档"
+        },
+        "virtualComputing": {
+          "name": "虚拟计算",
+          "description": "弹性工作站与远程桌面"
+        },
+        "gpuProgramming": {
+          "name": "GPU 编程",
+          "description": "CUDA 开发与性能调优"
+        },
+        "rendering": {
+          "name": "图形渲染",
+          "description": "渲染农场和 3D 制作"
+        }
+      }
+    },
+    "solutions": {
+      "byScenario": "按场景解决方案",
+      "byIndustry": "按行业",
+      "ctaDescription": "探索专为您行业定制的算力加速方案，助力业务快速增长。",
+      "ctaLink": "获取定制方案 ->",
+      "categories": {
+        "training": "AI 训练",
+        "inference": "AI 推理",
+        "compute": "专用计算"
+      },
+      "items": {
+        "llmTraining": {
+          "name": "大模型训练",
+          "description": "提供裸金属 GPU 集群"
+        },
+        "agents": {
+          "name": "智能体开发",
+          "description": "支持复杂智能体迭代"
+        },
+        "highConcurrency": {
+          "name": "高并发推理",
+          "description": "低延迟的弹性 API 部署"
+        },
+        "aigc": {
+          "name": "AIGC 生成",
+          "description": "专为图像/视频生成优化"
+        },
+        "graphics": {
+          "name": "图形渲染",
+          "description": "云端弹性渲染农场"
+        },
+        "scientific": {
+          "name": "科学计算",
+          "description": "高密集型仿真计算"
+        }
+      },
+      "industries": {
+        "startups": "AIGC 初创企业",
+        "research": "科研与高校",
+        "auto": "自动驾驶",
+        "gaming": "游戏与数字娱乐"
+      }
+    },
+    "hosting": {
+      "title": "托管",
+      "sideTitle": "硬件与资金支持",
+      "sideDescription": "从 GPU 服务器采购到融资方案，帮助团队更高效地完成资源准备。",
+      "sideLink": "查看硬件 ->",
+      "items": {
+        "hosting": {
+          "name": "托管",
+          "description": "发布 GPU 主机并获得客户、支持、账单和交易流"
+        },
+        "dataCenter": {
+          "name": "数据中心",
+          "description": "申请认证数据中心，获得信任标签和优先展示"
+        },
+        "financing": {
+          "name": "融资",
+          "description": "为 GPU 主机匹配融资与硬件采购支持"
+        },
+        "hardware": {
+          "name": "硬件",
+          "description": "采购认证 GPU 服务器并预配置为平台可用状态"
+        }
+      }
+    },
+    "company": {
+      "title": "公司",
+      "sideTitle": "合作咨询",
+      "sideDescription": "需要面向团队的专属资源池、网络隔离或采购支持，可以直接发起企业咨询。",
+      "contact": "联系我们",
+      "items": {
+        "about": {
+          "name": "关于我们",
+          "description": "了解团队、使命和算力基础设施方向"
+        },
+        "sustainability": {
+          "name": "可持续发展",
+          "description": "查看能源效率和长期运营责任"
+        },
+        "enterprise": {
+          "name": "企业解决方案",
+          "description": "为大型团队定制网络、存储与支持"
+        }
+      }
+    }
+  },
+  "BlogCard": {
+    "noImage": "No Image"
+  },
+  "MarketingHome": {
+    "hero": {
+      "badge": "Compute Rental",
+      "label": "GPU / Training / Inference",
+      "title": "按需租用稳定算力，把资源交付做得像基础设施一样直接。",
+      "description": "在这里浏览我们的算力产品目录。探索不同规格的 GPU 实例，支持您的 AI 训练与推理需求。"
+    },
+    "logoCarousel": {
+      "defaultText": "超过一万家公司，从初创企业到财富 500 强，都在我们的平台上运营业务。"
+    },
+    "productList": {
+      "title": "实时 GPU 基础设施",
+      "subtitle": "覆盖 20,000+ GPU 的透明算力供给，按需租用、实时查询、快速交付。",
+      "demand": {
+        "high": "高",
+        "medium": "中",
+        "low": "低"
+      },
+      "priceUnit": "/小时",
+      "priceRange": "{min} - {max}/小时区间",
+      "rent": "租用",
+      "viewAll": "查看全部 GPU"
+    },
+    "features": {
+      "title": "探索我们的 GPU 云服务",
+      "subtitle": "从服务器选择到 Token 产出，再到收益表现，把关键结果直接展示给你。",
+      "items": [
+        {
+          "title": "收益导向选机",
+          "description": "根据机器在真实 AI 场景下的表现，帮助你判断租哪台更合适。"
+        },
+        {
+          "title": "热门 AI 任务匹配",
+          "description": "面向文本、图像、视频、语音等热门需求分配服务器资源。"
+        },
+        {
+          "title": "Token 表现可追踪",
+          "description": "实时查看机器的 Token 处理能力与任务表现，选择更有依据。"
+        },
+        {
+          "title": "成本收益更清楚",
+          "description": "从租赁费用到运行产出，关键数据持续可见。"
+        },
+        {
+          "title": "平台负责运行调度",
+          "description": "减少机器空闲与切换损耗，让服务器更专注于实际任务。"
+        },
+        {
+          "title": "上手更简单",
+          "description": "你关注机型和收益，平台处理接入与运行流程。"
+        }
+      ]
+    },
+    "useCases": {
+      "title": "广泛的 AI 工作负载支持",
+      "subtitle": "无论您运行的是训练、推理还是渲染，我们都能提供匹配的算力支持。",
+      "viewAll": "查看全部用例",
+      "learnMore": "了解更多",
+      "items": [
+        {
+          "title": "AI 文本生成",
+          "desc": "部署大型语言模型进行文本生成、对话 AI 和代码辅助。"
+        },
+        {
+          "title": "AI 图像与视频生成",
+          "desc": "运行 Stable Diffusion 或视频生成模型，释放创意工作流。"
+        },
+        {
+          "title": "AI 智能体",
+          "desc": "构建自主 AI 智能体，用于任务自动化和工作流编排。"
+        }
+      ]
+    },
+    "engines": {
+      "title": "超级智能的引擎",
+      "subtitle": "体验新一代 AI 基础设施。高性能 GPU 集群专为高要求工作负载而设计。",
+      "items": [
+        {
+          "title": "NVIDIA VR200 NVL72",
+          "description": "面向智能体 AI 优化的机架级系统。"
+        },
+        {
+          "title": "NVIDIA GB300 NVL72",
+          "description": "面向 AI 推理优化的机架级系统。"
+        },
+        {
+          "title": "NVIDIA HGX B300",
+          "description": "以峰值能效支持更长训练运行时间。"
+        },
+        {
+          "title": "NVIDIA HGX B200",
+          "description": "适合微调和推理的通用 GPU 基础设施。"
+        }
+      ]
+    },
+    "workloads": {
+      "title": "专为 AI 工作负载设计",
+      "subtitle": "我们通过提供高价值的性能、规模和专业知识，弥合人工智能雄心与执行之间的鸿沟。",
+      "items": [
+        {
+          "title": "更快推向市场",
+          "number": "10X",
+          "subtext": "更快的推理启动时间",
+          "hoverBullets": [
+            "通过全栈 AI 原生云平台，以行业领先的速度和规模获得 NVIDIA 显卡资源，加快 AI 开发周期，更快将解决方案推向市场。",
+            "我们的 Kubernetes 原生开发体验拥有前沿裸机基础设施、自动化配置，以及对主流工作负载编排框架的支持。"
+          ]
+        },
+        {
+          "title": "获得行业领先的性能\n和效率",
+          "number": "96%",
+          "subtext": "集群吞吐量",
+          "hoverBullets": [
+            "减少中断，提高集群利用率，并近实时解决问题，让工作和工作负载重回正轨，保持团队高效并专注于创新。",
+            "凭借强韧基础设施、严格的节点生命周期管理、深度可观察性，以及全天候专业工程团队支持，保障关键工作负载持续推进。"
+          ]
+        },
+        {
+          "title": "提供实时的可靠性和\n韧性",
+          "number": "50%",
+          "subtext": "每天的中断减少",
+          "hoverBullets": [
+            "通过高性能集群加快训练和推理，集群从第一天起就面向生产工作负载准备，并在设计上追求可靠性和更优 TCO。",
+            "获得先进的计算、存储和网络云服务、严格健康检查以及自动化生命周期管理，让 AI 工作负载能在数小时内运行，而非等待数周。"
+          ]
+        }
+      ]
+    },
+    "testimonials": {
+      "title": "领先的 AI 创新者信赖 CoreWeave",
+      "slideAria": "跳转到第 {index} 张推荐语",
+      "items": [
+        {
+          "quote": "CoreWeave 提供可靠、前沿硬件的能力，持续满足了我们关键工作负载的需求。我们同样看重他们能够根据我们的独特需求定制解决方案，帮助我们优化性能，并应对快速变化的市场环境。",
+          "author": "Craig Falls",
+          "title": "量化研究负责人",
+          "company": "Jane Street"
+        },
+        {
+          "quote": "CoreWeave 是我们最早、规模最大的算力合作伙伴之一。CoreWeave 帮助我们构建了超大规模计算集群，推动了部分知名模型的诞生，并帮助我们以客户所需的规模交付这些系统。",
+          "author": "Sam Altman",
+          "title": "首席执行官",
+          "company": "OpenAI"
+        },
+        {
+          "quote": "我们与 CoreWeave 团队紧密协作，共同建设基础设施。随着我们持续交付前沿模型，CoreWeave 集群在可靠性和稳定性方面始终保持一流水准。",
+          "author": "Arthur Mensch",
+          "title": "创始人兼首席执行官",
+          "company": "Mistral AI"
+        },
+        {
+          "quote": "与 CoreWeave 的合作显著加快了我们的模型训练周期。他们以 API 优先的基础设施稳定且高度可扩展，正是现代 AI 工作流所需要的能力。",
+          "author": "Alexandr Wang",
+          "title": "首席执行官",
+          "company": "Scale AI"
+        },
+        {
+          "quote": "CoreWeave 提供高性能 GPU 实例，让我们能够高效部署大型开源模型。他们稳定的网络确保我们的模型始终能够服务社区。",
+          "author": "Clem Delangue",
+          "title": "首席执行官",
+          "company": "Hugging Face"
+        },
+        {
+          "quote": "构建先进的 Claude 模型需要大规模且不中断的算力。CoreWeave 的基础设施正好提供了这一点，让我们的研究人员能够专注于算法突破。",
+          "author": "Dario Amodei",
+          "title": "首席执行官",
+          "company": "Anthropic"
+        }
+      ]
+    },
+    "enterprise": {
+      "badge": "企业级",
+      "title": "从一开始就达到企业级水平",
+      "subtitle": "专为规模化而打造，安全可靠，旨在满足您最苛刻的需求。",
+      "items": [
+        {
+          "title": "99.9% 正常运行时间",
+          "description": "凭借业界领先的可靠性，您可以自信地运行关键工作负载。"
+        },
+        {
+          "title": "默认安全",
+          "description": "经独立审计的控制措施与端到端数据保护，支持企业安全要求。"
+        },
+        {
+          "title": "可扩展至数千个 GPU",
+          "description": "利用可随您发展而扩展的基础设施，即时适应需求。"
+        }
+      ]
+    },
+    "faq": {
+      "title": "常见问题",
+      "subtitle": "了解算力租赁、产品资源和计费方式的关键信息。",
+      "items": [
+        {
+          "question": "可以租赁哪些类型的 GPU？",
+          "answer": "我们提供多种高性能 GPU 资源，包括 NVIDIA H100、A100 和 RTX 4090 等，可满足 AI 训练、推理和不同规模的算力任务。"
+        },
+        {
+          "question": "计费方式是怎样的？",
+          "answer": "平台采用透明的按量计费模式，通常按实际使用时长计费，不设置隐藏费用。长期租赁或稳定使用场景也可以享受更合适的价格方案。"
+        },
+        {
+          "question": "是否有最短租赁时长？",
+          "answer": "没有严格的最短租赁限制。你可以按需启动实例，既适合短时间实验验证，也适合持续运行的生产任务。"
+        },
+        {
+          "question": "平台提供哪些技术支持？",
+          "answer": "我们为算力基础设施提供技术支持，协助你处理部署、连接、运行和资源使用中的问题，并帮助优化实际使用体验。"
+        },
+        {
+          "question": "算力资源可以动态扩展吗？",
+          "answer": "可以。你可以根据任务负载变化，通过控制台选择和调整 GPU 节点，让资源规模更贴合训练、推理或批处理任务的实际需求。"
+        }
+      ]
+    },
+    "hub": {
+      "title": "AI 开发者中心",
+      "badge": "开放使用",
+      "subtitle": "面向机器学习团队的探索、实验、协作和构建中心，把模型评估、数据集查看和项目展示放在同一个工作流里。",
+      "items": [
+        {
+          "title": "用机器学习创作",
+          "description": "内置模型评估、数据集查看等机器学习工作流能力。",
+          "alt": "用机器学习创作"
+        },
+        {
+          "title": "协作",
+          "description": "基于 Git，并以共享开发和评审为核心设计。",
+          "alt": "协作"
+        },
+        {
+          "title": "边实验边学习",
+          "description": "通过动手实验和优秀社区案例持续学习。",
+          "alt": "边实验边学习"
+        },
+        {
+          "title": "构建机器学习作品集",
+          "description": "与世界分享你的作品，打造可展示的机器学习档案。",
+          "alt": "构建机器学习作品集"
+        }
+      ]
+    },
+    "blogPreview": {
+      "title": "阅读最新博客",
+      "subtitle": "获取算力租赁、GPU 集群和 AI 基础设施的最新实践与产品洞察。",
+      "viewAll": "查看全部",
+      "readMore": "继续阅读",
+      "defaultSummary": "阅读更多算力租赁与 AI 基础设施实践。",
+      "defaultCategory": "博客",
+      "fallbackPosts": [
+        {
+          "title": "GPU 租赁如何缩短模型训练排队时间",
+          "summary": "从实例规格、显存容量到节点交付节奏，梳理训练任务上线前最需要确认的算力指标。",
+          "category": "算力实践"
+        },
+        {
+          "title": "推理业务上线前需要确认的基础设施指标",
+          "summary": "围绕吞吐、延迟、弹性扩缩容和网络稳定性，建立更清晰的 AI 推理资源评估方式。",
+          "category": "AI 推理"
+        },
+        {
+          "title": "构建高稳定 GPU 集群的三条经验",
+          "summary": "把安全、监控和资源隔离前置到架构设计阶段，让关键工作负载具备持续运行能力。",
+          "category": "基础设施"
+        }
+      ]
+    }
+  }
+}

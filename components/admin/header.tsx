@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { Bell, LayoutGrid, LogOut, Moon, Search, Settings, Sun } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { adminLogout, getAdminMe, type AdminMeResponse } from "@/api/admin";
 
 type AdminTheme = "light" | "dark";
@@ -21,29 +22,29 @@ type DocumentWithViewTransition = Document & {
   startViewTransition?: (callback: () => void) => void;
 };
 
-const breadcrumbLabels: Record<string, string> = {
-  admins: "管理后台",
-  dashboard: "数据总览",
-  management: "用户管理",
-  wallets: "钱包管理",
-  recharge: "充值审核",
-  withdraw: "提现审核",
-  orders: "租赁订单",
-  api: "API 凭证",
-  profits: "收益记录",
-  commissions: "佣金记录",
-  settlements: "结算订单",
-  team: "团队关系",
-  products: "产品目录",
-  models: "AI 模型",
-  gpu: "GPU 型号",
-  regions: "机房地区",
-  rules: "周期规则",
-  content: "内容管理",
-  notifications: "通知管理",
-  config: "系统配置",
-  scheduler: "调度任务",
-  logs: "操作日志",
+const breadcrumbKeys: Record<string, string> = {
+  admins: "breadcrumbs.admins",
+  dashboard: "breadcrumbs.dashboard",
+  management: "breadcrumbs.management",
+  wallets: "breadcrumbs.wallets",
+  recharge: "breadcrumbs.recharge",
+  withdraw: "breadcrumbs.withdraw",
+  orders: "breadcrumbs.orders",
+  api: "breadcrumbs.api",
+  profits: "breadcrumbs.profits",
+  commissions: "breadcrumbs.commissions",
+  settlements: "breadcrumbs.settlements",
+  team: "breadcrumbs.team",
+  products: "breadcrumbs.products",
+  models: "breadcrumbs.models",
+  gpu: "breadcrumbs.gpu",
+  regions: "breadcrumbs.regions",
+  rules: "breadcrumbs.rules",
+  content: "breadcrumbs.content",
+  notifications: "breadcrumbs.notifications",
+  config: "breadcrumbs.config",
+  scheduler: "breadcrumbs.scheduler",
+  logs: "breadcrumbs.logs",
 };
 
 function getCurrentTheme(): AdminTheme {
@@ -58,10 +59,10 @@ function setAdminTheme(theme: AdminTheme) {
   window.localStorage.setItem("adminTheme", theme);
 }
 
-
 function AdminThemeToggle() {
   const [theme, setTheme] = useState<AdminTheme>("dark");
   const [mounted, setMounted] = useState(false);
+  const t = useTranslations("AdminHeader");
 
   useEffect(() => {
     setTheme(getCurrentTheme());
@@ -71,6 +72,8 @@ function AdminThemeToggle() {
   if (!mounted) return <div className="h-9 w-9" />;
 
   const nextTheme: AdminTheme = theme === "dark" ? "light" : "dark";
+  const themeLabel = nextTheme === "dark" ? t("darkTheme") : t("lightTheme");
+  const label = t("switchTheme", { theme: themeLabel });
 
   const handleToggle = () => {
     const viewTransitionDocument = document as DocumentWithViewTransition;
@@ -91,8 +94,8 @@ function AdminThemeToggle() {
       variant="ghost"
       size="icon"
       className="relative h-9 w-9 overflow-hidden text-muted-foreground hover:text-foreground"
-      aria-label={`切换到${nextTheme === "dark" ? "暗色" : "明亮"}主题`}
-      title={`切换到${nextTheme === "dark" ? "暗色" : "明亮"}主题`}
+      aria-label={label}
+      title={label}
       onClick={handleToggle}
     >
       <div className="relative h-4 w-4">
@@ -109,6 +112,7 @@ function AdminThemeToggle() {
 export function AdminHeader() {
   const pathname = usePathname();
   const router = useRouter();
+  const t = useTranslations("AdminHeader");
   const [admin, setAdmin] = useState<AdminMeResponse | null>(null);
   const pathSegments = pathname.split("/").filter(Boolean);
 
@@ -149,7 +153,7 @@ export function AdminHeader() {
             <span key={`${segment}-${index}`} className="flex items-center gap-2">
               {index > 0 ? <span className="text-muted-foreground">/</span> : null}
               <span className={index === pathSegments.length - 1 ? "text-foreground" : "text-muted-foreground"}>
-                {breadcrumbLabels[segment] ?? segment}
+                {breadcrumbKeys[segment] ? t(breadcrumbKeys[segment]) : segment}
               </span>
             </span>
           ))}
@@ -159,11 +163,9 @@ export function AdminHeader() {
       <div className="flex items-center gap-2">
         <div className="relative hidden w-72 lg:block">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            className="h-10 rounded-lg bg-muted/40 pl-9"
-            placeholder="搜索用户、订单、流水或配置"
-          />
+          <Input className="h-10 rounded-lg bg-muted/40 pl-9" placeholder={t("searchPlaceholder")} />
         </div>
+        <LanguageSwitcher />
         <AdminThemeToggle />
         <Button asChild variant="ghost" size="icon" className="relative text-muted-foreground hover:text-foreground">
           <Link href="/admins/notifications">
@@ -178,25 +180,21 @@ export function AdminHeader() {
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button
-              type="button"
-              variant="outline"
-              className="ml-1 h-9 gap-2 rounded-lg px-2 sm:px-3"
-            >
+            <Button type="button" variant="outline" className="ml-1 h-9 gap-2 rounded-lg px-2 sm:px-3">
               <Avatar className="h-6 w-6 rounded-md">
                 <AvatarFallback className="rounded-md bg-primary/10 text-xs font-medium text-primary">
                   {(admin?.userName || "A").slice(0, 1).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
               <span className="hidden max-w-32 truncate text-sm text-muted-foreground sm:inline">
-                {admin?.userName || "管理员"}
+                {admin?.userName || t("adminFallback")}
               </span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-36">
             <DropdownMenuItem className="gap-2 text-destructive focus:text-destructive" onClick={handleLogout}>
               <LogOut className="h-4 w-4" />
-              退出登录
+              {t("logout")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -1,14 +1,26 @@
 "use client";
 
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslations } from "next-intl";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { createAdminRechargeChannel, updateAdminRechargeChannel } from "@/api/admin";
-import type { AdminRechargeChannelResponse, CreateRechargeChannelRequest } from "@/api/types";
+import {
+  createAdminRechargeChannel,
+  getAdminRechargeChannelTranslations,
+  updateAdminRechargeChannel,
+  updateAdminRechargeChannelTranslation,
+} from "@/api/admin";
+import type {
+  AdminRechargeChannelResponse,
+  CreateRechargeChannelRequest,
+  SupportedLocale,
+} from "@/api/types";
 import { useState } from "react";
 import { toErrorMessage } from "@/lib/format";
 
@@ -238,5 +250,186 @@ export function RechargeChannelForm({ initialData, onSuccess, onCancel }: Rechar
         </Button>
       </div>
     </form>
+  );
+}
+
+type RechargeChannelTranslationDraft = {
+  channelName: string;
+  accountName: string;
+  configured?: boolean;
+};
+
+const supportedLocales: SupportedLocale[] = ["zh-CN", "en-US"];
+
+const emptyTranslations: Record<SupportedLocale, RechargeChannelTranslationDraft> = {
+  "zh-CN": { channelName: "", accountName: "", configured: false },
+  "en-US": { channelName: "", accountName: "", configured: false },
+};
+
+interface RechargeChannelTranslationFormProps {
+  channelId: number;
+  onSuccess: () => void;
+  onCancel: () => void;
+}
+
+export function RechargeChannelTranslationForm({
+  channelId,
+  onSuccess,
+  onCancel,
+}: RechargeChannelTranslationFormProps) {
+  const t = useTranslations("AdminTranslations");
+  const [translations, setTranslations] = useState<Record<SupportedLocale, RechargeChannelTranslationDraft>>(emptyTranslations);
+  const [loading, setLoading] = useState(true);
+  const [savingLocale, setSavingLocale] = useState<SupportedLocale | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let mounted = true;
+    setLoading(true);
+    setError(null);
+
+    getAdminRechargeChannelTranslations(channelId)
+      .then((res) => {
+        if (!mounted) return;
+        const next: Record<SupportedLocale, RechargeChannelTranslationDraft> = {
+          "zh-CN": { ...emptyTranslations["zh-CN"] },
+          "en-US": { ...emptyTranslations["en-US"] },
+        };
+        for (const item of res.data) {
+          next[item.locale] = {
+            channelName: item.channelName ?? "",
+            accountName: item.accountName ?? "",
+            configured: item.configured,
+          };
+        }
+        setTranslations(next);
+      })
+      .catch((err) => {
+        if (mounted) setError(toErrorMessage(err));
+      })
+      .finally(() => {
+        if (mounted) setLoading(false);
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, [channelId]);
+
+  const updateDraft = (
+    locale: SupportedLocale,
+    key: "channelName" | "accountName",
+    value: string,
+  ) => {
+    setTranslations((current) => ({
+      ...current,
+      [locale]: {
+        ...current[locale],
+        [key]: value,
+      },
+    }));
+  };
+
+  const saveLocale = async (locale: SupportedLocale) => {
+    setSavingLocale(locale);
+    setError(null);
+    try {
+      const draft = translations[locale];
+      await updateAdminRechargeChannelTranslation(channelId, {
+        locale,
+        channelName: draft.channelName,
+        accountName: draft.accountName,
+      });
+      onSuccess();
+    } catch (err) {
+      setError(toErrorMessage(err));
+    } finally {
+      setSavingLocale(null);
+    }
+  };
+
+  return (
+    <div className="space-y-5">
+      <div>
+        <h2 className="text-lg font-semibold text-foreground">{t("rechargeChannelTitle")}</h2>
+        <p className="mt-1 text-sm leading-6 text-muted-foreground">{t("description")}</p>
+      </div>
+
+      {error ? (
+        <div className="rounded-md border border-rose-500/20 bg-rose-500/10 p-3 text-sm font-medium text-rose-500">
+          {error}
+        </div>
+      ) : null}
+
+      {loading ? (
+        <div className="flex items-center gap-2 rounded-lg border border-border p-4 text-sm text-muted-foreground">
+          <Loader2 className="h-4 w-4 animate-spin" />
+          {t("loading")}
+        </div>
+      ) : (
+        <div className="grid gap-4 md:grid-cols-2">
+          {supportedLocales.map((locale) => {
+            const draft = translations[locale];
+            const label = locale === "zh-CN" ? t("chinese") : t("english");
+            return (
+              <section key={locale} className="rounded-xl border border-border bg-card p-4 text-card-foreground">
+                <div className="mb-4 flex items-center justify-between gap-3">
+                  <div>
+                    <h3 className="text-sm font-semibold">{label}</h3>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      {draft.configured ? t("configured") : t("notConfigured")}
+                    </p>
+                  </div>
+                  {!draft.configured ? (
+                    <span className="rounded-full bg-amber-500/10 px-2 py-1 text-[11px] font-medium text-amber-600">
+                      {t("emptyHint")}
+                    </span>
+                  ) : null}
+                </div>
+                <div className="space-y-3">
+                  <div className="space-y-2">
+                    <Label>{t("channelName")}</Label>
+                    <Input
+                      value={draft.channelName}
+                      onChange={(event) => updateDraft(locale, "channelName", event.target.value)}
+                      className="bg-background"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>{t("accountName")}</Label>
+                    <Input
+                      value={draft.accountName}
+                      onChange={(event) => updateDraft(locale, "accountName", event.target.value)}
+                      className="bg-background"
+                    />
+                  </div>
+                  <Button
+                    type="button"
+                    className="w-full"
+                    disabled={savingLocale !== null}
+                    onClick={() => void saveLocale(locale)}
+                  >
+                    {savingLocale === locale ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        {t("saving")}
+                      </>
+                    ) : (
+                      t("save", { language: label })
+                    )}
+                  </Button>
+                </div>
+              </section>
+            );
+          })}
+        </div>
+      )}
+
+      <div className="flex justify-end border-t border-border pt-4">
+        <Button type="button" variant="ghost" onClick={onCancel}>
+          {t("cancel")}
+        </Button>
+      </div>
+    </div>
   );
 }

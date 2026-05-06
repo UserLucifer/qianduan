@@ -29,26 +29,46 @@ import type {
   AdminWalletQuery,
   AdminWalletTransactionQuery,
   AiModelResponse,
+  AiModelTranslationRequest,
+  AiModelTranslationResponse,
   ApiDeployOrderResponse,
   BlogCategory,
+  BlogCategoryTranslationRequest,
+  BlogCategoryTranslationResponse,
   BlogPostQueryRequest,
+  BlogPostTranslationRequest,
+  BlogPostTranslationResponse,
   BlogTag,
+  BlogTagTranslationRequest,
+  BlogTagTranslationResponse,
   CommissionRecordResponse,
   CreateRechargeChannelRequest,
   AdminDocsArticleQuery,
   AdminDocsCategoryQuery,
   GpuModelResponse,
+  GpuModelTranslationRequest,
+  GpuModelTranslationResponse,
   NotificationBroadcastRequest,
   NotificationCreateRequest,
   NotificationQueryRequest,
+  NotificationTranslationRequest,
+  NotificationTranslationResponse,
   PageQuery,
   PageResult,
   ProductResponse,
+  ProductTranslationRequest,
+  ProductTranslationResponse,
   ProfitRecordResponse,
   RechargeOrderQueryRequest,
   RechargeOrderResponse,
+  RechargeChannelTranslationRequest,
+  RechargeChannelTranslationResponse,
   RegionResponse,
+  RegionTranslationRequest,
+  RegionTranslationResponse,
   RentalCycleRuleResponse,
+  RentalCycleRuleTranslationRequest,
+  RentalCycleRuleTranslationResponse,
   RentalOrderDetailResponse,
   SchedulerRunResult,
   SchedulerLogResponse,
@@ -101,26 +121,46 @@ export type {
   AdminWalletTransactionQuery,
   ApiDeployOrderResponse as AdminApiDeployOrderResponse,
   BlogCategory,
+  BlogCategoryTranslationRequest,
+  BlogCategoryTranslationResponse,
   BlogPostQueryRequest,
+  BlogPostTranslationRequest,
+  BlogPostTranslationResponse,
   BlogTag,
+  BlogTagTranslationRequest,
+  BlogTagTranslationResponse,
   CommissionRecordResponse as AdminCommissionRecordResponse,
   AdminDocsArticleQuery,
   AdminDocsCategoryQuery,
+  AiModelTranslationRequest,
+  AiModelTranslationResponse,
   DocsArticle,
   DocsArticleRequest,
   DocsCategory,
   DocsCategoryRequest,
   GpuModelResponse as AdminGpuModelResponse,
+  GpuModelTranslationRequest,
+  GpuModelTranslationResponse,
   ProductResponse as AdminProductResponse,
+  ProductTranslationRequest,
+  ProductTranslationResponse,
   ProfitRecordResponse as AdminProfitRecordResponse,
   RechargeOrderResponse as AdminRechargeOrderResponse,
   RegionResponse as AdminRegionResponse,
+  RegionTranslationRequest,
+  RegionTranslationResponse,
   RentalCycleRuleResponse as AdminCycleRuleResponse,
+  RentalCycleRuleTranslationRequest,
+  RentalCycleRuleTranslationResponse,
   RentalOrderDetailResponse as AdminRentalOrderResponse,
   SchedulerRunResult,
   SettlementOrderResponse as AdminSettlementOrderResponse,
   SysAdminLog as AdminLogResponse,
   SysNotification as AdminNotificationResponse,
+  NotificationTranslationRequest,
+  NotificationTranslationResponse,
+  RechargeChannelTranslationRequest,
+  RechargeChannelTranslationResponse,
   UserWallet,
   WalletTransactionResponse,
   WithdrawOrderResponse as AdminWithdrawOrderResponse,
@@ -247,6 +287,18 @@ export const updateAdminRechargeChannel = (id: number, data: UpdateRechargeChann
 export const deleteAdminRechargeChannel = (id: number) =>
   adminApiPost<void>(`/api/admin/recharge/channels/${id}/delete`);
 
+export const getAdminRechargeChannelTranslations = (id: number) =>
+  adminApiGet<RechargeChannelTranslationResponse[]>(`/api/admin/recharge/channels/${id}/translations`);
+
+export const updateAdminRechargeChannelTranslation = (
+  id: number,
+  data: RechargeChannelTranslationRequest,
+) =>
+  adminApiPut<RechargeChannelTranslationResponse, RechargeChannelTranslationRequest>(
+    `/api/admin/recharge/channels/${id}/translations`,
+    data,
+  );
+
 export const getAdminWithdrawOrders = (params: WithdrawOrderQueryRequest = {}) =>
   adminApiGet<PageResult<WithdrawOrderResponse>>("/api/admin/withdraw/orders", { params });
 
@@ -331,6 +383,18 @@ export const createAdminProduct = (data: AdminProductRequest) =>
 export const updateAdminProduct = (productCode: string, data: AdminProductRequest) =>
   adminApiPut<ProductResponse, AdminProductRequest>(`/api/admin/products/${productCode}`, data);
 
+export const getAdminProductTranslations = (productCode: string) =>
+  adminApiGet<ProductTranslationResponse[]>(`/api/admin/products/${productCode}/translations`);
+
+export const updateAdminProductTranslation = (
+  productCode: string,
+  data: ProductTranslationRequest,
+) =>
+  adminApiPut<ProductTranslationResponse, ProductTranslationRequest>(
+    `/api/admin/products/${productCode}/translations`,
+    data,
+  );
+
 export const enableAdminProduct = (productCode: string) =>
   adminApiPost<ProductResponse>(`/api/admin/products/${productCode}/enable`);
 
@@ -345,6 +409,18 @@ export const createAdminRegion = (data: Partial<RegionResponse>) =>
 
 export const updateAdminRegion = (id: number, data: Partial<RegionResponse>) =>
   adminApiPut<RegionResponse, Partial<RegionResponse>>(`/api/admin/regions/${id}`, data);
+
+export const getAdminRegionTranslations = (id: number) =>
+  adminApiGet<RegionTranslationResponse[]>(`/api/admin/regions/${id}/translations`);
+
+export const updateAdminRegionTranslation = (
+  id: number,
+  data: RegionTranslationRequest,
+) =>
+  adminApiPut<RegionTranslationResponse, RegionTranslationRequest>(
+    `/api/admin/regions/${id}/translations`,
+    data,
+  );
 
 export const enableAdminRegion = (id: number) =>
   adminApiPost<RegionResponse>(`/api/admin/regions/${id}/enable`);
@@ -361,6 +437,18 @@ export const createAdminGpuModel = (data: Partial<GpuModelResponse>) =>
 export const updateAdminGpuModel = (id: number, data: Partial<GpuModelResponse>) =>
   adminApiPut<GpuModelResponse, Partial<GpuModelResponse>>(`/api/admin/gpu-models/${id}`, data);
 
+export const getAdminGpuModelTranslations = (id: number) =>
+  adminApiGet<GpuModelTranslationResponse[]>(`/api/admin/gpu-models/${id}/translations`);
+
+export const updateAdminGpuModelTranslation = (
+  id: number,
+  data: GpuModelTranslationRequest,
+) =>
+  adminApiPut<GpuModelTranslationResponse, GpuModelTranslationRequest>(
+    `/api/admin/gpu-models/${id}/translations`,
+    data,
+  );
+
 export const enableAdminGpuModel = (id: number) =>
   adminApiPost<GpuModelResponse>(`/api/admin/gpu-models/${id}/enable`);
 
@@ -375,6 +463,18 @@ export const createAdminAiModel = (data: Partial<AiModelResponse>) =>
 
 export const updateAdminAiModel = (modelCode: string, data: Partial<AiModelResponse>) =>
   adminApiPut<AiModelResponse, Partial<AiModelResponse>>(`/api/admin/ai-models/${modelCode}`, data);
+
+export const getAdminAiModelTranslations = (modelCode: string) =>
+  adminApiGet<AiModelTranslationResponse[]>(`/api/admin/ai-models/${modelCode}/translations`);
+
+export const updateAdminAiModelTranslation = (
+  modelCode: string,
+  data: AiModelTranslationRequest,
+) =>
+  adminApiPut<AiModelTranslationResponse, AiModelTranslationRequest>(
+    `/api/admin/ai-models/${modelCode}/translations`,
+    data,
+  );
 
 export const enableAdminAiModel = (modelCode: string) =>
   adminApiPost<AiModelResponse>(`/api/admin/ai-models/${modelCode}/enable`);
@@ -391,6 +491,20 @@ export const createAdminCycleRule = (data: Partial<RentalCycleRuleResponse>) =>
 export const updateAdminCycleRule = (cycleCode: string, data: Partial<RentalCycleRuleResponse>) =>
   adminApiPut<RentalCycleRuleResponse, Partial<RentalCycleRuleResponse>>(
     `/api/admin/rental-cycle-rules/${cycleCode}`,
+    data,
+  );
+
+export const getAdminCycleRuleTranslations = (cycleCode: string) =>
+  adminApiGet<RentalCycleRuleTranslationResponse[]>(
+    `/api/admin/rental-cycle-rules/${cycleCode}/translations`,
+  );
+
+export const updateAdminCycleRuleTranslation = (
+  cycleCode: string,
+  data: RentalCycleRuleTranslationRequest,
+) =>
+  adminApiPut<RentalCycleRuleTranslationResponse, RentalCycleRuleTranslationRequest>(
+    `/api/admin/rental-cycle-rules/${cycleCode}/translations`,
     data,
   );
 
@@ -427,6 +541,18 @@ export const broadcastAdminNotification = (data: NotificationBroadcastRequest) =
 export const cancelAdminNotification = (id: number) =>
   adminApiPost<void>(`/api/admin/notifications/${id}/cancel`);
 
+export const getAdminNotificationTranslations = (id: number) =>
+  adminApiGet<NotificationTranslationResponse[]>(`/api/admin/notifications/${id}/translations`);
+
+export const updateAdminNotificationTranslation = (
+  id: number,
+  data: NotificationTranslationRequest,
+) =>
+  adminApiPut<NotificationTranslationResponse, NotificationTranslationRequest>(
+    `/api/admin/notifications/${id}/translations`,
+    data,
+  );
+
 export const getAdminLogs = (params: AdminLogQuery = {}) =>
   adminApiGet<PageResult<SysAdminLog>>("/api/admin/logs", { params });
 
@@ -460,6 +586,18 @@ export const createAdminBlogCategory = (data: Partial<BlogCategory>) =>
 export const updateAdminBlogCategory = (id: number, data: Partial<BlogCategory>) =>
   adminApiPut<BlogCategory, Partial<BlogCategory>>(`/api/admin/blog/categories/${id}`, data);
 
+export const getAdminBlogCategoryTranslations = (id: number) =>
+  adminApiGet<BlogCategoryTranslationResponse[]>(`/api/admin/blog/categories/${id}/translations`);
+
+export const updateAdminBlogCategoryTranslation = (
+  id: number,
+  data: BlogCategoryTranslationRequest,
+) =>
+  adminApiPut<BlogCategoryTranslationResponse, BlogCategoryTranslationRequest>(
+    `/api/admin/blog/categories/${id}/translations`,
+    data,
+  );
+
 export const disableAdminBlogCategory = (id: number) =>
   adminApiPost<BlogCategory>(`/api/admin/blog/categories/${id}/disable`);
 
@@ -475,6 +613,18 @@ export const getAdminBlogPostDetail = (id: number) =>
 export const updateAdminBlogPost = (id: number, data: Partial<AdminBlogPost>) =>
   adminApiPut<AdminBlogPost, Partial<AdminBlogPost>>(`/api/admin/blog/posts/${id}`, data);
 
+export const getAdminBlogPostTranslations = (id: number) =>
+  adminApiGet<BlogPostTranslationResponse[]>(`/api/admin/blog/posts/${id}/translations`);
+
+export const updateAdminBlogPostTranslation = (
+  id: number,
+  data: BlogPostTranslationRequest,
+) =>
+  adminApiPut<BlogPostTranslationResponse, BlogPostTranslationRequest>(
+    `/api/admin/blog/posts/${id}/translations`,
+    data,
+  );
+
 export const deleteAdminBlogPost = (id: number) =>
   adminApiPost<void>(`/api/admin/blog/posts/${id}/delete`);
 
@@ -483,6 +633,18 @@ export const createAdminBlogTag = (data: Partial<BlogTag>) =>
 
 export const updateAdminBlogTag = (id: number, data: Partial<BlogTag>) =>
   adminApiPut<BlogTag, Partial<BlogTag>>(`/api/admin/blog/tags/${id}`, data);
+
+export const getAdminBlogTagTranslations = (id: number) =>
+  adminApiGet<BlogTagTranslationResponse[]>(`/api/admin/blog/tags/${id}/translations`);
+
+export const updateAdminBlogTagTranslation = (
+  id: number,
+  data: BlogTagTranslationRequest,
+) =>
+  adminApiPut<BlogTagTranslationResponse, BlogTagTranslationRequest>(
+    `/api/admin/blog/tags/${id}/translations`,
+    data,
+  );
 
 export const disableAdminBlogTag = (id: number) =>
   adminApiPost<BlogTag>(`/api/admin/blog/tags/${id}/disable`);

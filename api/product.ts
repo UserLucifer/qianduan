@@ -3,6 +3,7 @@ import type {
   AiModelResponse,
   ApiResponse,
   GpuModelResponse,
+  LocaleQuery,
   PageResult,
   ProductQueryRequest,
   ProductResponse,
@@ -14,6 +15,7 @@ export type {
   AiModelResponse,
   ApiResponse,
   GpuModelResponse,
+  LocaleQuery,
   PageResult,
   ProductQueryRequest,
   ProductResponse,
@@ -24,19 +26,22 @@ export type {
 export const getProducts = (params: ProductQueryRequest = {}) =>
   apiGet<PageResult<ProductResponse>>("/api/products", { params });
 
-export const getProductDetail = (productCode: string) =>
-  apiGet<ProductResponse>(`/api/products/${productCode}`);
+export const getProductDetail = (productCode: string, params: LocaleQuery = {}) =>
+  apiGet<ProductResponse>(`/api/products/${productCode}`, { params });
 
-export const getAiModels = () =>
-  apiGet<AiModelResponse[]>("/api/ai-models");
+export const getAiModels = (params: LocaleQuery = {}) =>
+  apiGet<AiModelResponse[]>("/api/ai-models", { params });
 
-export const getGpuModels = (regionId?: number) => {
-  const url = regionId ? `/api/gpu-models?regionId=${regionId}` : "/api/gpu-models";
-  return apiGet<GpuModelResponse[]>(url);
-};
+export const getGpuModels = (regionId?: number, params: LocaleQuery = {}) =>
+  apiGet<GpuModelResponse[]>("/api/gpu-models", {
+    params: {
+      ...params,
+      ...(regionId ? { regionId } : {}),
+    },
+  });
 
-export const getRegions = () =>
-  apiGet<RegionResponse[]>("/api/regions");
+export const getRegions = (params: LocaleQuery = {}) =>
+  apiGet<RegionResponse[]>("/api/regions", { params });
 
-export const getRentalCycleRules = () =>
-  apiGet<RentalCycleRuleResponse[]>("/api/rental-cycle-rules");
+export const getRentalCycleRules = (params: LocaleQuery = {}) =>
+  apiGet<RentalCycleRuleResponse[]>("/api/rental-cycle-rules", { params });

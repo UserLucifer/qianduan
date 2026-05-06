@@ -4,6 +4,7 @@ import type {
   ApiDeployInfoResponse,
   ApiDeployOrderResponse,
   CreateRentalOrderRequest,
+  LocaleQuery,
   PageResult,
   ProfitRecordQueryRequest,
   ProfitRecordResponse,
@@ -36,8 +37,11 @@ export const getRentalApiManagement = (params: RentalOrderQueryRequest = {}) =>
 export const getRentalOrderDetail = (orderNo: string) =>
   apiGet<RentalOrderDetailResponse>(`/api/rental/orders/${orderNo}`);
 
-export const estimateRental = (data: RentalEstimateRequest) =>
-  apiPost<RentalEstimateResponse, RentalEstimateRequest>("/api/rental/estimate", data);
+export const estimateRental = (data: RentalEstimateRequest, params: LocaleQuery = {}) =>
+  apiPost<RentalEstimateResponse, RentalEstimateRequest>("/api/rental/estimate", data, {
+    params,
+    headers: params.language ? { "Accept-Language": params.language } : undefined,
+  });
 
 export const createRentalOrder = (data: CreateRentalOrderRequest) =>
   apiPost<RentalOrderDetailResponse, CreateRentalOrderRequest>("/api/rental/orders", data);

@@ -1,4 +1,5 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
+import { getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
 import {
   BookOpen,
@@ -15,6 +16,7 @@ import {
   DOCS_DEFAULT_LANGUAGE,
   DOCS_SECTION_ITEMS,
   docsSectionHref,
+  docsSectionLabel,
   withDocsLanguage,
 } from "@/components/docs/sections";
 import { cn } from "@/lib/utils";
@@ -128,7 +130,7 @@ function renderCategoryBranch({
   );
 }
 
-export function DocsFrame({
+export async function DocsFrame({
   categories,
   sidebarArticles,
   activeSection,
@@ -138,16 +140,22 @@ export function DocsFrame({
   keyword,
   children,
 }: DocsFrameProps) {
+  const t = await getTranslations({ locale: language, namespace: "Docs" });
   const sortedCategories = sortBySortNo(categories);
   const sortedArticles = sortBySortNo(sidebarArticles);
   const sectionHref = docsSectionHref(activeSection);
   const topTabs = [
     ...DOCS_SECTION_ITEMS.map((item) => ({
       ...item,
+      label: docsSectionLabel(item.section, language),
       href: withDocsLanguage(item.href, language),
       active: item.section === activeSection,
     })),
-    { label: "支持", href: withDocsLanguage(docsSectionHref("support"), language), active: activeSection === "support" },
+    {
+      label: docsSectionLabel("support", language),
+      href: withDocsLanguage(docsSectionHref("support"), language),
+      active: activeSection === "support",
+    },
   ];
 
   return (
@@ -180,18 +188,18 @@ export function DocsFrame({
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted/60 hover:text-foreground"
             >
               <BookOpen className="h-4 w-4" />
-              定价
+              {t("pricing")}
             </Link>
             <Link
               href="/blog"
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted/60 hover:text-foreground"
             >
               <Newspaper className="h-4 w-4" />
-              博客
+              {t("blog")}
             </Link>
           </div>
 
-          <nav aria-label="文档导航" className="pt-6">
+          <nav aria-label={t("docsNav")} className="pt-6">
             {sortedCategories.length > 0 ? (
               sortedCategories.map((category) =>
                 renderCategoryBranch({
@@ -205,7 +213,7 @@ export function DocsFrame({
               )
             ) : (
               <div className="space-y-1">
-                <p className="px-3 text-sm font-semibold text-foreground">文档中心</p>
+                <p className="px-3 text-sm font-semibold text-foreground">{t("docsCenter")}</p>
                 {sortedArticles.map((article) => (
                   <Link
                     key={article.id}

@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 type Theme = "light" | "dark";
 
 const STORAGE_KEY = "theme";
@@ -15,6 +17,8 @@ function applyTheme(theme: Theme) {
 }
 
 export default function ThemeToggle() {
+  const t = useTranslations("ThemeToggle");
+
   function toggleTheme() {
     const nextTheme = getCurrentTheme() === "light" ? "dark" : "light";
     applyTheme(nextTheme);
@@ -25,7 +29,7 @@ export default function ThemeToggle() {
       type="button"
       className="theme-toggle"
       onClick={toggleTheme}
-      aria-label="切换明暗主题"
+      aria-label={t("ariaLabel")}
     >
       <svg
         className="theme-icon theme-icon--moon"

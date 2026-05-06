@@ -1,41 +1,45 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useTranslations } from "next-intl";
 import './AccordionSection.css';
 
-const engines = [
+type EngineCopy = {
+  title: string;
+  description: string;
+};
+
+const engineImages = [
   {
-    title: "NVIDIA VR200 NVL72",
-    description: "Rack-scale systems optimized for agentic AI.",
     image: "https://lambda.ai/hubfs/VR200.jpg"
   },
   {
-    title: "NVIDIA GB300 NVL72",
-    description: "Rack-scale systems optimized for AI inference.",
     image: "https://lambda.ai/hubfs/gb300.png"
   },
   {
-    title: "NVIDIA HGX B300",
-    description: "Peak performance per watt for maximum training uptime.",
     image: "https://lambda.ai/hubfs/NVIDIA%20HGX%20B300%20(1).png"
   },
   {
-    title: "NVIDIA HGX B200",
-    description: "Versatile fine-tuning and inference.",
     image: "https://lambda.ai/hubfs/b200.png"
   }
 ];
 
 const AccordionSection = () => {
+  const t = useTranslations("MarketingHome.engines");
   const [activeIndex, setActiveIndex] = useState(0);
+  const copy = t.raw("items") as EngineCopy[];
+  const engines = engineImages.map((item, index) => ({
+    ...item,
+    ...copy[index],
+  }));
 
   return (
     <section className="accordion-section">
       <div className="accordion-section__header-container">
         <div className="accordion-section__header">
-          <h2 className="accordion-section__title">The engines of superintelligence</h2>
+          <h2 className="accordion-section__title">{t("title")}</h2>
           <p className="accordion-section__description">
-            Experience the next generation of AI infrastructure with our high-performance GPU clusters, designed for the most demanding workloads.
+            {t("subtitle")}
           </p>
         </div>
       </div>

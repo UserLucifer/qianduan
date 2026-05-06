@@ -5,6 +5,7 @@ import type {
   BlogPostQueryRequest,
   BlogPostResponse,
   BlogTagResponse,
+  LocaleQuery,
   PageResult,
 } from "./types";
 
@@ -13,14 +14,15 @@ export type {
   BlogPostQueryRequest,
   BlogPostResponse,
   BlogTagResponse,
+  LocaleQuery,
   PageResult,
 };
 
-export const getBlogCategories = () =>
-  apiGet<BlogCategoryResponse[]>("/api/blog/categories");
+export const getBlogCategories = (params: LocaleQuery = {}) =>
+  apiGet<BlogCategoryResponse[]>("/api/blog/categories", { params });
 
-export const getBlogTags = () =>
-  apiGet<BlogTagResponse[]>("/api/blog/tags");
+export const getBlogTags = (params: LocaleQuery = {}) =>
+  apiGet<BlogTagResponse[]>("/api/blog/tags", { params });
 
 export const getBlogPosts = (
   params: BlogPostQueryRequest = {},
@@ -28,5 +30,5 @@ export const getBlogPosts = (
 ) =>
   apiGet<PageResult<BlogPostResponse>>("/api/blog/posts", { ...config, params });
 
-export const getBlogPostBySlug = (id: string | number) =>
-  apiGet<BlogPostResponse>(`/api/blog/posts/${id}`);
+export const getBlogPostBySlug = (id: string | number, params: LocaleQuery = {}) =>
+  apiGet<BlogPostResponse>(`/api/blog/posts/${id}`, { params });
