@@ -3672,5 +3672,288 @@
       "description": "Use Observability to get consistent visibility across clusters, jobs, and infrastructure.",
       "cta": "Contact us"
     }
+  },
+  "Sunk": {
+    "metadata": {
+      "title": "SUNK | Compute Rental",
+      "description": "CoreWeave SUNK is a unified training system for large-scale, long-running AI training workloads."
+    },
+    "hero": {
+      "title": "CoreWeave SUNK",
+      "description": "A unified training system for the most demanding AI workloads, delivering production-grade reliability and operational visibility for large-scale, long-running training jobs.",
+      "primaryCta": "Download solution brief",
+      "secondaryCta": "Contact sales",
+      "videoLabel": "CoreWeave SUNK video",
+      "videoPlayLabel": "Play SUNK video",
+      "videoPauseLabel": "Pause SUNK video"
+    },
+    "production": {
+      "title": "Redefine AI research clusters for production training",
+      "paragraphs": [
+        "SUNK is built for AI research teams running large-scale, long-running training jobs where predictability, reliability, and operational visibility matter as much as raw performance.",
+        "SUNK preserves the Slurm workflows researchers rely on while bringing Kubernetes-native operational discipline into the cluster."
+      ],
+      "features": [
+        {
+          "title": "Unified lifecycle",
+          "description": "Unify how research teams run Slurm and how platform teams operate clusters. SUNK user configuration automates secure onboarding, reduces identity and configuration drift, and keeps teams aligned from day one."
+        },
+        {
+          "title": "Reliability",
+          "description": "Run large-scale, long-running training with production-grade reliability. Mission Control monitors cluster health end to end, detects silent hardware issues and GPU stragglers, and mitigates problems before interruptions expand."
+        },
+        {
+          "title": "Performance",
+          "description": "Reduce interruptions, retries, and GPU fragmentation through topology-aware scheduling and predictable cluster behavior tuned for distributed training."
+        },
+        {
+          "title": "Observability",
+          "description": "Gain operational visibility from infrastructure health through job-level behavior, correlating Slurm metrics with GPU, networking, and storage signals to find bottlenecks faster."
+        }
+      ]
+    },
+    "offerings": {
+      "title": "The most mature Slurm-on-Kubernetes product in the market",
+      "description": "SUNK is a unified training system for demanding AI workloads, providing reliability, performance, and operational visibility for long-running training jobs.",
+      "cards": [
+        {
+          "title": "SUNK self-service",
+          "description": "Launch production-ready SUNK clusters faster. Self-service simplifies how teams deploy and manage clusters, reducing setup friction before training begins."
+        },
+        {
+          "title": "SUNK Anywhere",
+          "description": "Extend the unified training system beyond CoreWeave so teams can keep a consistent operating model as their infrastructure footprint grows."
+        },
+        {
+          "title": "Mission Control",
+          "description": "Monitor cluster health and lifecycle end to end, detect hardware anomalies and GPU stragglers, and automatically mitigate failures to keep long-running training on track."
+        },
+        {
+          "title": "Unified scheduling and observability",
+          "description": "Bring Slurm and Kubernetes closer together with unified scheduling and observability hooks that reduce tool fragmentation and manual coordination as workloads scale."
+        }
+      ]
+    },
+    "testimonials": {
+      "title": "Validated by production-scale pioneers",
+      "cta": "View more customer stories",
+      "indicatorLabel": "Show testimonial",
+      "items": [
+        {
+          "quote": "CoreWeave SUNK self-service makes it easier for customers to deploy clusters. Even with long-term contracts in place, there are strong reasons to launch self-service clusters quickly. Speed is the moat.",
+          "name": "Dylan Patel",
+          "role": "Founder, CEO, and Chief Analyst, SemiAnalysis",
+          "logoAlt": "SemiAnalysis"
+        },
+        {
+          "quote": "On rack-scale GB200 systems, SUNK topology-aware scheduling and custom dashboards help training run faster and more efficiently, with higher cluster utilization.",
+          "name": "Brian Belgodere",
+          "role": "Senior Technical Staff, IBM",
+          "logoText": "IBM"
+        },
+        {
+          "quote": "We needed infrastructure that scales without slowing down operations. SUNK gives us shared file systems, automated user setup, and customizable environments out of the box so researchers can stay focused on research.",
+          "name": "Sam Kottler",
+          "role": "Cursor ML Infra",
+          "logoAlt": "Cursor"
+        }
+      ]
+    },
+    "infrastructure": {
+      "title": "Runs on industry-leading cloud infrastructure services",
+      "description": "SUNK runs on CoreWeave infrastructure services built for AI training performance, scale, and operational consistency.",
+      "cards": [
+        {
+          "title": "Compute services",
+          "description": "Access the latest GPU compute capabilities in a Kubernetes-native environment for the most complex AI workloads."
+        },
+        {
+          "title": "Storage services",
+          "description": "Use flexible, dedicated, high-performance storage services that support AI training data and model assets reliably."
+        },
+        {
+          "title": "Networking services",
+          "description": "High-performance networking for optimal cluster scale-out and connectivity keeps training low-latency and high-throughput."
+        },
+        {
+          "title": "Supercomputing scale and enterprise security",
+          "description": "Support multi-trillion-parameter model training with large-scale GPU clusters, security capabilities, and observability."
+        }
+      ]
+    },
+    "faqs": {
+      "title": "FAQs",
+      "items": [
+        {
+          "question": "What is CoreWeave SUNK?",
+          "answer": "CoreWeave SUNK is a unified training system for the most demanding AI workloads, combining Slurm research workflows with Kubernetes-native operations."
+        },
+        {
+          "question": "How does SUNK self-service help teams launch clusters faster?",
+          "answer": "SUNK self-service captures CoreWeave operational experience in a guided path so customers can complete cluster setup, identity management, and launch readiness faster."
+        },
+        {
+          "question": "What is SUNK Anywhere?",
+          "answer": "SUNK Anywhere extends CoreWeave’s unified training system into more infrastructure environments, helping teams run demanding AI workloads with a consistent workflow."
+        },
+        {
+          "question": "How does Mission Control support long-running training?",
+          "answer": "Mission Control provides continuous health monitoring, automated remediation, and deep operational visibility so large-scale training jobs can run reliably."
+        },
+        {
+          "question": "What performance and reliability outcomes does SUNK target?",
+          "answer": "SUNK is designed to improve productive training time and training goodput by reducing interruptions and resource fragmentation through topology-aware scheduling, health checks, and automated remediation."
+        }
+      ]
+    },
+    "resources": {
+      "title": "Related resources",
+      "cta": "View all resources",
+      "empty": "No published blog posts yet."
+    },
+    "bottomCta": {
+      "title": "See what SUNK can do for you",
+      "description": "Get the resource flexibility your team needs to build, train, and deploy new models.",
+      "cta": "Get started"
+    },
+    "learnMore": {
+      "title": "Learn more",
+      "docs": "Docs",
+      "pricing": "Pricing"
+    }
+  },
+  "SunkAnywhere": {
+    "metadata": {
+      "title": "SUNK Anywhere | Compute Rental",
+      "description": "SUNK Anywhere extends the unified training system beyond CoreWeave so teams can keep consistent scheduling, workflows, and observability across infrastructure environments."
+    },
+    "hero": {
+      "eyebrow": "Now generally available",
+      "title": "SUNK Anywhere",
+      "description": "Extend the industry’s first unified training system beyond CoreWeave to accelerate and scale demanding AI workloads on existing infrastructure anywhere.",
+      "cta": "Get started with SUNK Anywhere"
+    },
+    "code": {
+      "codeString": "# Install SUNK with Helm\nhelm repo add coreweave https://helm.coreweave.com\nhelm repo update\n\nhelm install sunk coreweave/sunk \\\n  --namespace slurm \\\n  --create-namespace \\\n  -f sunk-values.yaml\n\n# Verify controller status\nkubectl get pods -n slurm -l app.kubernetes.io/name=sunk",
+      "copiedLabel": "Copied!",
+      "copyLabel": "Copy code"
+    },
+    "why": {
+      "eyebrow": "Why SUNK Anywhere?",
+      "title": "Flexibility should not mean fragmentation",
+      "paragraphs": [
+        "As training environments expand across providers and customer-owned infrastructure, teams risk accumulating different workflows, control planes, and operating practices. That fragmentation adds complexity where continuity matters most.",
+        "SUNK Anywhere extends the same SUNK system beyond CoreWeave, giving organizations a faster path to production training and less setup work as infrastructure choices grow."
+      ],
+      "cards": [
+        {
+          "title": "Reach production training faster",
+          "description": "AI teams should reach productive training sooner, not take on more setup and operational overhead."
+        },
+        {
+          "title": "Reduce manual coordination",
+          "description": "When training workloads move beyond CoreWeave, new setup work and manual coordination often follow. SUNK Anywhere reduces that overhead instead of adding another layer of complexity."
+        },
+        {
+          "title": "Infrastructure flexibility without the burden",
+          "description": "Platform teams can support infrastructure beyond a single provider without maintaining fragmented or fragile operating models across environments."
+        },
+        {
+          "title": "Less fragmentation, one unified training system",
+          "description": "SUNK Anywhere gives teams an intentional expansion path so the same training system can span more infrastructure environments."
+        }
+      ]
+    },
+    "banner": {
+      "eyebrow": "SUNK Anywhere",
+      "title": "The most mature Slurm-on-Kubernetes product in the market"
+    },
+    "architecture": {
+      "title": "One unified training system across infrastructure environments",
+      "description": "SUNK Anywhere extends the same unified training system beyond CoreWeave so teams can keep consistent scheduling, workflows, and operating practices as their infrastructure footprint grows.",
+      "productLabel": "sunk",
+      "slurmJobs": "Slurm Jobs",
+      "kubernetesPods": "Kubernetes Pods",
+      "cards": [
+        {
+          "title": "CoreWeave Kubernetes Service",
+          "icon": "coreweave"
+        },
+        {
+          "title": "Cloud Provider Kubernetes",
+          "icon": "cloud"
+        }
+      ]
+    },
+    "capabilities": {
+      "title": "Built for demanding AI workloads wherever they run",
+      "description": "SUNK Anywhere extends the unified training system teams already rely on, without forcing teams into new tools or different operating patterns.",
+      "cards": [
+        {
+          "title": "Bring training environments into one system",
+          "description": "Integrate more training environment capabilities into one system and avoid the tool fragmentation and manual coordination common in external environments."
+        },
+        {
+          "title": "Hybrid scheduling and observability hooks",
+          "description": "Integrate hybrid scheduling, researcher-facing capabilities, and observability hooks so teams stay in control as workloads expand."
+        },
+        {
+          "title": "Reach productive training faster",
+          "description": "Built-in access, user environments, containers, and other foundations help teams spend less time on setup and more time training."
+        },
+        {
+          "title": "Operate consistently across environments",
+          "description": "Extend SUNK beyond CoreWeave while preserving familiar interfaces, scheduling behavior, and day-to-day operating habits."
+        }
+      ]
+    },
+    "testimonial": {
+      "title": "Validated by production-scale pioneers",
+      "cta": "View more customer stories",
+      "quote": "CoreWeave’s SUNK is an industry-leading cluster management capability. It combines the advantages of Slurm on Kubernetes so we can run large distributed jobs across CoreWeave and non-CoreWeave providers while keeping familiar observability and production-grade long-running service.",
+      "name": "Xander Dunn",
+      "role": "Technical Staff, Periodic Labs",
+      "company": "periodic labs",
+      "imageAlt": "Xander Dunn"
+    },
+    "delivery": {
+      "eyebrow": "Delivery capabilities",
+      "title": "What SUNK Anywhere makes possible",
+      "items": [
+        {
+          "title": "Standardize on a unified training system",
+          "description": "Give teams a clearer standardization path so demanding AI workloads keep running the same way as infrastructure footprints expand."
+        },
+        {
+          "title": "Reduce cross-environment fragmentation",
+          "description": "Lower the operational assembly cost that often comes with running training across multiple providers and customer-owned infrastructure."
+        },
+        {
+          "title": "Simplify the path to production AI workloads",
+          "description": "Help platform and research teams reach productive training faster by reducing setup, adaptation, and operational overhead before work begins."
+        }
+      ]
+    },
+    "faqs": {
+      "title": "FAQs",
+      "items": [
+        {
+          "question": "What is SUNK Anywhere?",
+          "answer": "SUNK Anywhere extends SUNK beyond CoreWeave so teams can use the same unified training system on existing infrastructure without introducing a separate external training stack."
+        },
+        {
+          "question": "When should teams use SUNK Anywhere?",
+          "answer": "SUNK Anywhere is a fit when teams need to run demanding AI workloads beyond a single environment while keeping consistent workflows, tools, and operating practices."
+        },
+        {
+          "question": "Does SUNK Anywhere require teams to change how they work?",
+          "answer": "No. It is designed to preserve familiar interfaces, scheduling behavior, and day-to-day operations so infrastructure expansion does not force researchers to relearn how jobs run."
+        },
+        {
+          "question": "Where do sandbox workloads run?",
+          "answer": "Sandbox workloads can run on existing CoreWeave environments and agreed capacity for validation, adaptation, and gradual expansion of training workflows."
+        }
+      ]
+    }
   }
 }

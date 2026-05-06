@@ -22,11 +22,15 @@ kubectl get pods -n slurm -l app.kubernetes.io/name=sunk`;
 
 type SunkCodeBlockProps = {
   codeString?: string;
+  copiedLabel?: string;
+  copyLabel?: string;
   className?: string;
 };
 
 export default function SunkCodeBlock({
   codeString = defaultCodeString,
+  copiedLabel = 'Copied!',
+  copyLabel = 'Copy code',
   className,
 }: SunkCodeBlockProps) {
   const [copied, setCopied] = useState(false);
@@ -60,7 +64,7 @@ export default function SunkCodeBlock({
               transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
               className="rounded-full border border-emerald-300/20 bg-emerald-300/10 px-3 py-1 text-xs font-medium text-emerald-100 backdrop-blur"
             >
-              Copied!
+              {copiedLabel}
             </motion.span>
           ) : null}
         </AnimatePresence>
@@ -68,7 +72,7 @@ export default function SunkCodeBlock({
           type="button"
           size="icon"
           variant="ghost"
-          aria-label="Copy code"
+          aria-label={copyLabel}
           onClick={copyCode}
           className="h-9 w-9 rounded-md border border-white/10 bg-white/5 text-slate-200 hover:bg-white/10 hover:text-white"
         >

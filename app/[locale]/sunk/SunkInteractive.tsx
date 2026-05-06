@@ -18,10 +18,14 @@ export type SunkTestimonial = {
 export function HeroVideoFrame({
   src,
   ariaLabel,
+  playLabel,
+  pauseLabel,
   className = '',
 }: {
   src: string;
   ariaLabel: string;
+  playLabel: string;
+  pauseLabel: string;
   className?: string;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -60,7 +64,7 @@ export function HeroVideoFrame({
       <Button
         type="button"
         onClick={togglePlay}
-        aria-label={isPlaying ? 'Pause SUNK video' : 'Play SUNK video'}
+        aria-label={isPlaying ? pauseLabel : playLabel}
         className={`absolute left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#0b45f5] p-0 text-white shadow-[0_18px_50px_rgba(11,69,245,0.28)] transition duration-300 hover:bg-[#2a61ff] ${
           isPlaying ? 'scale-90 opacity-0 group-hover:scale-100 group-hover:opacity-100' : 'opacity-100'
         }`}
@@ -71,7 +75,13 @@ export function HeroVideoFrame({
   );
 }
 
-export function TestimonialCarousel({ testimonials }: { testimonials: SunkTestimonial[] }) {
+export function TestimonialCarousel({
+  testimonials,
+  indicatorLabel,
+}: {
+  testimonials: SunkTestimonial[];
+  indicatorLabel: string;
+}) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -176,7 +186,7 @@ export function TestimonialCarousel({ testimonials }: { testimonials: SunkTestim
               index === activeIndex ? 'w-6 bg-[#ef4444]' : 'w-3 bg-[#d7dbe2]'
             }`}
             onClick={() => scrollToIndex(index)}
-            aria-label={`Show testimonial ${index + 1}`}
+            aria-label={`${indicatorLabel} ${index + 1}`}
           />
         ))}
       </div>
