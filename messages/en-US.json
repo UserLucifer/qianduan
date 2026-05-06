@@ -433,6 +433,129 @@
       "email": "contact@example.com"
     }
   },
+  "VulnerabilityDisclosure": {
+    "metadata": {
+      "title": "Vulnerability Disclosure Policy | Compute Rental",
+      "description": "Security vulnerability disclosure policy and reporting guidance for the Compute Rental platform."
+    },
+    "title": "Vulnerability Disclosure Policy",
+    "subtitle": "Security research and coordinated disclosure",
+    "purpose": {
+      "title": "Policy purpose",
+      "text": "Compute Rental welcomes responsible security research and coordinated disclosure. This policy explains how to report potential vulnerabilities, what researchers can expect from our handling process, and the legal protection we provide without committing to monetary rewards."
+    },
+    "bugBounty": {
+      "title": "Bug bounty program",
+      "text": "Although we do not guarantee monetary rewards for submitted reports, Compute Rental may, at its sole discretion, provide a bug bounty for high-value reports. All rewards are discretionary and are not guaranteed. Participation in this program should not be driven solely by compensation."
+    },
+    "scope": {
+      "title": "Scope",
+      "inScopeLabel": "In scope:",
+      "inScopeItems": [
+        "Compute Rental web console, REST APIs, and billing flows",
+        "Provider daemon code (host agent)",
+        "Matching and pricing engines",
+        "Default Docker and KVM isolation based on reference images",
+        "GPU memory isolation and tenant escape vulnerabilities"
+      ],
+      "outOfScopeLabel": "Out of scope:",
+      "outOfScopeItems": [
+        "User workloads and third-party container images",
+        "Social engineering, physical security, or denial-of-service (DoS) testing",
+        "Brute-force attacks against customer passwords or multi-factor authentication",
+        "Any activity that violates applicable law, export regulations, or supplier terms of service"
+      ],
+      "note": "If you are unsure whether a target is in scope, contact us first through the channel listed in the How to report section."
+    },
+    "safeHarbor": {
+      "title": "Safe harbor",
+      "items": [
+        "Research conducted under this policy is considered authorized. Compute Rental will not pursue civil or criminal action for good-faith, accidental violations.",
+        "We use industry gold-standard safe harbor terms to protect good-faith security researchers.",
+        "Safe harbor does not apply to activity on third-party infrastructure that we do not control, such as upstream data centers."
+      ]
+    },
+    "conduct": {
+      "title": "Rules of conduct",
+      "items": [
+        {
+          "term": "Do no harm. ",
+          "text": "Avoid privacy violations, service interruption, or data destruction."
+        },
+        {
+          "term": "Test with your own resources. ",
+          "text": "Please use your own account for testing."
+        },
+        {
+          "term": "Stop and report immediately if you encounter user data. ",
+          "text": "If you encounter user data, including personal information, health information, payment information, model checkpoints, or similar data, stop immediately and report it."
+        },
+        {
+          "term": "No spam or extortion. ",
+          "text": ""
+        },
+        {
+          "term": "Coordinate disclosure. ",
+          "text": "Give Compute Rental 90 days to remediate before public disclosure unless we agree to an earlier date."
+        }
+      ]
+    },
+    "commitment": {
+      "title": "Our commitment",
+      "text": "We will keep you informed of handling progress and provide safe harbor protection to good-faith security researchers."
+    },
+    "reporting": {
+      "title": "How to report",
+      "emailLabel": "Email: ",
+      "email": "security@example.com",
+      "intro": "Please include the following information in your report:",
+      "items": [
+        "Vulnerability summary",
+        "Affected service",
+        "Step-by-step reproduction instructions",
+        "Impact assessment",
+        "Any proof-of-concept code or screenshots"
+      ]
+    },
+    "quality": {
+      "title": "Report quality requirements",
+      "text": "Reports with clear descriptions, precise reproduction steps, and concise tool output can be triaged faster. We strongly encourage including proof-of-concept code."
+    },
+    "notAccepted": {
+      "title": "Findings we do not accept",
+      "text": "Compute Rental is not interested in theoretical or extremely low-probability vulnerabilities, or findings without a demonstrable security impact. Examples include:",
+      "items": [
+        "Clickjacking without security impact",
+        "SPF or DMARC configuration issues on domains not owned by Compute Rental",
+        "Outdated TLS cipher suites on assets that do not involve sensitive data",
+        "Best-practice recommendations without an exploitable vulnerability",
+        "Issues affecting only browsers or operating systems that are no longer supported",
+        "Dangling-link takeover, tabnabbing, content spoofing, or text injection without further impact",
+        "Attacks requiring physical access",
+        "Self-XSS or self-DoS that only affects your own account",
+        "CSRF on non-critical forms, such as logout",
+        "Permissive CORS without an exploitation path",
+        "CSV injection or open redirects not linked to a real attack"
+      ]
+    },
+    "legal": {
+      "title": "Legal statement",
+      "intro": "By participating in this program, you acknowledge that:",
+      "items": [
+        "You have read and will comply with this policy.",
+        "Compute Rental may use any submitted information to remediate vulnerabilities.",
+        "Compute Rental reserves all rights to modify or terminate this policy at any time. Changes will be published at least 30 days before they take effect."
+      ]
+    },
+    "contact": {
+      "title": "Questions?",
+      "prefix": "Send an email to ",
+      "middle": " with the subject ",
+      "subject": "Vulnerability Disclosure Policy Inquiry",
+      "suffix": ", and we will respond within two business days.",
+      "thanks": "Thank you for helping protect the Compute Rental platform and community."
+    }
+  },
   "DocsMetadata": {
     "guide": {
       "title": "Guides | Compute Rental Docs",
