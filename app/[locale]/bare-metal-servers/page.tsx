@@ -1,52 +1,56 @@
-import type { Metadata } from 'next';
-import Image from 'next/image';
+import type { Metadata } from "next";
+import Image from "next/image";
+import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import Header from '@/components/marketing/Header';
-import Footer from '@/components/marketing/Footer';
-import { Button } from '@/components/ui/button';
-import {
-  Cpu,
-  Search,
-  ShieldCheck,
-  Zap,
-} from 'lucide-react';
+import Header from "@/components/marketing/Header";
+import Footer from "@/components/marketing/Footer";
+import { normalizeLocale } from "@/i18n/locales";
+import { Button } from "@/components/ui/button";
+import { Cpu, Search, ShieldCheck, Zap, type LucideIcon } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: '裸金属服务器 | 算力租赁',
-  description: '获取快速、可靠、高性能的裸金属服务器，直接访问 GPU、CPU、网络和存储资源。',
+type BareMetalServersPageProps = {
+  params: Promise<{ locale: string }>;
+};
+
+type FeatureCopy = {
+  title: string;
+  description: string;
 };
 
 const bareMetalImages = {
-  hero: '/images/裸金属/第1.avif',
-  stack: '/images/裸金属/第2.avif',
-  observability: '/images/裸金属/第4.avif',
-  cta: '/images/裸金属/第5.avif',
+  hero: "/images/%E8%A3%B8%E9%87%91%E5%B1%9E/%E7%AC%AC1.avif",
+  stack: "/images/%E8%A3%B8%E9%87%91%E5%B1%9E/%E7%AC%AC2.avif",
+  observability: "/images/%E8%A3%B8%E9%87%91%E5%B1%9E/%E7%AC%AC4.avif",
+  cta: "/images/%E8%A3%B8%E9%87%91%E5%B1%9E/%E7%AC%AC5.avif",
 };
 
-const hypervisorFeatures = [
-  {
-    title: '释放更高性能',
-    description: '无需虚拟化层限制，直接访问 NVIDIA GPU 与 x86 或 Arm CPU 的完整性能。',
-    icon: Zap,
-  },
-  {
-    title: '最大化可靠性',
-    description: '更简洁的软件栈减少潜在问题暴露面，提升可靠性与在线时间。',
-    icon: ShieldCheck,
-  },
-  {
-    title: '释放计算资源',
-    description: '通过 NVIDIA BlueField DPU 卸载网络、安全与存储处理任务，让算力资源发挥更大价值。',
-    icon: Cpu,
-  },
-  {
-    title: '获得深入洞察',
-    description: '查看集群健康与性能指标，获得更细粒度的可观测性体验。',
-    icon: Search,
-  },
-];
+const hypervisorIcons = [Zap, ShieldCheck, Cpu, Search] as const;
 
-export default function BareMetalServersPage() {
+export async function generateMetadata({ params }: BareMetalServersPageProps): Promise<Metadata> {
+  const { locale } = await params;
+  const language = normalizeLocale(locale);
+  const t = await getTranslations({ locale: language, namespace: "BareMetalServers" });
+
+  return {
+    title: t("metadata.title"),
+    description: t("metadata.description"),
+  };
+}
+
+export default async function BareMetalServersPage({ params }: BareMetalServersPageProps) {
+  const { locale } = await params;
+  const language = normalizeLocale(locale);
+  const t = await getTranslations({ locale: language, namespace: "BareMetalServers" });
+  const performanceParagraphs = t.raw("performance.paragraphs") as string[];
+  const hypervisorParagraphs = t.raw("hypervisor.paragraphs") as string[];
+  const hypervisorFeatures = (t.raw("hypervisor.features") as FeatureCopy[]).map(
+    (feature, index) => ({
+      ...feature,
+      icon: hypervisorIcons[index] ?? Zap,
+    }),
+  );
+  const observabilityParagraphs = t.raw("observability.paragraphs") as string[];
+
   return (
     <>
       <Header />
@@ -63,10 +67,10 @@ export default function BareMetalServersPage() {
           <div className="absolute inset-0 -z-10 bg-black/35" />
           <div className="mx-auto max-w-[860px]">
             <h1 className="text-5xl font-semibold leading-[1.02] tracking-[-0.05em] sm:text-6xl lg:text-7xl">
-              裸金属服务器
+              {t("hero.title")}
             </h1>
             <p className="mx-auto mt-7 max-w-[600px] text-xl leading-8 text-white/86 sm:text-2xl">
-              快速、可靠、高性能。
+              {t("hero.description")}
             </p>
           </div>
         </section>
@@ -75,28 +79,25 @@ export default function BareMetalServersPage() {
           <div className="mx-auto grid max-w-[1280px] items-center gap-14 lg:grid-cols-[0.82fr_1.18fr] lg:gap-24">
             <div className="max-w-[520px] lg:justify-self-end">
               <h2 className="text-4xl font-semibold leading-[1.08] tracking-[-0.04em] sm:text-5xl lg:text-6xl">
-                获得裸金属性能优势
+                {t("performance.title")}
               </h2>
               <div className="mt-8 space-y-6 text-lg leading-8 text-white/88">
-                <p>
-                  大多数生成式 AI 工作负载并不需要虚拟化，它们需要直接访问资源，以最大性能和低延迟运行训练、推理和实验。
-                </p>
-                <p>
-                  直接运行在裸金属服务器上，让新模型构建更快、更稳定。
-                </p>
+                {performanceParagraphs.map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
+                ))}
               </div>
               <Button
                 asChild
                 className="mt-9 h-14 rounded-full bg-[#0b45f5] px-9 text-base font-semibold text-white hover:bg-[#2a61ff]"
               >
-                <Link href="/contact-sales">立即开始</Link>
+                <Link href="/contact-sales">{t("performance.cta")}</Link>
               </Button>
             </div>
 
             <div className="relative min-h-[420px] overflow-hidden rounded-[22px] bg-[#111] lg:min-h-[540px]">
               <Image
                 src={bareMetalImages.stack}
-                alt="裸金属服务器软件栈示意图"
+                alt={t("performance.imageAlt")}
                 fill
                 sizes="(min-width: 1024px) 760px, 100vw"
                 className="object-contain"
@@ -110,25 +111,19 @@ export default function BareMetalServersPage() {
             <div className="flex items-start justify-center border-black/15 px-6 py-16 lg:border-r lg:px-10 lg:py-20">
               <div className="w-full max-w-[520px]">
                 <h2 className="text-4xl font-semibold leading-[1.08] tracking-[-0.04em] sm:text-5xl">
-                  去掉 Hypervisor 层
+                  {t("hypervisor.title")}
                 </h2>
                 <div className="mt-8 space-y-7 text-lg leading-8 text-black/86">
-                  <p>
-                    虚拟化通常会限制性能、削弱可观测性，并让环境管理变得更复杂。
-                  </p>
-                  <p>
-                    Kubernetes 直接运行在裸金属服务器上，让你同时获得云式交付灵活性与专用硬件性能。
-                  </p>
-                  <p>
-                    更好地观察工作负载，并充分使用 GPU、CPU、网络和存储资源。
-                  </p>
+                  {hypervisorParagraphs.map((paragraph) => (
+                    <p key={paragraph}>{paragraph}</p>
+                  ))}
                 </div>
               </div>
             </div>
 
             <div>
               {hypervisorFeatures.map((feature) => {
-                const Icon = feature.icon;
+                const Icon = feature.icon as LucideIcon;
 
                 return (
                   <article
@@ -155,22 +150,19 @@ export default function BareMetalServersPage() {
           <div className="mx-auto grid max-w-[1180px] items-center gap-14 lg:grid-cols-[0.9fr_1fr] lg:gap-20">
             <div className="max-w-[560px]">
               <h2 className="text-4xl font-semibold leading-[1.08] tracking-[-0.04em] sm:text-5xl">
-                前沿可观测性
+                {t("observability.title")}
               </h2>
               <div className="mt-8 space-y-6 text-lg leading-8 text-white/88">
-                <p>
-                  虚拟化会让团队更难获得追踪性能所需的数据。
-                </p>
-                <p>
-                  裸金属栈提供低层级、高分辨率指标访问能力，让团队始终掌握关键运行细节。
-                </p>
+                {observabilityParagraphs.map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
+                ))}
               </div>
             </div>
 
             <div className="relative aspect-[1.78] overflow-hidden rounded-[24px] bg-[#101113] shadow-[0_24px_80px_rgba(0,0,0,0.35)]">
               <Image
                 src={bareMetalImages.observability}
-                alt="GPU 集群可观测性仪表盘"
+                alt={t("observability.imageAlt")}
                 fill
                 sizes="(min-width: 1024px) 620px, 100vw"
                 className="object-cover"
@@ -191,16 +183,16 @@ export default function BareMetalServersPage() {
           <div className="mx-auto max-w-[1180px]">
             <div className="max-w-[520px]">
               <h2 className="text-4xl font-semibold leading-tight tracking-[-0.04em] sm:text-5xl">
-                裸金属更适合 AI
+                {t("bottomCta.title")}
               </h2>
               <p className="mt-7 text-lg leading-8 text-white/78">
-                准备开始构建更快、更可靠的 AI 基础设施。
+                {t("bottomCta.description")}
               </p>
               <Button
                 asChild
                 className="mt-9 h-14 rounded-full bg-[#0b45f5] px-9 text-base font-semibold text-white hover:bg-[#2a61ff]"
               >
-                <Link href="/contact-sales">联系我们</Link>
+                <Link href="/contact-sales">{t("bottomCta.cta")}</Link>
               </Button>
             </div>
           </div>

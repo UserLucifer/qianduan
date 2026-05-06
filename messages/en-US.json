@@ -3148,5 +3148,271 @@
       "description": "Do not let inefficient networking slow down GPUs. Get stable, low-latency, high-throughput AI network connectivity.",
       "cta": "Start now"
     }
+  },
+  "BareMetalServers": {
+    "metadata": {
+      "title": "Bare Metal Servers | Compute Rental",
+      "description": "Get fast, reliable, high-performance bare metal servers with direct access to GPU, CPU, networking, and storage resources."
+    },
+    "hero": {
+      "title": "Bare Metal Servers",
+      "description": "Fast, reliable, high performance."
+    },
+    "performance": {
+      "title": "Get the bare-metal performance advantage",
+      "paragraphs": [
+        "Most generative AI workloads do not need a virtualization layer. They need direct access to resources so training, inference, and experimentation can run with maximum performance and low latency.",
+        "Run directly on bare metal to build new models faster and with fewer infrastructure bottlenecks."
+      ],
+      "cta": "Get started",
+      "imageAlt": "Bare metal server software stack diagram"
+    },
+    "hypervisor": {
+      "title": "Remove the hypervisor layer",
+      "paragraphs": [
+        "Virtualization can limit performance, reduce observability, and add complexity to environment management.",
+        "Run Kubernetes directly on bare metal servers to combine cloud-style delivery with dedicated hardware performance.",
+        "See workloads more clearly and make full use of GPU, CPU, networking, and storage resources."
+      ],
+      "features": [
+        {
+          "title": "Unlock higher performance",
+          "description": "Access the full performance of NVIDIA GPUs and x86 or Arm CPUs without hypervisor overhead."
+        },
+        {
+          "title": "Maximize reliability",
+          "description": "A simpler software stack reduces the potential failure surface and improves uptime."
+        },
+        {
+          "title": "Free up compute resources",
+          "description": "Use NVIDIA BlueField DPUs to offload networking, security, and storage tasks so compute resources stay focused on your workloads."
+        },
+        {
+          "title": "Gain deeper visibility",
+          "description": "Review cluster health and performance metrics with finer-grained observability."
+        }
+      ]
+    },
+    "observability": {
+      "title": "Advanced observability",
+      "paragraphs": [
+        "Virtualization can make it harder for teams to get the data they need to track performance.",
+        "The bare-metal stack provides low-level, high-resolution metrics so teams can stay close to the details that matter."
+      ],
+      "imageAlt": "GPU cluster observability dashboard"
+    },
+    "bottomCta": {
+      "title": "Bare metal is built for AI",
+      "description": "Start building faster, more reliable AI infrastructure.",
+      "cta": "Contact us"
+    }
+  },
+  "DedicatedVastStorage": {
+    "metadata": {
+      "title": "Dedicated VAST Storage | Compute Rental",
+      "description": "Dedicated, high-performance VAST storage for AI workloads that need isolation, VMS access, replication, auditing, and quota control."
+    },
+    "hero": {
+      "eyebrow": "CoreWeave Dedicated Storage",
+      "title": "Dedicated VAST Storage",
+      "description": "Exclusive, high-performance AI storage for dedicated workloads.",
+      "body": "Built for hybrid and dedicated workloads that need access to the VAST ecosystem, direct VMS access, physical isolation on dedicated hardware, and the full VAST platform, including DataBase, DataEngine, snapshots, and replication.",
+      "primaryCta": "Contact sales",
+      "secondaryCta": "Learn more"
+    },
+    "metrics": {
+      "items": [
+        {
+          "value": "100",
+          "unit": "PB",
+          "label": "Available storage",
+          "description": "Maximum usable capacity"
+        },
+        {
+          "value": "2",
+          "unit": "TB/s",
+          "label": "Read bandwidth",
+          "description": "Large-scale sequential read throughput"
+        },
+        {
+          "value": "Millions",
+          "unit": "",
+          "label": "Read IOPS",
+          "description": "Random 4K read performance at maximum scale"
+        }
+      ]
+    },
+    "capabilities": {
+      "eyebrow": "Core capabilities",
+      "title": "Full VAST capability in a zero-sharing environment.",
+      "description": "Dedicated VAST gives your workloads exclusive hardware and the full capabilities of the VAST AI Operating System.",
+      "items": [
+        {
+          "title": "Physical isolation",
+          "description": "Dedicated hardware provides full physical storage isolation from other customer environments."
+        },
+        {
+          "title": "Full VMS access",
+          "description": "Access the VAST Management System directly, including failover, QoS, quota management, and tenant-level control."
+        },
+        {
+          "title": "Protocol flexibility",
+          "description": "Connect through any VAST-supported protocol, including NFS, S3, or NVMe-over-TCP, with support for the standard VAST CSI driver."
+        },
+        {
+          "title": "Latest VAST capabilities",
+          "description": "Use DataBase, DataEngine, snapshots, audit logs, VAST Catalog, and newly released platform capabilities."
+        }
+      ]
+    },
+    "comparison": {
+      "eyebrow": "Why choose Dedicated VAST Storage?",
+      "title": "When standard storage is not enough",
+      "paragraphs": [
+        "For most AI workloads, AI Object Storage and Distributed File Storage are the recommended starting point. They are built for GPU-accelerated pipelines, zero-egress pricing, and Kubernetes integration.",
+        "Hybrid environments, strict compliance needs, and deep VAST ecosystem dependencies are different. Those workloads need the isolation, control, and extensibility that only a dedicated cluster can provide."
+      ],
+      "reasons": [
+        {
+          "title": "Global VAST access and replication",
+          "description": "Interoperate with other VAST clusters and support cross-cluster replication and global namespace access."
+        },
+        {
+          "title": "Dedicated encryption keys",
+          "description": "Enable encryption at rest from cluster launch and use separate encryption keys per tenant."
+        },
+        {
+          "title": "Detailed audit logs",
+          "description": "Control VAST audit and logging services for compliance and visibility requirements."
+        },
+        {
+          "title": "QoS and quota control",
+          "description": "Manage tenant-level quality of service and quotas through direct VMS access."
+        },
+        {
+          "title": "SSO/SAML identity provider support",
+          "description": "Integrate with identity providers for centralized access control and single sign-on."
+        }
+      ]
+    },
+    "faqs": {
+      "title": "FAQs",
+      "items": [
+        {
+          "question": "What is Dedicated VAST Storage?",
+          "answer": "Dedicated VAST Storage is a single-tenant VAST AI Operating System deployment on dedicated hardware, giving workloads full platform access."
+        },
+        {
+          "question": "When should I choose Dedicated VAST Storage?",
+          "answer": "It is best suited for workloads that need strict data isolation, advanced security controls, hybrid replication, or deep VAST ecosystem capabilities."
+        },
+        {
+          "question": "How does it integrate with GPU workloads?",
+          "answer": "Dedicated VAST clusters can be deployed in the same data center as GPU infrastructure and attached through the standard VAST CSI driver to reduce data access latency."
+        }
+      ]
+    },
+    "bottomCta": {
+      "title": "Ready to use Dedicated VAST Storage?",
+      "description": "Talk with our team about capacity, pricing, and cluster deployment options.",
+      "cta": "Contact sales"
+    },
+    "learnMore": {
+      "title": "Learn more",
+      "cta": "View docs"
+    }
+  },
+  "ManagedKubernetes": {
+    "metadata": {
+      "title": "Managed Kubernetes | Compute Rental",
+      "description": "Managed Kubernetes for generative AI teams building, training, and deploying AI applications at scale."
+    },
+    "hero": {
+      "title": "CoreWeave Kubernetes Service",
+      "description": "A managed Kubernetes environment purpose-built for building, training, and deploying AI applications.",
+      "cta": "Get started",
+      "videoLabel": "CoreWeave Kubernetes Service animation"
+    },
+    "generative": {
+      "title": "Designed for generative AI",
+      "description": "A large share of effective GPU capacity can be lost to platform inefficiency. CKS is built around generative AI from the ground up, bringing Kubernetes, bare metal, networking, storage, and orchestration tools into one high-performance stack.",
+      "cards": [
+        {
+          "title": "Kubernetes on bare metal",
+          "description": "Remove the virtualization layer so teams can use bare-metal nodes directly, with better node performance, lower latency, clearer observability, and faster launches."
+        },
+        {
+          "title": "AI-ready clusters from day one",
+          "description": "CKS clusters include networking, storage interfaces, GPU drivers, Slurm on Kubernetes, and observability plugins so teams can move into production immediately."
+        },
+        {
+          "title": "Deep integration with AI orchestration",
+          "description": "Native integration with Slurm, Kubeflow, KServe, and other workload orchestration tools lets developers focus on model work instead of cluster management."
+        }
+      ]
+    },
+    "performance": {
+      "title": "Industry-leading performance, scale, and resilience",
+      "description": "Launch GPU superclusters in an environment built for AI workloads, with ultra-low latency, high-speed interconnects, and human-in-the-loop automation.",
+      "features": [
+        {
+          "title": "Get maximum performance from GPU nodes",
+          "description": "CKS uses bare-metal nodes and NVIDIA BlueField DPUs to offload node and resource management workflows, helping training, experimentation, and inference jobs get more stable GPU performance."
+        },
+        {
+          "title": "Supercomputing scale and performance",
+          "description": "Built on NVIDIA InfiniBand, cluster-level interconnect, and AI-focused storage services, CKS supports expansion across 100K+ GPUs while maintaining high-performance delivery."
+        },
+        {
+          "title": "Reliability and resilience",
+          "description": "Deep integration with Mission Control and cluster health management reduces routine interruptions and lowers the operating burden of large-scale clusters."
+        }
+      ]
+    },
+    "security": {
+      "title": "Enterprise security and observability",
+      "paragraphs": [
+        "CKS provides enterprise-grade security and observability for mission-critical workloads, helping teams understand cluster state precisely and recover quickly after interruptions.",
+        "With more granular cluster visibility, teams can improve troubleshooting efficiency and maximize cluster utilization."
+      ],
+      "cards": [
+        {
+          "title": "Secure connectivity through VPC",
+          "description": "Create isolated CKS clusters with VPC networking and encryption, and use NVIDIA BlueField DPUs to manage connectivity between compute and storage resources."
+        },
+        {
+          "title": "Fine-grained observability",
+          "description": "Access cluster, node, and job-level metrics to find infrastructure issues quickly and act before they affect workloads."
+        },
+        {
+          "title": "Stop interruptions early",
+          "description": "Automated health checks run continuously on idle nodes, identify potential hardware issues, and replace affected nodes before critical jobs are impacted."
+        }
+      ]
+    },
+    "solutions": {
+      "title": "A complete solution stack",
+      "description": "CKS is built for AI workloads, combining the runtime, model loading, and cluster management capabilities developers need to build and deploy AI applications faster, more simply, and more cost efficiently.",
+      "itemCta": "Learn more",
+      "cards": [
+        {
+          "title": "Unlock SUNK capabilities",
+          "description": "Run Slurm on CKS so Slurm jobs and containerized workloads can share the same cluster, improving workload flexibility and resource utilization."
+        },
+        {
+          "title": "Reduce waiting with Tensorizer",
+          "description": "Tensorizer serializes AI models and tensors into a single file and streams them from HTTPS or S3 endpoints to shorten model loading time."
+        },
+        {
+          "title": "Do more with Mission Control",
+          "description": "Mission Control verifies CKS cluster readiness before delivery and continuously monitors infrastructure health to improve cluster performance and recovery."
+        }
+      ]
+    },
+    "bottomCta": {
+      "title": "Start building with CKS today",
+      "description": "Do not settle for a Kubernetes platform built for traditional web applications. Use a platform built for AI.",
+      "cta": "Get started"
+    }
   }
 }

@@ -3148,5 +3148,271 @@
       "description": "不要让低效网络拖慢 GPU。获得稳定、低延迟、高吞吐的 AI 网络连接能力。",
       "cta": "立即开始"
     }
+  },
+  "BareMetalServers": {
+    "metadata": {
+      "title": "裸金属服务器 | 算力租赁",
+      "description": "获取快速、可靠、高性能的裸金属服务器，直接访问 GPU、CPU、网络和存储资源。"
+    },
+    "hero": {
+      "title": "裸金属服务器",
+      "description": "快速、可靠、高性能。"
+    },
+    "performance": {
+      "title": "获得裸金属性能优势",
+      "paragraphs": [
+        "大多数生成式 AI 工作负载并不需要虚拟化，它们需要直接访问资源，以最大性能和低延迟运行训练、推理和实验。",
+        "直接运行在裸金属服务器上，让新模型构建更快、更稳定。"
+      ],
+      "cta": "立即开始",
+      "imageAlt": "裸金属服务器软件栈示意图"
+    },
+    "hypervisor": {
+      "title": "去掉 Hypervisor 层",
+      "paragraphs": [
+        "虚拟化通常会限制性能、削弱可观测性，并让环境管理变得更复杂。",
+        "Kubernetes 直接运行在裸金属服务器上，让你同时获得云式交付灵活性与专用硬件性能。",
+        "更好地观察工作负载，并充分使用 GPU、CPU、网络和存储资源。"
+      ],
+      "features": [
+        {
+          "title": "释放更高性能",
+          "description": "无需虚拟化层限制，直接访问 NVIDIA GPU 与 x86 或 Arm CPU 的完整性能。"
+        },
+        {
+          "title": "最大化可靠性",
+          "description": "更简洁的软件栈减少潜在问题暴露面，提升可靠性与在线时间。"
+        },
+        {
+          "title": "释放计算资源",
+          "description": "通过 NVIDIA BlueField DPU 卸载网络、安全与存储处理任务，让算力资源发挥更大价值。"
+        },
+        {
+          "title": "获得深入洞察",
+          "description": "查看集群健康与性能指标，获得更细粒度的可观测性体验。"
+        }
+      ]
+    },
+    "observability": {
+      "title": "前沿可观测性",
+      "paragraphs": [
+        "虚拟化会让团队更难获得追踪性能所需的数据。",
+        "裸金属栈提供低层级、高分辨率指标访问能力，让团队始终掌握关键运行细节。"
+      ],
+      "imageAlt": "GPU 集群可观测性仪表盘"
+    },
+    "bottomCta": {
+      "title": "裸金属更适合 AI",
+      "description": "准备开始构建更快、更可靠的 AI 基础设施。",
+      "cta": "联系我们"
+    }
+  },
+  "DedicatedVastStorage": {
+    "metadata": {
+      "title": "专用 VAST 存储 | 算力租赁",
+      "description": "为专用 AI 工作负载提供独享、高性能的 VAST 存储能力，支持物理隔离、VMS 访问、复制、审计与配额控制。"
+    },
+    "hero": {
+      "eyebrow": "CoreWeave 专用存储",
+      "title": "专用 VAST 存储",
+      "description": "为专用工作负载构建的独享高性能 AI 存储。",
+      "body": "面向需要访问 VAST 生态的混合与专用工作负载，提供直接 VMS 访问、专用硬件物理隔离，以及 DataBase、DataEngine、快照、复制等完整 VAST 平台能力。",
+      "primaryCta": "联系销售",
+      "secondaryCta": "了解更多"
+    },
+    "metrics": {
+      "items": [
+        {
+          "value": "100",
+          "unit": "PB",
+          "label": "可用存储",
+          "description": "最大可用容量"
+        },
+        {
+          "value": "2",
+          "unit": "TB/s",
+          "label": "读取带宽",
+          "description": "大规模顺序读取吞吐"
+        },
+        {
+          "value": "数百万",
+          "unit": "",
+          "label": "读取 IOPS",
+          "description": "最大规模下的随机 4K 读取性能"
+        }
+      ]
+    },
+    "capabilities": {
+      "eyebrow": "核心能力",
+      "title": "完整 VAST 能力，零共享环境。",
+      "description": "专用 VAST 让你的工作负载独享专用硬件，获得完整 VAST AI Operating System 的能力。",
+      "items": [
+        {
+          "title": "物理隔离",
+          "description": "专用硬件带来完整的物理存储隔离，与其他客户环境分离。"
+        },
+        {
+          "title": "完整 VMS 访问",
+          "description": "可直接访问 VAST Management System，并获得故障转移、QoS 和配额管理等租户级控制。"
+        },
+        {
+          "title": "协议灵活性",
+          "description": "通过任意 VAST 支持的协议连接，包括 NFS、S3 或 NVMe-over-TCP，并支持标准 VAST CSI 驱动。"
+        },
+        {
+          "title": "最新 VAST 能力",
+          "description": "访问 DataBase、DataEngine、快照、审计日志、VAST Catalog 以及持续发布的新能力。"
+        }
+      ]
+    },
+    "comparison": {
+      "eyebrow": "为什么选择专用 VAST 存储？",
+      "title": "当标准存储无法满足需求",
+      "paragraphs": [
+        "对多数 AI 工作负载来说，AI 对象存储与分布式文件存储是推荐起点。它们面向 GPU 加速流水线构建，具备零流出计价与 Kubernetes 集成能力。",
+        "但混合环境、严格合规或深度 VAST 生态依赖是另一回事。此时需要只有专用集群才能提供的隔离、控制与扩展能力。"
+      ],
+      "reasons": [
+        {
+          "title": "VAST 全局访问与复制",
+          "description": "与其他 VAST 集群互通，支持跨集群复制和全局命名空间访问。"
+        },
+        {
+          "title": "专属加密密钥",
+          "description": "集群启动时即可启用静态数据加密，并为每个租户提供独立加密密钥。"
+        },
+        {
+          "title": "详细审计日志",
+          "description": "完整控制 VAST 审计与日志服务，满足合规性与可见性要求。"
+        },
+        {
+          "title": "QoS 与配额控制",
+          "description": "通过直接 VMS 访问进行租户级服务质量和配额管理。"
+        },
+        {
+          "title": "SSO/SAML 身份提供商支持",
+          "description": "可与身份提供商集成，实现集中访问控制和单点登录。"
+        }
+      ]
+    },
+    "faqs": {
+      "title": "常见问题",
+      "items": [
+        {
+          "question": "什么是专用 VAST 存储？",
+          "answer": "专用 VAST 存储是在专属硬件上部署的单租户 VAST AI Operating System，为工作负载提供完整平台访问能力。"
+        },
+        {
+          "question": "何时应选择专用 VAST 存储？",
+          "answer": "当工作负载需要严格数据隔离、高级安全控制、混合复制，或依赖深度 VAST 生态能力时，专用 VAST 存储更合适。"
+        },
+        {
+          "question": "它如何与 GPU 工作负载集成？",
+          "answer": "专用 VAST 集群可与 GPU 基础设施部署在同一数据中心，并通过标准 VAST CSI 驱动接入，降低数据访问延迟。"
+        }
+      ]
+    },
+    "bottomCta": {
+      "title": "准备开始使用专用 VAST 存储？",
+      "description": "与我们的团队沟通容量、价格和集群部署方案。",
+      "cta": "联系销售"
+    },
+    "learnMore": {
+      "title": "了解更多",
+      "cta": "查看文档"
+    }
+  },
+  "ManagedKubernetes": {
+    "metadata": {
+      "title": "托管 Kubernetes | 算力租赁",
+      "description": "面向生成式 AI 的托管 Kubernetes 服务，用于构建、训练和部署大规模 AI 应用。"
+    },
+    "hero": {
+      "title": "CoreWeave Kubernetes 服务",
+      "description": "专为构建、训练和部署 AI 应用打造的托管 Kubernetes 环境。",
+      "cta": "开始使用",
+      "videoLabel": "CoreWeave Kubernetes 服务动画"
+    },
+    "generative": {
+      "title": "面向生成式 AI 设计",
+      "description": "大量 GPU 有效算力会被系统低效消耗。CKS 从底层围绕生成式 AI 构建，把 Kubernetes、裸金属、网络、存储和编排工具放在同一个高性能栈中。",
+      "cards": [
+        {
+          "title": "裸金属上的 Kubernetes",
+          "description": "移除虚拟化层，让团队直接使用裸金属节点，获得更好的节点性能、更低延迟、更清晰的可观测性和更快上线速度。"
+        },
+        {
+          "title": "面向 AI 的预配置集群",
+          "description": "CKS 集群预装网络、存储接口、GPU 驱动、Slurm-on-Kubernetes 与可观测性插件，让团队从第一天就能进入生产。"
+        },
+        {
+          "title": "紧密集成 AI 编排工具",
+          "description": "原生集成 Slurm、Kubeflow、KServe 等工作负载编排工具，让开发者把时间用于模型创新，而不是集群管理。"
+        }
+      ]
+    },
+    "performance": {
+      "title": "行业领先的性能、规模与韧性",
+      "description": "在专为 AI 工作负载构建的环境中启动 GPU 超级集群，获得超低延迟、高速互联和人机协同自动化能力。",
+      "features": [
+        {
+          "title": "从 GPU 节点获得最大性能",
+          "description": "CKS 使用裸金属节点和 NVIDIA BlueField DPU 卸载节点与资源管理流程，帮助训练、实验和推理任务获得更稳定的 GPU 性能。"
+        },
+        {
+          "title": "超算级规模与性能",
+          "description": "基于 NVIDIA InfiniBand、集群级互联与面向 AI 的存储服务，支持跨 100K+ GPU 的集群扩展，同时保持高性能交付。"
+        },
+        {
+          "title": "可靠性与韧性",
+          "description": "与任务控制和集群健康管理能力深度集成，减少日常中断并降低大规模集群运维开销。"
+        }
+      ]
+    },
+    "security": {
+      "title": "企业级安全与可观测性",
+      "paragraphs": [
+        "CKS 面向关键任务提供企业级安全和可观测性，让团队精确理解集群状态，并在工作负载中断后快速恢复。",
+        "借助更细粒度的集群可见性，团队可以提升故障定位效率并最大化集群利用率。"
+      ],
+      "cards": [
+        {
+          "title": "通过 VPC 安全连接",
+          "description": "使用 VPC 网络和加密能力创建隔离的 CKS 集群，并通过 NVIDIA BlueField DPU 管理计算与存储资源连接。"
+        },
+        {
+          "title": "细粒度可观测性",
+          "description": "获得集群、节点和作业级指标，快速定位基础架构问题，并在问题影响工作负载前完成处理。"
+        },
+        {
+          "title": "把中断扼杀在萌芽",
+          "description": "自动健康检查持续运行在空闲节点上，识别潜在硬件问题并替换问题节点，降低对关键任务的影响。"
+        }
+      ]
+    },
+    "solutions": {
+      "title": "一整套解决方案栈",
+      "description": "CKS 为 AI 工作负载而生，整合开发者需要的运行时、模型加载和集群管理能力，让 AI 应用构建与部署更快、更简单、更具成本效率。",
+      "itemCta": "了解更多",
+      "cards": [
+        {
+          "title": "释放 SUNK 的能力",
+          "description": "在 CKS 上运行 Slurm，让 Slurm 作业与容器化工作负载共用同一集群，提高工作负载弹性和资源利用率。"
+        },
+        {
+          "title": "用 Tensorizer 缩短等待",
+          "description": "Tensorizer 将 AI 模型和张量序列化为单文件并从 HTTPS 或 S3 端点流式加载，缩短模型加载时间。"
+        },
+        {
+          "title": "结合任务控制做更多事",
+          "description": "任务控制在交付前确保 CKS 集群就绪，并持续监控基础架构健康，提升集群性能和恢复能力。"
+        }
+      ]
+    },
+    "bottomCta": {
+      "title": "今天开始构建 CKS",
+      "description": "不要满足于为传统 Web 应用构建的 Kubernetes 平台。使用真正面向 AI 的平台。",
+      "cta": "开始使用"
+    }
   }
 }
