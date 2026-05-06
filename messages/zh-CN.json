@@ -139,6 +139,50 @@
       "emptyContent": "暂无正文内容。"
     }
   },
+  "HelpCenter": {
+    "metadata": {
+      "title": "帮助中心 | 算力租赁",
+      "description": "查看算力租赁平台的帮助文档、产品指引和服务支持内容。"
+    },
+    "categoryKeywords": [
+      "帮助",
+      "文档",
+      "指南",
+      "教程",
+      "常见问题",
+      "FAQ",
+      "支持"
+    ],
+    "badge": "Help Center",
+    "hero": {
+      "title": "帮助中心",
+      "description": "查看平台使用说明、产品指引和服务支持内容。文档内容由后台文档系统统一维护。"
+    },
+    "cards": [
+      {
+        "title": "使用文档",
+        "description": "阅读平台使用、租赁流程和账户管理相关内容。"
+      },
+      {
+        "title": "常见问题",
+        "description": "快速查找计费、实例、充值、提现和 API 相关说明。"
+      },
+      {
+        "title": "服务支持",
+        "description": "如需人工协助，可先查看支持说明或联系服务团队。"
+      }
+    ],
+    "categories": {
+      "title": "帮助分类"
+    },
+    "latest": {
+      "title": "最新帮助内容",
+      "description": "从后端内容接口读取已发布文章。",
+      "cta": "查看全部文章",
+      "emptyTitle": "暂无帮助内容",
+      "emptyDescription": "当前后端没有返回已发布内容，或内容接口暂时不可用。"
+    }
+  },
   "DocsMetadata": {
     "guide": {
       "title": "向导 | 算力租赁文档",

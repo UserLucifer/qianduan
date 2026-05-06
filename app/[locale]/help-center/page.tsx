@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { BookOpen, FileQuestion, LifeBuoy } from "lucide-react";
 import { getBlogCategories, getBlogPosts } from "@/api/blog";
@@ -12,9 +13,13 @@ import { normalizeLocale } from "@/i18n/locales";
 
 export const revalidate = 600;
 
-export const metadata: Metadata = {
-  title: "帮助中心 | 算力租赁",
-  description: "查看算力租赁平台的帮助文档、产品指引和服务支持内容。",
+type HelpCenterPageProps = {
+  params: Promise<{ locale: string }>;
+};
+
+type HelpCardCopy = {
+  title: string;
+  description: string;
 };
 
 const emptyPage: PageResult<BlogPostResponse> = {
@@ -24,44 +29,31 @@ const emptyPage: PageResult<BlogPostResponse> = {
   pageSize: 6,
 };
 
-const helpCategoryKeywords = [
-  "帮助",
-  "文档",
-  "指南",
-  "教程",
-  "常见问题",
-  "FAQ",
-  "支持",
-];
+const helpCardIcons = [BookOpen, FileQuestion, LifeBuoy] as const;
+const helpCardRoutes = ["/docs", "/docs/faq", "/docs/support"] as const;
 
-const helpCards = [
-  {
-    title: "使用文档",
-    description: "阅读平台使用、租赁流程和账户管理相关内容。",
-    href: "/docs",
-    icon: BookOpen,
-  },
-  {
-    title: "常见问题",
-    description: "快速查找计费、实例、充值、提现和 API 相关说明。",
-    href: "/docs/faq",
-    icon: FileQuestion,
-  },
-  {
-    title: "服务支持",
-    description: "如需人工协助，可先查看支持说明或联系服务团队。",
-    href: "/docs/support",
-    icon: LifeBuoy,
-  },
-];
+export async function generateMetadata({
+  params,
+}: HelpCenterPageProps): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "HelpCenter" });
 
-type HelpCenterPageProps = {
-  params: Promise<{ locale: string }>;
-};
+  return {
+    title: t("metadata.title"),
+    description: t("metadata.description"),
+  };
+}
 
 export default async function HelpCenterPage({ params }: HelpCenterPageProps) {
   const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "HelpCenter" });
   const language = normalizeLocale(locale);
+  const helpCategoryKeywords = t.raw("categoryKeywords") as string[];
+  const helpCards = (t.raw("cards") as HelpCardCopy[]).map((card, index) => ({
+    ...card,
+    href: helpCardRoutes[index] ?? "/docs",
+    icon: helpCardIcons[index] ?? BookOpen,
+  }));
 
   const [categoriesRes, postsRes] = await Promise.all([
     getBlogCategories({ language }).catch(() => ({ data: [] })),
@@ -84,13 +76,13 @@ export default async function HelpCenterPage({ params }: HelpCenterPageProps) {
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-muted/40 px-3 py-1 text-xs font-medium text-muted-foreground">
               <LifeBuoy className="h-3.5 w-3.5" />
-              Help Center
+              {t("badge")}
             </div>
             <h1 className="mt-6 text-4xl font-bold tracking-tight text-foreground md:text-5xl">
-              帮助中心
+              {t("hero.title")}
             </h1>
             <p className="mt-5 text-base leading-7 text-muted-foreground md:text-lg">
-              查看平台使用说明、产品指引和服务支持内容。文档内容由后台文档系统统一维护。
+              {t("hero.description")}
             </p>
           </div>
 
@@ -112,7 +104,9 @@ export default async function HelpCenterPage({ params }: HelpCenterPageProps) {
 
           {helpCategories.length > 0 && (
             <section className="mt-12">
-              <h2 className="text-xl font-semibold text-foreground">帮助分类</h2>
+              <h2 className="text-xl font-semibold text-foreground">
+                {t("categories.title")}
+              </h2>
               <div className="mt-5 flex flex-wrap gap-3">
                 {helpCategories.map((category) => (
                   <Button key={category.id} asChild variant="outline" size="sm">
@@ -129,14 +123,14 @@ export default async function HelpCenterPage({ params }: HelpCenterPageProps) {
             <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
               <div>
                 <h2 className="text-2xl font-semibold tracking-tight text-foreground">
-                  最新帮助内容
+                  {t("latest.title")}
                 </h2>
                 <p className="mt-2 text-sm text-muted-foreground">
-                  从后端内容接口读取已发布文章。
+                  {t("latest.description")}
                 </p>
               </div>
               <Button asChild variant="outline">
-                <Link href="/blog">查看全部文章</Link>
+                <Link href="/blog">{t("latest.cta")}</Link>
               </Button>
             </div>
 
@@ -150,10 +144,10 @@ export default async function HelpCenterPage({ params }: HelpCenterPageProps) {
               <div className="mt-8 flex min-h-[260px] flex-col items-center justify-center rounded-xl border border-dashed border-border p-10 text-center">
                 <BookOpen className="h-8 w-8 text-muted-foreground" />
                 <h3 className="mt-4 text-lg font-semibold text-foreground">
-                  暂无帮助内容
+                  {t("latest.emptyTitle")}
                 </h3>
                 <p className="mt-2 max-w-md text-sm leading-6 text-muted-foreground">
-                  当前后端没有返回已发布内容，或内容接口暂时不可用。
+                  {t("latest.emptyDescription")}
                 </p>
               </div>
             )}

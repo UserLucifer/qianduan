@@ -139,6 +139,50 @@
       "emptyContent": "No article content yet."
     }
   },
+  "HelpCenter": {
+    "metadata": {
+      "title": "Help Center | Compute Rental",
+      "description": "Browse help docs, product guides, and support resources for the compute rental platform."
+    },
+    "categoryKeywords": [
+      "help",
+      "docs",
+      "documentation",
+      "guide",
+      "tutorial",
+      "faq",
+      "support"
+    ],
+    "badge": "Help Center",
+    "hero": {
+      "title": "Help Center",
+      "description": "Browse platform guides, product documentation, and support resources. Documentation content is maintained through the admin documentation system."
+    },
+    "cards": [
+      {
+        "title": "Documentation",
+        "description": "Read guides for platform usage, rental workflows, and account management."
+      },
+      {
+        "title": "FAQ",
+        "description": "Find quick answers about billing, instances, top-ups, withdrawals, and APIs."
+      },
+      {
+        "title": "Support",
+        "description": "Review support guidance or contact the service team when you need help from a person."
+      }
+    ],
+    "categories": {
+      "title": "Help categories"
+    },
+    "latest": {
+      "title": "Latest help content",
+      "description": "Published articles loaded from the backend content API.",
+      "cta": "View all articles",
+      "emptyTitle": "No help content yet",
+      "emptyDescription": "The backend did not return published content, or the content API is temporarily unavailable."
+    }
+  },
   "DocsMetadata": {
     "guide": {
       "title": "Guides | Compute Rental Docs",
