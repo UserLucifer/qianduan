@@ -2427,5 +2427,419 @@
         "emailDraft": "Email draft created. Please confirm and send it in your email client."
       }
     }
+  },
+  "GpuComputing": {
+    "metadata": {
+      "title": "GPU Computing | Compute Rental",
+      "description": "Access AI-optimized NVIDIA GPUs for training, inference, and generative AI workloads."
+    },
+    "hero": {
+      "title": "GPU Computing",
+      "description": "Access leading AI-optimized NVIDIA GPUs quickly, with capacity for training, inference, and generative AI applications.",
+      "videoLabel": "GPU computing hero animation"
+    },
+    "products": {
+      "gb200": {
+        "title": "NVIDIA GB200 NVL72",
+        "description": "An industry-leading platform for building and deploying the newest generative AI applications.",
+        "buttonText": "Explore Blackwell",
+        "features": [
+          {
+            "title": "Major performance gains",
+            "description": "Compared with H100 architecture, training performance can improve up to 4x, and real-time trillion-parameter inference can improve up to 30x."
+          },
+          {
+            "title": "Stronger compute access",
+            "description": "A single server integrates 72 NVIDIA Blackwell GPUs and 36 NVIDIA Grace CPUs for higher-density compute."
+          },
+          {
+            "title": "Massive-scale clusters",
+            "description": "Connect tens of thousands of NVIDIA Blackwell systems in one site and unlock 100K+ GPU cluster capacity."
+          },
+          {
+            "title": "Designed for sustained growth",
+            "description": "Liquid-cooled GPU design supports rack power up to 130 kW for dense AI infrastructure."
+          }
+        ]
+      },
+      "h200": {
+        "title": "NVIDIA H200 Tensor Core GPU",
+        "description": "Early access to NVIDIA H200 Tensor Core GPUs helps teams bring AI applications to market faster.",
+        "buttonText": "Explore NVIDIA HGX H200",
+        "features": [
+          {
+            "title": "Outstanding performance",
+            "description": "Up to 1.9x performance compared with H100 Tensor Core GPUs."
+          },
+          {
+            "title": "Expanded memory capacity",
+            "description": "Each server provides 1,128 GB of total GPU memory for the large datasets behind generative AI workloads."
+          },
+          {
+            "title": "Ultra-fast interconnect",
+            "description": "3200 Gbps NVIDIA Quantum-2 InfiniBand networking enables low-latency GPU-to-GPU connectivity."
+          },
+          {
+            "title": "Optimized GPU efficiency",
+            "description": "NVIDIA BlueField-3 DPUs offload networking and storage tasks to improve GPU utilization during model development."
+          }
+        ]
+      },
+      "h100": {
+        "title": "NVIDIA H100 Tensor Core GPU",
+        "description": "A platform that helped set MLPerf records and build world-class high-speed supercomputing capacity.",
+        "buttonText": "Explore NVIDIA HGX H100",
+        "features": [
+          {
+            "title": "Stronger training performance",
+            "description": "Up to 4x training performance compared with NVIDIA A100 Tensor Core GPUs."
+          },
+          {
+            "title": "Record-setting training results",
+            "description": "The platform has used 3,500 H100 GPUs to complete full GPT-3 large language model training in 11 minutes."
+          },
+          {
+            "title": "Unlock more GPU capacity",
+            "description": "NVIDIA BlueField-3 DPU offload lets GPUs focus on training, experiments, and compute-intensive tasks."
+          }
+        ]
+      },
+      "l40s": {
+        "title": "NVIDIA L40S GPU",
+        "description": "Right-sized compute for workloads that need efficiency without overprovisioning.",
+        "features": [
+          {
+            "title": "Excellent performance at lower cost",
+            "description": "Up to 2x the performance of A40 instances, with 733 TFLOPs of compute and NVIDIA BlueField-3 DPU offload."
+          },
+          {
+            "title": "More flexible compute access",
+            "description": "Each system can use 8 L40S GPUs with Platinum Intel Emerald Rapids processors for generative AI workloads."
+          },
+          {
+            "title": "Flexible configuration",
+            "description": "Access NVIDIA L40 configurations and choose the right compute scale for each workload."
+          }
+        ]
+      }
+    },
+    "quote": {
+      "text": "\"Training advanced models and running large-scale inference requires synchronizing trillions of operations across tens of billions of parameters. Teams need enormous compute resources to do that well.\"",
+      "author": "- Brannin McBee, Co-founder and Chief Development Officer"
+    },
+    "sku": {
+      "title": "More GPU SKUs",
+      "paragraphs": [
+        "Configure compute resources on demand and choose the right GPU for different workloads.",
+        "A broad GPU portfolio gives teams flexibility across different levels of complexity.",
+        "All are equipped with DPUs and delivered on bare metal."
+      ],
+      "acceleratorsTitle": "Accelerators",
+      "items": [
+        "GB300 NVL72",
+        "B200",
+        "A100",
+        "RTX PRO 6000 Blackwell Server Edition",
+        "L40"
+      ]
+    },
+    "market": {
+      "title": "Get to market faster",
+      "paragraphs": [
+        "Our platform helps teams access frontier compute and move the next AI breakthrough forward.",
+        "Run jobs on high-performance clusters and complete more work in less time."
+      ],
+      "cta": "Learn more",
+      "cards": [
+        {
+          "title": "Consistent stable performance",
+          "description": "Scale alone is not enough. Stable performance helps teams save GPU hours and reduce daily interruptions."
+        },
+        {
+          "title": "Efficient infrastructure",
+          "description": "Higher system utilization helps teams reach the same performance level with less infrastructure."
+        },
+        {
+          "title": "Resilience from the start",
+          "description": "Automated health checks and node lifecycle management help maintain cluster performance and recovery."
+        }
+      ]
+    },
+    "bottomCta": {
+      "title": "Start building now",
+      "description": "Access enhanced GPU computing capacity for generative AI workloads.",
+      "cta": "Start now",
+      "videoLabel": "Start building GPU animation"
+    }
+  },
+  "About": {
+    "hero": {
+      "title": "What we do",
+      "textBefore": "We are a ",
+      "highlight": "cloud compute platform",
+      "textAfter": " built to scale, support, and accelerate GenAI. We combine infrastructure and strategic partnership to help teams deploy AI at scale today and in the future. We manage the complexity of AI growth, make supercomputing accessible, and keep pushing the boundaries of what is possible."
+    },
+    "video": {
+      "label": "Company overview video"
+    },
+    "values": {
+      "title": "Our values",
+      "description": "We believe in people. As fast movers and forward thinkers, our values guide how we work.",
+      "items": [
+        {
+          "title": "Keep learning and keep innovating",
+          "subtitle": "Mindset & Curiosity",
+          "description": "We cultivate a learning mindset and treat curiosity as the engine of innovation. We seek information, challenge assumptions, and value diverse perspectives."
+        },
+        {
+          "title": "Trust transparently and support success",
+          "subtitle": "Trust & Support",
+          "description": "We trust each other to make decisions, communicate clearly, and share the tools, resources, and feedback needed for success."
+        },
+        {
+          "title": "Take ownership and act",
+          "subtitle": "Accountability & Initiative",
+          "description": "We own our work and decisions. We move proactively, solve problems directly, and build a culture where everyone can contribute to shared success."
+        },
+        {
+          "title": "Put customers first",
+          "subtitle": "Customer Obsession",
+          "description": "We work to understand customer needs deeply and exceed expectations at every step, building long-term partnerships through excellent service."
+        },
+        {
+          "title": "Collaborate as one team",
+          "subtitle": "Collaboration",
+          "description": "Collaboration unlocks our potential. By bringing different perspectives together, we solve harder problems and reach goals no one could achieve alone."
+        }
+      ]
+    },
+    "team": {
+      "title": "Our team",
+      "subtitle": "Meet the people building the platform",
+      "members": [
+        {
+          "name": "Mike Intrator",
+          "role": "Chief Executive Officer, Co-founder"
+        },
+        {
+          "name": "Brian Venturo",
+          "role": "Chief Strategy Officer, Co-founder"
+        },
+        {
+          "name": "Brannin McBee",
+          "role": "Chief Development Officer, Co-founder"
+        },
+        {
+          "name": "Peter Salanki",
+          "role": "Chief Technology Officer, Co-founder"
+        },
+        {
+          "name": "Max Nova",
+          "role": "Chief Product Officer"
+        },
+        {
+          "name": "Sarah Chen",
+          "role": "VP of Engineering"
+        },
+        {
+          "name": "David Miller",
+          "role": "Head of Infrastructure"
+        },
+        {
+          "name": "Elena Rodriguez",
+          "role": "Creative Director"
+        }
+      ]
+    },
+    "partners": {
+      "title": "Our customers and partners",
+      "subtitle": "These customers trust us with business-critical AI workloads."
+    },
+    "cta": {
+      "videoLabel": "AI infrastructure background video",
+      "titleLine1": "We build global artificial",
+      "titleLine2": "intelligence infrastructure",
+      "description": "The most AI-friendly GPU clusters"
+    },
+    "vision": {
+      "titleLine1": "Our vision:",
+      "titleLine2": "one GPU for everyone",
+      "paragraph1": "We started the company as machine learning engineers solving our own scaling problems and building the tools we wanted to use. That work became a mission to build gigawatt-scale AI factories for teams pushing the frontier.",
+      "paragraph2": "Our mission is to make compute as available as electricity, so everyone can access superintelligence. From a single GPU to hundreds of thousands, our infrastructure powers AI services used by millions."
+    }
+  },
+  "Enterprise": {
+    "metadata": {
+      "title": "Enterprise Solutions | Compute Rental",
+      "description": "Secure, scalable AI infrastructure for enterprise teams running hundreds to thousands of GPUs."
+    },
+    "hero": {
+      "badge": "Enterprise Solutions",
+      "titleBefore": "Secure, scalable ",
+      "titleHighlight": "AI infrastructure",
+      "titleAfter": " for enterprise teams",
+      "description": "From hundreds to thousands of GPUs, we work with enterprises to design custom deployments that deliver performance, control, and reliability without traditional cloud complexity.",
+      "primaryCta": "Get a quote",
+      "secondaryCta": "Start building"
+    },
+    "nav": {
+      "ariaLabel": "Enterprise feature navigation",
+      "cards": [
+        {
+          "title": "Customer stories",
+          "desc": "Explore real enterprise use cases and success stories."
+        },
+        {
+          "title": "Bulk pricing for large workloads",
+          "desc": "Custom pricing tiers and volume discounts for AI deployments."
+        },
+        {
+          "title": "Compliance-ready infrastructure",
+          "desc": "Dedicated GPU clusters for regulated and high-compliance environments."
+        },
+        {
+          "title": "Private networking and storage",
+          "desc": "Secure routes, high bandwidth, and scalable storage options."
+        },
+        {
+          "title": "White-glove support",
+          "desc": "Dedicated onboarding, optimization, and 24/7 enterprise support."
+        },
+        {
+          "title": "Custom software and workflows",
+          "desc": "Custom environments and workflow support for advanced ML and AI projects."
+        }
+      ]
+    },
+    "caseStudies": {
+      "eyebrow": "Customer stories",
+      "title": "See how enterprises build faster with us",
+      "stats": [
+        {
+          "value": "200,000",
+          "label": "Scaled from zero to 200,000 monthly active users in 12 months with no CapEx."
+        },
+        {
+          "value": "8x4090",
+          "label": "Large multi-GPU clusters support large language model training."
+        },
+        {
+          "value": "80%",
+          "label": "Machine learning teams can reduce large GPU workload costs by up to 80%."
+        }
+      ],
+      "quote": "\"Some experiments were not cost-effective anywhere else. This platform let us experiment at real scale.\"",
+      "author": "- Founder and CEO, AI consulting company"
+    },
+    "support": {
+      "eyebrow": "White-glove support",
+      "title": "From onboarding to production, your team has a clear support path",
+      "desc": "Enterprise-grade support helps teams move projects forward quickly and confidently.",
+      "features": [
+        {
+          "title": "Flexible support tiers",
+          "desc": "Start with standard support and upgrade to premium tiers with white-glove service and a dedicated account manager."
+        },
+        {
+          "title": "Onboarding and optimization",
+          "desc": "Work directly with engineers to configure, launch, and continuously optimize your deployment."
+        },
+        {
+          "title": "Priority response and escalation",
+          "desc": "Get SLA-backed response times and clear escalation paths for production-critical issues."
+        },
+        {
+          "title": "Live support and expert access",
+          "desc": "Access real-time technical support plus AI infrastructure architecture and troubleshooting guidance."
+        }
+      ]
+    },
+    "compliance": {
+      "eyebrow": "Compliance ready",
+      "title": "Isolated infrastructure with full data control",
+      "desc": "Secure compute environments built for regulated industries and critical workloads.",
+      "features": [
+        {
+          "title": "Single-tenant isolation",
+          "desc": "Deploy on dedicated GPU hardware with no shared compute, ensuring strong environment isolation."
+        },
+        {
+          "title": "Data sovereignty",
+          "desc": "Control the data lifecycle, delete workloads on demand, and remove residual data across the stack."
+        },
+        {
+          "title": "Custom security configuration",
+          "desc": "Enable private VPN, persistent audit logs, and custom security profiles for compliance needs."
+        },
+        {
+          "title": "Complete access environment",
+          "desc": "Work directly through SSH, CLI, API, or Jupyter with root-level control over GPU instances."
+        }
+      ]
+    },
+    "pricing": {
+      "eyebrow": "Bulk pricing",
+      "title": "The larger your deployment, the more you can save",
+      "desc": "Flexible pricing agreements for teams running large-scale, long-term workloads.",
+      "features": [
+        {
+          "title": "Volume discounts",
+          "desc": "Negotiate custom pricing based on reserved capacity and usage tiers."
+        },
+        {
+          "title": "Reserved GPU contracts",
+          "desc": "Lock in favorable rates with long-term reservations for critical workloads."
+        },
+        {
+          "title": "Transparent costs",
+          "desc": "Clear pricing up front with no surprises and no hidden fees."
+        },
+        {
+          "title": "Flexible commitments",
+          "desc": "Adjust contract terms as project scale expands or contracts."
+        }
+      ]
+    },
+    "networking": {
+      "eyebrow": "Private networking",
+      "title": "Private networking and storage",
+      "desc": "Infrastructure flexibility for advanced teams, including private networks, dedicated bandwidth, and configurable storage.",
+      "features": [
+        {
+          "title": "Private networks and VPN",
+          "desc": "Configure secure subnets, network routes, and VPN access for isolated deployments."
+        },
+        {
+          "title": "Regional and hybrid setup",
+          "desc": "Choose specific server regions or combine platform GPUs with internal infrastructure."
+        },
+        {
+          "title": "Custom storage and access control",
+          "desc": "Use scalable storage with advanced user permission management."
+        },
+        {
+          "title": "Dedicated bandwidth",
+          "desc": "Reserve high-speed connectivity for performance-sensitive workloads."
+        }
+      ]
+    },
+    "customSoftware": {
+      "eyebrow": "Custom workflows",
+      "title": "Custom software and advanced workflows",
+      "desc": "Support complex use cases, from specialized ML frameworks to custom orchestration setups.",
+      "items": [
+        "Tailored cluster configuration for niche AI and ML workflows",
+        "Deployment of proprietary or custom-built software stacks",
+        "Seamless third-party tool integration",
+        "Support for unique orchestration and scheduling requirements"
+      ]
+    },
+    "bottomCta": {
+      "titleBefore": "Build boldly, ",
+      "titleHighlight": "scale confidently",
+      "description": "Enterprise-grade security, custom deployments, and world-class support. We provide the GPU infrastructure your team needs without compromise.",
+      "primaryCta": "Start building",
+      "secondaryCta": "Contact sales"
+    }
   }
 }

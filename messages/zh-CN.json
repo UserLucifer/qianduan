@@ -2427,5 +2427,419 @@
         "emailDraft": "已生成邮件草稿，请在邮件客户端中确认发送。"
       }
     }
+  },
+  "GpuComputing": {
+    "metadata": {
+      "title": "GPU 计算 | 算力租赁",
+      "description": "快速获取面向 AI 优化的 NVIDIA GPU，支持训练、推理和生成式 AI 工作负载。"
+    },
+    "hero": {
+      "title": "GPU 计算",
+      "description": "快速获取领先的 AI 优化 NVIDIA GPU，为训练、推理和生成式 AI 应用提供可用算力。",
+      "videoLabel": "GPU 计算首屏动画"
+    },
+    "products": {
+      "gb200": {
+        "title": "NVIDIA GB200 NVL72",
+        "description": "面向最新生成式 AI 应用构建和部署的行业领先平台。",
+        "buttonText": "了解 Blackwell",
+        "features": [
+          {
+            "title": "性能大幅提升",
+            "description": "相比 H100 架构，训练性能最高可提升 4 倍，实时万亿参数推理速度最高可提升 30 倍。"
+          },
+          {
+            "title": "更强算力接入",
+            "description": "单服务器集成 72 块 NVIDIA Blackwell GPU 和 36 颗 NVIDIA Grace CPU，提供更高密度算力。"
+          },
+          {
+            "title": "超大规模集群",
+            "description": "可在单站点连接数万套 NVIDIA Blackwell 系统，释放 100K+ GPU 集群能力。"
+          },
+          {
+            "title": "面向持续增长设计",
+            "description": "液冷 GPU 设计支持高达 130 kW 机柜功率，满足高密度 AI 基础设施需求。"
+          }
+        ]
+      },
+      "h200": {
+        "title": "NVIDIA H200 Tensor Core GPU",
+        "description": "较早接入 NVIDIA H200 Tensor Core GPU，帮助团队更快将 AI 应用推向市场。",
+        "buttonText": "了解 NVIDIA HGX H200",
+        "features": [
+          {
+            "title": "卓越性能",
+            "description": "相比 H100 Tensor Core GPU，性能最高可提升 1.9 倍。"
+          },
+          {
+            "title": "扩展显存容量",
+            "description": "单服务器提供 1,128 GB GPU 总显存，足以承载生成式 AI 工作负载所需的大规模数据。"
+          },
+          {
+            "title": "超高速互联",
+            "description": "通过 3200 Gbps NVIDIA Quantum-2 InfiniBand 网络，实现 GPU 间低延迟连接。"
+          },
+          {
+            "title": "优化 GPU 计算效率",
+            "description": "利用 NVIDIA BlueField-3 DPU 卸载网络与存储任务，提高模型构建过程中的 GPU 利用率。"
+          }
+        ]
+      },
+      "h100": {
+        "title": "NVIDIA H100 Tensor Core GPU",
+        "description": "这套平台帮助我们刷新 MLPerf 记录，并构建世界级高速超算能力。",
+        "buttonText": "了解 NVIDIA HGX H100",
+        "features": [
+          {
+            "title": "更强训练性能",
+            "description": "相比 NVIDIA A100 Tensor Core GPU，训练性能最高可提升 4 倍。"
+          },
+          {
+            "title": "破纪录训练结果",
+            "description": "平台曾使用 3,500 块 H100，在 11 分钟内完成完整 GPT-3 大语言模型训练工作负载。"
+          },
+          {
+            "title": "释放更多 GPU 能力",
+            "description": "使用 NVIDIA BlueField-3 DPU 卸载处理任务，让 GPU 更专注于训练、实验和计算任务。"
+          }
+        ]
+      },
+      "l40s": {
+        "title": "NVIDIA L40S GPU",
+        "description": "为工作负载匹配恰到好处的算力，避免过度配置或性能不足。",
+        "features": [
+          {
+            "title": "更低价格下的优秀性能",
+            "description": "相比 A40 实例，性能最高可提升 2 倍，提供 733 TFLOPs 算力，并通过 NVIDIA BlueField-3 DPU 卸载任务。"
+          },
+          {
+            "title": "更灵活的算力接入",
+            "description": "每套系统可使用 8 块 L40S GPU，并搭配 Platinum Intel Emerald Rapids 处理器，适配生成式 AI 工作负载。"
+          },
+          {
+            "title": "灵活配置",
+            "description": "可接入 NVIDIA L40 配置，按照不同工作负载需求选择更合适的算力规模。"
+          }
+        ]
+      }
+    },
+    "quote": {
+      "text": "“训练先进模型并进行大规模推理，需要在数十亿参数之间完成数万亿次同步计算。这意味着团队需要极其庞大的计算资源。”",
+      "author": "— Brannin McBee，联合创始人兼首席开发官"
+    },
+    "sku": {
+      "title": "更多 GPU SKU",
+      "paragraphs": [
+        "按需配置计算资源，并为不同工作负载选择合适的 GPU。",
+        "丰富的 GPU 阵容可灵活满足不同复杂度的业务需求。",
+        "全部配备 DPU，全部基于裸金属交付。"
+      ],
+      "acceleratorsTitle": "加速器",
+      "items": [
+        "GB300 NVL72",
+        "B200",
+        "A100",
+        "RTX PRO 6000 Blackwell Server Edition",
+        "L40"
+      ]
+    },
+    "market": {
+      "title": "更快进入市场",
+      "paragraphs": [
+        "我们的平台帮助团队获得前沿计算能力，推动下一次 AI 突破。",
+        "在高性能集群上运行任务，用更少时间完成更多工作。"
+      ],
+      "cta": "了解更多",
+      "cards": [
+        {
+          "title": "持续稳定的性能",
+          "description": "规模本身没有意义，稳定性能才是关键。团队可以节省 GPU 小时，并减少日常中断。"
+        },
+        {
+          "title": "高效率基础设施",
+          "description": "更高系统利用率帮助团队用更少基础设施达到同等性能水平。"
+        },
+        {
+          "title": "从开始就具备韧性",
+          "description": "自动健康检查和节点生命周期管理帮助持续维护节点与集群性能。"
+        }
+      ]
+    },
+    "bottomCta": {
+      "title": "立即开始构建",
+      "description": "获取面向生成式 AI 工作负载的增强 GPU 计算能力。",
+      "cta": "立即开始",
+      "videoLabel": "开始构建 GPU 动画"
+    }
+  },
+  "About": {
+    "hero": {
+      "title": "我们能做什么",
+      "textBefore": "我们是一个专为规模化、支持和加速 GenAI 而构建的",
+      "highlight": "云计算平台",
+      "textAfter": "。我们结合基础设施和战略合作，帮助团队在今天和未来规模化部署 AI。我们管理 AI 增长的复杂性，让超算触手可及，并持续突破可能性的边界。"
+    },
+    "video": {
+      "label": "公司介绍视频"
+    },
+    "values": {
+      "title": "我们的价值观",
+      "description": "我们相信人的力量。作为快速行动者和前瞻思考者，价值观是驱动我们工作的核心理念。",
+      "items": [
+        {
+          "title": "持续学习，勇于创新",
+          "subtitle": "Mindset & Curiosity",
+          "description": "我们培养持续学习的心态，把好奇心视为创新的源动力。我们主动寻找信息，敢于质疑假设，并重视多元视角。"
+        },
+        {
+          "title": "透明信任，赋能成功",
+          "subtitle": "Trust & Support",
+          "description": "我们信任彼此做出决策，保持清晰沟通，并共享成功所需的工具、资源和反馈。"
+        },
+        {
+          "title": "主动担当，自我负责",
+          "subtitle": "Accountability & Initiative",
+          "description": "我们对自己的工作和决策负责。我们主动行动，直接解决问题，并营造每个人都能为共同成功贡献力量的文化。"
+        },
+        {
+          "title": "客户至上，追求卓越",
+          "subtitle": "Customer Obsession",
+          "description": "我们深入理解客户需求，并努力在每个环节超越预期，以卓越服务建立长期合作关系。"
+        },
+        {
+          "title": "团队协作，共创未来",
+          "subtitle": "Collaboration",
+          "description": "协作能释放更大的潜力。通过汇聚多元视角，我们能解决更困难的问题，并实现单打独斗无法达成的目标。"
+        }
+      ]
+    },
+    "team": {
+      "title": "我们的团队",
+      "subtitle": "了解正在构建平台的人",
+      "members": [
+        {
+          "name": "Mike Intrator",
+          "role": "首席执行官，联合创始人"
+        },
+        {
+          "name": "Brian Venturo",
+          "role": "首席战略官，联合创始人"
+        },
+        {
+          "name": "Brannin McBee",
+          "role": "首席开发官，联合创始人"
+        },
+        {
+          "name": "Peter Salanki",
+          "role": "首席技术官，联合创始人"
+        },
+        {
+          "name": "Max Nova",
+          "role": "首席产品官"
+        },
+        {
+          "name": "Sarah Chen",
+          "role": "工程副总裁"
+        },
+        {
+          "name": "David Miller",
+          "role": "基础设施负责人"
+        },
+        {
+          "name": "Elena Rodriguez",
+          "role": "创意总监"
+        }
+      ]
+    },
+    "partners": {
+      "title": "我们的客户与合作伙伴",
+      "subtitle": "这些客户信任我们来处理其业务关键的 AI 工作负载。"
+    },
+    "cta": {
+      "videoLabel": "AI 基础设施背景视频",
+      "titleLine1": "我们构建全球人工",
+      "titleLine2": "智能基础设施",
+      "description": "对 AI 最友好的 GPU 集群"
+    },
+    "vision": {
+      "titleLine1": "我们的愿景：",
+      "titleLine2": "一人一块 GPU",
+      "paragraph1": "我们最初作为机器学习工程师创立公司，是为了解决自身面对的扩展问题，并构建我们梦寐以求的工具。这项工作逐渐发展成建设吉瓦级人工智能工厂的事业，服务不断开拓前沿的团队。",
+      "paragraph2": "我们的使命是让计算能力像电力一样普及，让每个人都能获得超级智能。从单块 GPU 到数十万块 GPU，我们构建的基础设施为数百万人使用的 AI 服务提供动力。"
+    }
+  },
+  "Enterprise": {
+    "metadata": {
+      "title": "企业解决方案 | 算力租赁",
+      "description": "为运行数百到数千块 GPU 的企业团队提供安全、可扩展的 AI 基础设施。"
+    },
+    "hero": {
+      "badge": "Enterprise Solutions",
+      "titleBefore": "为企业团队打造",
+      "titleHighlight": "安全、可扩展的 AI 基础设施",
+      "titleAfter": "",
+      "description": "从数百到数千块 GPU，我们与企业合作设计定制部署方案，在不承担传统云复杂性的前提下交付性能、控制力和可靠性。",
+      "primaryCta": "获取报价",
+      "secondaryCta": "开始构建"
+    },
+    "nav": {
+      "ariaLabel": "企业功能导航",
+      "cards": [
+        {
+          "title": "客户案例",
+          "desc": "探索来自企业客户的真实用例与成功故事。"
+        },
+        {
+          "title": "大规模工作负载批量定价",
+          "desc": "为大规模 AI 部署提供定制定价层级与批量折扣。"
+        },
+        {
+          "title": "合规就绪的基础设施",
+          "desc": "为受监管和高合规环境构建专用 GPU 集群。"
+        },
+        {
+          "title": "私有网络与网络存储",
+          "desc": "安全网络路径、高速带宽和可扩展存储方案。"
+        },
+        {
+          "title": "高端白手套支持",
+          "desc": "专属入驻、优化和 7x24 企业级技术支持。"
+        },
+        {
+          "title": "定制软件与高级工作流",
+          "desc": "为复杂 ML/AI 项目提供定制环境与工作流支持。"
+        }
+      ]
+    },
+    "caseStudies": {
+      "eyebrow": "客户案例",
+      "title": "看看企业如何借助我们加速构建",
+      "stats": [
+        {
+          "value": "200,000",
+          "label": "12 个月内从零扩展至 20 万月活用户，无需资本开支。"
+        },
+        {
+          "value": "8x4090",
+          "label": "大规模多 GPU 集群支持大型语言模型训练。"
+        },
+        {
+          "value": "80%",
+          "label": "机器学习团队的大型 GPU 工作负载成本最高可节省 80%。"
+        }
+      ],
+      "quote": "“某些实验在其他任何地方都不具备成本效益。这个平台真正让我们能够大规模进行实验。”",
+      "author": "— 创始人兼 CEO，AI 咨询公司"
+    },
+    "support": {
+      "eyebrow": "白手套支持",
+      "title": "从入驻到生产，全程为你的团队保驾护航",
+      "desc": "企业级支持让团队快速、自信地推进项目。",
+      "features": [
+        {
+          "title": "灵活的支持层级",
+          "desc": "从标准支持起步，可升级至高端层级，享受白手套服务和专属客户经理。"
+        },
+        {
+          "title": "入驻与优化",
+          "desc": "与工程师直接合作，配置、启动并持续优化部署以达到峰值性能。"
+        },
+        {
+          "title": "优先响应与升级",
+          "desc": "获得 SLA 保障的响应时间，以及针对生产关键问题的快速升级路径。"
+        },
+        {
+          "title": "实时支持与专家访问",
+          "desc": "按需获得实时技术支持，以及 AI 基础设施专家的架构咨询与故障排除。"
+        }
+      ]
+    },
+    "compliance": {
+      "eyebrow": "合规就绪",
+      "title": "隔离基础设施与完整数据控制",
+      "desc": "为受监管行业和关键工作负载构建的安全计算环境。",
+      "features": [
+        {
+          "title": "单租户隔离",
+          "desc": "部署在专属 GPU 硬件上，零共享计算，确保完整环境隔离。"
+        },
+        {
+          "title": "数据主权",
+          "desc": "完整控制数据生命周期，按需删除工作负载，并清除整个堆栈中的残留数据。"
+        },
+        {
+          "title": "自定义安全配置",
+          "desc": "启用可选的私有 VPN、持久审计日志和自定义安全配置文件，满足合规要求。"
+        },
+        {
+          "title": "完整访问环境",
+          "desc": "通过 SSH、CLI、API 或 Jupyter 直接工作，拥有 GPU 实例和计算环境的 root 级控制权。"
+        }
+      ]
+    },
+    "pricing": {
+      "eyebrow": "批量定价",
+      "title": "部署规模越大，节省越多",
+      "desc": "为运行大规模、长期工作负载的团队提供灵活的定价协议。",
+      "features": [
+        {
+          "title": "批量折扣",
+          "desc": "根据预留容量和使用层级协商定制定价方案。"
+        },
+        {
+          "title": "预留 GPU 合同",
+          "desc": "通过长期预留锁定优惠费率，保障关键工作负载。"
+        },
+        {
+          "title": "成本透明",
+          "desc": "前期明确的定价，无惊喜，无隐藏费用。"
+        },
+        {
+          "title": "灵活承诺",
+          "desc": "随项目规模扩大或缩小，灵活调整合同条款。"
+        }
+      ]
+    },
+    "networking": {
+      "eyebrow": "私有网络",
+      "title": "私有网络与网络存储",
+      "desc": "为高级团队提供深度基础设施灵活性，包括私有网络、专属带宽和可配置存储。",
+      "features": [
+        {
+          "title": "私有网络与 VPN",
+          "desc": "设置安全子网、网络路径和 VPN 访问，实现隔离部署。"
+        },
+        {
+          "title": "区域与混合配置",
+          "desc": "选择特定服务器区域，或将平台 GPU 与内部基础设施混合使用。"
+        },
+        {
+          "title": "定制存储与访问控制",
+          "desc": "使用可扩展存储方案，并配备高级用户权限管理。"
+        },
+        {
+          "title": "专属带宽",
+          "desc": "预留高速连接，保障关键工作负载的性能表现。"
+        }
+      ]
+    },
+    "customSoftware": {
+      "eyebrow": "定制工作流",
+      "title": "定制软件与高级工作流",
+      "desc": "支持复杂用例，从专业机器学习框架到定制编排配置，让团队按需构建。",
+      "items": [
+        "为小众 AI/ML 工作流量身定制集群配置",
+        "部署专有或定制构建的软件栈",
+        "无缝集成第三方工具",
+        "支持独特的编排和任务调度需求"
+      ]
+    },
+    "bottomCta": {
+      "titleBefore": "大胆构建，",
+      "titleHighlight": "自信扩展",
+      "description": "企业级安全、定制部署、世界级支持。我们为你的团队提供所需的 GPU 基础设施，毫不妥协。",
+      "primaryCta": "开始使用",
+      "secondaryCta": "联系销售"
+    }
   }
 }
