@@ -1,15 +1,16 @@
-import type { Metadata } from 'next';
+import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import Header from '@/components/marketing/Header';
-import Footer from '@/components/marketing/Footer';
+import Header from "@/components/marketing/Header";
+import Footer from "@/components/marketing/Footer";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '@/components/ui/accordion';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+} from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   ArrowRight,
   Check,
@@ -22,179 +23,84 @@ import {
   ShieldCheck,
   Wrench,
   type LucideIcon,
-} from 'lucide-react';
+} from "lucide-react";
+import { normalizeLocale } from "@/i18n/locales";
 
-export const metadata: Metadata = {
-  title: 'GPU 托管 | 算力租赁',
-  description:
-    '将 GPU 硬件托管到平台，获得客户、支持、账单和交易流能力，同时保留定价控制权。',
+type HostingPageProps = {
+  params: Promise<{ locale: string }>;
 };
 
-const heroVideo =
-  '/videos/hostinger/Host%20Your%20GPUs%20on%20Vast.ai.mp4';
-const bottomImage = '/videos/hostinger/10001.jpg';
-const shellClass =
-  'mx-auto w-[calc(100%-40px)] max-w-[1240px] max-[720px]:w-[calc(100%-24px)]';
+type StatCopy = {
+  value: string;
+  label: string;
+};
 
-const stats = [
-  { value: '120K+', label: 'Active developers' },
-  { value: '20K+', label: 'GPUs on platform' },
-  { value: '24/7', label: 'Customer support' },
-  { value: 'You', label: 'Set your prices' },
-];
-
-const platformCards: Array<{
+type CardCopy = {
   title: string;
   description: string;
+  cta?: string;
+};
+
+type StepCopy = {
+  step: string;
+  title: string;
+  description: string;
+};
+
+type FaqCopy = {
+  question: string;
+  answer: string;
+};
+
+const heroVideo = "/videos/hostinger/Host%20Your%20GPUs%20on%20Vast.ai.mp4";
+const bottomImage = "/videos/hostinger/10001.jpg";
+const shellClass =
+  "mx-auto w-[calc(100%-40px)] max-w-[1240px] max-[720px]:w-[calc(100%-24px)]";
+
+const platformCardIcons = [Headphones, Server, Settings2] as const;
+
+const hostCardHrefs = ["/contact-sales", "/signup", "#how-it-works"] as const;
+
+const hardwareCardMeta: Array<{
   icon: LucideIcon;
+  href: string;
 }> = [
   {
-    title: 'Customers & Support',
-    description:
-      '120K+ developers actively searching for compute. We handle 24/7 support, billing, and discovery so you never talk to a customer unless you want to.',
-    icon: Headphones,
-  },
-  {
-    title: 'Hardware & Financing',
-    description:
-      "Source GPUs through our vetted suppliers. Finance them with partners who use your platform earnings as qualification. Presell capacity before it's live.",
-    icon: Server,
-  },
-  {
-    title: 'Your Terms, Your Control',
-    description:
-      "Set your own prices. Choose on-demand, interruptible, or reserved. Configure GPU, CPU, storage, and bandwidth billing. You're the operator, we're the platform.",
-    icon: Settings2,
-  },
-];
-
-const hostCards = [
-  {
-    title: 'Data Centers & Colo Operators',
-    description:
-      'Run flagship GPUs with verified trust, priority placement, and enterprise deal flow. Apply for our trust label and connect directly with enterprise customers.',
-    cta: 'Apply for Certification',
-    href: '/contact-sales',
-  },
-  {
-    title: 'GPU Farm Operators',
-    description:
-      'Turn dedicated GPU infrastructure into a profitable compute business. Presell upcoming capacity to our sales team and have customers ready before hardware arrives.',
-    cta: 'Start Hosting',
-    href: '/signup',
-  },
-  {
-    title: 'Getting Started',
-    description:
-      'From a single workstation to your first rack, Vast handles customer acquisition, support, and billing. Source hardware, explore financing, or just list what you have.',
-    cta: 'Explore How It Works',
-    href: '#how-it-works',
-  },
-];
-
-const vastHandles = [
-  'Customer acquisition & platform exposure',
-  '24/7 customer support',
-  'Billing, invoicing, payments',
-  'Job scheduling & resource optimization',
-  'Marketing & demand generation',
-  'Compliance (SOC 2 Type I)',
-];
-
-const youHandle = [
-  'Hardware uptime & maintenance',
-  'Network connectivity',
-  'Physical infrastructure',
-  'Initial hardware setup',
-];
-
-const hardwareCards = [
-  {
-    title: 'Vast Finance',
-    description:
-      'Finance GPU hardware with partners who factor in your Vast platform earnings. Submit once, get multiple offers.',
-    cta: 'Explore Financing',
-    href: '/financing',
+    href: "/financing",
     icon: CircleDollarSign,
   },
   {
-    title: 'Vast Hardware',
-    description:
-      'Source new or certified refurbished GPUs through our vetted supplier network. Every unit is stress-tested and platform-ready.',
-    cta: 'Get a Hardware Quote',
-    href: '/hardware',
+    href: "/hardware",
     icon: ShieldCheck,
   },
 ];
 
-const howItWorks: Array<{
-  step: string;
-  title: string;
-  description: string;
-  icon: LucideIcon;
-}> = [
-  {
-    step: 'Step 1',
-    title: 'List Your Hardware',
-    description:
-      'Install our lightweight client. Your machines appear on the platform in minutes.',
-    icon: Monitor,
-  },
-  {
-    step: 'Step 2',
-    title: 'Set Your Terms',
-    description:
-      'Price your GPUs, choose rental types, and configure billing.',
-    icon: Wrench,
-  },
-  {
-    step: 'Step 3',
-    title: 'We Bring the Customers',
-    description:
-      '120K+ developers discover your GPUs. Revenue flows automatically. We handle support 24/7.',
-    icon: DollarSign,
-  },
-];
+const howItWorksIcons = [Monitor, Wrench, DollarSign] as const;
 
-const faqs = [
-  {
-    question: 'How do I start hosting on Vast?',
-    answer:
-      'Create an account, install the client on your GPU machine, verify hardware availability, and publish your pricing terms.',
-  },
-  {
-    question: 'How do I get data center certified?',
-    answer:
-      'Contact the host team with your facility profile, network details, inventory, and support processes so they can review certification fit.',
-  },
-  {
-    question: 'How long does verification take?',
-    answer:
-      'Single machines can usually be listed quickly after software setup. Larger or certified deployments require a deeper operations review.',
-  },
-  {
-    question: 'How do I track my earnings?',
-    answer:
-      'Hosts can monitor utilization, jobs, rates, payments, and customer demand from the platform dashboard.',
-  },
-  {
-    question: 'How does Vast pricing work?',
-    answer:
-      'You set host pricing and availability terms. The platform handles discovery, scheduling, support, and payment collection.',
-  },
-  {
-    question: 'What GPUs can I host?',
-    answer:
-      'Common NVIDIA data center and workstation GPUs can be listed when they meet platform reliability, driver, memory, and network requirements.',
-  },
-  {
-    question: 'Can I finance GPU hardware through Vast?',
-    answer:
-      'Financing partners can evaluate platform earnings and deployment plans to help operators source or expand GPU inventory.',
-  },
-];
+export async function generateMetadata({ params }: HostingPageProps): Promise<Metadata> {
+  const { locale } = await params;
+  const language = normalizeLocale(locale);
+  const t = await getTranslations({ locale: language, namespace: "Hosting" });
 
-export default function HostingPage() {
+  return {
+    title: t("metadata.title"),
+    description: t("metadata.description"),
+  };
+}
+
+export default async function HostingPage({ params }: HostingPageProps) {
+  const { locale } = await params;
+  const language = normalizeLocale(locale);
+  const t = await getTranslations({ locale: language, namespace: "Hosting" });
+  const stats = t.raw("stats") as StatCopy[];
+  const platformCards = t.raw("platform.cards") as CardCopy[];
+  const hostCards = t.raw("hostTypes.cards") as CardCopy[];
+  const vastHandles = t.raw("responsibilities.platformItems") as string[];
+  const youHandle = t.raw("responsibilities.hostItems") as string[];
+  const hardwareCards = t.raw("hardware.cards") as CardCopy[];
+  const howItWorks = t.raw("howItWorks.steps") as StepCopy[];
+  const faqs = t.raw("faq.items") as FaqCopy[];
+
   return (
     <>
       <Header />
@@ -218,12 +124,10 @@ export default function HostingPage() {
             className={`${shellClass} flex min-h-[640px] flex-col items-center justify-center py-24 text-center sm:py-28`}
           >
             <h1 className="max-w-[900px] text-4xl font-semibold leading-[1.04] text-[#f7f8f8] sm:text-5xl lg:text-6xl">
-              120,000 AI Developers Need Your GPUs
+              {t("hero.title")}
             </h1>
             <p className="mt-7 max-w-[760px] text-base leading-7 text-[#d0d6e0] sm:text-lg">
-              List your hardware on the world&apos;s largest GPU cloud. We
-              handle customers, support, billing, and deal flow; you control
-              pricing and earn.
+              {t("hero.description")}
             </p>
 
             <div className="mt-9 grid w-full max-w-[640px] grid-cols-2 gap-5 sm:grid-cols-4">
@@ -245,7 +149,7 @@ export default function HostingPage() {
                 className="h-10 rounded-[6px] bg-[#5e6ad2] px-5 text-sm font-semibold text-white hover:bg-[#7170ff]"
               >
                 <Link href="/signup">
-                  Start Hosting
+                  {t("hero.primaryCta")}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
@@ -254,7 +158,7 @@ export default function HostingPage() {
                 variant="outline"
                 className="h-10 rounded-[6px] border-white/25 bg-white/[0.02] px-5 text-sm font-semibold text-[#f7f8f8] hover:bg-white/[0.06] hover:text-[#f7f8f8]"
               >
-                <Link href="/contact-sales">Talk to Our Host Team</Link>
+                <Link href="/contact-sales">{t("hero.secondaryCta")}</Link>
               </Button>
             </div>
           </div>
@@ -264,16 +168,16 @@ export default function HostingPage() {
           <div className={shellClass}>
             <div className="mx-auto max-w-[760px] text-center">
               <h2 className="text-3xl font-semibold leading-tight text-[#f7f8f8] sm:text-5xl">
-                Everything You Need to Run a GPU Business
+                {t("platform.title")}
               </h2>
               <p className="mt-5 text-base leading-7 text-[#d0d6e0] sm:text-lg">
-                A full-stack platform for GPU operators.
+                {t("platform.description")}
               </p>
             </div>
 
             <div className="mt-14 grid gap-6 md:grid-cols-3">
-              {platformCards.map((item) => {
-                const Icon = item.icon;
+              {platformCards.map((item, index) => {
+                const Icon = platformCardIcons[index];
 
                 return (
                   <Card
@@ -300,16 +204,15 @@ export default function HostingPage() {
           <div className={shellClass}>
             <div className="mx-auto max-w-[760px] text-center">
               <h2 className="text-3xl font-semibold leading-tight text-[#f7f8f8] sm:text-5xl">
-                Who Hosts on Vast
+                {t("hostTypes.title")}
               </h2>
               <p className="mt-5 text-base leading-7 text-[#d0d6e0]">
-                From data center operators to first-time hosts, Vast supports
-                every scale.
+                {t("hostTypes.description")}
               </p>
             </div>
 
             <div className="mt-14 grid gap-6 lg:grid-cols-3">
-              {hostCards.map((item) => (
+              {hostCards.map((item, index) => (
                 <Card
                   key={item.title}
                   className="h-full rounded-[8px] border-white/10 bg-transparent text-[#f7f8f8] shadow-none"
@@ -325,7 +228,7 @@ export default function HostingPage() {
                       asChild
                       className="mt-7 h-10 w-fit rounded-[6px] bg-[#5e6ad2] px-4 text-sm font-semibold text-white hover:bg-[#7170ff]"
                     >
-                      <Link href={item.href}>
+                      <Link href={hostCardHrefs[index]}>
                         {item.cta}
                         <ArrowRight className="h-4 w-4" />
                       </Link>
@@ -341,10 +244,10 @@ export default function HostingPage() {
           <div className={shellClass}>
             <div className="mx-auto max-w-[780px] text-center">
               <h2 className="text-3xl font-semibold leading-tight text-[#f7f8f8] sm:text-5xl">
-                What We Handle vs. What You Handle
+                {t("responsibilities.title")}
               </h2>
               <p className="mt-5 text-base leading-7 text-[#d0d6e0]">
-                You focus on hardware. We focus on everything else.
+                {t("responsibilities.description")}
               </p>
             </div>
 
@@ -352,7 +255,7 @@ export default function HostingPage() {
               <Card className="rounded-[8px] border-white/10 bg-white/[0.04] text-[#f7f8f8] shadow-none">
                 <CardContent className="p-7">
                   <h3 className="text-lg font-semibold text-[#8d9cff]">
-                    Vast Handles
+                    {t("responsibilities.platformTitle")}
                   </h3>
                   <ul className="mt-6 space-y-4 text-sm leading-6 text-[#f7f8f8]">
                     {vastHandles.map((item) => (
@@ -367,7 +270,7 @@ export default function HostingPage() {
 
               <Card className="rounded-[8px] border-white/10 bg-white/[0.04] text-[#f7f8f8] shadow-none">
                 <CardContent className="p-7">
-                  <h3 className="text-lg font-semibold">You Handle</h3>
+                  <h3 className="text-lg font-semibold">{t("responsibilities.hostTitle")}</h3>
                   <ul className="mt-6 space-y-4 text-sm leading-6 text-[#f7f8f8]">
                     {youHandle.map((item) => (
                       <li key={item} className="flex gap-3">
@@ -381,8 +284,7 @@ export default function HostingPage() {
             </div>
 
             <p className="mx-auto mt-8 max-w-[760px] text-center text-sm font-medium leading-6 text-[#10b981]">
-              Our 24/7 support team resolves customer issues so you don&apos;t
-              have to. This is the #1 thing hosts tell us they value.
+              {t("responsibilities.note")}
             </p>
           </div>
         </section>
@@ -392,20 +294,17 @@ export default function HostingPage() {
             <Card className="mx-auto max-w-[760px] rounded-[8px] border-white/10 bg-transparent text-center text-[#f7f8f8] shadow-none">
               <CardContent className="p-8 sm:p-12">
                 <h2 className="text-2xl font-semibold leading-tight sm:text-3xl">
-                  Sell Capacity Before Your Hardware Arrives
+                  {t("presell.title")}
                 </h2>
                 <p className="mx-auto mt-5 max-w-[520px] text-sm leading-6 text-[#d0d6e0] sm:text-base">
-                  Planning a new deployment? Share your upcoming GPU
-                  availability and timeline with our sales team. We&apos;ll
-                  match you with enterprise customers looking for reserved
-                  compute.
+                  {t("presell.description")}
                 </p>
                 <Button
                   asChild
                   className="mt-7 h-10 rounded-[6px] bg-[#5e6ad2] px-5 text-sm font-semibold text-white hover:bg-[#7170ff]"
                 >
                   <Link href="/contact-sales">
-                    Contact Our Sales Team
+                    {t("presell.cta")}
                     <ArrowRight className="h-4 w-4" />
                   </Link>
                 </Button>
@@ -418,13 +317,13 @@ export default function HostingPage() {
           <div className={shellClass}>
             <div className="mx-auto max-w-[720px] text-center">
               <h2 className="text-3xl font-semibold leading-tight text-[#f7f8f8] sm:text-5xl">
-                Finance & Source Hardware Through Vast
+                {t("hardware.title")}
               </h2>
             </div>
 
             <div className="mt-14 grid gap-6 md:grid-cols-2">
-              {hardwareCards.map((item) => {
-                const Icon = item.icon;
+              {hardwareCards.map((item, index) => {
+                const Icon = hardwareCardMeta[index].icon;
 
                 return (
                   <Card
@@ -440,7 +339,7 @@ export default function HostingPage() {
                         {item.description}
                       </p>
                       <Link
-                        href={item.href}
+                        href={hardwareCardMeta[index].href}
                         className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-[#8d9cff] hover:text-[#aab4ff]"
                       >
                         {item.cta}
@@ -458,16 +357,16 @@ export default function HostingPage() {
           <div className={shellClass}>
             <div className="mx-auto max-w-[760px] text-center">
               <h2 className="text-3xl font-semibold leading-tight text-[#f7f8f8] sm:text-5xl">
-                How It Works
+                {t("howItWorks.title")}
               </h2>
               <p className="mt-5 text-base leading-7 text-[#d0d6e0]">
-                Three steps from hardware to revenue.
+                {t("howItWorks.description")}
               </p>
             </div>
 
             <div className="mt-14 grid gap-10 md:grid-cols-3">
-              {howItWorks.map((item) => {
-                const Icon = item.icon;
+              {howItWorks.map((item, index) => {
+                const Icon = howItWorksIcons[index];
 
                 return (
                   <div key={item.step} className="text-center">
@@ -493,7 +392,7 @@ export default function HostingPage() {
         <section className="py-20 sm:py-24">
           <div className={`${shellClass} max-w-[960px]`}>
             <h2 className="text-center text-3xl font-semibold leading-tight text-[#f7f8f8] sm:text-5xl">
-              Frequently Asked Questions
+              {t("faq.title")}
             </h2>
             <Accordion type="single" collapsible className="mt-12 space-y-3">
               {faqs.map((item) => (
@@ -523,18 +422,17 @@ export default function HostingPage() {
               }}
             >
               <h2 className="text-3xl font-semibold leading-tight text-[#f7f8f8] sm:text-5xl">
-                Ready to Start Earning?
+                {t("bottomCta.title")}
               </h2>
               <p className="mx-auto mt-4 max-w-[760px] text-base leading-7 text-[#f7f8f8]">
-                Join hundreds of hosts already earning revenue on the
-                world&apos;s largest GPU cloud.
+                {t("bottomCta.description")}
               </p>
               <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
                 <Button
                   asChild
                   className="h-10 rounded-[6px] bg-[#5e6ad2] px-5 text-sm font-semibold text-white hover:bg-[#7170ff]"
                 >
-                  <Link href="/signup">Start Hosting</Link>
+                  <Link href="/signup">{t("bottomCta.primaryCta")}</Link>
                 </Button>
                 <Button
                   asChild
@@ -542,7 +440,7 @@ export default function HostingPage() {
                   className="h-10 rounded-[6px] border-white/25 bg-white/[0.02] px-5 text-sm font-semibold text-[#f7f8f8] hover:bg-white/[0.06] hover:text-[#f7f8f8]"
                 >
                   <Link href="/contact-sales">
-                    Apply for Data Center Certification
+                    {t("bottomCta.secondaryCta")}
                   </Link>
                 </Button>
               </div>

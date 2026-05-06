@@ -1669,5 +1669,175 @@
       "submit": "Create contact email",
       "directEmail": "Send email directly"
     }
+  },
+  "Hosting": {
+    "metadata": {
+      "title": "GPU Hosting | Compute Rental",
+      "description": "Host GPU hardware on the platform, reach customers, use support and billing workflows, and keep control of your pricing."
+    },
+    "hero": {
+      "title": "120,000 AI developers need your GPUs",
+      "description": "List your hardware on a large GPU compute marketplace. We handle customers, support, billing, and deal flow; you control pricing and earn.",
+      "primaryCta": "Start hosting",
+      "secondaryCta": "Talk to our host team"
+    },
+    "stats": [
+      {
+        "value": "120K+",
+        "label": "Active developers"
+      },
+      {
+        "value": "20K+",
+        "label": "GPUs on platform"
+      },
+      {
+        "value": "24/7",
+        "label": "Customer support"
+      },
+      {
+        "value": "You",
+        "label": "Set your prices"
+      }
+    ],
+    "platform": {
+      "title": "Everything you need to run a GPU business",
+      "description": "A full-stack platform for GPU operators.",
+      "cards": [
+        {
+          "title": "Customers and support",
+          "description": "Developers actively search for compute. We handle support, billing, and discovery so you do not need to talk to customers unless you want to."
+        },
+        {
+          "title": "Hardware and financing",
+          "description": "Source GPUs through vetted suppliers, use financing partners, and presell capacity before it goes live."
+        },
+        {
+          "title": "Your terms, your control",
+          "description": "Set your own prices, choose rental types, and configure GPU, CPU, storage, and bandwidth billing."
+        }
+      ]
+    },
+    "hostTypes": {
+      "title": "Who hosts on the platform",
+      "description": "From data center operators to first-time hosts, the platform supports every scale.",
+      "cards": [
+        {
+          "title": "Data centers and colo operators",
+          "description": "Run flagship GPUs with verified trust, priority placement, and enterprise deal flow.",
+          "cta": "Apply for certification"
+        },
+        {
+          "title": "GPU farm operators",
+          "description": "Turn dedicated GPU infrastructure into a compute business and line up demand before new hardware arrives.",
+          "cta": "Start hosting"
+        },
+        {
+          "title": "Getting started",
+          "description": "From a single workstation to your first rack, list what you have while the platform handles discovery, support, and billing.",
+          "cta": "Explore how it works"
+        }
+      ]
+    },
+    "responsibilities": {
+      "title": "What we handle vs. what you handle",
+      "description": "You focus on hardware. We focus on everything else.",
+      "platformTitle": "Platform handles",
+      "hostTitle": "You handle",
+      "platformItems": [
+        "Customer acquisition and platform exposure",
+        "24/7 customer support",
+        "Billing, invoicing, and payments",
+        "Job scheduling and resource optimization",
+        "Marketing and demand generation",
+        "Compliance support"
+      ],
+      "hostItems": [
+        "Hardware uptime and maintenance",
+        "Network connectivity",
+        "Physical infrastructure",
+        "Initial hardware setup"
+      ],
+      "note": "Our support team resolves customer issues so hosts can focus on keeping infrastructure reliable."
+    },
+    "presell": {
+      "title": "Sell capacity before your hardware arrives",
+      "description": "Planning a new deployment? Share upcoming GPU availability and timelines with our sales team so we can match you with customers looking for reserved compute.",
+      "cta": "Contact our sales team"
+    },
+    "hardware": {
+      "title": "Finance and source hardware through the platform",
+      "cards": [
+        {
+          "title": "GPU financing",
+          "description": "Finance GPU hardware with partners who can factor platform earnings into the review. Submit once and compare options.",
+          "cta": "Explore financing"
+        },
+        {
+          "title": "GPU hardware",
+          "description": "Source new or certified refurbished GPUs through vetted suppliers. Units can be stress-tested and platform-ready.",
+          "cta": "Get a hardware quote"
+        }
+      ]
+    },
+    "howItWorks": {
+      "title": "How it works",
+      "description": "Three steps from hardware to revenue.",
+      "steps": [
+        {
+          "step": "Step 1",
+          "title": "List your hardware",
+          "description": "Install the lightweight client. Your machines can appear on the platform in minutes."
+        },
+        {
+          "step": "Step 2",
+          "title": "Set your terms",
+          "description": "Price your GPUs, choose rental types, and configure billing."
+        },
+        {
+          "step": "Step 3",
+          "title": "We bring the customers",
+          "description": "Developers discover your GPUs, revenue flows automatically, and support is handled by the platform."
+        }
+      ]
+    },
+    "faq": {
+      "title": "Frequently asked questions",
+      "items": [
+        {
+          "question": "How do I start hosting?",
+          "answer": "Create an account, install the client on your GPU machine, verify hardware availability, and publish your pricing terms."
+        },
+        {
+          "question": "How do I get data center certified?",
+          "answer": "Contact the host team with your facility profile, network details, inventory, and support processes so they can review certification fit."
+        },
+        {
+          "question": "How long does verification take?",
+          "answer": "Single machines can usually be listed quickly after software setup. Larger or certified deployments require a deeper operations review."
+        },
+        {
+          "question": "How do I track my earnings?",
+          "answer": "Hosts can monitor utilization, jobs, rates, payments, and demand from the dashboard."
+        },
+        {
+          "question": "How does pricing work?",
+          "answer": "You set host pricing and availability terms. The platform handles discovery, scheduling, support, and payment collection."
+        },
+        {
+          "question": "What GPUs can I host?",
+          "answer": "Common NVIDIA data center and workstation GPUs can be listed when they meet reliability, driver, memory, and network requirements."
+        },
+        {
+          "question": "Can I finance GPU hardware through the platform?",
+          "answer": "Financing partners can evaluate platform earnings and deployment plans to help operators source or expand GPU inventory."
+        }
+      ]
+    },
+    "bottomCta": {
+      "title": "Ready to start earning?",
+      "description": "Join hosts already earning revenue from GPU compute demand.",
+      "primaryCta": "Start hosting",
+      "secondaryCta": "Apply for data center certification"
+    }
   }
 }
