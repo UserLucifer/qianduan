@@ -12,6 +12,7 @@ import { formatDate } from "@/lib/format";
 import { ArrowLeft, Calendar, Eye, User } from "lucide-react";
 import { cache } from "react";
 import { normalizeLocale, type AppLocale } from "@/i18n/locales";
+import styles from "./BlogDetailPage.module.css";
 
 export const revalidate = 3600; // Cache for 1 hour
 
@@ -68,7 +69,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
     <>
       <ReadingProgressBar />
       <Header />
-      <main className="shell min-h-screen pb-16 pt-32 md:pt-40">
+      <main className={styles.blogDetailMain}>
         {/* Navigation */}
         <div className="mx-auto max-w-[700px] mb-12">
           <Link 

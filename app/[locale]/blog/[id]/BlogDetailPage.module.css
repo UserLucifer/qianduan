@@ -1,0 +1,24 @@
+.blogDetailMain {
+  width: min(1200px, calc(100vw - 40px));
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 28px 0 64px;
+}
+
+@media (min-width: 768px) {
+  .blogDetailMain {
+    padding-top: 48px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .blogDetailMain {
+    padding-top: 56px;
+  }
+}
+
+@media (max-width: 600px) {
+  .blogDetailMain {
+    width: min(100%, calc(100vw - 24px));
+  }
+}
