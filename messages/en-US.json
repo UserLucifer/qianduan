@@ -289,7 +289,13 @@
     "visual": {
       "cudaEditorAria": "CUDA code editor preview",
       "editorMenuAria": "Editor menu",
-      "editorMenu": ["File", "Edit", "View", "Find", "Help"],
+      "editorMenu": [
+        "File",
+        "Edit",
+        "View",
+        "Find",
+        "Help"
+      ],
       "vmLabel": "Virtual machine",
       "galleryExampleAlt": "{title} example {index}",
       "audioOutputTitle": "Audio-to-text output:",
@@ -1218,6 +1224,317 @@
           "category": "Infrastructure"
         }
       ]
+    }
+  },
+  "SolutionsDetail": {
+    "metadataTitle": "{title} | Compute Rental",
+    "badge": "Premium GPU Solutions",
+    "primaryCta": "Get started",
+    "secondaryCta": "Talk to an architect",
+    "infrastructure": {
+      "title": "Next-generation compute infrastructure",
+      "description": "We provide a fully optimized compute environment, from bare-metal hardware to container orchestration, tuned layer by layer for demanding workloads."
+    },
+    "recommendations": {
+      "title": "Recommended compute profiles",
+      "description": "For this workload, we selected GPU profiles that balance performance, efficiency, and delivery readiness.",
+      "viewInventory": "View live inventory",
+      "availableNow": "Available Now"
+    },
+    "visualizationLabel": "{name} visualization",
+    "cta": {
+      "titleLine1": "Start your",
+      "titleLine2": "high-performance compute journey",
+      "description": "Chosen by AI labs and enterprise teams worldwide. From a single node to large GPU clusters, capacity scales with your workload.",
+      "primary": "Start now",
+      "secondary": "Book a technical demo"
+    },
+    "pages": {
+      "llm-training": {
+        "heroTitle": "Large-scale LLM training clusters",
+        "heroSubtitle": "Bare-metal NVIDIA H100 nodes on the Hopper architecture, connected through InfiniBand NDR 400G, built for frontier-scale language model training.",
+        "features": [
+          {
+            "title": "RDMA lossless networking",
+            "description": "InfiniBand NDR fabric enables full-speed GPU memory access with ultra-low latency between training nodes."
+          },
+          {
+            "title": "High-performance compute base",
+            "description": "Each node can pair 8x H100 80GB SXM5 GPUs with high-bandwidth NVLink for tensor-heavy distributed training."
+          },
+          {
+            "title": "Parallel storage acceleration",
+            "description": "A parallel file-system layer sustains high-throughput reads and writes so I/O does not throttle large training jobs."
+          }
+        ],
+        "visualContent": "// DeepSpeed ZeRO-3 training config\n{\n  \"fp16\": { \"enabled\": true },\n  \"zero_optimization\": {\n    \"stage\": 3,\n    \"offload_optimizer\": { \"device\": \"cpu\", \"pin_memory\": true },\n    \"overlap_comm\": true,\n    \"contiguous_gradients\": true,\n    \"reduce_bucket_size\": \"auto\"\n  },\n  \"gradient_accumulation_steps\": \"auto\"\n}",
+        "recommendedGpus": [
+          {
+            "model": "NVIDIA H100 80GB",
+            "specs": "8x H100 SXM5 cluster"
+          },
+          {
+            "model": "NVIDIA A100 80GB",
+            "specs": "8x A100 SXM4 cluster"
+          }
+        ]
+      },
+      "ai-inference": {
+        "heroTitle": "Enterprise elastic AI inference engine",
+        "heroSubtitle": "Low-latency responses, multi-model hot swapping, and serverless autoscaling for production-grade inference workloads.",
+        "features": [
+          {
+            "title": "Serverless scheduling",
+            "description": "Scale instances with live traffic, reduce idle capacity, and keep inference endpoints responsive under changing demand."
+          },
+          {
+            "title": "Low-latency inference acceleration",
+            "description": "Optimized TensorRT and vLLM runtime paths improve throughput and response time compared with generic serving stacks."
+          },
+          {
+            "title": "Global active-active deployment",
+            "description": "Regional compute pools and redundancy help inference services stay stable during high-concurrency traffic spikes."
+          }
+        ],
+        "visualContent": "// High-throughput inference with vLLM\nfrom vllm import LLM, SamplingParams\n\nprompts = [\"Explain quantum computing in 100 words.\"]\nsampling_params = SamplingParams(temperature=0.8, top_p=0.95)\n\nllm = LLM(model=\"llama-3-70b-instruct\", tensor_parallel_size=4)\noutputs = llm.generate(prompts, sampling_params)",
+        "recommendedGpus": [
+          {
+            "model": "NVIDIA L40S 48GB",
+            "specs": "Optimized for FP8 inference throughput"
+          },
+          {
+            "model": "NVIDIA A10 24GB",
+            "specs": "A practical balance of cost and deployment density"
+          }
+        ]
+      },
+      "high-concurrency-inference": {
+        "heroTitle": "High-concurrency inference optimization",
+        "heroSubtitle": "An elastic inference stack designed for production APIs that need stable latency under heavy daily request volume.",
+        "features": [
+          {
+            "title": "Serverless architecture",
+            "description": "Expand on demand when requests arrive and reduce idle spend when traffic is quiet."
+          },
+          {
+            "title": "Optimized inference kernels",
+            "description": "TensorRT-based acceleration helps shorten response time for common model-serving paths."
+          },
+          {
+            "title": "Global acceleration fabric",
+            "description": "Multi-region deployment patterns reduce user-facing latency across different markets."
+          }
+        ],
+        "visualContent": "// vLLM inference request\ncurl http://localhost:8000/v1/completions \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\": \"llama3\", \"prompt\": \"...\"}'",
+        "recommendedGpus": [
+          {
+            "model": "NVIDIA L40S",
+            "specs": "Optimized for FP8 inference"
+          }
+        ]
+      },
+      "aigc-generation": {
+        "heroTitle": "AIGC image and video generation acceleration",
+        "heroSubtitle": "High-memory GPU capacity for Stable Diffusion, video-generation models, and creative production pipelines.",
+        "features": [
+          {
+            "title": "Large-memory GPU support",
+            "description": "80GB-class GPU memory helps handle 4K and 8K generation workloads with fewer memory bottlenecks."
+          },
+          {
+            "title": "Shared compute utilization",
+            "description": "Run multiple generation jobs in parallel to improve device utilization across creative batches."
+          },
+          {
+            "title": "Automated creative workflow",
+            "description": "Prebuilt ComfyUI-style workflows help teams move from prompt experiments to repeatable production."
+          }
+        ],
+        "visualContent": "# Diffusers pipeline\npipe = StableDiffusionPipeline.from_pretrained(\n  \"runwayml/stable-diffusion-v1-5\",\n  torch_dtype=torch.float16\n)",
+        "recommendedGpus": [
+          {
+            "model": "NVIDIA A100 80GB",
+            "specs": "80GB HBM2e memory"
+          }
+        ]
+      },
+      "graphic-rendering": {
+        "heroTitle": "Cloud render farm for graphics and film production",
+        "heroSubtitle": "Elastic GPU rendering capacity for film post-production, architectural visualization, digital twins, and mainstream rendering engines.",
+        "features": [
+          {
+            "title": "Distributed parallel rendering",
+            "description": "Support Redshift, Octane, Arnold, and similar engines with distributed rendering to shorten frame delivery time."
+          },
+          {
+            "title": "High-density compute nodes",
+            "description": "Multi-GPU nodes with large memory are suited for complex textures, lighting, and scene calculations."
+          },
+          {
+            "title": "Isolated creative assets",
+            "description": "Dedicated isolation helps protect production assets during transfer, rendering, and storage."
+          }
+        ],
+        "recommendedGpus": [
+          {
+            "model": "NVIDIA RTX 6000 Ada",
+            "specs": "48GB VRAM, designed for professional graphics workloads"
+          },
+          {
+            "model": "NVIDIA RTX 4090 24GB",
+            "specs": "High ray-tracing performance for cost-efficient rendering"
+          }
+        ]
+      },
+      "scientific-computing": {
+        "heroTitle": "Dense simulation and scientific computing",
+        "heroSubtitle": "Double-precision GPU compute for weather simulation, genomics, quantitative risk models, and other research workloads.",
+        "features": [
+          {
+            "title": "Double-precision floating point",
+            "description": "FP64-oriented performance supports numerical workloads where result accuracy matters."
+          },
+          {
+            "title": "Massive parallel execution",
+            "description": "MPI and CUDA workflows can scale across multiple nodes and GPU cards for larger simulations."
+          },
+          {
+            "title": "Research data isolation",
+            "description": "Physically isolated nodes help protect sensitive research datasets and experimental results."
+          }
+        ],
+        "recommendedGpus": [
+          {
+            "model": "NVIDIA A100 SXM",
+            "specs": "9.7 TFLOPS FP64"
+          }
+        ]
+      },
+      "ai-agents": {
+        "heroTitle": "Compute platform for AI agent development",
+        "heroSubtitle": "Stable inference and fine-tuning capacity for complex agent iteration, multi-agent simulation, and workflow automation.",
+        "features": [
+          {
+            "title": "Fast prototype iteration",
+            "description": "Launch fine-tuning and evaluation jobs quickly so agent logic can be tested and updated faster."
+          },
+          {
+            "title": "Elastic resource pools",
+            "description": "Allocate GPU resources around agent training and serving demand without overcommitting capacity."
+          },
+          {
+            "title": "API integration optimization",
+            "description": "Low-latency endpoints support real-time agent interaction and tool-calling workflows."
+          }
+        ],
+        "visualContent": "// LangChain agent executor\nconst agent = createOpenAIFunctionsAgent({\n  llm,\n  tools,\n  prompt\n});",
+        "recommendedGpus": [
+          {
+            "model": "NVIDIA A100 80GB",
+            "specs": "SXM4 high bandwidth"
+          }
+        ]
+      },
+      "autonomous-driving": {
+        "heroTitle": "Autonomous driving perception training and simulation",
+        "heroSubtitle": "A compute foundation for the full L3+ development loop, from data ingestion and multimodal labeling to closed-loop simulation.",
+        "features": [
+          {
+            "title": "Multi-sensor fusion training",
+            "description": "Storage and data paths are tuned for LiDAR, camera, radar, and other heterogeneous perception streams."
+          },
+          {
+            "title": "High-fidelity physical simulation",
+            "description": "GPU clusters can support large-scale simulation engines that generate rare and extreme driving scenarios."
+          },
+          {
+            "title": "Large-scale labeling acceleration",
+            "description": "AI-assisted labeling models help clean, classify, and structure raw perception data more efficiently."
+          }
+        ],
+        "recommendedGpus": [
+          {
+            "model": "NVIDIA H100 NVL",
+            "specs": "Dual-card NVLink, optimized for parallel compute"
+          },
+          {
+            "model": "NVIDIA A100 80GB SXM",
+            "specs": "Standard AI data-center profile with stable throughput"
+          }
+        ]
+      },
+      "aigc-startups": {
+        "heroTitle": "Growth plan for AIGC startups",
+        "heroSubtitle": "Startup-friendly GPU capacity, technical guidance, and flexible cost control for getting AI products into production faster.",
+        "features": [
+          {
+            "title": "Flexible billing",
+            "description": "Hourly usage and no large upfront commitment help early teams control experimentation cost."
+          },
+          {
+            "title": "Technical expert support",
+            "description": "Architecture guidance helps teams choose GPU profiles and deployment patterns for their stage."
+          },
+          {
+            "title": "Ecosystem integration",
+            "description": "Connect with common AI frameworks and open-source workflows without rebuilding the stack from scratch."
+          }
+        ],
+        "recommendedGpus": [
+          {
+            "model": "NVIDIA A10 24GB",
+            "specs": "Balanced cost and performance"
+          }
+        ]
+      },
+      "research": {
+        "heroTitle": "Academic compute for research and universities",
+        "heroSubtitle": "Education-aware pricing and stable long-running compute environments for frontier research teams.",
+        "features": [
+          {
+            "title": "Academic discounts",
+            "description": "Qualified universities and research groups can use discounted compute resources for approved projects."
+          },
+          {
+            "title": "Long-term reservation",
+            "description": "Monthly and annual reservations help keep experiments reproducible and uninterrupted."
+          },
+          {
+            "title": "Prebuilt research frameworks",
+            "description": "Images with PyTorch, TensorFlow, and common scientific tooling reduce setup overhead."
+          }
+        ],
+        "recommendedGpus": [
+          {
+            "model": "NVIDIA V100 32GB",
+            "specs": "Classic stability for research workloads"
+          }
+        ]
+      },
+      "gaming": {
+        "heroTitle": "Cloud rendering for games and digital entertainment",
+        "heroSubtitle": "Low-latency cloud gaming and real-time rendering capacity for high-quality interactive experiences.",
+        "features": [
+          {
+            "title": "Ultra-low latency",
+            "description": "Encoding and delivery paths are tuned for real-time rendering and interactive streaming."
+          },
+          {
+            "title": "High-density instances",
+            "description": "Run multiple cloud gaming streams from a single machine profile where workload density allows."
+          },
+          {
+            "title": "Cross-platform compatibility",
+            "description": "Support PC, mobile, web, and other endpoints for broader game and entertainment delivery."
+          }
+        ],
+        "recommendedGpus": [
+          {
+            "model": "NVIDIA RTX 4090",
+            "specs": "High rasterization performance for real-time graphics"
+          }
+        ]
+      }
     }
   }
 }

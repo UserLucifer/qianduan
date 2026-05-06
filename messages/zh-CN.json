@@ -289,7 +289,13 @@
     "visual": {
       "cudaEditorAria": "CUDA 代码编辑器展示",
       "editorMenuAria": "编辑器菜单",
-      "editorMenu": ["文件", "编辑", "查看", "查找", "帮助"],
+      "editorMenu": [
+        "文件",
+        "编辑",
+        "查看",
+        "查找",
+        "帮助"
+      ],
       "vmLabel": "虚拟机",
       "galleryExampleAlt": "{title}示例 {index}",
       "audioOutputTitle": "音频转文本输出：",
@@ -1218,6 +1224,317 @@
           "category": "基础设施"
         }
       ]
+    }
+  },
+  "SolutionsDetail": {
+    "metadataTitle": "{title} | 算力租赁",
+    "badge": "Premium GPU Solutions",
+    "primaryCta": "开始使用",
+    "secondaryCta": "咨询架构师",
+    "infrastructure": {
+      "title": "下一代算力基础设施",
+      "description": "我们提供全栈优化的算力环境，从裸金属硬件层到容器虚拟化调度，每一层都为高性能计算量身打造。"
+    },
+    "recommendations": {
+      "title": "推荐算力规格",
+      "description": "针对当前业务场景，我们精选了以下机型，旨在提供最佳的性能功耗比。",
+      "viewInventory": "查看实时库存",
+      "availableNow": "Available Now"
+    },
+    "visualizationLabel": "{name} visualization",
+    "cta": {
+      "titleLine1": "立即开启您的",
+      "titleLine2": "高性能计算之旅",
+      "description": "全球 1000+ 顶尖 AI 实验室与企业的一致选择。从单个节点到万卡集群，我们随需而动。",
+      "primary": "立即开始",
+      "secondary": "预约技术演示"
+    },
+    "pages": {
+      "llm-training": {
+        "heroTitle": "大规模语言模型 (LLM) 训练集群",
+        "heroSubtitle": "基于 NVIDIA Hopper 架构 H100 裸金属节点，通过 InfiniBand NDR 400G 互联，为千亿级参数模型提供极致算力支撑。",
+        "visualContent": "// DeepSpeed-ZeRO3 训练优化配置\n{\n  \"fp16\": { \"enabled\": true },\n  \"zero_optimization\": {\n    \"stage\": 3,\n    \"offload_optimizer\": { \"device\": \"cpu\", \"pin_memory\": true },\n    \"overlap_comm\": true,\n    \"contiguous_gradients\": true,\n    \"reduce_bucket_size\": \"auto\"\n  },\n  \"gradient_accumulation_steps\": \"auto\"\n}",
+        "features": [
+          {
+            "title": "RDMA 无损网络",
+            "description": "搭载 InfiniBand NDR 互联架构，实现全线速 GPU 内存直接访问，节点间通信延迟低至 1μs。"
+          },
+          {
+            "title": "高性能算力基座",
+            "description": "单节点配备 8x H100 80GB SXM5，NVLink 总带宽高达 900GB/s，充分释放张量计算潜力。"
+          },
+          {
+            "title": "并行存储加速",
+            "description": "自研并行文件系统，支持最高 200GB/s 持续吞吐，确保大规模并行训练中的 I/O 效率。"
+          }
+        ],
+        "recommendedGpus": [
+          {
+            "model": "NVIDIA H100 80GB",
+            "specs": "8x H100 SXM5 Cluster"
+          },
+          {
+            "model": "NVIDIA A100 80GB",
+            "specs": "8x A100 SXM4 Cluster"
+          }
+        ]
+      },
+      "ai-inference": {
+        "heroTitle": "企业级 AI 高并发弹性推理引擎",
+        "heroSubtitle": "毫秒级响应，支持多模型热切换与 Serverless 自动扩缩容，为生产环境提供高可用的推理算力保障。",
+        "visualContent": "// 使用 vLLM 进行高吞吐量推理\nfrom vllm import LLM, SamplingParams\n\nprompts = [\"Explain quantum computing in 100 words.\"]\nsampling_params = SamplingParams(temperature=0.8, top_p=0.95)\n\nllm = LLM(model=\"llama-3-70b-instruct\", tensor_parallel_size=4)\noutputs = llm.generate(prompts, sampling_params)",
+        "features": [
+          {
+            "title": "Serverless 弹性调度",
+            "description": "根据实时流量自动调整实例规模，支持毫秒级冷启动，实现资源利用率最大化。"
+          },
+          {
+            "title": "低延迟推理加速",
+            "description": "内置 TensorRT 与 vLLM 深度优化内核，相比通用框架响应速度提升 2.5 倍。"
+          },
+          {
+            "title": "全球化多活部署",
+            "description": "跨区域算力池冗余备份，确保在高并发请求下业务依然保持极高的 SLA 稳定性。"
+          }
+        ],
+        "recommendedGpus": [
+          {
+            "model": "NVIDIA L40S 48GB",
+            "specs": "专门优化 FP8 推理吞吐"
+          },
+          {
+            "model": "NVIDIA A10 24GB",
+            "specs": "兼顾性价比与部署密度的首选"
+          }
+        ]
+      },
+      "high-concurrency-inference": {
+        "heroTitle": "高并发推理 (Inference) 优化方案",
+        "heroSubtitle": "专为生产环境设计的弹性推理引擎，支持千万级日活请求。",
+        "visualContent": "// vLLM Inference Request\ncurl http://localhost:8000/v1/completions \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"model\": \"llama3\", \"prompt\": \"...\"}'",
+        "features": [
+          {
+            "title": "Serverless 架构",
+            "description": "按需动态扩容，无请求时零成本。"
+          },
+          {
+            "title": "推理加速内核",
+            "description": "集成 TensorRT 优化，响应时间缩短 50%。"
+          },
+          {
+            "title": "全球加速网",
+            "description": "多地域部署，降低终端用户访问延迟。"
+          }
+        ],
+        "recommendedGpus": [
+          {
+            "model": "NVIDIA L40S",
+            "specs": "Optimized for FP8 Inference"
+          }
+        ]
+      },
+      "aigc-generation": {
+        "heroTitle": "AIGC 图像与视频生成加速",
+        "heroSubtitle": "为 Stable Diffusion、Sora 等生成式模型提供极致的显存带宽。",
+        "visualContent": "# Diffusers Pipeline\npipe = StableDiffusionPipeline.from_pretrained(\n  \"runwayml/stable-diffusion-v1-5\",\n  torch_dtype=torch.float16\n)",
+        "features": [
+          {
+            "title": "大显存支持",
+            "description": "80GB 显存轻松应对 4K/8K 视频生成。"
+          },
+          {
+            "title": "算力共享机制",
+            "description": "支持多任务并行生成，提高设备利用率。"
+          },
+          {
+            "title": "自动化工作流",
+            "description": "集成 ComfyUI 等工具流，一键开启生产。"
+          }
+        ],
+        "recommendedGpus": [
+          {
+            "model": "NVIDIA A100 80GB",
+            "specs": "80GB HBM2e Memory"
+          }
+        ]
+      },
+      "graphic-rendering": {
+        "heroTitle": "云端高密图形与影视渲染农场",
+        "heroSubtitle": "为好莱坞级影视后期、建筑表现与数字孪生提供无限容量的 GPU 渲染集群，支持主流渲染引擎一键部署。",
+        "features": [
+          {
+            "title": "分布式并行渲染",
+            "description": "支持 Redshift, Octane, Arnold 等引擎的分布式计算，单帧渲染速度提升数倍。"
+          },
+          {
+            "title": "高密算力节点",
+            "description": "单节点配备 4-8 张大显存 GPU，轻松应对海量纹理与复杂光影计算。"
+          },
+          {
+            "title": "数据资产物理隔离",
+            "description": "金融级安全隔离环境，确保您的创意资产在传输与存储中万无一失。"
+          }
+        ],
+        "recommendedGpus": [
+          {
+            "model": "NVIDIA RTX 6000 Ada",
+            "specs": "48GB 显存, 专为图形任务设计"
+          },
+          {
+            "model": "NVIDIA RTX 4090 24GB",
+            "specs": "极致光追性能, 性价比渲染首选"
+          }
+        ]
+      },
+      "scientific-computing": {
+        "heroTitle": "高密集型仿真与科学计算",
+        "heroSubtitle": "为气象模拟、基因测序、金融风控提供双精度算力。",
+        "features": [
+          {
+            "title": "双精度浮点",
+            "description": "FP64 性能优化，确保计算结果精准。"
+          },
+          {
+            "title": "大规模并行",
+            "description": "支持 MPI/CUDA 多机多卡并行计算。"
+          },
+          {
+            "title": "数据安全性",
+            "description": "物理隔离节点，确保科研数据安全。"
+          }
+        ],
+        "recommendedGpus": [
+          {
+            "model": "NVIDIA A100 SXM",
+            "specs": "9.7 TFLOPS FP64"
+          }
+        ]
+      },
+      "ai-agents": {
+        "heroTitle": "智能体 (AI Agents) 开发算力平台",
+        "heroSubtitle": "为复杂 Agent 迭代提供稳定的推理与微调算力，支持多 Agent 协作仿真。",
+        "visualContent": "// LangChain Agent Executor\nconst agent = createOpenAIFunctionsAgent({\n  llm,\n  tools,\n  prompt\n});",
+        "features": [
+          {
+            "title": "快速原型迭代",
+            "description": "秒级部署微调任务，加速智能体逻辑更新。"
+          },
+          {
+            "title": "弹性资源池",
+            "description": "根据训练负载自动调度 GPU 资源。"
+          },
+          {
+            "title": "API 集成优化",
+            "description": "提供低延迟接口，支持 Agent 实时交互。"
+          }
+        ],
+        "recommendedGpus": [
+          {
+            "model": "NVIDIA A100 80GB",
+            "specs": "SXM4 High Bandwidth"
+          }
+        ]
+      },
+      "autonomous-driving": {
+        "heroTitle": "自动驾驶感知训练与仿真平台",
+        "heroSubtitle": "打通从海量数据回传、多模态标注到闭环仿真的全生命周期，为 L3+ 级自动驾驶研发提供算力基座。",
+        "features": [
+          {
+            "title": "多传感器融合训练",
+            "description": "针对 LiDAR, Camera, Radar 等异构数据流优化的存储方案，支持高效读取。"
+          },
+          {
+            "title": "高保真物理仿真",
+            "description": "高性能 GPU 集群支撑高保真物理仿真引擎，模拟数百万种极端边缘场景。"
+          },
+          {
+            "title": "大规模标注加速",
+            "description": "集成 AI 辅助标注模型，利用大算力显著提升原始感知数据的清洗与分类效率。"
+          }
+        ],
+        "recommendedGpus": [
+          {
+            "model": "NVIDIA H100 NVL",
+            "specs": "NVLink 双卡, 专为并行计算优化"
+          },
+          {
+            "model": "NVIDIA A100 80GB SXM",
+            "specs": "标准智算中心配置, 兼具稳定性与吞吐率"
+          }
+        ]
+      },
+      "aigc-startups": {
+        "heroTitle": "AIGC 初创企业成长计划",
+        "heroSubtitle": "提供初创企业专属折扣与技术指导，助您快速上线 AI 产品。",
+        "features": [
+          {
+            "title": "灵活计费",
+            "description": "支持小时计费，无预付门槛。"
+          },
+          {
+            "title": "技术专家支持",
+            "description": "架构师 1 对 1 指导算力选型。"
+          },
+          {
+            "title": "生态对接",
+            "description": "对接主流 AI 开发框架与社区。"
+          }
+        ],
+        "recommendedGpus": [
+          {
+            "model": "NVIDIA A10 24GB",
+            "specs": "Balanced Cost & Performance"
+          }
+        ]
+      },
+      "research": {
+        "heroTitle": "科研与高校学术支持",
+        "heroSubtitle": "助力学术前沿探索，提供教育优惠与长期稳定的算力环境。",
+        "features": [
+          {
+            "title": "学术折扣",
+            "description": "面向认证高校提供 20% 以上优惠。"
+          },
+          {
+            "title": "长期预留",
+            "description": "支持月度/年度算力预留，确保实验连续性。"
+          },
+          {
+            "title": "多框架预装",
+            "description": "内置 PyTorch, TensorFlow 等科研镜像。"
+          }
+        ],
+        "recommendedGpus": [
+          {
+            "model": "NVIDIA V100 32GB",
+            "specs": "Classic Stability for Research"
+          }
+        ]
+      },
+      "gaming": {
+        "heroTitle": "游戏与数字娱乐云端渲染",
+        "heroSubtitle": "低延迟云游戏方案，支持高画质实进渲染。",
+        "features": [
+          {
+            "title": "超低延迟",
+            "description": "专为实时渲染优化的编解码链路。"
+          },
+          {
+            "title": "高密实例",
+            "description": "单机支持多路云游戏流。"
+          },
+          {
+            "title": "跨平台兼容",
+            "description": "支持 PC, Mobile, Web 等多种终端。"
+          }
+        ],
+        "recommendedGpus": [
+          {
+            "model": "NVIDIA RTX 4090",
+            "specs": "Unmatched Rasterization Performance"
+          }
+        ]
+      }
     }
   }
 }
