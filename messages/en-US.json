@@ -707,6 +707,283 @@
       "salesText": "Contact our sales team"
     }
   },
+  "Privacy": {
+    "metadata": {
+      "title": "Privacy Policy | Compute Rental",
+      "description": "Compute Rental platform Privacy Policy explaining how we collect, use, and protect your personal information."
+    },
+    "title": "Privacy Policy",
+    "date": "Version date: June 18, 2025",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "text": "Compute Rental (the Company, we, or us) respects the privacy of users (users or you). This Privacy Policy explains the types of information the Company may collect from website users, the conditions under which we use and disclose that information, and the rights you have regarding that information."
+      },
+      {
+        "type": "paragraph",
+        "text": "Each time you use the website, the current version of this Privacy Policy applies. Please check the date of this policy each time you use the website and review any changes made since your last visit."
+      },
+      {
+        "type": "notice",
+        "text": "By using or accessing the website, you accept the practices described in this Privacy Policy."
+      },
+      {
+        "type": "heading",
+        "text": "Overview of website user information"
+      },
+      {
+        "type": "subheading",
+        "text": "Non-personally identifiable information"
+      },
+      {
+        "type": "paragraph",
+        "text": "Non-personally identifiable information means information that cannot, without additional information, be directly associated with a specific individual. Like most website operators, the Company collects this type of information from website users, including Internet Protocol (IP) addresses, operating systems, browser types, and the websites users visit before and after visiting the website."
+      },
+      {
+        "type": "paragraph",
+        "text": "Although this information does not itself constitute personally identifiable information, the Company may use IP addresses to identify a user's internet service provider and the geographic location of the connection point. The Company analyzes non-personally identifiable information collected from users to better understand website usage."
+      },
+      {
+        "type": "subheading",
+        "text": "Personally identifiable information"
+      },
+      {
+        "type": "paragraph",
+        "text": "Personally identifiable information means information that can be directly associated with a specific individual without more information, such as a name or email address. The Company may collect personally identifiable information when you register for services, sign in with social network credentials, participate in surveys or other activities, communicate with us, create a public profile, or subscribe to communications."
+      },
+      {
+        "type": "paragraph",
+        "text": "Information collected may include your name, address, email address, telephone number, and financial information when you transact with us, such as valid payment method information."
+      },
+      {
+        "type": "heading",
+        "text": "Cookies"
+      },
+      {
+        "type": "paragraph",
+        "text": "A cookie is a string of information stored on a user's computer by a website to assign a unique identifier. We use cookies on the website to track services you have used, record sign-in information and user preferences, keep you signed in, and assist with purchase flows."
+      },
+      {
+        "type": "paragraph",
+        "text": "The Company also uses cookies to track pages visited during each website session to help improve the user experience and understand how the website is used. Users who do not want cookies placed on their computers should set their browsers to refuse cookies before accessing the website, but some website features may not function properly as a result."
+      },
+      {
+        "type": "heading",
+        "text": "Web beacons"
+      },
+      {
+        "type": "paragraph",
+        "text": "Web beacons are objects embedded in web pages or emails, usually invisible to users, that allow website operators to check whether a user has viewed a particular page or email. The Company may use web beacons on the website and in emails to count users who visit specific pages or view emails. Web beacons are not used to access users' personally identifiable information."
+      },
+      {
+        "type": "heading",
+        "text": "Analytics tools"
+      },
+      {
+        "type": "paragraph",
+        "text": "We may use analytics tools from third-party service providers, including Google. These tools use first-party and third-party cookies to provide information, optimize advertising, and deliver ads based on your historical activity on the website. If you do not want Google Analytics to collect and use information, you can install an opt-out browser add-on."
+      },
+      {
+        "type": "subheading",
+        "text": "Aggregated information and non-personally identifiable information"
+      },
+      {
+        "type": "paragraph",
+        "text": "We may share aggregated and non-personally identifiable information in any of the circumstances described above. We may also share it with third parties and affiliates to develop and deliver targeted advertising. We may combine non-personally identifiable information with additional non-personally identifiable information collected from other sources."
+      },
+      {
+        "type": "heading",
+        "text": "Social media"
+      },
+      {
+        "type": "paragraph",
+        "text": "We may offer you the option to connect your website account with a social network account for sign-in, information upload, or to enable certain website features. Once connected, we may collect personally identifiable information that you make public on the social network, such as your name, profile image, and username. Each social network allows you to set privacy controls, and our collection of information will follow those controls and permissions."
+      },
+      {
+        "type": "heading",
+        "text": "Collection, use, and disclosure of personally identifiable information"
+      },
+      {
+        "type": "subheading",
+        "text": "Website registration"
+      },
+      {
+        "type": "paragraph",
+        "text": "By registering for or using the website, you consent to the use and disclosure of your personally identifiable information as described in this section. Website users are not required to provide any type of personally identifiable information to the Company, but refusing to provide it may prevent use of certain website features."
+      },
+      {
+        "type": "subheading",
+        "text": "Company communications"
+      },
+      {
+        "type": "paragraph",
+        "text": "We may occasionally use your name and email address to send notices about new services offered through the website. In general, you may opt out of such emails at registration or through account settings, but we reserve the right to send notices about your account, such as service announcements and administrative messages."
+      },
+      {
+        "type": "subheading",
+        "text": "Company disclosures"
+      },
+      {
+        "type": "paragraph",
+        "text": "The Company will disclose personally identifiable information in the following circumstances:"
+      },
+      {
+        "type": "labeledList",
+        "items": [
+          {
+            "term": "By law or to protect rights. ",
+            "text": "When we believe disclosure is appropriate, we may disclose personally identifiable information to investigate, prevent, or take action regarding illegal activity, suspected fraud, or other wrongdoing; to protect the rights, property, or safety of the Company, users, employees, or others; to comply with applicable law or cooperate with law enforcement; or to respond to subpoenas, court orders, or law enforcement requests when necessary."
+          },
+          {
+            "term": "Marketing communications. ",
+            "text": "Unless a user opts out during registration, the Company may email the user about products and services that may be of interest."
+          },
+          {
+            "term": "Third-party service providers. ",
+            "text": "We may share your personally identifiable information with authorized service providers that perform services on our behalf, including order fulfillment, customer service, marketing assistance, business analytics, and credit card payment processing."
+          },
+          {
+            "term": "Business transfers and bankruptcy. ",
+            "text": "The Company reserves the right to transfer all personally identifiable information it possesses to a successor organization in connection with a merger, acquisition, bankruptcy, or sale of all or part of the Company's assets."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Changes to personally identifiable information and account termination"
+      },
+      {
+        "type": "paragraph",
+        "text": "You may review or change your personally identifiable information at any time through account settings or by contacting us. At your request, we will deactivate or delete your account and contact information as soon as reasonably possible based on your account activity and applicable law. We will retain certain personally identifiable information in our files to prevent fraud, troubleshoot problems, assist investigations, and comply with legal requirements."
+      },
+      {
+        "type": "heading",
+        "text": "General use of information"
+      },
+      {
+        "type": "paragraph",
+        "text": "The Company uses personally identifiable information and other information we maintain about you to deliver requested products and services, manage your account and provide customer support, communicate with you by email, mail, telephone, and/or mobile devices about products or services, develop and display content and advertising tailored to your interests, resolve disputes and troubleshoot problems, measure consumer interest in our services, notify you of updates, customize your experience, detect and protect against errors, fraud, and other criminal activity, and enforce our Terms of Use."
+      },
+      {
+        "type": "heading",
+        "text": "Security"
+      },
+      {
+        "type": "paragraph",
+        "text": "We take the security of your personally identifiable information seriously and use reasonable electronic, personnel, and physical measures to protect it from loss, theft, alteration, or misuse. However, even the best security measures cannot eliminate all risk. We cannot guarantee that only authorized persons will view your information."
+      },
+      {
+        "type": "paragraph",
+        "text": "You are responsible for maintaining the confidentiality of your personally identifiable information by safeguarding your password. If you believe someone has accessed your password or account without authorization, change your password immediately."
+      },
+      {
+        "type": "heading",
+        "text": "Changes to this Privacy Policy"
+      },
+      {
+        "type": "paragraph",
+        "text": "The Company may change this Privacy Policy from time to time at its discretion. All changes will be posted on this page. The Company will always publish a new version of the Privacy Policy on the website, so users should review this page periodically for changes."
+      },
+      {
+        "type": "heading",
+        "text": "Children's privacy"
+      },
+      {
+        "type": "paragraph",
+        "text": "We do not knowingly collect or maintain personally identifiable information from anyone under 13 years of age unless permitted by law. Anyone who provides personally identifiable information through the website represents that they are at least 13 years old. If we learn that we have collected personally identifiable information from a user under 13, we will take appropriate steps to delete it."
+      },
+      {
+        "type": "heading",
+        "text": "For users in the European Union and United Kingdom"
+      },
+      {
+        "type": "subheading",
+        "text": "GDPR privacy supplement"
+      },
+      {
+        "type": "paragraph",
+        "text": "This GDPR privacy supplement is incorporated into the Privacy Policy and applies only to personal data of individuals located in the European Economic Area and the United Kingdom. We comply with Regulation (EU) 2016/679, the General Data Protection Regulation, and adopt this supplement to meet GDPR requirements."
+      },
+      {
+        "type": "subheading",
+        "text": "Legal bases for processing"
+      },
+      {
+        "type": "paragraph",
+        "text": "We have lawful bases for processing your personal data, including processing to pursue our legitimate interests balanced against your rights and freedoms, processing required by law, and processing based on your consent."
+      },
+      {
+        "type": "subheading",
+        "text": "Your rights"
+      },
+      {
+        "type": "paragraph",
+        "text": "Under applicable data protection laws, you may have the following rights:"
+      },
+      {
+        "type": "labeledList",
+        "items": [
+          {
+            "term": "Access and update. ",
+            "text": "You may notify us to correct any changes or errors in your personal data."
+          },
+          {
+            "term": "Restrict processing. ",
+            "text": "In certain circumstances, you have the right to restrict our processing of your personal data."
+          },
+          {
+            "term": "Data portability. ",
+            "text": "Where processing is based on your consent and carried out by automated means, you have the right to request a copy of your personal data in a structured, commonly used, machine-readable format."
+          },
+          {
+            "term": "Withdraw consent. ",
+            "text": "Where our processing of your personal data is based on your consent, you may withdraw that consent at any time."
+          },
+          {
+            "term": "Right to be forgotten. ",
+            "text": "You have the right to request that we delete all of your personal data."
+          },
+          {
+            "term": "Complaint. ",
+            "text": "You have the right to lodge a complaint with the applicable supervisory authority in your country or region."
+          }
+        ]
+      },
+      {
+        "type": "subheading",
+        "text": "International transfers of personal data"
+      },
+      {
+        "type": "paragraph",
+        "text": "We may process your personal data outside your country of residence. We do so only where permitted by law and ensure appropriate safeguards protect your personal data. To ensure your personal data is processed in accordance with this Privacy Statement, we use data protection agreements containing Standard Contractual Clauses with other data recipients."
+      },
+      {
+        "type": "subheading",
+        "text": "Data retention"
+      },
+      {
+        "type": "paragraph",
+        "text": "We may retain your personal data. In some cases, we may retain it after you no longer have an account, including:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "in backup and disaster recovery systems;",
+          "where necessary to protect our legitimate interests;",
+          "to comply with other legal requirements;",
+          "indefinitely where the data has been anonymized."
+        ]
+      },
+      {
+        "type": "contact",
+        "title": "Contact us",
+        "paragraphs": [
+          "If you have any questions about our Privacy Policy, please contact our privacy officer:",
+          "Compute Rental\nPrivacy Officer\nEmail: contact@example.com"
+        ]
+      }
+    ]
+  },
   "DocsMetadata": {
     "guide": {
       "title": "Guides | Compute Rental Docs",
