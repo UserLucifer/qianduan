@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, Send } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -26,91 +27,80 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
+const gpuOptionMeta = [
+  { key: "b200" },
+  { key: "h200", hasNote: true },
+  { key: "h100Sxm", hasNote: true },
+  { key: "h100Pcie" },
+  { key: "a10080" },
+  { key: "a10040" },
+  { key: "l40s" },
+  { key: "rtx5090", hasNote: true },
+  { key: "rtx4090" },
+  { key: "rtx3090" },
+  { key: "other" },
+] as const;
+
+const selectGroupMeta = [
+  {
+    key: "quantity",
+    required: true,
+    options: ["qty1_4", "qty5_16", "qty17_64", "qty64Plus"],
+  },
+  {
+    key: "formFactor",
+    options: ["fullServer", "gpuNode", "bareCard", "rackConfig"],
+  },
+  {
+    key: "timeline",
+    required: true,
+    options: ["immediate", "weeks2_4", "months1_2", "quarterPlanning"],
+  },
+  {
+    key: "useCase",
+    options: ["hostingYield", "modelTraining", "inferenceService", "mixedUse"],
+  },
+  {
+    key: "hosting",
+    options: ["haveFacility", "needHosting", "evaluating", "other"],
+  },
+  {
+    key: "budget",
+    options: ["under100k", "range100k500k", "range500k2m", "above2m"],
+    className: "md:col-span-2",
+  },
+] as const;
+
+type GpuKey = (typeof gpuOptionMeta)[number]["key"];
+type SelectKey = (typeof selectGroupMeta)[number]["key"];
+type QuoteSelections = Record<SelectKey, string>;
+
 type GpuOption = {
+  value: GpuKey;
   label: string;
   note?: string;
 };
 
+type SelectOption = {
+  value: string;
+  label: string;
+};
+
 type SelectGroup = {
-  key: "quantity" | "formFactor" | "timeline" | "useCase" | "hosting" | "budget";
+  key: SelectKey;
   label: string;
   placeholder: string;
-  options: string[];
+  options: SelectOption[];
   required?: boolean;
   className?: string;
 };
 
-const gpuOptions: GpuOption[] = [
-  { label: "B200" },
-  { label: "H200 高", note: "需求" },
-  { label: "H100 SXM", note: "高需求" },
-  { label: "H100 PCIe" },
-  { label: "A100 80GB" },
-  { label: "A100 40GB" },
-  { label: "L40S" },
-  { label: "RTX 5090", note: "有限供应" },
-  { label: "RTX 4090" },
-  { label: "RTX 3090" },
-  { label: "其他" },
-];
-
-const selectGroups: SelectGroup[] = [
-  {
-    key: "quantity",
-    label: "数量 *",
-    placeholder: "精选",
-    options: ["1-4 台", "5-16 台", "17-64 台", "64 台以上"],
-    required: true,
-  },
-  {
-    key: "formFactor",
-    label: "形态规格",
-    placeholder: "精选",
-    options: ["整机服务器", "GPU 节点", "裸卡", "机柜级配置"],
-  },
-  {
-    key: "timeline",
-    label: "时间线 *",
-    placeholder: "什么时候需要硬件",
-    options: ["立即", "2-4 周", "1-2 个月", "季度规划"],
-    required: true,
-  },
-  {
-    key: "useCase",
-    label: "主要使用场景",
-    placeholder: "精选",
-    options: ["托管收益", "模型训练", "推理服务", "混合用途"],
-  },
-  {
-    key: "hosting",
-    label: "现有的潜在主机",
-    placeholder: "精选",
-    options: ["已有机房", "需要托管", "正在评估", "其他"],
-  },
-  {
-    key: "budget",
-    label: "预算范围",
-    placeholder: "精选",
-    options: ["10 万以内", "10-50 万", "50-200 万", "200 万以上"],
-    className: "md:col-span-2",
-  },
-];
-
-type SelectKey = SelectGroup["key"];
-type QuoteSelections = Record<SelectKey, string>;
-
-const contactSchema = z.object({
-  name: z.string().trim().min(2, "请输入联系人姓名"),
-  email: z.string().trim().email("请输入有效邮箱"),
-  company: z.string().trim().max(80, "公司名称不超过 80 个字").optional(),
-  message: z
-    .string()
-    .trim()
-    .min(10, "请至少输入 10 个字")
-    .max(1000, "请控制在 1000 字以内"),
-});
-
-type ContactValues = z.infer<typeof contactSchema>;
+type ContactValues = {
+  name: string;
+  email: string;
+  company: string;
+  message: string;
+};
 
 const stepBaseClass =
   "flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold transition-colors";
@@ -119,8 +109,9 @@ const fieldClassName =
   "h-12 rounded-[6px] border-white/12 bg-white/[0.12] text-[#f7f8f8] shadow-none placeholder:text-[#8a8f98] focus-visible:ring-[#5e6ad2]";
 
 export function HardwareQuoteFlow() {
+  const t = useTranslations("Hardware.quote");
   const [step, setStep] = useState<1 | 2>(1);
-  const [selectedGpu, setSelectedGpu] = useState(gpuOptions[0].label);
+  const [selectedGpu, setSelectedGpu] = useState<GpuKey>(gpuOptionMeta[0].key);
   const [selections, setSelections] = useState<QuoteSelections>({
     quantity: "",
     formFactor: "",
@@ -129,6 +120,47 @@ export function HardwareQuoteFlow() {
     hosting: "",
     budget: "",
   });
+
+  const gpuOptions = useMemo<GpuOption[]>(
+    () =>
+      gpuOptionMeta.map((gpu) => ({
+        value: gpu.key,
+        label: t(`gpu.options.${gpu.key}.label`),
+        note: "hasNote" in gpu ? t(`gpu.options.${gpu.key}.note`) : undefined,
+      })),
+    [t],
+  );
+
+  const selectGroups = useMemo<SelectGroup[]>(
+    () =>
+      selectGroupMeta.map((group) => ({
+        key: group.key,
+        label: t(`selectGroups.${group.key}.label`),
+        placeholder: t(`selectGroups.${group.key}.placeholder`),
+        required: "required" in group ? group.required : false,
+        className: "className" in group ? group.className : undefined,
+        options: group.options.map((option) => ({
+          value: option,
+          label: t(`selectGroups.${group.key}.options.${option}`),
+        })),
+      })),
+    [t],
+  );
+
+  const contactSchema = useMemo(
+    (): z.ZodType<ContactValues> =>
+      z.object({
+        name: z.string().trim().min(2, t("validation.name")),
+        email: z.string().trim().email(t("validation.email")),
+        company: z.string().trim().max(80, t("validation.company")),
+        message: z
+          .string()
+          .trim()
+          .min(10, t("validation.messageMin"))
+          .max(1000, t("validation.messageMax")),
+      }),
+    [t],
+  );
 
   const form = useForm<ContactValues>({
     resolver: zodResolver(contactSchema),
@@ -140,15 +172,19 @@ export function HardwareQuoteFlow() {
     },
   });
 
-  const summaryItems = useMemo(
+  const selectedGpuLabel =
+    gpuOptions.find((gpu) => gpu.value === selectedGpu)?.label ?? selectedGpu;
+
+  const summaryItems = useMemo<Array<[string, string]>>(
     () => [
-      ["GPU 型号", selectedGpu],
-      ...selectGroups.map((group) => [
-        group.label.replace(" *", ""),
-        selections[group.key] || "未填写",
+      [t("summary.gpuModel"), selectedGpuLabel],
+      ...selectGroups.map((group): [string, string] => [
+        group.label,
+        group.options.find((option) => option.value === selections[group.key])?.label ??
+          t("summary.notProvided"),
       ]),
     ],
-    [selectedGpu, selections],
+    [selectedGpuLabel, selectGroups, selections, t],
   );
 
   function updateSelection(key: SelectKey, value: string) {
@@ -157,7 +193,7 @@ export function HardwareQuoteFlow() {
 
   function goNext() {
     if (!selectedGpu || !selections.quantity || !selections.timeline) {
-      toast.error("请先选择 GPU 型号、数量和时间线。");
+      toast.error(t("validation.requiredSelection"));
       return;
     }
 
@@ -165,41 +201,52 @@ export function HardwareQuoteFlow() {
   }
 
   function onSubmit(values: ContactValues) {
-    const subject = `[算力租赁] GPU 硬件报价 - ${values.company || values.name}`;
-    const body = [
-      `联系人：${values.name}`,
-      `邮箱：${values.email}`,
-      values.company ? `公司/团队：${values.company}` : null,
+    const subject = t("email.subject", { name: values.company || values.name });
+    const bodyLines: Array<string | null> = [
+      t("email.name", { value: values.name }),
+      t("email.email", { value: values.email }),
+      values.company ? t("email.company", { value: values.company }) : null,
       "",
-      "硬件需求：",
-      ...summaryItems.map(([label, value]) => `${label}：${value}`),
+      t("email.requirementsTitle"),
+      ...summaryItems.map(([label, value]) =>
+        t("email.summaryLine", { label, value }),
+      ),
       "",
-      "补充说明：",
+      t("email.extraTitle"),
       values.message,
-    ]
-      .filter(Boolean)
+    ];
+    const body = bodyLines
+      .filter((line): line is string => line !== null)
       .join("\n");
 
     window.location.assign(
       `mailto:contact@example.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`,
     );
-    toast.success("已生成邮件草稿，请在邮件客户端中确认发送。");
+    toast.success(t("toast.emailDraft"));
   }
 
   return (
     <div className="p-8 sm:p-12 lg:p-14">
       <div className="text-center">
         <h2 className="text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">
-          获取报价
+          {t("title")}
         </h2>
         <p className="mx-auto mt-4 max-w-[520px] text-base leading-7 text-[#a4acb6]">
-          先整理硬件需求，再生成邮件草稿。我们会基于型号、数量和交付窗口给出报价。
+          {t("description")}
         </p>
         <div className="mt-8 flex items-center justify-center gap-3">
-          <span className={`${stepBaseClass} ${step === 1 ? "bg-[#5e6ad2] text-white" : "bg-white/10 text-[#8a8f98]"}`}>
+          <span
+            className={`${stepBaseClass} ${
+              step === 1 ? "bg-[#5e6ad2] text-white" : "bg-white/10 text-[#8a8f98]"
+            }`}
+          >
             1
           </span>
-          <span className={`${stepBaseClass} ${step === 2 ? "bg-[#5e6ad2] text-white" : "bg-white/10 text-[#8a8f98]"}`}>
+          <span
+            className={`${stepBaseClass} ${
+              step === 2 ? "bg-[#5e6ad2] text-white" : "bg-white/10 text-[#8a8f98]"
+            }`}
+          >
             2
           </span>
         </div>
@@ -208,21 +255,23 @@ export function HardwareQuoteFlow() {
       {step === 1 ? (
         <div className="mt-9">
           <h3 className="text-xl font-semibold tracking-[-0.03em]">
-            硬件需求
+            {t("requirementsTitle")}
           </h3>
           <div className="mt-6">
-            <p className="text-sm font-semibold text-[#f7f8f8]">GPU 型号 *</p>
+            <p className="text-sm font-semibold text-[#f7f8f8]">
+              {t("gpuModelLabel")} <span aria-hidden="true">{t("requiredMark")}</span>
+            </p>
             <div className="mt-3 grid gap-2 sm:grid-cols-2">
               {gpuOptions.map((gpu) => {
-                const isSelected = selectedGpu === gpu.label;
+                const isSelected = selectedGpu === gpu.value;
 
                 return (
                   <Button
-                    key={gpu.label}
+                    key={gpu.value}
                     type="button"
                     variant="outline"
                     aria-pressed={isSelected}
-                    onClick={() => setSelectedGpu(gpu.label)}
+                    onClick={() => setSelectedGpu(gpu.value)}
                     className={`h-11 rounded-[6px] px-3 text-sm font-semibold transition-colors ${
                       isSelected
                         ? "border-[#5e6ad2] bg-[#5e6ad2]/12 text-[#9aa2ff] hover:bg-[#5e6ad2]/18 hover:text-white"
@@ -244,6 +293,9 @@ export function HardwareQuoteFlow() {
               <div key={group.key} className={group.className ?? ""}>
                 <label className="text-sm font-semibold text-[#f7f8f8]">
                   {group.label}
+                  {group.required ? (
+                    <span aria-hidden="true"> {t("requiredMark")}</span>
+                  ) : null}
                 </label>
                 <Select
                   value={selections[group.key]}
@@ -254,8 +306,8 @@ export function HardwareQuoteFlow() {
                   </SelectTrigger>
                   <SelectContent className="border-white/12 bg-[#191a1b] text-[#f7f8f8]">
                     {group.options.map((option) => (
-                      <SelectItem key={option} value={option}>
-                        {option}
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -269,7 +321,7 @@ export function HardwareQuoteFlow() {
             className="mt-7 h-12 w-full rounded-[6px] bg-[#5e6ad2] text-base font-semibold text-white hover:bg-[#828fff]"
             onClick={goNext}
           >
-            继续
+            {t("continue")}
           </Button>
         </div>
       ) : (
@@ -292,9 +344,15 @@ export function HardwareQuoteFlow() {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[#f7f8f8]">联系人</FormLabel>
+                    <FormLabel className="text-[#f7f8f8]">
+                      {t("fields.name.label")}
+                    </FormLabel>
                     <FormControl>
-                      <Input placeholder="您的姓名" {...field} className={fieldClassName} />
+                      <Input
+                        placeholder={t("fields.name.placeholder")}
+                        {...field}
+                        className={fieldClassName}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -306,9 +364,16 @@ export function HardwareQuoteFlow() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[#f7f8f8]">工作邮箱</FormLabel>
+                    <FormLabel className="text-[#f7f8f8]">
+                      {t("fields.email.label")}
+                    </FormLabel>
                     <FormControl>
-                      <Input type="email" placeholder="name@company.com" {...field} className={fieldClassName} />
+                      <Input
+                        type="email"
+                        placeholder={t("fields.email.placeholder")}
+                        {...field}
+                        className={fieldClassName}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -321,9 +386,15 @@ export function HardwareQuoteFlow() {
               name="company"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[#f7f8f8]">公司/团队</FormLabel>
+                  <FormLabel className="text-[#f7f8f8]">
+                    {t("fields.company.label")}
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="可选" {...field} className={fieldClassName} />
+                    <Input
+                      placeholder={t("fields.company.placeholder")}
+                      {...field}
+                      className={fieldClassName}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -335,10 +406,12 @@ export function HardwareQuoteFlow() {
               name="message"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[#f7f8f8]">补充说明</FormLabel>
+                  <FormLabel className="text-[#f7f8f8]">
+                    {t("fields.message.label")}
+                  </FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="例如：目标机房、是否需要托管、期望交付日期、付款方式或其他硬件要求。"
+                      placeholder={t("fields.message.placeholder")}
                       {...field}
                       className="min-h-[140px] resize-none rounded-[6px] border-white/12 bg-white/[0.12] text-[#f7f8f8] shadow-none placeholder:text-[#8a8f98] focus-visible:ring-[#5e6ad2]"
                     />
@@ -356,14 +429,14 @@ export function HardwareQuoteFlow() {
                 onClick={() => setStep(1)}
               >
                 <ArrowLeft className="h-4 w-4" />
-                返回修改
+                {t("back")}
               </Button>
               <Button
                 type="submit"
                 className="h-12 flex-1 rounded-[6px] bg-[#5e6ad2] text-base font-semibold text-white hover:bg-[#828fff]"
               >
                 <Send className="h-4 w-4" />
-                生成报价邮件
+                {t("submit")}
               </Button>
             </div>
           </form>

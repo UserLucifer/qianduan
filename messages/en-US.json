@@ -1839,5 +1839,243 @@
       "primaryCta": "Start hosting",
       "secondaryCta": "Apply for data center certification"
     }
+  },
+  "Hardware": {
+    "metadata": {
+      "title": "GPU Hardware | Compute Rental",
+      "description": "Source new or certified refurbished GPU servers through vetted suppliers and prepare them for platform hosting."
+    },
+    "hero": {
+      "title": "Source GPUs that are ready to earn",
+      "description": "Use our vetted supplier network for new or certified refurbished GPU servers. Each unit can be stress-tested, benchmarked, and prepared for platform hosting from day one.",
+      "assurances": [
+        "New and refurbished",
+        "Burn-in tested",
+        "Platform ready"
+      ]
+    },
+    "steps": {
+      "title": "How it works",
+      "description": "Submit once. We source options from multiple suppliers.",
+      "items": [
+        {
+          "title": "Tell us what you need",
+          "description": "Share the GPU models, quantity, condition preference, and delivery window. We will match the request with suitable suppliers."
+        },
+        {
+          "title": "We source and test",
+          "description": "Our team compares new and refurbished options, then completes the required verification flow before delivery."
+        },
+        {
+          "title": "Deploy and earn",
+          "description": "Once certified, the hardware is ready for client installation and platform listing so your GPUs can start producing revenue quickly."
+        }
+      ]
+    },
+    "value": {
+      "title": "Why source through the platform",
+      "description": "Your GPU hardware partner should be more than a reseller. We combine new and refurbished supply channels with platform hosting readiness as the target outcome.",
+      "videoLabel": "GPU hardware sourcing background video",
+      "cards": [
+        {
+          "title": "Volume pricing",
+          "description": "Our purchasing volume and supplier relationships help unlock pricing that is hard to secure alone."
+        },
+        {
+          "title": "Platform ready",
+          "description": "Hardware can arrive prepared for platform hosting. Install the client, list the machine, and move toward revenue faster."
+        },
+        {
+          "title": "Vast certified",
+          "description": "Each unit can pass GPU verification with stress, memory, benchmark, and thermal results included."
+        },
+        {
+          "title": "Financing aligned",
+          "description": "Hardware sourcing can connect with financing options to help you expand GPU capacity faster."
+        }
+      ]
+    },
+    "certification": {
+      "title": "What you receive: platform certification",
+      "description": "Before shipment, each device can pass our GPU verification flow. Orders include certification results for hosting and operations planning.",
+      "items": [
+        {
+          "title": "Burn-in test",
+          "description": "72 hours of full-load stress testing"
+        },
+        {
+          "title": "Memory verification",
+          "description": "Complete memory checks with no defects"
+        },
+        {
+          "title": "Benchmark score",
+          "description": "Performance compared with reference results"
+        },
+        {
+          "title": "Thermal profile",
+          "description": "Cooling behavior confirmed under sustained load"
+        }
+      ]
+    },
+    "bottomCta": {
+      "title": "Ready to build your GPU fleet?",
+      "description": "Source hardware through vetted suppliers, or explore financing to scale faster.",
+      "primaryCta": "Explore financing",
+      "secondaryCta": "Start hosting"
+    },
+    "quote": {
+      "title": "Get a quote",
+      "description": "Start by organizing the hardware request, then generate an email draft. We will quote based on model, quantity, and delivery window.",
+      "requirementsTitle": "Hardware requirements",
+      "gpuModelLabel": "GPU model",
+      "requiredMark": "*",
+      "continue": "Continue",
+      "back": "Back",
+      "submit": "Generate quote email",
+      "gpu": {
+        "options": {
+          "b200": {
+            "label": "B200"
+          },
+          "h200": {
+            "label": "H200",
+            "note": "High demand"
+          },
+          "h100Sxm": {
+            "label": "H100 SXM",
+            "note": "High demand"
+          },
+          "h100Pcie": {
+            "label": "H100 PCIe"
+          },
+          "a10080": {
+            "label": "A100 80GB"
+          },
+          "a10040": {
+            "label": "A100 40GB"
+          },
+          "l40s": {
+            "label": "L40S"
+          },
+          "rtx5090": {
+            "label": "RTX 5090",
+            "note": "Limited supply"
+          },
+          "rtx4090": {
+            "label": "RTX 4090"
+          },
+          "rtx3090": {
+            "label": "RTX 3090"
+          },
+          "other": {
+            "label": "Other"
+          }
+        }
+      },
+      "selectGroups": {
+        "quantity": {
+          "label": "Quantity",
+          "placeholder": "Select",
+          "options": {
+            "qty1_4": "1-4 units",
+            "qty5_16": "5-16 units",
+            "qty17_64": "17-64 units",
+            "qty64Plus": "64+ units"
+          }
+        },
+        "formFactor": {
+          "label": "Form factor",
+          "placeholder": "Select",
+          "options": {
+            "fullServer": "Full server",
+            "gpuNode": "GPU node",
+            "bareCard": "Bare card",
+            "rackConfig": "Rack-level configuration"
+          }
+        },
+        "timeline": {
+          "label": "Timeline",
+          "placeholder": "When do you need the hardware?",
+          "options": {
+            "immediate": "Immediate",
+            "weeks2_4": "2-4 weeks",
+            "months1_2": "1-2 months",
+            "quarterPlanning": "Quarterly planning"
+          }
+        },
+        "useCase": {
+          "label": "Primary use case",
+          "placeholder": "Select",
+          "options": {
+            "hostingYield": "Hosting revenue",
+            "modelTraining": "Model training",
+            "inferenceService": "Inference service",
+            "mixedUse": "Mixed use"
+          }
+        },
+        "hosting": {
+          "label": "Existing hosting plan",
+          "placeholder": "Select",
+          "options": {
+            "haveFacility": "Already have a facility",
+            "needHosting": "Need hosting",
+            "evaluating": "Still evaluating",
+            "other": "Other"
+          }
+        },
+        "budget": {
+          "label": "Budget range",
+          "placeholder": "Select",
+          "options": {
+            "under100k": "Under $100K",
+            "range100k500k": "$100K-$500K",
+            "range500k2m": "$500K-$2M",
+            "above2m": "Above $2M"
+          }
+        }
+      },
+      "validation": {
+        "name": "Please enter a contact name.",
+        "email": "Please enter a valid email address.",
+        "company": "Company name must be 80 characters or fewer.",
+        "messageMin": "Please enter at least 10 characters.",
+        "messageMax": "Please keep the message within 1,000 characters.",
+        "requiredSelection": "Please select a GPU model, quantity, and timeline first."
+      },
+      "summary": {
+        "gpuModel": "GPU model",
+        "notProvided": "Not provided"
+      },
+      "fields": {
+        "name": {
+          "label": "Contact",
+          "placeholder": "Your name"
+        },
+        "email": {
+          "label": "Work email",
+          "placeholder": "name@company.com"
+        },
+        "company": {
+          "label": "Company / team",
+          "placeholder": "Optional"
+        },
+        "message": {
+          "label": "Additional details",
+          "placeholder": "For example: target facility, hosting needs, expected delivery date, payment preferences, or other hardware requirements."
+        }
+      },
+      "email": {
+        "subject": "[Compute Rental] GPU hardware quote - {name}",
+        "name": "Contact: {value}",
+        "email": "Email: {value}",
+        "company": "Company / team: {value}",
+        "requirementsTitle": "Hardware requirements:",
+        "summaryLine": "{label}: {value}",
+        "extraTitle": "Additional details:"
+      },
+      "toast": {
+        "emailDraft": "Email draft created. Please confirm and send it in your email client."
+      }
+    }
   }
 }

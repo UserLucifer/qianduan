@@ -1839,5 +1839,243 @@
       "primaryCta": "开始托管",
       "secondaryCta": "申请数据中心认证"
     }
+  },
+  "Hardware": {
+    "metadata": {
+      "title": "GPU 硬件 | 算力租赁",
+      "description": "通过经过筛选的供应商采购全新或认证翻新 GPU 服务器，并准备好托管上线。"
+    },
+    "hero": {
+      "title": "寻找可以马上产生收益的 GPU",
+      "description": "通过我们筛选过的供应商网络采购全新或认证翻新的 GPU 服务器。每台设备都可以完成压力测试、基准验证，并预配置为平台托管可用状态。",
+      "assurances": [
+        "全新与翻新",
+        "烧机测试",
+        "平台就绪"
+      ]
+    },
+    "steps": {
+      "title": "工作流程",
+      "description": "提交一次需求，我们会从多个供应商获取方案。",
+      "items": [
+        {
+          "title": "告诉我们你的需求",
+          "description": "填写 GPU 型号、数量、设备状态偏好和交付时间，我们会匹配合适的供应商。"
+        },
+        {
+          "title": "我们负责询价和测试",
+          "description": "团队会比较全新和翻新设备方案，并在交付前完成必要的验证流程。"
+        },
+        {
+          "title": "部署并开始托管",
+          "description": "设备通过认证后即可安装客户端并发布到平台，让 GPU 尽快进入可收益状态。"
+        }
+      ]
+    },
+    "value": {
+      "title": "为什么通过平台采购",
+      "description": "GPU 硬件合作方不应只是经销商。我们整合新机和翻新渠道，并以平台托管结果作为验收目标。",
+      "videoLabel": "GPU 硬件采购背景视频",
+      "cards": [
+        {
+          "title": "批量议价",
+          "description": "通过采购规模和供应商关系，为您争取更有竞争力的价格。"
+        },
+        {
+          "title": "平台就绪",
+          "description": "硬件到达时已按平台托管需求准备，安装客户端后即可发布机器。"
+        },
+        {
+          "title": "Vast 认证",
+          "description": "每台设备都可完成 GPU 验证，并附带压力、显存、基准和散热结果。"
+        },
+        {
+          "title": "融资协同",
+          "description": "采购可以与融资方案衔接，帮助您更快扩展 GPU 规模。"
+        }
+      ]
+    },
+    "certification": {
+      "title": "交付内容：平台认证",
+      "description": "每台设备发货前都可以通过我们的 GPU 验证流程，订单会附带认证结果，便于后续托管和运维。",
+      "items": [
+        {
+          "title": "烧机测试",
+          "description": "满载 72 小时压力测试"
+        },
+        {
+          "title": "显存验证",
+          "description": "完整显存检查，无缺陷"
+        },
+        {
+          "title": "基准评分",
+          "description": "性能与参考结果比对"
+        },
+        {
+          "title": "散热剖面",
+          "description": "持续负载下的冷却表现已确认"
+        }
+      ]
+    },
+    "bottomCta": {
+      "title": "准备扩展你的 GPU 资源池了吗？",
+      "description": "通过经过筛选的供应商采购硬件，或了解融资方案来更快扩大规模。",
+      "primaryCta": "了解融资",
+      "secondaryCta": "开始托管"
+    },
+    "quote": {
+      "title": "获取报价",
+      "description": "先整理硬件需求，再生成报价邮件草稿。我们会根据型号、数量和交付窗口提供报价。",
+      "requirementsTitle": "硬件需求",
+      "gpuModelLabel": "GPU 型号",
+      "requiredMark": "*",
+      "continue": "继续",
+      "back": "返回修改",
+      "submit": "生成报价邮件",
+      "gpu": {
+        "options": {
+          "b200": {
+            "label": "B200"
+          },
+          "h200": {
+            "label": "H200",
+            "note": "热门需求"
+          },
+          "h100Sxm": {
+            "label": "H100 SXM",
+            "note": "热门需求"
+          },
+          "h100Pcie": {
+            "label": "H100 PCIe"
+          },
+          "a10080": {
+            "label": "A100 80GB"
+          },
+          "a10040": {
+            "label": "A100 40GB"
+          },
+          "l40s": {
+            "label": "L40S"
+          },
+          "rtx5090": {
+            "label": "RTX 5090",
+            "note": "供应有限"
+          },
+          "rtx4090": {
+            "label": "RTX 4090"
+          },
+          "rtx3090": {
+            "label": "RTX 3090"
+          },
+          "other": {
+            "label": "其他"
+          }
+        }
+      },
+      "selectGroups": {
+        "quantity": {
+          "label": "数量",
+          "placeholder": "请选择",
+          "options": {
+            "qty1_4": "1-4 台",
+            "qty5_16": "5-16 台",
+            "qty17_64": "17-64 台",
+            "qty64Plus": "64 台以上"
+          }
+        },
+        "formFactor": {
+          "label": "形态规格",
+          "placeholder": "请选择",
+          "options": {
+            "fullServer": "整机服务器",
+            "gpuNode": "GPU 节点",
+            "bareCard": "裸卡",
+            "rackConfig": "机柜级配置"
+          }
+        },
+        "timeline": {
+          "label": "时间线",
+          "placeholder": "什么时候需要硬件？",
+          "options": {
+            "immediate": "立即",
+            "weeks2_4": "2-4 周",
+            "months1_2": "1-2 个月",
+            "quarterPlanning": "季度规划"
+          }
+        },
+        "useCase": {
+          "label": "主要使用场景",
+          "placeholder": "请选择",
+          "options": {
+            "hostingYield": "托管收益",
+            "modelTraining": "模型训练",
+            "inferenceService": "推理服务",
+            "mixedUse": "混合用途"
+          }
+        },
+        "hosting": {
+          "label": "现有托管计划",
+          "placeholder": "请选择",
+          "options": {
+            "haveFacility": "已有机房",
+            "needHosting": "需要托管",
+            "evaluating": "正在评估",
+            "other": "其他"
+          }
+        },
+        "budget": {
+          "label": "预算范围",
+          "placeholder": "请选择",
+          "options": {
+            "under100k": "10 万以内",
+            "range100k500k": "10-50 万",
+            "range500k2m": "50-200 万",
+            "above2m": "200 万以上"
+          }
+        }
+      },
+      "validation": {
+        "name": "请输入联系人姓名。",
+        "email": "请输入有效邮箱。",
+        "company": "公司名称不能超过 80 个字。",
+        "messageMin": "请至少输入 10 个字。",
+        "messageMax": "请控制在 1000 字以内。",
+        "requiredSelection": "请先选择 GPU 型号、数量和时间线。"
+      },
+      "summary": {
+        "gpuModel": "GPU 型号",
+        "notProvided": "未填写"
+      },
+      "fields": {
+        "name": {
+          "label": "联系人",
+          "placeholder": "您的姓名"
+        },
+        "email": {
+          "label": "工作邮箱",
+          "placeholder": "name@company.com"
+        },
+        "company": {
+          "label": "公司/团队",
+          "placeholder": "选填"
+        },
+        "message": {
+          "label": "补充说明",
+          "placeholder": "例如：目标机房、是否需要托管、期望交付日期、付款方式或其他硬件要求。"
+        }
+      },
+      "email": {
+        "subject": "[算力租赁] GPU 硬件报价 - {name}",
+        "name": "联系人：{value}",
+        "email": "邮箱：{value}",
+        "company": "公司/团队：{value}",
+        "requirementsTitle": "硬件需求：",
+        "summaryLine": "{label}：{value}",
+        "extraTitle": "补充说明："
+      },
+      "toast": {
+        "emailDraft": "已生成邮件草稿，请在邮件客户端中确认发送。"
+      }
+    }
   }
 }
