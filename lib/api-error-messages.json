@@ -1,0 +1,572 @@
+{
+  "fallback": {
+    "zh-CN": "请求失败，请稍后重试",
+    "en-US": "Request failed. Please try again later."
+  },
+  "codes": {
+    "400": {
+      "zh-CN": "请求参数错误",
+      "en-US": "Invalid request. Check the fields and try again."
+    },
+    "401": {
+      "zh-CN": "未登录或登录已过期",
+      "en-US": "Your session has expired. Please log in again."
+    },
+    "403": {
+      "zh-CN": "无权限访问",
+      "en-US": "You do not have permission to access this resource."
+    },
+    "404": {
+      "zh-CN": "资源不存在",
+      "en-US": "The requested resource was not found."
+    },
+    "422": {
+      "zh-CN": "参数校验失败",
+      "en-US": "Validation failed. Check the submitted fields."
+    },
+    "500": {
+      "zh-CN": "系统异常，请稍后重试",
+      "en-US": "System error. Please try again later."
+    },
+    "10000": {
+      "zh-CN": "业务处理失败",
+      "en-US": "The business request could not be processed."
+    },
+    "10001": {
+      "zh-CN": "余额不足",
+      "en-US": "Insufficient balance."
+    },
+    "10002": {
+      "zh-CN": "重复操作",
+      "en-US": "Duplicate operation."
+    },
+    "10003": {
+      "zh-CN": "请求过于频繁",
+      "en-US": "Too many requests. Please wait and try again."
+    },
+    "10004": {
+      "zh-CN": "请求体格式错误",
+      "en-US": "Invalid request body format."
+    },
+    "10005": {
+      "zh-CN": "缺少必填参数",
+      "en-US": "Required parameters are missing."
+    },
+    "10006": {
+      "zh-CN": "请求参数格式错误",
+      "en-US": "Invalid request parameter format."
+    },
+    "11001": {
+      "zh-CN": "钱包不存在",
+      "en-US": "Wallet not found."
+    },
+    "11002": {
+      "zh-CN": "钱包已禁用",
+      "en-US": "Wallet is disabled."
+    },
+    "11003": {
+      "zh-CN": "金额无效",
+      "en-US": "Invalid amount."
+    },
+    "11004": {
+      "zh-CN": "数据状态已变化，请刷新后重试",
+      "en-US": "Data status changed. Refresh and try again."
+    },
+    "11005": {
+      "zh-CN": "钱包业务类型和业务订单号不能为空",
+      "en-US": "Wallet business type and business order number are required."
+    },
+    "11006": {
+      "zh-CN": "钱包幂等键重复",
+      "en-US": "Duplicate wallet idempotency key."
+    },
+    "20001": {
+      "zh-CN": "邮箱已注册",
+      "en-US": "This email is already registered."
+    },
+    "20002": {
+      "zh-CN": "邮箱未注册",
+      "en-US": "This email is not registered."
+    },
+    "20003": {
+      "zh-CN": "邮箱或密码错误",
+      "en-US": "Incorrect email or password."
+    },
+    "20004": {
+      "zh-CN": "用户已禁用",
+      "en-US": "This account has been disabled."
+    },
+    "20005": {
+      "zh-CN": "邮箱验证码无效或已过期",
+      "en-US": "The verification code is invalid or has expired."
+    },
+    "20006": {
+      "zh-CN": "邮箱验证码发送过于频繁",
+      "en-US": "You're requesting email verification codes too often."
+    },
+    "20007": {
+      "zh-CN": "邮箱验证码尝试次数过多",
+      "en-US": "Too many email verification attempts."
+    },
+    "20008": {
+      "zh-CN": "邮箱验证码限流不可用",
+      "en-US": "Email verification rate limiting is unavailable."
+    },
+    "20009": {
+      "zh-CN": "邮箱验证码尝试限制不可用",
+      "en-US": "Email verification attempt limiting is unavailable."
+    },
+    "20010": {
+      "zh-CN": "邀请码无效",
+      "en-US": "Invalid invite code."
+    },
+    "20011": {
+      "zh-CN": "登录令牌无效",
+      "en-US": "Invalid login token."
+    },
+    "20012": {
+      "zh-CN": "请先登录",
+      "en-US": "Please log in first."
+    },
+    "20013": {
+      "zh-CN": "用户不存在",
+      "en-US": "User not found."
+    },
+    "30001": {
+      "zh-CN": "地区不存在",
+      "en-US": "Region not found."
+    },
+    "30002": {
+      "zh-CN": "GPU 型号不存在",
+      "en-US": "GPU model not found."
+    },
+    "30003": {
+      "zh-CN": "产品不存在",
+      "en-US": "Product not found."
+    },
+    "30004": {
+      "zh-CN": "AI 模型不存在",
+      "en-US": "AI model not found."
+    },
+    "30005": {
+      "zh-CN": "租赁周期规则不存在",
+      "en-US": "Rental cycle rule not found."
+    },
+    "30006": {
+      "zh-CN": "产品所属地区不可用",
+      "en-US": "The product region is unavailable."
+    },
+    "30007": {
+      "zh-CN": "产品 GPU 型号不可用",
+      "en-US": "The product GPU model is unavailable."
+    },
+    "31001": {
+      "zh-CN": "博客文章不存在",
+      "en-US": "Blog post not found."
+    },
+    "31002": {
+      "zh-CN": "博客分类不存在",
+      "en-US": "Blog category not found."
+    },
+    "31003": {
+      "zh-CN": "博客标签不存在",
+      "en-US": "Blog tag not found."
+    },
+    "32001": {
+      "zh-CN": "文档分类存在子分类，不能删除",
+      "en-US": "This document category has child categories and cannot be deleted."
+    },
+    "32002": {
+      "zh-CN": "文档分类存在文章，不能删除",
+      "en-US": "This document category has articles and cannot be deleted."
+    },
+    "32003": {
+      "zh-CN": "文档文章不存在",
+      "en-US": "Document article not found."
+    },
+    "32004": {
+      "zh-CN": "文档分类不存在",
+      "en-US": "Document category not found."
+    },
+    "32005": {
+      "zh-CN": "文档分类父级不能形成循环",
+      "en-US": "Document category parent cannot create a cycle."
+    },
+    "32006": {
+      "zh-CN": "文档分类编码已存在",
+      "en-US": "Document category code already exists."
+    },
+    "32007": {
+      "zh-CN": "文档文章 slug 已存在",
+      "en-US": "Document article slug already exists."
+    },
+    "32008": {
+      "zh-CN": "状态无效",
+      "en-US": "Invalid status."
+    },
+    "32009": {
+      "zh-CN": "发布状态无效",
+      "en-US": "Invalid publish status."
+    },
+    "32010": {
+      "zh-CN": "缺少必填字段",
+      "en-US": "Required fields are missing."
+    },
+    "40001": {
+      "zh-CN": "租赁订单不存在",
+      "en-US": "Rental order not found."
+    },
+    "40002": {
+      "zh-CN": "仅待支付租赁订单可支付",
+      "en-US": "Only pending-payment rental orders can be paid."
+    },
+    "40003": {
+      "zh-CN": "当前租赁订单状态不可取消",
+      "en-US": "The current rental order status cannot be canceled."
+    },
+    "40004": {
+      "zh-CN": "仅待激活租赁订单可支付部署费用",
+      "en-US": "Only pending-activation rental orders can pay deployment fees."
+    },
+    "40005": {
+      "zh-CN": "仅已暂停租赁订单可启动",
+      "en-US": "Only paused rental orders can be started."
+    },
+    "40006": {
+      "zh-CN": "仅运行中或已暂停租赁订单可提前结算",
+      "en-US": "Only running or paused rental orders can be settled early."
+    },
+    "40007": {
+      "zh-CN": "租赁订单正在处理，请稍后重试",
+      "en-US": "Rental order is being processed. Please try again later."
+    },
+    "41001": {
+      "zh-CN": "API 凭证不存在",
+      "en-US": "API credential not found."
+    },
+    "41002": {
+      "zh-CN": "仅已生成的 API 凭证可激活",
+      "en-US": "Only generated API credentials can be activated."
+    },
+    "41003": {
+      "zh-CN": "仅已暂停 API 凭证可启动",
+      "en-US": "Only paused API credentials can be started."
+    },
+    "41004": {
+      "zh-CN": "API 凭证未处于激活中",
+      "en-US": "API credential is not active."
+    },
+    "41005": {
+      "zh-CN": "API 凭证已存在",
+      "en-US": "API credential already exists."
+    },
+    "41101": {
+      "zh-CN": "API 部署订单不存在",
+      "en-US": "API deployment order not found."
+    },
+    "41102": {
+      "zh-CN": "API 部署订单已存在",
+      "en-US": "API deployment order already exists."
+    },
+    "41103": {
+      "zh-CN": "API 部署订单状态已变化",
+      "en-US": "API deployment order status changed."
+    },
+    "41104": {
+      "zh-CN": "API 凭证状态已变化",
+      "en-US": "API credential status changed."
+    },
+    "41201": {
+      "zh-CN": "API Token 明文不能为空",
+      "en-US": "API token plaintext is required."
+    },
+    "41202": {
+      "zh-CN": "API Token 加密失败",
+      "en-US": "API token encryption failed."
+    },
+    "41203": {
+      "zh-CN": "API Token 加密密钥未配置",
+      "en-US": "API token encryption key is not configured."
+    },
+    "42001": {
+      "zh-CN": "收益记录不存在",
+      "en-US": "Earning record not found."
+    },
+    "43001": {
+      "zh-CN": "结算订单不存在",
+      "en-US": "Settlement order not found."
+    },
+    "44001": {
+      "zh-CN": "佣金记录不存在",
+      "en-US": "Commission record not found."
+    },
+    "60001": {
+      "zh-CN": "充值渠道编码重复",
+      "en-US": "Top-up channel code already exists."
+    },
+    "60002": {
+      "zh-CN": "充值渠道已有订单引用，不能删除",
+      "en-US": "Top-up channel has linked orders and cannot be deleted."
+    },
+    "60003": {
+      "zh-CN": "充值金额必须大于 0",
+      "en-US": "Top-up amount must be greater than 0."
+    },
+    "60004": {
+      "zh-CN": "充值金额低于最低金额",
+      "en-US": "Top-up amount is below the minimum."
+    },
+    "60005": {
+      "zh-CN": "充值订单或外部交易号重复",
+      "en-US": "Top-up order or external transaction number is duplicated."
+    },
+    "60006": {
+      "zh-CN": "仅已提交充值订单可取消",
+      "en-US": "Only submitted top-up orders can be canceled."
+    },
+    "60007": {
+      "zh-CN": "仅已提交充值订单可审核通过",
+      "en-US": "Only submitted top-up orders can be approved."
+    },
+    "60008": {
+      "zh-CN": "仅已提交充值订单可驳回",
+      "en-US": "Only submitted top-up orders can be rejected."
+    },
+    "60009": {
+      "zh-CN": "充值订单状态已变化",
+      "en-US": "Top-up order status changed."
+    },
+    "60010": {
+      "zh-CN": "充值渠道不可用",
+      "en-US": "Top-up channel is unavailable."
+    },
+    "60011": {
+      "zh-CN": "充值渠道不存在",
+      "en-US": "Top-up channel not found."
+    },
+    "60012": {
+      "zh-CN": "外部交易号重复",
+      "en-US": "External transaction number already exists."
+    },
+    "60013": {
+      "zh-CN": "充值订单不存在",
+      "en-US": "Top-up order not found."
+    },
+    "60014": {
+      "zh-CN": "最小充值金额不能大于最大充值金额",
+      "en-US": "Minimum top-up amount cannot exceed the maximum."
+    },
+    "60015": {
+      "zh-CN": "充值订单正在处理，请稍后重试",
+      "en-US": "Top-up order is being processed. Please try again later."
+    },
+    "70001": {
+      "zh-CN": "提现地址无效",
+      "en-US": "Invalid withdrawal address."
+    },
+    "70002": {
+      "zh-CN": "提现金额低于最低金额",
+      "en-US": "Withdrawal amount is below the minimum."
+    },
+    "70003": {
+      "zh-CN": "已超过每日提现限额",
+      "en-US": "Daily withdrawal limit exceeded."
+    },
+    "70004": {
+      "zh-CN": "仅待处理提现订单可取消",
+      "en-US": "Only pending withdrawal orders can be canceled."
+    },
+    "70005": {
+      "zh-CN": "仅待处理提现订单可审核通过",
+      "en-US": "Only pending withdrawal orders can be approved."
+    },
+    "70006": {
+      "zh-CN": "仅待处理或已审核提现订单可驳回",
+      "en-US": "Only pending or approved withdrawal orders can be rejected."
+    },
+    "70007": {
+      "zh-CN": "仅已审核提现订单可标记打款",
+      "en-US": "Only approved withdrawal orders can be marked as paid."
+    },
+    "70008": {
+      "zh-CN": "提现订单状态已变化",
+      "en-US": "Withdrawal order status changed."
+    },
+    "70009": {
+      "zh-CN": "提现订单不存在",
+      "en-US": "Withdrawal order not found."
+    },
+    "70010": {
+      "zh-CN": "提现订单正在处理，请稍后重试",
+      "en-US": "Withdrawal order is being processed. Please try again later."
+    },
+    "80001": {
+      "zh-CN": "用户名或密码错误",
+      "en-US": "Incorrect username or password."
+    },
+    "80002": {
+      "zh-CN": "管理员账号已禁用",
+      "en-US": "Admin account is disabled."
+    },
+    "80003": {
+      "zh-CN": "用户名已存在",
+      "en-US": "Username already exists."
+    },
+    "80004": {
+      "zh-CN": "管理员不存在",
+      "en-US": "Admin not found."
+    },
+    "80005": {
+      "zh-CN": "需要管理员令牌",
+      "en-US": "Admin token required."
+    },
+    "80010": {
+      "zh-CN": "缺少系统配置",
+      "en-US": "Missing system configuration."
+    },
+    "80011": {
+      "zh-CN": "系统配置不存在",
+      "en-US": "System configuration not found."
+    },
+    "80012": {
+      "zh-CN": "系统配置更新失败",
+      "en-US": "System configuration update failed."
+    },
+    "80013": {
+      "zh-CN": "管理员日志不存在",
+      "en-US": "Admin log not found."
+    },
+    "80020": {
+      "zh-CN": "通知不存在",
+      "en-US": "Notification not found."
+    }
+  },
+  "aliases": {
+    "an unknown error occurred": {
+      "zh-CN": "请求失败，请稍后重试",
+      "en-US": "Request failed. Please try again later."
+    },
+    "bad credentials": {
+      "zh-CN": "账号或密码错误",
+      "en-US": "Incorrect email or password."
+    },
+    "email already exists": {
+      "zh-CN": "邮箱已被注册",
+      "en-US": "This email is already registered."
+    },
+    "failed to send code": {
+      "zh-CN": "验证码发送失败，请稍后重试",
+      "en-US": "We could not send the verification code. Please try again later."
+    },
+    "failed to send reset code": {
+      "zh-CN": "重置验证码发送失败，请稍后重试",
+      "en-US": "We could not send the reset code. Please try again later."
+    },
+    "forbidden": {
+      "zh-CN": "无权访问该资源",
+      "en-US": "You do not have permission to access this resource."
+    },
+    "invalid credentials": {
+      "zh-CN": "账号或密码错误",
+      "en-US": "Incorrect email or password."
+    },
+    "invalid verification code": {
+      "zh-CN": "验证码错误或已失效",
+      "en-US": "The verification code is incorrect or has expired."
+    },
+    "login failed. please check your credentials.": {
+      "zh-CN": "登录失败，请检查账号或密码",
+      "en-US": "Incorrect email or password."
+    },
+    "network error": {
+      "zh-CN": "网络异常，请检查网络后重试",
+      "en-US": "Network error. Check your connection and try again."
+    },
+    "network timeout": {
+      "zh-CN": "网络连接超时，请检查网络设置",
+      "en-US": "The connection timed out. Check your network and try again."
+    },
+    "not found": {
+      "zh-CN": "请求的资源不存在",
+      "en-US": "The requested resource was not found."
+    },
+    "passwords do not match": {
+      "zh-CN": "两次输入的密码不一致",
+      "en-US": "Passwords do not match."
+    },
+    "registration failed": {
+      "zh-CN": "注册失败，请稍后重试",
+      "en-US": "Registration failed. Please try again later."
+    },
+    "request failed": {
+      "zh-CN": "请求失败，请稍后重试",
+      "en-US": "Request failed. Please try again later."
+    },
+    "request timeout": {
+      "zh-CN": "请求超时，请稍后重试",
+      "en-US": "The request timed out. Please try again later."
+    },
+    "reset failed": {
+      "zh-CN": "密码重置失败，请稍后重试",
+      "en-US": "Password reset failed. Please try again later."
+    },
+    "token expired": {
+      "zh-CN": "登录已过期，请重新登录",
+      "en-US": "Your session has expired. Please log in again."
+    },
+    "unauthorized": {
+      "zh-CN": "登录已过期，请重新登录",
+      "en-US": "Your session has expired. Please log in again."
+    },
+    "user not found": {
+      "zh-CN": "用户不存在",
+      "en-US": "User not found."
+    },
+    "password invalid": {
+      "zh-CN": "密码输入有误",
+      "en-US": "The password is invalid."
+    },
+    "system busy": {
+      "zh-CN": "系统繁忙，请稍后再试",
+      "en-US": "The system is busy. Please try again later."
+    },
+    "admin system error": {
+      "zh-CN": "管理后台系统异常",
+      "en-US": "Admin system error. Please try again later."
+    }
+  },
+  "keywordAliases": [
+    {
+      "keyword": "timeout",
+      "alias": "request timeout"
+    },
+    {
+      "keyword": "verification code",
+      "alias": "invalid verification code"
+    },
+    {
+      "keyword": "password",
+      "alias": "password invalid"
+    },
+    {
+      "keyword": "credential",
+      "alias": "invalid credentials"
+    },
+    {
+      "keyword": "unauthorized",
+      "alias": "unauthorized"
+    },
+    {
+      "keyword": "forbidden",
+      "alias": "forbidden"
+    },
+    {
+      "keyword": "not found",
+      "alias": "not found"
+    },
+    {
+      "keyword": "network",
+      "alias": "network error"
+    }
+  ]
+}

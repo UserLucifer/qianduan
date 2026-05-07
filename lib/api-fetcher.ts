@@ -11,15 +11,16 @@ import { clearUserAuthSession, getUserAccessToken } from "@/lib/auth-session";
 import { getClientLocale, localizePathname, stripLocaleFromPathname } from "@/i18n/locales";
 
 /**
- * 通用 Fetcher 函数，为 Spring Boot 后端设计
- * 包含 Authorization: Bearer <token>
+ * Shared fetcher for the Spring Boot backend.
+ * Adds Authorization: Bearer <token> when a user token is available.
  */
 export async function apiFetcher<T>(url: string, options: RequestInit = {}): Promise<T> {
   const token = getUserAccessToken();
+  const locale = getClientLocale();
 
   const defaultHeaders: Record<string, string> = {
     'Content-Type': 'application/json',
-    'Accept-Language': getClientLocale(),
+    'Accept-Language': locale,
   };
 
   if (token) {
@@ -51,11 +52,12 @@ export async function apiFetcher<T>(url: string, options: RequestInit = {}): Pro
       message: responseData.message,
       data: responseData.data,
       response: responseData,
+      locale,
     });
   }
 
   if (!response.ok) {
-    // 处理常见的 HTTP 错误
+    // Handle common HTTP errors.
     if (shouldClearAuthSession(undefined, response.status) && typeof window !== "undefined") {
       clearUserAuthSession();
       if (stripLocaleFromPathname(window.location.pathname) !== "/login") {
@@ -71,9 +73,10 @@ export async function apiFetcher<T>(url: string, options: RequestInit = {}): Pro
           responseData && typeof responseData === "object" && "message" in responseData
             ? String(responseData.message)
             : undefined,
-      }),
+      }, locale),
       data: responseData,
       response: responseData,
+      locale,
     });
   }
 

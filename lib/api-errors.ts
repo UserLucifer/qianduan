@@ -1,3 +1,6 @@
+import { defaultLocale, normalizeLocale, type AppLocale } from "@/i18n/locales";
+import apiErrorMessages from "@/lib/api-error-messages.json";
+
 export type ApiErrorKind =
   | "auth"
   | "permission"
@@ -22,6 +25,7 @@ export type ApiClientErrorOptions = {
   data?: unknown;
   response?: unknown;
   cause?: unknown;
+  locale?: string;
 };
 
 export class ApiClientError extends Error {
@@ -33,7 +37,7 @@ export class ApiClientError extends Error {
   isApiClientError = true;
 
   constructor(options: ApiClientErrorOptions) {
-    const message = getApiErrorMessage(options);
+    const message = getApiErrorMessage(options, options.locale);
     super(message);
     this.name = "ApiClientError";
     this.code = options.code;
@@ -52,117 +56,69 @@ const LEGACY_SUCCESS_CODE = 200;
 
 export const AUTH_EXPIRED_CODES = new Set([401, 20011, 20012, 80004]);
 
-export const API_ERROR_MESSAGES: Record<number, string> = {
-  400: "请求参数错误",
-  401: "未登录或登录已过期",
-  403: "无权限访问",
-  404: "资源不存在",
-  422: "参数校验失败",
-  500: "系统异常，请稍后重试",
-  10000: "业务处理失败",
-  10001: "余额不足",
-  10002: "重复操作",
-  10003: "请求过于频繁",
-  10004: "请求体格式错误",
-  10005: "缺少必填参数",
-  10006: "请求参数格式错误",
-  11001: "钱包不存在",
-  11002: "钱包已禁用",
-  11003: "金额无效",
-  11004: "数据状态已变化，请刷新后重试",
-  11005: "钱包业务类型和业务订单号不能为空",
-  11006: "钱包幂等键重复",
-  20001: "邮箱已注册",
-  20002: "邮箱未注册",
-  20003: "邮箱或密码错误",
-  20004: "用户已禁用",
-  20005: "邮箱验证码无效或已过期",
-  20006: "邮箱验证码发送过于频繁",
-  20007: "邮箱验证码尝试次数过多",
-  20008: "邮箱验证码限流不可用",
-  20009: "邮箱验证码尝试限制不可用",
-  20010: "邀请码无效",
-  20011: "登录令牌无效",
-  20012: "请先登录",
-  20013: "用户不存在",
-  30001: "地区不存在",
-  30002: "GPU 型号不存在",
-  30003: "产品不存在",
-  30004: "AI 模型不存在",
-  30005: "租赁周期规则不存在",
-  30006: "产品所属地区不可用",
-  30007: "产品 GPU 型号不可用",
-  31001: "博客文章不存在",
-  31002: "博客分类不存在",
-  31003: "博客标签不存在",
-  32001: "文档分类存在子分类，不能删除",
-  32002: "文档分类存在文章，不能删除",
-  32003: "文档文章不存在",
-  32004: "文档分类不存在",
-  32005: "文档分类父级不能形成循环",
-  32006: "文档分类编码已存在",
-  32007: "文档文章 slug 已存在",
-  32008: "状态无效",
-  32009: "发布状态无效",
-  32010: "缺少必填字段",
-  40001: "租赁订单不存在",
-  40002: "仅待支付租赁订单可支付",
-  40003: "当前租赁订单状态不可取消",
-  40004: "仅待激活租赁订单可支付部署费用",
-  40005: "仅已暂停租赁订单可启动",
-  40006: "仅运行中或已暂停租赁订单可提前结算",
-  40007: "租赁订单正在处理，请稍后重试",
-  41001: "API 凭证不存在",
-  41002: "仅已生成的 API 凭证可激活",
-  41003: "仅已暂停 API 凭证可启动",
-  41004: "API 凭证未处于激活中",
-  41005: "API 凭证已存在",
-  41101: "API 部署订单不存在",
-  41102: "API 部署订单已存在",
-  41103: "API 部署订单状态已变化",
-  41104: "API 凭证状态已变化",
-  41201: "API Token 明文不能为空",
-  41202: "API Token 加密失败",
-  41203: "API Token 加密密钥未配置",
-  42001: "收益记录不存在",
-  43001: "结算订单不存在",
-  44001: "佣金记录不存在",
-  60001: "充值渠道编码重复",
-  60002: "充值渠道已有订单引用，不能删除",
-  60003: "充值金额必须大于 0",
-  60004: "充值金额低于最低金额",
-  60005: "充值订单或外部交易号重复",
-  60006: "仅已提交充值订单可取消",
-  60007: "仅已提交充值订单可审核通过",
-  60008: "仅已提交充值订单可驳回",
-  60009: "充值订单状态已变化",
-  60010: "充值渠道不可用",
-  60011: "充值渠道不存在",
-  60012: "外部交易号重复",
-  60013: "充值订单不存在",
-  60014: "最小充值金额不能大于最大充值金额",
-  60015: "充值订单正在处理，请稍后重试",
-  70001: "提现地址无效",
-  70002: "提现金额低于最低金额",
-  70003: "已超过每日提现限额",
-  70004: "仅待处理提现订单可取消",
-  70005: "仅待处理提现订单可审核通过",
-  70006: "仅待处理或已审核提现订单可驳回",
-  70007: "仅已审核提现订单可标记打款",
-  70008: "提现订单状态已变化",
-  70009: "提现订单不存在",
-  70010: "提现订单正在处理，请稍后重试",
-  80001: "用户名或密码错误",
-  80002: "管理员账号已禁用",
-  80003: "用户名已存在",
-  80004: "管理员不存在",
-  80005: "需要管理员令牌",
-  80010: "缺少系统配置",
-  80011: "系统配置不存在",
-  80012: "系统配置更新失败",
-  80013: "管理员日志不存在",
-  80020: "通知不存在",
-};
+type LocalizedMessage = Record<AppLocale, string>;
+
+const fallbackMessages = apiErrorMessages.fallback as LocalizedMessage;
+const codeMessages = apiErrorMessages.codes as Record<string, LocalizedMessage>;
+const aliasMessages = apiErrorMessages.aliases as Record<string, LocalizedMessage>;
+const keywordAliases = apiErrorMessages.keywordAliases as Array<{ keyword: string; alias: string }>;
+
+const directMessages = Object.values(codeMessages).reduce<Record<string, LocalizedMessage>>((acc, message) => {
+  acc[message["zh-CN"]] = message;
+  acc[message["en-US"]] = message;
+  return acc;
+}, {});
+
+Object.values(aliasMessages).forEach((message) => {
+  directMessages[message["zh-CN"]] = message;
+  directMessages[message["en-US"]] = message;
+});
+
+function normalizeApiErrorLocale(locale: string | null | undefined): AppLocale {
+  return normalizeLocale(locale);
+}
+
+function readLocalizedMessage(message: LocalizedMessage | undefined, locale: AppLocale): string | undefined {
+  return message?.[locale] ?? message?.[defaultLocale];
+}
+
+export const API_ERROR_MESSAGES: Record<number, string> = Object.fromEntries(
+  Object.entries(codeMessages).map(([code, message]) => [Number(code), readLocalizedMessage(message, defaultLocale) ?? ""]),
+) as Record<number, string>;
+
+export function getApiErrorFallbackMessage(locale?: string | null): string {
+  return readLocalizedMessage(fallbackMessages, normalizeApiErrorLocale(locale)) ?? fallbackMessages[defaultLocale];
+}
+
+export function translateApiErrorMessage(message: string | null | undefined, locale?: string | null): string {
+  const language = normalizeApiErrorLocale(locale);
+  const trimmed = message?.trim();
+  if (!trimmed) return getApiErrorFallbackMessage(language);
+
+  const exactMessage = directMessages[trimmed];
+  const exactTranslation = readLocalizedMessage(exactMessage, language);
+  if (exactTranslation) return exactTranslation;
+
+  const normalized = trimmed.toLowerCase();
+  const aliasTranslation = readLocalizedMessage(aliasMessages[normalized], language);
+  if (aliasTranslation) return aliasTranslation;
+
+  const statusMatch = normalized.match(/^http error! status: (\d{3})$/);
+  if (statusMatch) {
+    return readLocalizedMessage(codeMessages[statusMatch[1]], language) ?? getApiErrorFallbackMessage(language);
+  }
+
+  const keywordAlias = keywordAliases.find(({ keyword }) => normalized.includes(keyword));
+  if (keywordAlias) {
+    return readLocalizedMessage(aliasMessages[keywordAlias.alias], language) ?? getApiErrorFallbackMessage(language);
+  }
+
+  if (/[\u4e00-\u9fff]/.test(trimmed) && language !== defaultLocale) {
+    return getApiErrorFallbackMessage(language);
+  }
+
+  return /[A-Za-z]/.test(trimmed) ? getApiErrorFallbackMessage(language) : trimmed;
+}
 
 export function isApiResponseLike(value: unknown): value is ApiResponseLike {
   return (
@@ -200,20 +156,21 @@ export function getApiErrorMessage(options: {
   code?: number;
   status?: number;
   message?: string;
-}): string {
-  if (options.code && API_ERROR_MESSAGES[options.code]) {
-    return API_ERROR_MESSAGES[options.code];
+}, locale?: string | null): string {
+  const language = normalizeApiErrorLocale(locale);
+  if (options.code && codeMessages[String(options.code)]) {
+    return readLocalizedMessage(codeMessages[String(options.code)], language) ?? getApiErrorFallbackMessage(language);
   }
-  if (options.status && API_ERROR_MESSAGES[options.status]) {
-    return API_ERROR_MESSAGES[options.status];
+  if (options.status && codeMessages[String(options.status)]) {
+    return readLocalizedMessage(codeMessages[String(options.status)], language) ?? getApiErrorFallbackMessage(language);
   }
   if (options.message?.trim()) {
-    return options.message.trim();
+    return translateApiErrorMessage(options.message, language);
   }
   if (options.status && options.status >= 500) {
-    return API_ERROR_MESSAGES[500];
+    return readLocalizedMessage(codeMessages["500"], language) ?? getApiErrorFallbackMessage(language);
   }
-  return "请求失败，请稍后重试";
+  return getApiErrorFallbackMessage(language);
 }
 
 export function createApiClientError(options: ApiClientErrorOptions): ApiClientError {
@@ -230,7 +187,7 @@ export function getValidationErrors(data: unknown): Record<string, string> {
     (acc, [key, value]) => {
       if (typeof value === "string") acc[key] = value;
       else if (Array.isArray(value) && value.every((item) => typeof item === "string")) {
-        acc[key] = value.join("，");
+        acc[key] = value.join(", ");
       }
       return acc;
     },

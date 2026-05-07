@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Check, ChevronDown, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function DocsCopyButton() {
+  const t = useTranslations("Docs");
   const [copied, setCopied] = useState(false);
 
   const copyPage = async () => {
@@ -22,7 +24,7 @@ export function DocsCopyButton() {
       onClick={copyPage}
     >
       {copied ? <Check className="h-4 w-4 text-[#4770FF]" /> : <Copy className="h-4 w-4" />}
-      {copied ? "已复制" : "复制页面"}
+      {copied ? t("copied") : t("copyPage")}
       <span className="ml-1 border-l border-border pl-2">
         <ChevronDown className="h-3.5 w-3.5" />
       </span>

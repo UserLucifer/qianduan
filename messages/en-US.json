@@ -1399,6 +1399,19 @@
       "empty": "No unread notifications."
     }
   },
+  "DashboardLegacy": {
+    "revenueChart": {
+      "title": "Revenue trend",
+      "description": "Monthly revenue movement over the past 12 months",
+      "currentPeriod": "Current period"
+    },
+    "statsCards": {
+      "totalRevenue": "Total revenue",
+      "totalOrders": "Total orders",
+      "activeVisitors": "Active visitors",
+      "refundRate": "Refund rate"
+    }
+  },
   "DocsMetadata": {
     "guide": {
       "title": "Guides | Compute Rental Docs",
@@ -1978,6 +1991,8 @@
     "systemHome": "System home",
     "pricing": "Pricing",
     "blog": "Blog",
+    "copyPage": "Copy page",
+    "copied": "Copied",
     "docsNav": "Docs navigation",
     "docsCenter": "Documentation",
     "views": "{count} views",
@@ -6650,7 +6665,28 @@
     "IN": "Credit",
     "OUT": "Debit",
     "FREEZE": "Frozen",
-    "UNFREEZE": "Unfrozen"
+    "UNFREEZE": "Unfrozen",
+    "RECHARGE": "Top-up",
+    "WITHDRAW": "Withdrawal",
+    "RENT_PAY": "Rental payment",
+    "API_DEPLOY_FEE": "API deployment",
+    "RENT_PROFIT": "Rental earnings",
+    "COMMISSION_PROFIT": "Commission earnings",
+    "SETTLEMENT": "Settlement",
+    "EARLY_PENALTY": "Early settlement penalty",
+    "REFUND": "Refund",
+    "ADJUST": "Balance adjustment",
+    "SYSTEM": "System notification",
+    "ANNOUNCEMENT": "Announcement",
+    "ALERT": "Risk alert",
+    "ORDER": "Order notification",
+    "FINANCE": "Finance notification",
+    "FINANCIAL": "Finance notification",
+    "PROFIT": "Earnings notification",
+    "BLOG": "Blog update",
+    "EXPIRE": "Expiry settlement",
+    "EARLY_TERMINATE": "Early settlement",
+    "MANUAL": "Manual settlement"
   },
   "DashboardApi": {
     "header": {

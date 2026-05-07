@@ -6,6 +6,7 @@ import {
   isApiResponseLike,
   isSuccessApiCode,
   shouldClearAuthSession,
+  translateApiErrorMessage,
 } from "@/lib/api-errors";
 import { clearUserAuthSession, getUserAccessToken } from "@/lib/auth-session";
 import { getClientLocale, localizePathname, stripLocaleFromPathname } from "@/i18n/locales";
@@ -53,6 +54,7 @@ function handleApiResponse(response: { data: unknown; status: number }, scope: C
   if (!isApiResponseLike(payload) || isSuccessApiCode(payload.code)) {
     return payload;
   }
+  const locale = getClientLocale();
 
   const error = createApiClientError({
     code: payload.code,
@@ -60,6 +62,7 @@ function handleApiResponse(response: { data: unknown; status: number }, scope: C
     message: payload.message,
     data: payload.data,
     response: payload,
+    locale,
   });
 
   if (shouldClearAuthSession(error.code, error.status)) {
@@ -72,6 +75,8 @@ function handleApiResponse(response: { data: unknown; status: number }, scope: C
 }
 
 function handleAxiosError(error: unknown, scope: ClientScope, fallbackMessage: string) {
+  const locale = getClientLocale();
+
   if (axios.isAxiosError(error)) {
     const status = error.response?.status;
     const payload = error.response?.data;
@@ -84,6 +89,7 @@ function handleAxiosError(error: unknown, scope: ClientScope, fallbackMessage: s
         data: payload.data,
         response: payload,
         cause: error,
+        locale,
       });
 
       if (shouldClearAuthSession(apiError.code, apiError.status)) {
@@ -97,14 +103,15 @@ function handleAxiosError(error: unknown, scope: ClientScope, fallbackMessage: s
 
     const message =
       error.request && !error.response
-        ? "网络连接超时，请检查网络设置"
-        : getApiErrorMessage({ status, message: fallbackMessage });
+        ? translateApiErrorMessage("network timeout", locale)
+        : getApiErrorMessage({ status, message: fallbackMessage }, locale);
     const apiError = createApiClientError({
       status,
       message,
       data: payload,
       response: payload,
       cause: error,
+      locale,
     });
 
     if (shouldClearAuthSession(apiError.code, apiError.status)) {
@@ -116,11 +123,11 @@ function handleAxiosError(error: unknown, scope: ClientScope, fallbackMessage: s
     return Promise.reject(apiError);
   }
 
-  notifyError(fallbackMessage);
+  notifyError(translateApiErrorMessage(fallbackMessage, locale));
   return Promise.reject(error);
 }
 
-// 1. 用户端 Axios 实例
+// User-facing Axios instance.
 const userAxiosClient = axios.create(baseConfig);
 
 userAxiosClient.interceptors.request.use(
@@ -142,11 +149,11 @@ userAxiosClient.interceptors.response.use(
     return handleApiResponse(response, "user") as never;
   },
   (error) => {
-    return handleAxiosError(error, "user", "系统繁忙，请稍后再试");
+    return handleAxiosError(error, "user", "system busy");
   },
 );
 
-// 2. 管理端 Axios 实例
+// Admin Axios instance.
 export const adminAxiosClient = axios.create(baseConfig);
 
 adminAxiosClient.interceptors.request.use(
@@ -168,7 +175,7 @@ adminAxiosClient.interceptors.response.use(
     return handleApiResponse(response, "admin") as never;
   },
   (error) => {
-    return handleAxiosError(error, "admin", "管理后台系统异常");
+    return handleAxiosError(error, "admin", "admin system error");
   },
 );
 

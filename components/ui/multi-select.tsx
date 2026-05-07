@@ -51,7 +51,7 @@ export function MultiSelect({ options, selected, onChange, placeholder, classNam
       </div>
       <Select onValueChange={handleSelect}>
         <SelectTrigger className="h-9 bg-background text-foreground">
-          <SelectValue placeholder={placeholder || "请选择..."} />
+          <SelectValue placeholder={placeholder || "Select..."} />
         </SelectTrigger>
         <SelectContent>
           {options.map((option) => (

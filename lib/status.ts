@@ -1,3 +1,17 @@
+import {
+  CommonStatus,
+  RentalOrderStatus,
+  RechargeOrderStatus,
+  WithdrawOrderStatus,
+  ApiTokenStatus,
+  ApiDeployOrderStatus,
+  ProfitStatus,
+  RentalOrderSettlementStatus,
+  WalletBusinessType,
+  WalletTransactionType,
+  RentalSettlementType,
+} from "@/types/enums";
+
 export type StatusTone =
   | "neutral"
   | "success"
@@ -11,76 +25,71 @@ export interface StatusMeta {
   tone: StatusTone;
 }
 
-import {
-  CommonStatus,
-  RentalOrderStatus,
-  RechargeOrderStatus,
-  WithdrawOrderStatus,
-  ApiTokenStatus,
-  ApiDeployOrderStatus,
-  ProfitStatus,
-  RentalOrderSettlementStatus,
-  WalletBusinessType,
-  WalletTransactionType,
-  RentalSettlementType
-} from "@/types/enums";
+export type StatusTranslator = ((key: string) => string) & {
+  has?: (key: string) => boolean;
+};
 
 const STATUS_MAP: Record<string, StatusMeta> = {
-  [CommonStatus.ENABLED.toString()]: { label: "已启用", tone: "success" },
-  [CommonStatus.DISABLED.toString()]: { label: "已禁用", tone: "neutral" },
+  [CommonStatus.ENABLED.toString()]: { label: "Enabled", tone: "success" },
+  [CommonStatus.DISABLED.toString()]: { label: "Disabled", tone: "neutral" },
 
-  // --- Shared / Overlapping Statuses ---
-  // Many enums share these string values (RUNNING, PAUSED, SETTLED, etc.)
-  // We map them here to avoid duplicate keys in the object literal.
-  ["RUNNING"]: { label: "运行中/产生中", tone: "success" },
-  ["PAUSED"]: { label: "已暂停", tone: "neutral" },
-  ["SETTLED"]: { label: "已结算", tone: "success" },
-  ["SETTLING"]: { label: "结算中", tone: "warning" },
-  ["CANCELED"]: { label: "已取消", tone: "danger" },
+  // Shared enum values that appear across several backend models.
+  RUNNING: { label: "Running", tone: "success" },
+  PAUSED: { label: "Paused", tone: "neutral" },
+  SETTLED: { label: "Settled", tone: "success" },
+  SETTLING: { label: "Settling", tone: "warning" },
+  CANCELED: { label: "Canceled", tone: "danger" },
 
-  // Rental Order Specific
-  [RentalOrderStatus.PENDING_PAY]: { label: "待支付", tone: "warning" },
-  [RentalOrderStatus.PAID]: { label: "已支付", tone: "success" },
-  [RentalOrderStatus.PENDING_ACTIVATION]: { label: "待激活", tone: "warning" },
-  [RentalOrderStatus.ACTIVATING]: { label: "激活中", tone: "warning" },
-  [RentalOrderStatus.EXPIRED]: { label: "已到期", tone: "danger" },
-  [RentalOrderStatus.EARLY_CLOSED]: { label: "提前结束", tone: "neutral" },
+  [RentalOrderStatus.PENDING_PAY]: { label: "Pending payment", tone: "warning" },
+  [RentalOrderStatus.PAID]: { label: "Paid", tone: "success" },
+  [RentalOrderStatus.PENDING_ACTIVATION]: { label: "Pending activation", tone: "warning" },
+  [RentalOrderStatus.ACTIVATING]: { label: "Activating", tone: "warning" },
+  [RentalOrderStatus.EXPIRED]: { label: "Expired", tone: "danger" },
+  [RentalOrderStatus.EARLY_CLOSED]: { label: "Closed early", tone: "neutral" },
 
-  // Profit Specific
-  [ProfitStatus.NOT_STARTED]: { label: "未开始", tone: "neutral" },
-  [ProfitStatus.FINISHED]: { label: "已结束", tone: "success" },
+  [ProfitStatus.NOT_STARTED]: { label: "Not started", tone: "neutral" },
+  [ProfitStatus.FINISHED]: { label: "Finished", tone: "success" },
 
-  // Settlement Specific
-  [RentalOrderSettlementStatus.UNSETTLED]: { label: "未结算", tone: "neutral" },
+  [RentalOrderSettlementStatus.UNSETTLED]: { label: "Unsettled", tone: "neutral" },
 
-  // Others
-  [RechargeOrderStatus.SUBMITTED]: { label: "待审核", tone: "warning" },
-  [RechargeOrderStatus.APPROVED]: { label: "已通过", tone: "success" },
-  [RechargeOrderStatus.REJECTED]: { label: "已拒绝", tone: "danger" },
+  [RechargeOrderStatus.SUBMITTED]: { label: "Submitted", tone: "warning" },
+  [RechargeOrderStatus.APPROVED]: { label: "Approved", tone: "success" },
+  [RechargeOrderStatus.REJECTED]: { label: "Rejected", tone: "danger" },
 
-  [WithdrawOrderStatus.PENDING_REVIEW]: { label: "待审核", tone: "warning" },
+  [WithdrawOrderStatus.PENDING_REVIEW]: { label: "Pending review", tone: "warning" },
 
-  [ApiTokenStatus.GENERATED]: { label: "已生成", tone: "neutral" },
-  [ApiTokenStatus.ACTIVE]: { label: "正常", tone: "success" },
-  [ApiTokenStatus.REVOKED]: { label: "已撤销", tone: "danger" },
+  [ApiTokenStatus.GENERATED]: { label: "Generated", tone: "neutral" },
+  [ApiTokenStatus.ACTIVE]: { label: "Active", tone: "success" },
+  [ApiTokenStatus.REVOKED]: { label: "Revoked", tone: "danger" },
 
-  [ApiDeployOrderStatus.REFUNDED]: { label: "已退款", tone: "neutral" },
+  [ApiDeployOrderStatus.REFUNDED]: { label: "Refunded", tone: "neutral" },
 
-  "NORMAL": { label: "正常", tone: "success" },
-  "ABNORMAL": { label: "异常", tone: "danger" },
-  "INACTIVE": { label: "未启用", tone: "neutral" },
-  "DEPLOYING": { label: "部署中", tone: "info" },
-  "COMPLETED": { label: "已完成", tone: "success" },
+  NORMAL: { label: "Normal", tone: "success" },
+  ABNORMAL: { label: "Abnormal", tone: "danger" },
+  INACTIVE: { label: "Inactive", tone: "neutral" },
+  DEPLOYING: { label: "Deploying", tone: "info" },
+  COMPLETED: { label: "Completed", tone: "success" },
 };
 
 const NUMERIC_STATUS_MAP: Record<number, StatusMeta> = {
-  0: { label: "已禁用", tone: "neutral" },
-  1: { label: "已启用", tone: "success" },
+  0: { label: "Disabled", tone: "neutral" },
+  1: { label: "Enabled", tone: "success" },
 };
 
-/**
- * Generic status meta getter
- */
+function hasTranslation(t: StatusTranslator | undefined, key: string): boolean {
+  return Boolean(t?.has?.(key));
+}
+
+function translateLabel(key: string, fallback: string, t?: StatusTranslator): string {
+  return t && hasTranslation(t, key) ? t(key) : fallback;
+}
+
+function normalizeStatusKey(status: string | number | boolean | null | undefined): string {
+  if (typeof status === "boolean") return status ? "1" : "0";
+  if (status === null || status === undefined || status === "") return "";
+  return String(status);
+}
+
 export function getStatusMeta(status: string | number | boolean | null | undefined): StatusMeta {
   if (typeof status === "boolean") return NUMERIC_STATUS_MAP[status ? 1 : 0];
   if (typeof status === "number") return NUMERIC_STATUS_MAP[status] ?? { label: String(status), tone: "neutral" };
@@ -88,86 +97,63 @@ export function getStatusMeta(status: string | number | boolean | null | undefin
   return STATUS_MAP[status] ?? { label: status, tone: "neutral" };
 }
 
-/**
- * Rental Order Status Helpers
- */
-export function getRentalOrderLabel(status: RentalOrderStatus): string {
-  return STATUS_MAP[status]?.label || status;
+export function getStatusLabel(
+  status: string | number | boolean | null | undefined,
+  t?: StatusTranslator,
+): string {
+  const key = normalizeStatusKey(status);
+  if (!key) return "-";
+  return translateLabel(key, getStatusMeta(status).label, t);
 }
+
+export function getRentalOrderLabel(status: RentalOrderStatus, t?: StatusTranslator): string {
+  return getStatusLabel(status, t);
+}
+
 export function getRentalOrderTone(status: RentalOrderStatus): StatusTone {
   return STATUS_MAP[status]?.tone || "neutral";
 }
 export const getRentalOrderColor = getRentalOrderTone;
 
-/**
- * Profit Status Helpers
- */
-export function getProfitStatusLabel(status: ProfitStatus): string {
-  return STATUS_MAP[status]?.label || status;
+export function getProfitStatusLabel(status: ProfitStatus, t?: StatusTranslator): string {
+  return getStatusLabel(status, t);
 }
+
 export function getProfitStatusTone(status: ProfitStatus): StatusTone {
   return STATUS_MAP[status]?.tone || "neutral";
 }
 export const getProfitStatusColor = getProfitStatusTone;
 
-/**
- * Settlement Status Helpers
- */
-export function getSettlementStatusLabel(status: RentalOrderSettlementStatus): string {
-  return STATUS_MAP[status]?.label || status;
+export function getSettlementStatusLabel(status: RentalOrderSettlementStatus, t?: StatusTranslator): string {
+  return getStatusLabel(status, t);
 }
+
 export function getSettlementStatusTone(status: RentalOrderSettlementStatus): StatusTone {
   return STATUS_MAP[status]?.tone || "neutral";
 }
 export const getSettlementStatusColor = getSettlementStatusTone;
 
-export function bizTypeLabel(type: string | null | undefined): string {
-  const labels: Record<string, string> = {
-    [WalletBusinessType.RECHARGE]: "充值",
-    [WalletBusinessType.WITHDRAW]: "提现",
-    [WalletBusinessType.RENT_PAY]: "租赁支付",
-    [WalletBusinessType.API_DEPLOY_FEE]: "API 部署",
-    [WalletBusinessType.RENT_PROFIT]: "租赁收益",
-    [WalletBusinessType.COMMISSION_PROFIT]: "佣金收益",
-    [WalletBusinessType.SETTLEMENT]: "结算",
-    [WalletBusinessType.EARLY_PENALTY]: "提前结算违约金",
-    [WalletBusinessType.REFUND]: "退款",
-    [WalletBusinessType.ADJUST]: "调账",
-  };
+function labelForType(type: string | null | undefined, t?: StatusTranslator): string {
   if (!type) return "-";
-  return labels[type] ?? type;
+  return translateLabel(type, type, t);
 }
 
-export function txTypeLabel(type: string | null | undefined): string {
-  const labels: Record<string, string> = {
-    [WalletTransactionType.IN]: "入账",
-    [WalletTransactionType.OUT]: "支出",
-    [WalletTransactionType.FREEZE]: "冻结",
-    [WalletTransactionType.UNFREEZE]: "解冻",
-  };
-  if (!type) return "-";
-  return labels[type] ?? type;
+export function bizTypeLabel(type: string | null | undefined, t?: StatusTranslator): string {
+  return labelForType(type, t);
 }
 
-export function notificationTypeLabel(type: string | null | undefined): string {
-  const labels: Record<string, string> = {
-    "SYSTEM": "系统通知",
-    "ANNOUNCEMENT": "公告",
-    "ALERT": "风险提醒",
-    "ORDER": "订单通知",
-    "FINANCE": "财务通知",
-    "PROFIT": "收益通知",
-  };
-  if (!type) return "-";
-  return labels[type] ?? type;
+export function txTypeLabel(type: string | null | undefined, t?: StatusTranslator): string {
+  return labelForType(type, t);
 }
 
-export function settlementTypeLabel(type: string | null | undefined): string {
-  const labels: Record<string, string> = {
-    [RentalSettlementType.EXPIRE]: "到期结算",
-    [RentalSettlementType.EARLY_TERMINATE]: "提前结算",
-    [RentalSettlementType.MANUAL]: "人工结算",
-  };
-  if (!type) return "-";
-  return labels[type] ?? type;
+export function notificationTypeLabel(type: string | null | undefined, t?: StatusTranslator): string {
+  return labelForType(type, t);
 }
+
+export function settlementTypeLabel(type: string | null | undefined, t?: StatusTranslator): string {
+  return labelForType(type, t);
+}
+
+export const walletBusinessTypeKeys = Object.values(WalletBusinessType);
+export const walletTransactionTypeKeys = Object.values(WalletTransactionType);
+export const rentalSettlementTypeKeys = Object.values(RentalSettlementType);

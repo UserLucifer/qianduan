@@ -41,6 +41,7 @@ const txFiltersInitial: TxFilters = { userId: "", walletNo: "", txType: "", bizT
 
 export default function AdminWalletsPage() {
   const t = useTranslations("AdminPages.wallets");
+  const statusT = useTranslations("Status");
   const [walletFilters, setWalletFilters] = useState<WalletFilters>(walletFiltersInitial);
   const [txFilters, setTxFilters] = useState<TxFilters>(txFiltersInitial);
   const [detail, setDetail] = useState<UserWallet | null>(null);
@@ -102,8 +103,8 @@ export default function AdminWalletsPage() {
 
   const txColumns: DataTableColumn<WalletTransactionResponse>[] = [
     { key: "txNo", title: t("transactionNo"), render: (row) => formatEmpty(row.txNo) },
-    { key: "txType", title: t("transactionType"), render: (row) => txTypeLabel(row.txType) },
-    { key: "bizType", title: t("businessType"), render: (row) => bizTypeLabel(row.bizType) },
+    { key: "txType", title: t("transactionType"), render: (row) => txTypeLabel(row.txType, statusT) },
+    { key: "bizType", title: t("businessType"), render: (row) => bizTypeLabel(row.bizType, statusT) },
     { key: "amount", title: t("amount"), render: (row) => <MoneyText value={row.amount} signed /> },
     { key: "bizOrderNo", title: t("businessNo"), render: (row) => formatEmpty(row.bizOrderNo) },
     { key: "createdAt", title: t("time"), render: (row) => <DateTimeText value={row.createdAt} /> },

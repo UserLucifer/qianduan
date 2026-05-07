@@ -36,6 +36,7 @@ const initialQuery: AdminSettlementOrderQuery = { pageNo: 1, pageSize: 10 };
 
 export default function AdminSettlementsPage() {
   const t = useTranslations("AdminPages.settlements");
+  const statusT = useTranslations("Status");
   const [filters, setFilters] = useState<SettlementFilters>(initialFilters);
   const [detail, setDetail] = useState<SettlementOrderResponse | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
@@ -69,7 +70,7 @@ export default function AdminSettlementsPage() {
   const columns: DataTableColumn<SettlementOrderResponse>[] = [
     { key: "settlementNo", title: t("settlementNo"), render: (row) => <CopyableSecret value={row.settlementNo} maskedValue={row.settlementNo} canReveal={false} /> },
     { key: "orderNo", title: t("rentalOrder"), render: (row) => <CopyableSecret value={row.orderNo} maskedValue={row.orderNo} canReveal={false} /> },
-    { key: "settlementType", title: t("settlementType"), render: (row) => settlementTypeLabel(row.settlementType) },
+    { key: "settlementType", title: t("settlementType"), render: (row) => settlementTypeLabel(row.settlementType, statusT) },
     { key: "actualSettleAmount", title: t("actualSettlementAmount"), render: (row) => <MoneyText value={row.actualSettleAmount} currency={row.currency} /> },
     { key: "profitAmount", title: t("earningsAmount"), render: (row) => <MoneyText value={row.profitAmount} currency={row.currency} /> },
     { key: "penaltyAmount", title: t("penalty"), render: (row) => <MoneyText value={row.penaltyAmount} currency={row.currency} /> },
@@ -92,7 +93,7 @@ export default function AdminSettlementsPage() {
           fields: [
             { label: t("settlementNo"), render: (detail) => <CopyableSecret value={detail.settlementNo} maskedValue={detail.settlementNo} canReveal={false} /> },
             { label: t("rentalOrder"), render: (detail) => <CopyableSecret value={detail.orderNo} maskedValue={detail.orderNo} canReveal={false} /> },
-            { label: t("settlementType"), render: (detail) => settlementTypeLabel(detail.settlementType) },
+            { label: t("settlementType"), render: (detail) => settlementTypeLabel(detail.settlementType, statusT) },
             { label: t("status"), render: (detail) => <StatusBadge status={detail.status} /> },
           ],
         },

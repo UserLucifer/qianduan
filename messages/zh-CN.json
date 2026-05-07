@@ -1399,6 +1399,19 @@
       "empty": "暂无未读通知。"
     }
   },
+  "DashboardLegacy": {
+    "revenueChart": {
+      "title": "收入趋势",
+      "description": "过去 12 个月的月度总收入波动",
+      "currentPeriod": "当前周期"
+    },
+    "statsCards": {
+      "totalRevenue": "总收入",
+      "totalOrders": "订单总量",
+      "activeVisitors": "活跃访客",
+      "refundRate": "退款率"
+    }
+  },
   "DocsMetadata": {
     "guide": {
       "title": "向导 | 算力租赁文档",
@@ -1978,6 +1991,8 @@
     "systemHome": "系统主页",
     "pricing": "定价",
     "blog": "博客",
+    "copyPage": "复制页面",
+    "copied": "已复制",
     "docsNav": "文档导航",
     "docsCenter": "文档中心",
     "views": "{count} 次浏览",
@@ -6650,7 +6665,28 @@
     "IN": "入账",
     "OUT": "支出",
     "FREEZE": "冻结",
-    "UNFREEZE": "解冻"
+    "UNFREEZE": "解冻",
+    "RECHARGE": "充值",
+    "WITHDRAW": "提现",
+    "RENT_PAY": "租赁支付",
+    "API_DEPLOY_FEE": "API 部署",
+    "RENT_PROFIT": "租赁收益",
+    "COMMISSION_PROFIT": "佣金收益",
+    "SETTLEMENT": "结算",
+    "EARLY_PENALTY": "提前结算违约金",
+    "REFUND": "退款",
+    "ADJUST": "调账",
+    "SYSTEM": "系统通知",
+    "ANNOUNCEMENT": "公告",
+    "ALERT": "风险提醒",
+    "ORDER": "订单通知",
+    "FINANCE": "财务通知",
+    "FINANCIAL": "财务通知",
+    "PROFIT": "收益通知",
+    "BLOG": "博客更新",
+    "EXPIRE": "到期结算",
+    "EARLY_TERMINATE": "提前结算",
+    "MANUAL": "人工结算"
   },
   "DashboardApi": {
     "header": {

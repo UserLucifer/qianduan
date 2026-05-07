@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { getStatusMeta } from "@/lib/status";
 
@@ -12,7 +13,10 @@ export function StatusIndicator({
   label?: string;
   pulse?: boolean;
 }) {
+  const t = useTranslations("Status");
   const meta = getStatusMeta(status);
+  const normalizedStatus = status == null ? "" : String(status);
+  const translatedLabel = normalizedStatus && t.has(normalizedStatus) ? t(normalizedStatus) : meta.label;
   const dotClassName =
     meta.tone === "success"
       ? "bg-emerald-400 shadow-[0_0_14px_rgba(52,211,153,0.45)]"
@@ -32,7 +36,7 @@ export function StatusIndicator({
         ) : null}
         <span className={cn("relative inline-flex h-2 w-2 rounded-full", dotClassName)} />
       </span>
-      {label ?? meta.label}
+      {label ?? translatedLabel}
     </span>
   );
 }

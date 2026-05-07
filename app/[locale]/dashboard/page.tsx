@@ -97,6 +97,7 @@ function buildProfitTrend(records: ProfitRecordResponse[]): TrendPoint[] {
 
 export default function DashboardPage() {
   const t = useTranslations("DashboardHome");
+  const statusT = useTranslations("Status");
   const [chartReady, setChartReady] = useState(false);
   const loader = useCallback(async (): Promise<DashboardData> => {
     const [
@@ -139,7 +140,7 @@ export default function DashboardPage() {
     {
       key: "txType",
       title: t("transactions.columns.type"),
-      render: (row) => <StatusBadge status={row.txType} label={txTypeLabel(row.txType)} />,
+      render: (row) => <StatusBadge status={row.txType} label={txTypeLabel(row.txType, statusT)} />,
     },
     {
       key: "amount",
@@ -151,7 +152,7 @@ export default function DashboardPage() {
     {
       key: "bizType",
       title: t("transactions.columns.business"),
-      render: (row) => <span>{bizTypeLabel(row.bizType)}</span>,
+      render: (row) => <span>{bizTypeLabel(row.bizType, statusT)}</span>,
     },
     {
       key: "createdAt",

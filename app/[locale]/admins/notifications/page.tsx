@@ -40,6 +40,7 @@ const initialQuery: NotificationQueryRequest = { pageNo: 1, pageSize: 10 };
 export default function AdminNotificationsPage() {
   const t = useTranslations("AdminPages.notifications");
   const tTranslations = useTranslations("AdminTranslations");
+  const statusT = useTranslations("Status");
   const [filters, setFilters] = useState<Filters>(initialFilters);
   const [actionError, setActionError] = useState<string | null>(null);
   const [formOpen, setFormOpen] = useState(false);
@@ -72,7 +73,7 @@ export default function AdminNotificationsPage() {
     { key: "id", title: "ID", render: (row) => <span className="font-mono text-xs text-muted-foreground">{formatEmpty(row.id)}</span> },
     { key: "userId", title: t("userID"), render: (row) => <span className="font-medium">{formatEmpty(row.userId)}</span> },
     { key: "title", title: t("title"), render: (row) => <span className="line-clamp-1 max-w-[260px] font-medium text-foreground">{row.title}</span> },
-    { key: "type", title: t("type"), render: (row) => <span className="rounded-full border border-border bg-muted px-2 py-0.5 text-xs">{notificationTypeLabel(row.type)}</span> },
+    { key: "type", title: t("type"), render: (row) => <span className="rounded-full border border-border bg-muted px-2 py-0.5 text-xs">{notificationTypeLabel(row.type, statusT)}</span> },
     { key: "bizType", title: t("business"), render: (row) => <span className="text-muted-foreground">{formatEmpty(row.bizType)}</span> },
     { key: "readStatus", title: t("status"), render: (row) => <StatusBadge status={row.readStatus === 1 ? t("read") : t("unread")} label={row.readStatus === 1 ? t("read") : t("unread")} /> },
     { key: "status", title: t("publish"), render: (row) => <StatusBadge status={row.status} /> },

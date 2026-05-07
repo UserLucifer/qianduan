@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useLocale, useTranslations } from "next-intl";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
   AreaChart, 
@@ -12,23 +13,34 @@ import {
   ResponsiveContainer 
 } from 'recharts';
 
-const data = [
-  { name: '1月', revenue: 4000 },
-  { name: '2月', revenue: 3000 },
-  { name: '3月', revenue: 5000 },
-  { name: '4月', revenue: 4500 },
-  { name: '5月', revenue: 6000 },
-  { name: '6月', revenue: 5500 },
-  { name: '7月', revenue: 8000 },
-  { name: '8月', revenue: 7500 },
-  { name: '9月', revenue: 9000 },
-  { name: '10月', revenue: 8500 },
-  { name: '11月', revenue: 11000 },
-  { name: '12月', revenue: 12500 },
+const revenueData = [
+  { month: 0, revenue: 4000 },
+  { month: 1, revenue: 3000 },
+  { month: 2, revenue: 5000 },
+  { month: 3, revenue: 4500 },
+  { month: 4, revenue: 6000 },
+  { month: 5, revenue: 5500 },
+  { month: 6, revenue: 8000 },
+  { month: 7, revenue: 7500 },
+  { month: 8, revenue: 9000 },
+  { month: 9, revenue: 8500 },
+  { month: 10, revenue: 11000 },
+  { month: 11, revenue: 12500 },
 ];
 
 export function RevenueChart() {
+  const locale = useLocale();
+  const t = useTranslations("DashboardLegacy.revenueChart");
   const [chartReady, setChartReady] = useState(false);
+  const data = useMemo(
+    () =>
+      revenueData.map((point) => ({
+        name: new Intl.DateTimeFormat(locale, { month: "short" }).format(new Date(2026, point.month, 1)),
+        revenue: point.revenue,
+      })),
+    [locale],
+  );
+  const currencyPrefix = locale === "zh-CN" ? "￥" : "$";
 
   useEffect(() => {
     setChartReady(true);
@@ -38,12 +50,12 @@ export function RevenueChart() {
     <Card className="col-span-3">
       <CardHeader className="flex flex-row items-center justify-between pb-8">
         <div>
-          <CardTitle className="text-lg font-semibold">收入趋势</CardTitle>
-          <p className="text-sm text-muted-foreground">过去 12 个月的月度总收入波动</p>
+          <CardTitle className="text-lg font-semibold">{t("title")}</CardTitle>
+          <p className="text-sm text-muted-foreground">{t("description")}</p>
         </div>
         <div className="flex items-center gap-2">
           <div className="flex h-2 w-2 rounded-full bg-primary" />
-          <span className="text-xs text-muted-foreground">当前周期</span>
+          <span className="text-xs text-muted-foreground">{t("currentPeriod")}</span>
         </div>
       </CardHeader>
       <CardContent>
@@ -69,7 +81,7 @@ export function RevenueChart() {
                   axisLine={false}
                   tickLine={false}
                   tick={{ fill: 'hsl(var(--ui-muted-foreground))', fontSize: 12 }}
-                  tickFormatter={(value: number) => `￥${value}`}
+                  tickFormatter={(value: number) => `${currencyPrefix}${value}`}
                 />
                 <Tooltip
                   contentStyle={{

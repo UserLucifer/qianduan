@@ -14,7 +14,7 @@ const AdminAuthContext = createContext<AdminAuthContextType>({ admin: null, load
 
 export const useAdminAuth = () => useContext(AdminAuthContext);
 
-// 基于角色的细粒度路由拦截规则
+// Fine-grained route guards by admin role.
 const roleRoutes: Record<string, AdminRole[]> = {
   "/admins/recharge": [AdminRole.SUPER_ADMIN, AdminRole.ADMIN],
   "/admins/withdraw": [AdminRole.SUPER_ADMIN, AdminRole.ADMIN],
@@ -42,10 +42,10 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
           if (res.code === 200 || res.code === 0) {
             setAdmin(res.data);
             
-            // 路由拦截 (Middleware)
+            // Client-side route guard.
             const requiredRoles = Object.entries(roleRoutes).find(([route]) => pathname.startsWith(route))?.[1];
             if (requiredRoles && !requiredRoles.includes(res.data.role as AdminRole)) {
-              router.replace("/admins/dashboard"); // 没有权限，拦截并跳回首页
+              router.replace("/admins/dashboard"); // Redirect admins without permission to the dashboard.
             }
           } else {
             router.replace("/admins/login");

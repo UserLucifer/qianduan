@@ -52,10 +52,10 @@ function articlesForCategory(articles: DocsArticle[], categoryId: number) {
 function getCategoryIcon(category: DocsCategory): LucideIcon {
   const iconKey = `${category.icon ?? ""} ${category.categoryCode} ${category.categoryName}`.toLowerCase();
 
-  if (iconKey.includes("concept") || iconKey.includes("理念") || iconKey.includes("概念")) return Lightbulb;
+  if (iconKey.includes("concept") || iconKey.includes("\u7406\u5ff5") || iconKey.includes("\u6982\u5ff5")) return Lightbulb;
   if (iconKey.includes("cli") || iconKey.includes("sdk") || iconKey.includes("terminal")) return Terminal;
-  if (iconKey.includes("guide") || iconKey.includes("book") || iconKey.includes("指南")) return BookOpen;
-  if (iconKey.includes("doc") || iconKey.includes("api") || iconKey.includes("文档")) return FileText;
+  if (iconKey.includes("guide") || iconKey.includes("book") || iconKey.includes("\u6307\u5357")) return BookOpen;
+  if (iconKey.includes("doc") || iconKey.includes("api") || iconKey.includes("\u6587\u6863")) return FileText;
 
   return Folder;
 }

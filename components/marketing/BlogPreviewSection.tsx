@@ -29,7 +29,7 @@ const fallbackPostMeta = [
   {
     id: "gpu-rental-training",
     date: "2026-05-05",
-    image: "/images/home/下载.png",
+    image: "/images/home/gpu-rental-training.png",
     href: "/blog",
   },
   {

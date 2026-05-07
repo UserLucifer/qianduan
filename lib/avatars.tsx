@@ -1,11 +1,11 @@
 "use client";
 
 /**
- * 头像工具函数：根据 Key 智能还原不同风格的 DiceBear URL
- * 支持前缀：
- * - shapes_  -> Shapes 风格
- * - bigears_ -> Big Ears 风格
- * - bottts_  -> Bottts 风格
+ * Avatar helpers that rebuild DiceBear URLs from persisted keys.
+ * Supported prefixes:
+ * - shapes_  -> Shapes style
+ * - bigears_ -> Big Ears style
+ * - bottts_  -> Bottts style
  */
 export const getAvatarUrl = (key?: string | null) => {
   if (!key) return null;
@@ -28,11 +28,11 @@ export const getAvatarUrl = (key?: string | null) => {
   return null;
 };
 
-// 预定义各风格的 20 个种子
+// Preset styles with 20 generated seeds per style.
 export const AVATAR_STYLES = [
-  { id: "shapes", name: "极简几何", prefix: "shapes_" },
-  { id: "bigears", name: "萌系动物", prefix: "bigears_" },
-  { id: "bottts", name: "科技机器人", prefix: "bottts_" },
+  { id: "shapes", name: "Minimal geometry", prefix: "shapes_" },
+  { id: "bigears", name: "Playful avatars", prefix: "bigears_" },
+  { id: "bottts", name: "Robot style", prefix: "bottts_" },
 ];
 
 export const getAvatarsByStyle = (styleId: string) => {

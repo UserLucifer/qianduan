@@ -1,46 +1,53 @@
 "use client";
 
 import React from 'react';
+import { useTranslations } from "next-intl";
 import { Card, CardContent } from "@/components/ui/card";
 import { TrendingUp, TrendingDown, DollarSign, ShoppingCart, Users, RotateCcw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-const stats = [
-  {
-    title: "总收入",
-    value: "￥42,560.00",
-    change: "+12.5%",
-    trend: "up",
-    icon: DollarSign,
-    color: "text-emerald-500",
-  },
-  {
-    title: "订单总量",
-    value: "1,284",
-    change: "+18.2%",
-    trend: "up",
-    icon: ShoppingCart,
-    color: "text-blue-500",
-  },
-  {
-    title: "活跃访客",
-    value: "24,562",
-    change: "-4.5%",
-    trend: "down",
-    icon: Users,
-    color: "text-purple-500",
-  },
-  {
-    title: "退款率",
-    value: "1.2%",
-    change: "-0.8%",
-    trend: "up", // lower is better usually, but here up means better performance
-    icon: RotateCcw,
-    color: "text-rose-500",
-  },
-];
+function useStats() {
+  const t = useTranslations("DashboardLegacy.statsCards");
+
+  return [
+    {
+      title: t("totalRevenue"),
+      value: "￥42,560.00",
+      change: "+12.5%",
+      trend: "up",
+      icon: DollarSign,
+      color: "text-emerald-500",
+    },
+    {
+      title: t("totalOrders"),
+      value: "1,284",
+      change: "+18.2%",
+      trend: "up",
+      icon: ShoppingCart,
+      color: "text-blue-500",
+    },
+    {
+      title: t("activeVisitors"),
+      value: "24,562",
+      change: "-4.5%",
+      trend: "down",
+      icon: Users,
+      color: "text-purple-500",
+    },
+    {
+      title: t("refundRate"),
+      value: "1.2%",
+      change: "-0.8%",
+      trend: "up", // lower is better usually, but here up means better performance
+      icon: RotateCcw,
+      color: "text-rose-500",
+    },
+  ];
+}
 
 export function StatsCards() {
+  const stats = useStats();
+
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {stats.map((stat) => (
