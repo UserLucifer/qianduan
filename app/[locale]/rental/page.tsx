@@ -2,12 +2,13 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
+import { useRouter } from "@/i18n/navigation";
 import Header from "@/components/marketing/Header";
 import Footer from "@/components/marketing/Footer";
 import { getGpuModels, getProducts, getRegions } from "@/api/product";
 import type { GpuModelResponse, ProductResponse, RegionResponse } from "@/api/types";
 import { formatMoney, formatNumber, toErrorMessage } from "@/lib/format";
+import { getUserAccessToken } from "@/lib/auth-session";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -129,6 +130,7 @@ function RentalCard({
   locale: string;
 }) {
   const t = useTranslations("Rental");
+  const router = useRouter();
   const accent = getAccent(item.id);
   const availability = getAvailability(item, {
     soldOut: t("availability.soldOut"),
@@ -154,6 +156,15 @@ function RentalCard({
     `Driver ${item.driverVersion || "-"}`,
     t("runtime.stock", { available: item.availableStock, total: item.totalStock }),
   ];
+
+  const handleRentClick = () => {
+    if (!getUserAccessToken()) {
+      router.push("/login");
+      return;
+    }
+
+    router.push(dashboardHref);
+  };
 
   return (
     <Card className="group relative overflow-hidden rounded-[10px] border border-white/[0.08] bg-[#101113] text-[#f7f8f8] shadow-none transition duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-[#141518]">
@@ -234,13 +245,12 @@ function RentalCard({
               </Button>
             ) : (
               <Button
-                asChild
+                type="button"
+                onClick={handleRentClick}
                 className="h-10 w-[112px] shrink-0 rounded-[6px] bg-[#2751E1] px-3 text-sm font-[590] text-white shadow-none hover:bg-[#3f66f0]"
               >
-                <Link href={dashboardHref}>
-                  {t("card.rent")}
-                  <ArrowUpRight className="h-4 w-4" />
-                </Link>
+                {t("card.rent")}
+                <ArrowUpRight className="h-4 w-4" />
               </Button>
             )}
           </div>
