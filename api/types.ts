@@ -36,6 +36,7 @@ export interface UserProfile {
   userName: string;
   nickname?: string | null;
   avatarKey?: string | null;
+  inviteCode?: string | null;
   createdAt: string;
 }
 
@@ -505,6 +506,7 @@ export interface TeamMemberResponse {
 
 export interface TeamMemberQueryRequest extends PageQuery {
   levelDepth?: number;
+  keyword?: string;
 }
 
 export interface SettlementOrderResponse {

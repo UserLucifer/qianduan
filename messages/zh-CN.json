@@ -7179,15 +7179,18 @@
     },
     "invite": {
       "title": "邀请链接",
+      "subtitle": "分享此链接以扩大您的网络。",
       "loading": "当前用户信息加载后显示",
-      "copy": "复制"
+      "copy": "复制",
+      "copySuccess": "已成功复制到剪贴板"
     },
     "filters": {
       "depth": "层级深度",
       "allLevels": "全部层级",
       "level1": "1级 (直接推广)",
       "level2": "2级 (间接推广)",
-      "level3": "3级 (间接推广)"
+      "level3": "3级 (间接推广)",
+      "searchPlaceholder": "搜索用户名或邮箱..."
     },
     "empty": "暂无团队成员。"
   },

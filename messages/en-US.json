@@ -7179,15 +7179,18 @@
     },
     "invite": {
       "title": "Invite link",
+      "subtitle": "Share this link to expand your network.",
       "loading": "Shown after current user information loads",
-      "copy": "Copy"
+      "copy": "Copy",
+      "copySuccess": "Successfully copied to clipboard"
     },
     "filters": {
       "depth": "Level depth",
       "allLevels": "All levels",
       "level1": "Level 1 (direct)",
       "level2": "Level 2 (indirect)",
-      "level3": "Level 3 (indirect)"
+      "level3": "Level 3 (indirect)",
+      "searchPlaceholder": "Search username or email..."
     },
     "empty": "No team members yet."
   },
