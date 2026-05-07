@@ -6774,8 +6774,11 @@
       "pending": "Pending",
       "settled": "Settled",
       "canceled": "Canceled",
-      "startDate": "Start date",
-      "endDate": "End date"
+      "allTime": "All Time",
+      "last3Days": "Last 3 Days",
+      "last7Days": "Last 7 Days",
+      "last30Days": "Last 30 Days",
+      "searchUsername": "Search username..."
     },
     "empty": "No commission records yet."
   },
@@ -7190,7 +7193,7 @@
       "level1": "Level 1 (direct)",
       "level2": "Level 2 (indirect)",
       "level3": "Level 3 (indirect)",
-      "searchPlaceholder": "Search username or email..."
+      "searchPlaceholder": "Search username..."
     },
     "empty": "No team members yet."
   },

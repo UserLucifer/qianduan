@@ -6774,8 +6774,11 @@
       "pending": "待结算",
       "settled": "已结算",
       "canceled": "已取消",
-      "startDate": "开始日期",
-      "endDate": "结束日期"
+      "allTime": "全部时间",
+      "last3Days": "近 3 天",
+      "last7Days": "近 7 天",
+      "last30Days": "近 30 天",
+      "searchUsername": "搜索用户名..."
     },
     "empty": "暂无佣金记录。"
   },
@@ -7190,7 +7193,7 @@
       "level1": "1级 (直接推广)",
       "level2": "2级 (间接推广)",
       "level3": "3级 (间接推广)",
-      "searchPlaceholder": "搜索用户名或邮箱..."
+      "searchPlaceholder": "搜索用户名..."
     },
     "empty": "暂无团队成员。"
   },

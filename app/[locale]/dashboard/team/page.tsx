@@ -1,21 +1,23 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
-import { Copy, Users, Search, UserCircle2, Loader2 } from "lucide-react";
+import { Copy, Users, Search, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DateTimeText } from "@/components/shared/DateTimeText";
+import { UserAvatar } from "@/components/shared/UserAvatar";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { StatsCard } from "@/components/shared/StatsCard";
 import { StatusBadge } from "@/components/shared/StatusBadge";
+import { getTeamMembers, getTeamSummary } from "@/api/team";
 import { getCurrentUser } from "@/api/user";
 import type { PageResult, TeamMemberQueryRequest, TeamMemberResponse, TeamSummaryResponse, UserMeResponse } from "@/api/types";
 import { useAsyncResource } from "@/hooks/useAsyncResource";
 import { usePaginatedResource } from "@/hooks/usePaginatedResource";
-import { ErrorAlert } from "@/components/shared/ErrorAlert";
+import { getAvatarUrl } from "@/lib/avatars";
 
 const initialParams: TeamMemberQueryRequest = { pageNo: 1, pageSize: 12 };
 
@@ -24,13 +26,8 @@ export default function TeamPage() {
   const dt = useTranslations("DataTable");
   
   const summaryLoader = useCallback(async (): Promise<TeamSummaryResponse> => {
-    return {
-      totalTeamCount: 128,
-      directTeamCount: 12,
-      level2TeamCount: 45,
-      level3TeamCount: 71,
-      deeperTeamCount: 0
-    };
+    const res = await getTeamSummary();
+    return res.data;
   }, []);
 
   const userLoader = useCallback(async (): Promise<UserMeResponse> => {
@@ -39,38 +36,8 @@ export default function TeamPage() {
   }, []);
 
   const loader = useCallback(async (params: TeamMemberQueryRequest): Promise<PageResult<TeamMemberResponse>> => {
-    // Fake data for preview
-    const mockMembers: TeamMemberResponse[] = [
-      { userId: "10001", userName: "Alice Chen", email: "alice@example.com", levelDepth: 1, status: 1, createdAt: "2024-05-01T10:00:00Z" },
-      { userId: "10002", userName: "Bob Smith", email: "bob@tech.com", levelDepth: 1, status: 1, createdAt: "2024-05-02T11:30:00Z" },
-      { userId: "10003", userName: "Charlie Wang", email: "charlie@ai.org", levelDepth: 2, status: 1, createdAt: "2024-05-03T09:15:00Z" },
-      { userId: "10004", userName: "David Liu", email: "david@cloud.io", levelDepth: 2, status: 0, createdAt: "2024-05-04T14:20:00Z" },
-      { userId: "10005", userName: "Eva Green", email: "eva@future.net", levelDepth: 3, status: 1, createdAt: "2024-05-05T16:45:00Z" },
-      { userId: "10006", userName: "Frank Miller", email: "frank@node.com", levelDepth: 1, status: 1, createdAt: "2024-05-06T08:00:00Z" },
-      { userId: "10007", userName: "Grace Ho", email: "grace@computing.cn", levelDepth: 2, status: 1, createdAt: "2024-05-07T13:10:00Z" },
-      { userId: "10008", userName: "Henry Zhang", email: "henry@gpu-rent.com", levelDepth: 3, status: 1, createdAt: "2024-05-08T10:50:00Z" },
-      { userId: "10009", userName: "Ivy Lee", email: "ivy@startup.ai", levelDepth: 1, status: 1, createdAt: "2024-05-09T17:30:00Z" },
-    ];
-
-    // Simple filtering logic for mock data
-    let filtered = mockMembers;
-    if (params.levelDepth) {
-      filtered = mockMembers.filter(m => m.levelDepth === params.levelDepth);
-    }
-    if (params.keyword) {
-      const kw = params.keyword.toLowerCase();
-      filtered = filtered.filter(m => 
-        (m.userName?.toLowerCase().includes(kw)) || 
-        (m.email.toLowerCase().includes(kw))
-      );
-    }
-
-    return {
-      records: filtered,
-      total: filtered.length,
-      pageNo: 1,
-      pageSize: 12
-    };
+    const res = await getTeamMembers(params);
+    return res.data;
   }, []);
 
   const summary = useAsyncResource(summaryLoader);
@@ -79,6 +46,12 @@ export default function TeamPage() {
   
   const [activeTab, setActiveTab] = useState("ALL");
   const [keyword, setKeyword] = useState("");
+
+  useEffect(() => {
+    if (members.error) {
+      toast.error(members.error);
+    }
+  }, [members.error]);
 
   const origin = typeof window === "undefined" ? "" : window.location.origin;
   const inviteLink = user.data?.inviteCode && origin ? `${origin}/signup?inviteCode=${user.data.inviteCode}` : "";
@@ -183,8 +156,6 @@ export default function TeamPage() {
           </div>
         </div>
 
-        <ErrorAlert message={members.error} />
-
         {/* Member Cards Grid */}
         <div className="min-h-[400px]">
           {members.loading && members.page.records.length === 0 ? (
@@ -206,14 +177,15 @@ export default function TeamPage() {
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-muted/50">
-                        <UserCircle2 className="h-5 w-5 text-muted-foreground" />
-                      </div>
+                      <UserAvatar
+                        src={getAvatarUrl(member.avatarKey)}
+                        name={member.userName || member.userId}
+                        className="h-10 w-10 border border-border"
+                      />
                       <div className="flex flex-col">
                         <span className="text-sm font-medium text-foreground">
                           {member.userName || "-"}
                         </span>
-                        <span className="text-xs text-muted-foreground">{member.email}</span>
                       </div>
                     </div>
                     <StatusBadge status={member.status} />

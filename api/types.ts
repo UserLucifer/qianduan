@@ -485,6 +485,7 @@ export interface CommissionRecordQueryRequest extends PageQuery {
   status?: string;
   startTime?: string;
   endTime?: string;
+  username?: string;
 }
 
 export interface TeamSummaryResponse {
@@ -497,8 +498,8 @@ export interface TeamSummaryResponse {
 
 export interface TeamMemberResponse {
   userId: string;
-  email: string;
   userName: string;
+  avatarKey?: string | null;
   status: number;
   levelDepth: number;
   createdAt: string;

@@ -20,7 +20,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getCurrentUser, type UserMeResponse } from "@/api/user";
+import { getUserNotifications } from "@/api/notification";
 import { clearUserAuthSession, subscribeUserAuthChanges } from "@/lib/auth-session";
+import { motion, AnimatePresence } from "framer-motion";
 import { UserAvatar } from "@/components/shared/UserAvatar";
 import { getAvatarUrl } from "@/lib/avatars";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
@@ -43,6 +45,7 @@ const PUBLIC_HEADER_LINKS = [
 export function Header() {
   const [user, setUser] = useState<UserMeResponse | null>(null);
   const [theme, setTheme] = useState<string>("dark");
+  const [hasUnread, setHasUnread] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
   const t = useTranslations("DashboardHeader");
@@ -50,6 +53,8 @@ export function Header() {
 
   useEffect(() => {
     let mounted = true;
+    
+    // Fetch user info
     getCurrentUser()
       .then((res) => {
         if (mounted && (res.code === 200 || res.code === 0)) setUser(res.data);
@@ -58,6 +63,21 @@ export function Header() {
         if (mounted) setUser(null);
       });
 
+    // Check for unread notifications
+    const checkUnread = async () => {
+      try {
+        const res = await getUserNotifications({ read_status: 0, pageSize: 1 });
+        if (mounted) setHasUnread(res.data.total > 0);
+      } catch (err) {
+        // Silently ignore notification check errors
+      }
+    };
+    
+    checkUnread();
+    
+    // Refresh unread count occasionally or on route change if needed
+    // For now, just on mount is fine.
+    
     const currentTheme = document.documentElement.dataset.theme || "dark";
     setTheme(currentTheme);
 
@@ -73,6 +93,8 @@ export function Header() {
           if (res.code === 200 || res.code === 0) setUser(res.data);
         })
         .catch(() => setUser(null));
+        
+      checkUnread();
     });
 
     return () => {
@@ -173,9 +195,34 @@ export function Header() {
           {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
         </Button>
 
-        <Button asChild variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-foreground">
+        <Button asChild variant="ghost" size="icon" className="relative h-9 w-9 text-muted-foreground hover:text-foreground">
           <Link href="/dashboard/notifications">
-            <Bell className="h-4 w-4" />
+            <motion.div
+              animate={hasUnread ? {
+                rotate: [0, -10, 10, -10, 10, 0],
+              } : {}}
+              transition={{
+                duration: 0.5,
+                repeat: hasUnread ? Infinity : 0,
+                repeatDelay: 3,
+              }}
+            >
+              <Bell className="h-4 w-4" />
+            </motion.div>
+            
+            <AnimatePresence>
+              {hasUnread && (
+                <motion.span
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  exit={{ scale: 0 }}
+                  className="absolute right-2.5 top-2.5 flex h-2 w-2"
+                >
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-primary"></span>
+                </motion.span>
+              )}
+            </AnimatePresence>
           </Link>
         </Button>
 
