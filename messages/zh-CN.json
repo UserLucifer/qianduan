@@ -1346,7 +1346,14 @@
     },
     "profitTrend": {
       "title": "收益趋势",
-      "description": "基于收益记录按日期聚合"
+      "description": "基于收益记录按日期聚合",
+      "details": "查看详情"
+    },
+    "health": {
+      "title": "系统运行状态",
+      "emptyTitle": "暂无活跃实例",
+      "desc": "您的 API 服务和计算节点正处于最佳运行状态。",
+      "emptyDesc": "部署新的 GPU 实例以开始计算。"
     },
     "quickActions": {
       "title": "快捷入口",
@@ -1365,6 +1372,10 @@
       "emptyDescription": "您当前没有活跃的算力资源。立即前往算力市场，选择最适合您 AI 任务的 GPU 节点。",
       "deploy": "立即部署新实例",
       "autoAssigned": "自动分配",
+      "monitor": "实例监控",
+      "details": "详情",
+      "connect": "连接终端",
+      "currentCost": "当前费用",
       "columns": {
         "instance": "实例名称",
         "plan": "配置方案",
@@ -6959,7 +6970,11 @@
       "pending": "待结算",
       "settled": "已结算",
       "canceled": "已失效",
-      "profitDate": "收益日期"
+      "profitDate": "收益日期",
+      "allTime": "全部时间",
+      "last3Days": "近 3 天",
+      "last7Days": "近 7 天",
+      "last30Days": "近 30 天"
     },
     "empty": "暂无收益记录。"
   },
@@ -7105,8 +7120,8 @@
   },
   "DashboardSettlements": {
     "header": {
-      "eyebrow": "结算记录",
-      "title": "结算订单",
+      "eyebrow": "账单明细",
+      "title": "结算记录与账单",
       "description": "查看到期、提前和人工结算记录，跟踪结算金额、状态和关联订单。"
     },
     "columns": {
@@ -7142,7 +7157,11 @@
       "allStatus": "全部状态",
       "pending": "待结算",
       "settled": "已结算",
-      "canceled": "已取消"
+      "canceled": "已取消",
+      "allTime": "全部时间",
+      "last3Days": "近 3 天",
+      "last7Days": "近 7 天",
+      "last30Days": "近 30 天"
     },
     "settlementTypes": {
       "EXPIRE": "到期结算",
@@ -7210,7 +7229,9 @@
       "amount": "金额",
       "available": "可用余额",
       "frozen": "冻结余额",
-      "time": "时间"
+      "time": "时间",
+      "bizOrderNo": "关联单号",
+      "remark": "备注"
     },
     "stats": {
       "available": "可用余额",
@@ -7219,7 +7240,8 @@
       "income": "累计收入",
       "incomeDesc": "充值 + 收益 + 佣金",
       "expense": "累计支出",
-      "expenseDesc": "历史提现金额"
+      "expenseDesc": "历史提现金额",
+      "historyDesc": "按交易类型和业务类型筛选资金流水"
     },
     "cardTitle": "资金流水",
     "filters": {
@@ -7228,7 +7250,11 @@
       "bizType": "业务类型",
       "allBiz": "全部业务",
       "startDate": "开始日期",
-      "endDate": "结束日期"
+      "endDate": "结束日期",
+      "allTime": "全部时间",
+      "last3Days": "近 3 天",
+      "last7Days": "近 7 天",
+      "last30Days": "近 30 天"
     },
     "txTypes": {
       "IN": "入账",
@@ -7246,7 +7272,8 @@
       "SETTLEMENT": "结算",
       "EARLY_PENALTY": "提前结算违约金",
       "REFUND": "退款",
-      "ADJUST": "系统调账"
+      "ADJUST": "系统调账",
+      "ACTIVATE_TIMEOUT_REFUND": "激活超时退款"
     },
     "empty": "暂无资金流水。"
   },

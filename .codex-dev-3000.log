@@ -6,80 +6,32 @@
 - Local:         http://localhost:3000
 - Network:       http://172.18.0.1:3000
 - Environments: .env.local
-✓ Ready in 3.8s
+✓ Ready in 5.5s
 ○ Compiling proxy ...
 
-○ Compiling /[locale] ...
- GET /en-US 200 in 60s (proxy.ts: 13ms)
- GET /zh-CN 200 in 60s (proxy.ts: 16ms)
- GET /zh-CN 200 in 2.1s (next.js: 738ms, proxy.ts: 31ms, generate-params: 6ms, application-code: 1371ms)
- GET /zh-CN 200 in 1261ms (next.js: 142ms, proxy.ts: 8ms, generate-params: 9ms, application-code: 1111ms)
- GET /en-US 200 in 1288ms (next.js: 57ms, proxy.ts: 11ms, generate-params: 16ms, application-code: 1221ms)
- GET /zh-CN 200 in 640ms (next.js: 55ms, proxy.ts: 7ms, generate-params: 5ms, application-code: 577ms)
-○ Compiling /[locale]/use-cases/[slug] ...
- GET /zh-CN/use-cases/ai-text-generation 200 in 6.3s (next.js: 6.2s, proxy.ts: 7ms, generate-params: 638ms, application-code: 51ms)
-✓ Finished filesystem cache database compaction in 79s
- GET /zh-CN 200 in 832ms (next.js: 128ms, proxy.ts: 5ms, generate-params: 7ms, application-code: 699ms)
- GET /zh-CN/login 200 in 694ms (next.js: 656ms, proxy.ts: 6ms, generate-params: 499ms, application-code: 31ms)
-✓ Finished filesystem cache database compaction in 13.6s
-✓ Finished filesystem cache database compaction in 15.9s
- GET /zh-CN/login 200 in 73ms (next.js: 23ms, proxy.ts: 11ms, generate-params: 9ms, application-code: 39ms)
-○ Compiling /[locale]/rental ...
-✓ Compiled in 42.1s
- GET /zh-CN/rental 200 in 11.7s (next.js: 11.6s, proxy.ts: 6ms, generate-params: 7.3s, application-code: 56ms)
- GET /zh-CN/rental 200 in 3.1s (next.js: 112ms, proxy.ts: 2.8s, generate-params: 9ms, application-code: 163ms)
- GET /zh-CN/rental 200 in 123ms (next.js: 11ms, proxy.ts: 7ms, generate-params: 29µs, application-code: 105ms)
- GET /zh-CN/dashboard/products?source=rental&productId=625&productCode=P_BEIJING_A_700_BCE24A9CD7&regionId=1&gpuModelId=8 200 in 861ms (next.js: 832ms, proxy.ts: 4ms, generate-params: 606ms, application-code: 25ms)
- GET /zh-CN/login 200 in 2.6s (next.js: 2.5s, proxy.ts: 7ms, generate-params: 19µs, application-code: 109ms)
- GET /zh-CN/dashboard/settlements 200 in 2.6s (proxy.ts: 10ms)
- GET /zh-CN/docs 200 in 2.6s (proxy.ts: 19ms)
- GET /zh-CN/blog 200 in 2.6s (proxy.ts: 21ms)
- GET /zh-CN/dashboard/settings 200 in 2.6s (proxy.ts: 11ms)
- GET /zh-CN/login 200 in 2.7s (next.js: 23ms, proxy.ts: 13ms, generate-params: 12ms, application-code: 2.7s)
- GET /zh-CN 200 in 2.1s (next.js: 272ms, proxy.ts: 4ms, generate-params: 7ms, application-code: 1860ms)
- GET /zh-CN/rental 200 in 59ms (next.js: 13ms, proxy.ts: 6ms, generate-params: 6ms, application-code: 40ms)
-✓ Compiled in 17.5s
- GET /zh-CN/rental 200 in 265ms (next.js: 98ms, proxy.ts: 60ms, generate-params: 6ms, application-code: 107ms)
- GET /zh-CN/rental 200 in 2.6s (next.js: 1130ms, proxy.ts: 4ms, generate-params: 1097ms, application-code: 1422ms)
- GET /zh-CN/login 200 in 140ms (next.js: 100ms, proxy.ts: 4ms, generate-params: 5ms, application-code: 35ms)
- GET /zh-CN 200 in 6.4s (next.js: 2.7s, proxy.ts: 10ms, generate-params: 1476ms, application-code: 3.8s)
- GET /zh-CN 200 in 760ms (next.js: 16ms, proxy.ts: 4ms, generate-params: 8ms, application-code: 739ms)
- GET /zh-CN 200 in 627ms (next.js: 15ms, proxy.ts: 5ms, generate-params: 9ms, application-code: 607ms)
-✓ Compiled in 13.5s
-○ Compiling /[locale] ...
- GET /zh-CN 200 in 9.1s (next.js: 7.9s, proxy.ts: 4ms, generate-params: 6ms, application-code: 1225ms)
- GET /zh-CN 200 in 1035ms (next.js: 29ms, proxy.ts: 568ms, generate-params: 5ms, application-code: 438ms)
- GET /zh-CN 200 in 595ms (next.js: 12ms, proxy.ts: 8ms, generate-params: 32µs, application-code: 575ms)
-✓ Finished filesystem cache database compaction in 54s
-✓ Finished filesystem cache database compaction in 31.3s
-✓ Compiled in 409ms
- GET /zh-CN 200 in 15.9s (next.js: 2.0s, proxy.ts: 6ms, generate-params: 7ms, application-code: 13.8s)
- GET /zh-CN 200 in 11.2s (next.js: 53ms, proxy.ts: 1117ms, generate-params: 36µs, application-code: 10.0s)
- GET /zh-CN 200 in 6.9s (next.js: 377ms, proxy.ts: 203ms, generate-params: 56µs, application-code: 6.3s)
- GET /zh-CN 200 in 2.9s (next.js: 41ms, proxy.ts: 34ms, generate-params: 19ms, application-code: 2.8s)
-○ Compiling /[locale] ...
- GET /zh-CN 200 in 23.9s (next.js: 20.3s, proxy.ts: 10ms, generate-params: 16ms, application-code: 3.7s)
- GET /zh-CN 200 in 2.6s (next.js: 925ms, proxy.ts: 624ms, generate-params: 50µs, application-code: 1042ms)
- GET /zh-CN 200 in 2.6s (next.js: 241ms, proxy.ts: 621ms, generate-params: 64µs, application-code: 1735ms)
- GET /zh-CN 200 in 2.6s (next.js: 650ms, proxy.ts: 623ms, generate-params: 43µs, application-code: 1369ms)
- GET /zh-CN 200 in 2.7s (next.js: 1181ms, proxy.ts: 625ms, generate-params: 52µs, application-code: 863ms)
- GET /zh-CN 200 in 1928ms (next.js: 16ms, proxy.ts: 12ms, generate-params: 80µs, application-code: 1899ms)
- GET /zh-CN 200 in 1785ms (next.js: 87ms, proxy.ts: 11ms, generate-params: 42µs, application-code: 1687ms)
- GET /zh-CN 200 in 1781ms (next.js: 326ms, proxy.ts: 63ms, generate-params: 70µs, application-code: 1391ms)
- GET /zh-CN 200 in 1747ms (next.js: 576ms, proxy.ts: 34ms, generate-params: 36µs, application-code: 1137ms)
- GET /zh-CN 200 in 1719ms (next.js: 735ms, proxy.ts: 295ms, generate-params: 31µs, application-code: 689ms)
- GET /zh-CN 200 in 1548ms (next.js: 1055ms, proxy.ts: 29ms, generate-params: 72µs, application-code: 463ms)
-✓ Finished filesystem cache database compaction in 2.7min
- GET /zh-CN/login 200 in 4.1s (next.js: 810ms, proxy.ts: 9ms, generate-params: 6ms, application-code: 3.3s)
- GET /zh-CN/dashboard 200 in 3.7s (next.js: 3.6s, proxy.ts: 6ms, generate-params: 597ms, application-code: 33ms)
- GET /en-US/dashboard 200 in 950ms (next.js: 10ms, proxy.ts: 4ms, generate-params: 5ms, application-code: 936ms)
- GET /zh-CN/dashboard 200 in 71ms (next.js: 17ms, proxy.ts: 4ms, generate-params: 6ms, application-code: 50ms)
- GET /en-US/dashboard 200 in 61ms (next.js: 10ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 48ms)
- GET /zh-CN/dashboard 200 in 69ms (next.js: 11ms, proxy.ts: 4ms, generate-params: 6ms, application-code: 53ms)
- GET /zh-CN 200 in 2.2s (next.js: 94ms, proxy.ts: 10ms, generate-params: 7ms, application-code: 2.1s)
- GET /zh-CN/dashboard 200 in 2.5s (next.js: 1138ms, proxy.ts: 10ms, generate-params: 6ms, application-code: 1385ms)
- GET /zh-CN/dashboard 200 in 1294ms (next.js: 47ms, proxy.ts: 915ms, generate-params: 6ms, application-code: 332ms)
- GET /zh-CN 200 in 2.5s (next.js: 667ms, proxy.ts: 4ms, generate-params: 7ms, application-code: 1841ms)
- GET /zh-CN 200 in 1515ms (next.js: 174ms, proxy.ts: 916ms, generate-params: 10ms, application-code: 425ms)
-✓ Finished filesystem cache database compaction in 18.5s
- GET /zh-CN/dashboard/team 200 in 1312ms (next.js: 1278ms, proxy.ts: 4ms, generate-params: 497ms, application-code: 30ms)
+○ Compiling /[locale]/dashboard/wallet ...
+ GET /zh-CN/dashboard/wallet 200 in 12.5s (next.js: 11.1s, proxy.ts: 153ms, generate-params: 404ms, application-code: 1220ms)
+ GET /zh-CN/dashboard/wallet 200 in 248ms (next.js: 98ms, proxy.ts: 12ms, generate-params: 6ms, application-code: 138ms)
+ GET /en-US/dashboard/wallet 200 in 95ms (next.js: 25ms, proxy.ts: 6ms, generate-params: 6ms, application-code: 64ms)
+ GET /zh-CN/dashboard/wallet 200 in 83ms (next.js: 23ms, proxy.ts: 6ms, generate-params: 5ms, application-code: 54ms)
+✓ Finished writing to filesystem cache in 13.4s
+✓ Compiled in 57.9s
+ GET /zh-CN/dashboard/wallet 200 in 2.9s (next.js: 1592ms, proxy.ts: 10ms, generate-params: 7ms, application-code: 1303ms)
+ GET /zh-CN/dashboard/wallet 200 in 1244ms (next.js: 111ms, proxy.ts: 858ms, generate-params: 103µs, application-code: 275ms)
+ GET /zh-CN/dashboard/wallet 200 in 192ms (next.js: 9ms, proxy.ts: 52ms, generate-params: 58µs, application-code: 131ms)
+ GET /zh-CN/dashboard/wallet 200 in 88ms (next.js: 18ms, proxy.ts: 7ms, generate-params: 37µs, application-code: 62ms)
+ GET /zh-CN/dashboard/wallet 200 in 1349ms (next.js: 34ms, proxy.ts: 6ms, generate-params: 43µs, application-code: 1310ms)
+✓ Finished filesystem cache database compaction in 27.6s
+✓ Finished filesystem cache database compaction in 23.9s
+✓ Compiled in 10.1s
+ GET /zh-CN/dashboard/wallet 200 in 3.9s (next.js: 2.3s, proxy.ts: 873ms, generate-params: 11ms, application-code: 718ms)
+ GET /zh-CN/dashboard/api 500 in 16.9s (next.js: 16.9s, proxy.ts: 4ms, generate-params: 8.0s, application-code: 23ms)
+ GET /zh-CN/dashboard/api 500 in 16.9s (next.js: 16.9s, proxy.ts: 4ms, generate-params: 8.0s, application-code: 24ms)
+ GET /zh-CN/login 500 in 18.7s (next.js: 18.7s, proxy.ts: 5ms, generate-params: 10.6s, application-code: 23ms)
+ GET /zh-CN/login 500 in 18.7s (next.js: 18.7s, proxy.ts: 5ms, generate-params: 10.6s, application-code: 24ms)
+ GET /zh-CN/dashboard/api 500 in 1130ms (next.js: 970ms, proxy.ts: 139ms, generate-params: 8ms, application-code: 21ms)
+ GET /zh-CN/dashboard/api 500 in 1131ms (next.js: 970ms, proxy.ts: 139ms, generate-params: 8ms, application-code: 22ms)
+ GET /zh-CN/dashboard 500 in 2.5s (next.js: 2.3s, proxy.ts: 111ms, application-code: 21ms)
+ GET /zh-CN/dashboard 500 in 2.5s (next.js: 2.3s, proxy.ts: 111ms, application-code: 23ms)
+ GET /zh-CN/dashboard 500 in 628ms (next.js: 602ms, proxy.ts: 4ms, application-code: 21ms)
+ GET /zh-CN/dashboard 500 in 628ms (next.js: 602ms, proxy.ts: 4ms, application-code: 22ms)

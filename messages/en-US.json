@@ -1346,7 +1346,14 @@
     },
     "profitTrend": {
       "title": "Earnings trend",
-      "description": "Aggregated by date from earning records"
+      "description": "Aggregated by date from earning records",
+      "details": "Details"
+    },
+    "health": {
+      "title": "System Healthy",
+      "emptyTitle": "No Active Instances",
+      "desc": "Your API services and compute nodes are running optimally.",
+      "emptyDesc": "Deploy a new GPU instance to start computing."
     },
     "quickActions": {
       "title": "Quick actions",
@@ -1365,6 +1372,10 @@
       "emptyDescription": "You do not have any active compute resources. Go to the compute marketplace and choose the GPU node that best fits your AI workload.",
       "deploy": "Deploy a new instance",
       "autoAssigned": "Auto assigned",
+      "monitor": "Compute Monitor",
+      "details": "Details",
+      "connect": "Connect",
+      "currentCost": "Current Cost",
       "columns": {
         "instance": "Instance name",
         "plan": "Plan",
@@ -6959,7 +6970,11 @@
       "pending": "Pending",
       "settled": "Settled",
       "canceled": "Invalid",
-      "profitDate": "Earning date"
+      "profitDate": "Earning date",
+      "allTime": "All Time",
+      "last3Days": "Last 3 Days",
+      "last7Days": "Last 7 Days",
+      "last30Days": "Last 30 Days"
     },
     "empty": "No earning records yet."
   },
@@ -7105,8 +7120,8 @@
   },
   "DashboardSettlements": {
     "header": {
-      "eyebrow": "Settlement records",
-      "title": "Settlement orders",
+      "eyebrow": "Billing Detail",
+      "title": "Settlements & Bills",
       "description": "Review expiry, early, and manual settlement records, and track settlement amounts, statuses, and linked orders."
     },
     "columns": {
@@ -7142,7 +7157,11 @@
       "allStatus": "All statuses",
       "pending": "Pending",
       "settled": "Settled",
-      "canceled": "Canceled"
+      "canceled": "Canceled",
+      "allTime": "All Time",
+      "last3Days": "Last 3 Days",
+      "last7Days": "Last 7 Days",
+      "last30Days": "Last 30 Days"
     },
     "settlementTypes": {
       "EXPIRE": "Expiry settlement",
@@ -7210,7 +7229,9 @@
       "amount": "Amount",
       "available": "Available balance",
       "frozen": "Frozen balance",
-      "time": "Time"
+      "time": "Time",
+      "bizOrderNo": "Linked Order No.",
+      "remark": "Remark"
     },
     "stats": {
       "available": "Available balance",
@@ -7219,7 +7240,8 @@
       "income": "Total income",
       "incomeDesc": "Top-ups + earnings + commission",
       "expense": "Total spending",
-      "expenseDesc": "Historical withdrawal amount"
+      "expenseDesc": "Historical withdrawal amount",
+      "historyDesc": "Filter fund transactions by transaction and business type"
     },
     "cardTitle": "Fund transactions",
     "filters": {
@@ -7228,7 +7250,11 @@
       "bizType": "Business type",
       "allBiz": "All business",
       "startDate": "Start date",
-      "endDate": "End date"
+      "endDate": "End date",
+      "allTime": "All Time",
+      "last3Days": "Last 3 Days",
+      "last7Days": "Last 7 Days",
+      "last30Days": "Last 30 Days"
     },
     "txTypes": {
       "IN": "Credit",
@@ -7246,7 +7272,8 @@
       "SETTLEMENT": "Settlement",
       "EARLY_PENALTY": "Early settlement penalty",
       "REFUND": "Refund",
-      "ADJUST": "System adjustment"
+      "ADJUST": "System adjustment",
+      "ACTIVATE_TIMEOUT_REFUND": "Activation timeout refund"
     },
     "empty": "No fund transactions yet."
   },
