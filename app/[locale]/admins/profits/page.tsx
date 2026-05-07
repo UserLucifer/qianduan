@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Eye } from "lucide-react";
 import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { Button } from "@/components/ui/button";
@@ -35,6 +36,7 @@ const initialFilters: ProfitFilters = { userId: "", orderNo: "", status: "", pro
 const initialQuery: AdminProfitRecordQuery = { pageNo: 1, pageSize: 10 };
 
 export default function AdminProfitsPage() {
+  const t = useTranslations("AdminPages.profits");
   const [chartReady, setChartReady] = useState(false);
   const [filters, setFilters] = useState<ProfitFilters>(initialFilters);
   const [detail, setDetail] = useState<ProfitRecordResponse | null>(null);
@@ -61,7 +63,7 @@ export default function AdminProfitsPage() {
       const key = formatDate(record.profitDate);
       bucket.set(key, (bucket.get(key) ?? 0) + record.finalProfitAmount);
     });
-    // 后端暂无管理端收益趋势接口，这里仅基于当前列表页数据按收益日期轻量聚合。
+  // The backend has no admin earnings trend endpoint yet, so this aggregates the current page by earnings date.
     return Array.from(bucket.entries()).map(([date, amount]) => ({ date, amount }));
   }, [page.records]);
 
@@ -77,51 +79,50 @@ export default function AdminProfitsPage() {
   };
 
   const columns: DataTableColumn<ProfitRecordResponse>[] = [
-    { key: "profitNo", title: "收益编号", render: (row) => <CopyableSecret value={row.profitNo} maskedValue={row.profitNo} canReveal={false} /> },
-    { key: "orderNo", title: "租赁订单", render: (row) => <CopyableSecret value={row.orderNo} maskedValue={row.orderNo} canReveal={false} /> },
-    { key: "productNameSnapshot", title: "算力产品", render: (row) => formatEmpty(row.productNameSnapshot) },
-    { key: "aiModelNameSnapshot", title: "AI 模型", render: (row) => formatEmpty(row.aiModelNameSnapshot) },
-    { key: "profitDate", title: "收益日期", render: (row) => formatDate(row.profitDate) },
-    { key: "finalProfitAmount", title: "最终收益", render: (row) => <MoneyText value={row.finalProfitAmount} /> },
-    { key: "status", title: "状态", render: (row) => <StatusBadge status={row.status} /> },
+    { key: "profitNo", title: t("earningsNo"), render: (row) => <CopyableSecret value={row.profitNo} maskedValue={row.profitNo} canReveal={false} /> },
+    { key: "orderNo", title: t("rentalOrder"), render: (row) => <CopyableSecret value={row.orderNo} maskedValue={row.orderNo} canReveal={false} /> },
+    { key: "productNameSnapshot", title: t("computeProduct"), render: (row) => formatEmpty(row.productNameSnapshot) },
+    { key: "aiModelNameSnapshot", title: t("aIModel"), render: (row) => formatEmpty(row.aiModelNameSnapshot) },
+    { key: "profitDate", title: t("earningsDate"), render: (row) => formatDate(row.profitDate) },
+    { key: "finalProfitAmount", title: t("finalEarnings"), render: (row) => <MoneyText value={row.finalProfitAmount} /> },
+    { key: "status", title: t("status"), render: (row) => <StatusBadge status={row.status} /> },
     {
       key: "actions",
-      title: "操作",
+      title: t("actions"),
       render: (row) => (
         <Button variant="ghost" size="sm" className="text-muted-foreground hover:bg-white/5" onClick={() => void openDetail(row.profitNo)}>
           <Eye className="h-4 w-4" />
-          详情
-        </Button>
+          {t("details")}</Button>
       ),
     },
   ];
 
   const detailSections: DetailSectionDef<ProfitRecordResponse>[] = [
         {
-          title: "收益信息",
+          title: t("earningsInformation"),
           fields: [
-            { label: "收益编号", render: (detail) => <CopyableSecret value={detail.profitNo} maskedValue={detail.profitNo} canReveal={false} /> },
-            { label: "订单号", render: (detail) => <CopyableSecret value={detail.orderNo} maskedValue={detail.orderNo} canReveal={false} /> },
-            { label: "状态", render: (detail) => <StatusBadge status={detail.status} /> },
-            { label: "收益日期", render: (detail) => formatDate(detail.profitDate) },
+            { label: t("earningsNo"), render: (detail) => <CopyableSecret value={detail.profitNo} maskedValue={detail.profitNo} canReveal={false} /> },
+            { label: t("orderNo"), render: (detail) => <CopyableSecret value={detail.orderNo} maskedValue={detail.orderNo} canReveal={false} /> },
+            { label: t("status"), render: (detail) => <StatusBadge status={detail.status} /> },
+            { label: t("earningsDate"), render: (detail) => formatDate(detail.profitDate) },
           ],
         },
         {
-          title: "计算快照",
+          title: t("calculationSnapshot"),
           fields: [
-            { label: "基础收益", render: (detail) => <MoneyText value={detail.baseProfitAmount} /> },
-            { label: "最终收益", render: (detail) => <MoneyText value={detail.finalProfitAmount} /> },
-            { label: "Token 单价", render: (detail) => formatEmpty(detail.tokenPriceSnapshot) },
-            { label: "收益倍率", render: (detail) => formatEmpty(detail.yieldMultiplierSnapshot) },
+            { label: t("baseEarnings"), render: (detail) => <MoneyText value={detail.baseProfitAmount} /> },
+            { label: t("finalEarnings"), render: (detail) => <MoneyText value={detail.finalProfitAmount} /> },
+            { label: t("tokenPrice"), render: (detail) => formatEmpty(detail.tokenPriceSnapshot) },
+            { label: t("earningsMultiplier"), render: (detail) => formatEmpty(detail.yieldMultiplierSnapshot) },
           ],
         },
         {
-          title: "关联信息",
+          title: t("linkedInformation"),
           fields: [
-            { label: "产品", render: (detail) => detail.productNameSnapshot },
-            { label: "AI 模型", render: (detail) => detail.aiModelNameSnapshot },
-            { label: "钱包流水", render: (detail) => <CopyableSecret value={detail.walletTxNo} maskedValue={detail.walletTxNo ?? "-"} canReveal={false} /> },
-            { label: "结算时间", render: (detail) => <DateTimeText value={detail.settledAt} /> },
+            { label: t("product"), render: (detail) => detail.productNameSnapshot },
+            { label: t("aIModel"), render: (detail) => detail.aiModelNameSnapshot },
+            { label: t("walletTransaction"), render: (detail) => <CopyableSecret value={detail.walletTxNo} maskedValue={detail.walletTxNo ?? "-"} canReveal={false} /> },
+            { label: t("settledAt"), render: (detail) => <DateTimeText value={detail.settledAt} /> },
           ],
         },
   ];
@@ -132,11 +133,11 @@ export default function AdminProfitsPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader eyebrow="PROFIT OPS" title="收益记录管理" description="查看用户租赁收益明细、收益状态和结算关联流水。" />
+      <PageHeader eyebrow="PROFIT OPS" title={t("earningsRecordManagement")} description={t("reviewUserRentalEarningsEarningStatusAndLinkedSettlementTransactions")} />
       <ErrorAlert message={actionError ?? error} />
       <Card>
         <CardHeader>
-          <CardTitle className="text-sm font-medium">收益分布</CardTitle>
+          <CardTitle className="text-sm font-medium">{t("earningsDistribution")}</CardTitle>
         </CardHeader>
         <CardContent className="h-64">
           {chartReady ? (
@@ -159,43 +160,43 @@ export default function AdminProfitsPage() {
         }}
       >
         <div className="space-y-2">
-          <Label htmlFor="userId">用户 ID</Label>
-          <Input id="userId" placeholder="输入 ID" value={filters.userId} onChange={(event) => setFilters((current) => ({ ...current, userId: event.target.value }))} className="h-9 w-[100px] bg-background text-foreground" />
+          <Label htmlFor="userId">{t("userID")}</Label>
+          <Input id="userId" placeholder={t("enterID")} value={filters.userId} onChange={(event) => setFilters((current) => ({ ...current, userId: event.target.value }))} className="h-9 w-[100px] bg-background text-foreground" />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="orderNo">订单号</Label>
-          <Input id="orderNo" placeholder="输入订单号" value={filters.orderNo} onChange={(event) => setFilters((current) => ({ ...current, orderNo: event.target.value }))} className="h-9 w-[180px] bg-background text-foreground" />
+          <Label htmlFor="orderNo">{t("orderNo")}</Label>
+          <Input id="orderNo" placeholder={t("enterOrderNumber")} value={filters.orderNo} onChange={(event) => setFilters((current) => ({ ...current, orderNo: event.target.value }))} className="h-9 w-[180px] bg-background text-foreground" />
         </div>
         <div className="space-y-2">
-          <Label>收益状态</Label>
+          <Label>{t("earningsStatus")}</Label>
           <Select value={filters.status} onValueChange={(val) => setFilters((current) => ({ ...current, status: val }))}>
             <SelectTrigger className="h-9 w-[130px] bg-background text-foreground">
-              <SelectValue placeholder="全部状态" />
+              <SelectValue placeholder={t("allStatuses")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value=" ">全部状态</SelectItem>
-              <SelectItem value="PENDING">待处理</SelectItem>
-              <SelectItem value="SETTLING">结算中</SelectItem>
-              <SelectItem value="SETTLED">已结算</SelectItem>
-              <SelectItem value="FAILED">已失效</SelectItem>
+              <SelectItem value=" ">{t("allStatuses")}</SelectItem>
+              <SelectItem value="PENDING">{t("pending")}</SelectItem>
+              <SelectItem value="SETTLING">{t("settling")}</SelectItem>
+              <SelectItem value="SETTLED">{t("settled")}</SelectItem>
+              <SelectItem value="FAILED">{t("invalid")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
         <div className="space-y-2">
-          <Label>收益日期</Label>
+          <Label>{t("earningsDate")}</Label>
           <Input type="date" value={filters.profitDate} onChange={(event) => setFilters((current) => ({ ...current, profitDate: event.target.value }))} className="h-9 w-[150px] bg-background text-foreground" />
         </div>
         <div className="space-y-2">
-          <Label>开始时间</Label>
+          <Label>{t("startTime")}</Label>
           <Input type="date" value={filters.startTime} onChange={(event) => setFilters((current) => ({ ...current, startTime: event.target.value }))} className="h-9 w-[150px] bg-background text-foreground" />
         </div>
         <div className="space-y-2">
-          <Label>结束时间</Label>
+          <Label>{t("endTime")}</Label>
           <Input type="date" value={filters.endTime} onChange={(event) => setFilters((current) => ({ ...current, endTime: event.target.value }))} className="h-9 w-[150px] bg-background text-foreground" />
         </div>
       </SearchPanel>
-      <DataTable columns={columns} data={page.records} rowKey={(row) => row.profitNo} loading={loading} emptyText="暂无收益记录" pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
-      <DetailDrawer data={detail} open={detailOpen} title="收益记录详情" subtitle={(data) => data.profitNo} sections={detailSections} onClose={() => setDetailOpen(false)} />
+      <DataTable columns={columns} data={page.records} rowKey={(row) => row.profitNo} loading={loading} emptyText={t("noEarningsRecordsYet")} pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
+      <DetailDrawer data={detail} open={detailOpen} title={t("earningsRecordDetails")} subtitle={(data) => data.profitNo} sections={detailSections} onClose={() => setDetailOpen(false)} />
     </div>
   );
 }

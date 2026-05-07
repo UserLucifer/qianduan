@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -32,6 +33,7 @@ interface ConfigCardProps {
 }
 
 function ConfigCard({ item, onSaved }: ConfigCardProps) {
+  const t = useTranslations("AdminPages.config");
   const [editing, setEditing] = useState(false);
   const [value, setValue] = useState(item.configValue);
   const [desc, setDesc] = useState(item.configDesc ?? "");
@@ -131,8 +133,7 @@ function ConfigCard({ item, onSaved }: ConfigCardProps) {
           editing ? (
             <div className="flex items-center gap-2 shrink-0">
               <Button variant="ghost" size="sm" className="h-8 text-xs" onClick={handleCancel} disabled={submitting}>
-                取消
-              </Button>
+                {t("cancel")}</Button>
               <Button
                 size="sm"
                 className="h-8 text-xs bg-[#5e6ad2] text-white hover:bg-[#7170ff]"
@@ -140,7 +141,7 @@ function ConfigCard({ item, onSaved }: ConfigCardProps) {
                 disabled={submitting}
               >
                 <Save className="h-3.5 w-3.5 mr-1" />
-                {submitting ? "保存中..." : "保存"}
+                {submitting ? t("saving") : t("save")}
               </Button>
             </div>
           ) : (
@@ -150,8 +151,7 @@ function ConfigCard({ item, onSaved }: ConfigCardProps) {
               className="shrink-0 h-8 text-xs text-muted-foreground hover:bg-muted"
               onClick={() => setEditing(true)}
             >
-              编辑
-            </Button>
+              {t("edit")}</Button>
           )
         )}
       </div>
@@ -162,11 +162,11 @@ function ConfigCard({ item, onSaved }: ConfigCardProps) {
       {/* Desc field when editing */}
       {editing && (
         <div className="flex flex-col gap-1.5">
-          <span className="text-xs text-muted-foreground font-medium">变更说明（可选）</span>
+          <span className="text-xs text-muted-foreground font-medium">{t("changeNotesOptional")}</span>
           <Textarea
             value={desc}
             onChange={(e) => setDesc(e.target.value)}
-            placeholder="输入本次变更的用途或说明"
+            placeholder={t("describeThePurposeOfThisChange")}
             className="min-h-[56px] bg-background text-sm resize-none focus-visible:ring-[#5e6ad2]"
           />
         </div>
@@ -176,7 +176,7 @@ function ConfigCard({ item, onSaved }: ConfigCardProps) {
 
       {/* Footer */}
       <div className="text-[11px] text-muted-foreground/60 border-t border-border/50 pt-2">
-        更新时间：<DateTimeText value={item.updatedAt} className="text-[11px]" />
+        {t("updatedAt")}<DateTimeText value={item.updatedAt} className="text-[11px]" />
       </div>
     </div>
   );
@@ -184,20 +184,21 @@ function ConfigCard({ item, onSaved }: ConfigCardProps) {
 
 // --- Group Tabs ---
 const CONFIG_GROUPS = [
-  { key: "", label: "全部" },
-  { key: "wallet", label: "钱包" },
-  { key: "withdraw", label: "提现" },
-  { key: "recharge", label: "充值" },
-  { key: "profit", label: "收益" },
-  { key: "commission", label: "佣金" },
-  { key: "rental", label: "租赁" },
-  { key: "system", label: "系统" },
+  { key: "", labelKey: "all" },
+  { key: "wallet", labelKey: "wallet" },
+  { key: "withdraw", labelKey: "withdrawal" },
+  { key: "recharge", labelKey: "topUp" },
+  { key: "profit", labelKey: "earnings" },
+  { key: "commission", labelKey: "commission" },
+  { key: "rental", labelKey: "rental" },
+  { key: "system", labelKey: "system" },
 ] as const;
 
 // --- Page ---
 const initialQuery: AdminSysConfigQueryRequest = { pageNo: 1, pageSize: 12 };
 
 export default function AdminConfigPage() {
+  const t = useTranslations("AdminPages.config");
   const [filters, setFilters] = useState({ configKey: "" });
   const [activeGroup, setActiveGroup] = useState("");
   const [globalError] = useState<string | null>(null);
@@ -220,8 +221,8 @@ export default function AdminConfigPage() {
     <div className="space-y-6">
       <PageHeader
         eyebrow="SYSTEM CONFIG"
-        title="系统配置"
-        description="按配置键查看和修改钱包、提现、收益、佣金与系统开关配置。"
+        title={t("systemConfiguration")}
+        description={t("viewAndUpdateWalletWithdrawalEarningsCommissionAndSystemSwitchSettingsByConfigKey")}
       />
 
       <ErrorAlert message={globalError ?? error} />
@@ -240,7 +241,7 @@ export default function AdminConfigPage() {
               activeGroup !== group.key && "text-muted-foreground"
             )}
           >
-            {group.label}
+            {t(group.labelKey)}
           </Button>
         ))}
       </div>
@@ -256,10 +257,10 @@ export default function AdminConfigPage() {
         }}
       >
         <div className="space-y-2">
-          <Label htmlFor="configKey">配置键</Label>
+          <Label htmlFor="configKey">{t("configKey")}</Label>
           <Input
             id="configKey"
-            placeholder="输入键名精确搜索"
+            placeholder={t("enterAnExactConfigKey")}
             value={filters.configKey}
             onChange={(e) => setFilters({ configKey: e.target.value })}
             className="h-9 w-[240px] bg-background text-foreground"
@@ -268,9 +269,9 @@ export default function AdminConfigPage() {
       </SearchPanel>
 
       {loading ? (
-        <div className="py-16 text-center text-sm text-muted-foreground">配置加载中…</div>
+        <div className="py-16 text-center text-sm text-muted-foreground">{t("loadingConfigs")}</div>
       ) : page.records.length === 0 ? (
-        <div className="py-16 text-center text-sm text-muted-foreground">暂无匹配配置项</div>
+        <div className="py-16 text-center text-sm text-muted-foreground">{t("noSYet")}</div>
       ) : (
         <>
           <div className="grid gap-4 grid-cols-1 xl:grid-cols-2">
@@ -286,8 +287,7 @@ export default function AdminConfigPage() {
           {/* Pagination */}
           <div className="flex items-center justify-between border border-border rounded-xl px-4 py-3 text-xs text-muted-foreground bg-card shadow-sm">
             <span>
-              第 {page.pageNo} / {totalPages} 页，共 {page.total} 条数据
-            </span>
+              {t("page")}{page.pageNo} / {totalPages} {t("of")}{page.total} {t("records")}</span>
             <div className="flex items-center gap-2">
               <Button
                 variant="outline"
@@ -296,8 +296,7 @@ export default function AdminConfigPage() {
                 disabled={page.pageNo <= 1}
                 onClick={() => updateParams({ pageNo: page.pageNo - 1, pageSize: page.pageSize })}
               >
-                上一页
-              </Button>
+                {t("previous")}</Button>
               <Button
                 variant="outline"
                 size="sm"
@@ -305,8 +304,7 @@ export default function AdminConfigPage() {
                 disabled={page.pageNo >= totalPages}
                 onClick={() => updateParams({ pageNo: page.pageNo + 1, pageSize: page.pageSize })}
               >
-                下一页
-              </Button>
+                {t("next")}</Button>
             </div>
           </div>
         </>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState, ReactNode } from "react";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import {
   AlertTriangle,
@@ -28,6 +29,7 @@ import { cn } from "@/lib/utils";
 import { useSysConfig } from "@/app/contexts/SysConfigContext";
 
 export default function AdminDashboardPage() {
+  const t = useTranslations("AdminPages.dashboard");
   const loader = useCallback(() => getAdminDashboardBundle(), []);
   const { data, loading, error, reload } = useAsyncResource(loader);
   const { getConfig } = useSysConfig();
@@ -46,24 +48,24 @@ export default function AdminDashboardPage() {
   const systemStatus = getConfig("SYSTEM_STATUS", "NORMAL");
 
   const orderStructure = [
-    { name: "进行中", value: data?.orders.runningOrderCount ?? 0 },
-    { name: "待支付", value: pendingPayOrderCount },
-    { name: "已暂停", value: data?.orders.pausedOrderCount ?? 0 },
-    { name: "已完成", value: completedOrderCount },
+    { name: t("inProgress"), value: data?.orders.runningOrderCount ?? 0 },
+    { name: t("awaitingPayment"), value: pendingPayOrderCount },
+    { name: t("paused"), value: data?.orders.pausedOrderCount ?? 0 },
+    { name: t("completed"), value: completedOrderCount },
   ];
   const userStructure = [
-    { name: "总用户", value: data?.overview.totalUsers ?? 0 },
-    { name: "新增", value: data?.users.todayNewUsers ?? 0 },
-    { name: "活跃", value: data?.users.activeUsers ?? 0 },
-    { name: "禁用", value: data?.users.disabledUsers ?? 0 },
+    { name: t("totalUsers"), value: data?.overview.totalUsers ?? 0 },
+    { name: t("new"), value: data?.users.todayNewUsers ?? 0 },
+    { name: t("active"), value: data?.users.activeUsers ?? 0 },
+    { name: t("disabled"), value: data?.users.disabledUsers ?? 0 },
   ];
 
   return (
     <div className="min-h-screen space-y-6 pb-12">
       <PageHeader
         eyebrow="PLATFORM ANALYTICS"
-        title="数据概览"
-        description="实时监控平台核心运营指标、财务状况及系统负载。"
+        title={t("analyticsOverview")}
+        description={t("monitorCoreOperatingMetricsFinancesAndSystemLoadInRealTime")}
         actions={
           <Button
             type="button"
@@ -72,8 +74,7 @@ export default function AdminDashboardPage() {
             onClick={() => void reload()}
           >
             <RefreshCw className={cn("mr-2 h-4 w-4", loading && "animate-spin")} />
-            刷新看板
-          </Button>
+            {t("refreshDashboard")}</Button>
         }
       />
 
@@ -83,13 +84,13 @@ export default function AdminDashboardPage() {
       <section className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
         {/* Users Card */}
         <DashboardCard
-          title="用户规模"
+          title={t("userBase")}
           value={formatNumber(data?.overview.totalUsers)}
           subtitle={
             <div className="flex items-center gap-1.5 text-blue-600 dark:text-blue-400">
               <ArrowUpRight className="h-3.5 w-3.5" />
               <span className="font-semibold">{data?.users?.todayNewUsers ?? 0}</span>
-              <span>今日新增</span>
+              <span>{t("newToday")}</span>
             </div>
           }
           icon={Users}
@@ -99,12 +100,12 @@ export default function AdminDashboardPage() {
 
         {/* Orders Card */}
         <DashboardCard
-          title="业务订单"
+          title={t("businessOrders")}
           value={formatNumber(totalOrderCount)}
           subtitle={
             <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
               <span className="font-semibold">{data?.orders?.todayPaidOrderCount ?? 0}</span>
-              <span>今日支付</span>
+              <span>{t("paidToday")}</span>
             </div>
           }
           icon={ClipboardList}
@@ -114,12 +115,12 @@ export default function AdminDashboardPage() {
 
         {/* Finance Card */}
         <DashboardCard
-          title="累计收益"
+          title={t("totalEarnings")}
           value={formatMoney(data?.overview.totalProfitAmount)}
           subtitle={
             <div className="flex items-center gap-1.5 text-slate-500 dark:text-zinc-400">
               <Banknote className="h-3.5 w-3.5" />
-              <span>流水：{formatMoney(data?.overview?.totalRechargeAmount)}</span>
+              <span>{t("cashFlow")}{formatMoney(data?.overview?.totalRechargeAmount)}</span>
             </div>
           }
           icon={CircleDollarSign}
@@ -130,7 +131,7 @@ export default function AdminDashboardPage() {
         {/* System Status Card */}
         <Card className="rounded-xl border-none bg-white p-6 shadow-sm ring-1 ring-slate-200 transition-all dark:bg-white/[0.035] dark:ring-white/10">
           <div className="flex items-center justify-between">
-            <p className="text-xs font-medium text-slate-500 dark:text-zinc-400">系统运行状态</p>
+            <p className="text-xs font-medium text-slate-500 dark:text-zinc-400">{t("systemStatus")}</p>
             <div className="rounded-lg bg-slate-50 p-2 dark:bg-white/[0.03]">
               <ShieldCheck className="h-5 w-5 text-slate-400 dark:text-zinc-500" />
             </div>
@@ -148,12 +149,11 @@ export default function AdminDashboardPage() {
                 )}></span>
               </div>
               <span className="text-lg font-bold tracking-tight text-slate-900 dark:text-zinc-50">
-                {systemStatus === "ABNORMAL" ? "服务运行异常" : "所有服务运行正常"}
+                {systemStatus === "ABNORMAL" ? t("serviceIssueDetected") : t("allServicesOperational")}
               </span>
             </div>
             <p className="mt-2 text-xs text-slate-500 dark:text-zinc-500">
-              核心组件健康度：100%
-            </p>
+              {t("coreComponentHealth100")}</p>
           </div>
         </Card>
       </section>
@@ -163,41 +163,41 @@ export default function AdminDashboardPage() {
         {/* Pending Tasks Panel */}
         <Card className="rounded-xl border-none bg-white shadow-sm ring-1 ring-slate-200 dark:bg-white/[0.035] dark:ring-white/10 xl:col-span-4">
           <CardHeader className="border-b border-slate-100 p-6 dark:border-white/5">
-            <CardTitle className="text-sm font-bold tracking-tight text-slate-900 dark:text-zinc-50">待处理事项</CardTitle>
+            <CardTitle className="text-sm font-bold tracking-tight text-slate-900 dark:text-zinc-50">{t("pendingTasks")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3 p-6">
-            <PendingItem label="待审核充值" value={data?.overview.pendingRechargeCount ?? 0} href="/admins/recharge" color="blue" />
-            <PendingItem label="待审核提现" value={data?.overview.pendingWithdrawCount ?? 0} href="/admins/withdraw" color="amber" />
-            <PendingItem label="待支付订单" value={pendingPayOrderCount} href="/admins/orders" color="purple" />
-            <PendingItem label="暂停订单" value={data?.orders.pausedOrderCount ?? 0} href="/admins/orders" color="rose" />
+            <PendingItem label={t("topUpsToReview")} value={data?.overview.pendingRechargeCount ?? 0} href="/admins/recharge" color="blue" />
+            <PendingItem label={t("withdrawalsToReview")} value={data?.overview.pendingWithdrawCount ?? 0} href="/admins/withdraw" color="amber" />
+            <PendingItem label={t("ordersAwaitingPayment")} value={pendingPayOrderCount} href="/admins/orders" color="purple" />
+            <PendingItem label={t("pausedOrders")} value={data?.orders.pausedOrderCount ?? 0} href="/admins/orders" color="rose" />
           </CardContent>
         </Card>
 
         {/* Financial Details Grid */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:col-span-8">
           <DashboardCard
-            title="充值总额"
+            title={t("totalTopUps")}
             value={formatMoney(data?.overview.totalRechargeAmount)}
             icon={Wallet}
             iconClassName="bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400"
             loading={loading}
           />
           <DashboardCard
-            title="提现总额"
+            title={t("totalWithdrawals")}
             value={formatMoney(data?.overview.totalWithdrawAmount)}
             icon={Banknote}
             iconClassName="bg-slate-50 text-slate-600 dark:bg-white/5 dark:text-zinc-400"
             loading={loading}
           />
           <DashboardCard
-            title="累计收益"
+            title={t("totalEarnings")}
             value={formatMoney(data?.overview.totalProfitAmount)}
             icon={CircleDollarSign}
             iconClassName="bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400"
             loading={loading}
           />
           <DashboardCard
-            title="分销佣金支出"
+            title={t("referralCommissionPayouts")}
             value={formatMoney(data?.overview.totalCommissionAmount)}
             icon={AlertTriangle}
             iconClassName="bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400"
@@ -208,11 +208,11 @@ export default function AdminDashboardPage() {
 
       {/* Visual Analytics */}
       <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-        <ChartCard title="算力租赁订单分布" eyebrow="Order Structure">
+        <ChartCard title={t("computeRentalOrderDistribution")} eyebrow="Order Structure">
           {mounted ? <OverviewBarChart data={orderStructure} fill="#5e6ad2" /> : <ChartSkeleton />}
         </ChartCard>
 
-        <ChartCard title="平台用户类型占比" eyebrow="User Structure">
+        <ChartCard title={t("platformUserMix")} eyebrow="User Structure">
           {mounted ? <OverviewBarChart data={userStructure} fill="#8b93ff" /> : <ChartSkeleton />}
         </ChartCard>
       </section>

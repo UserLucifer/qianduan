@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { useTranslations } from "next-intl";
 import { CalendarClock, CheckCircle2, Clock3, PauseCircle, Play, RotateCw, FileText } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageHeader } from "@/components/shared/PageHeader";
@@ -21,20 +22,21 @@ import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 interface SchedulerTask {
   key: string;
-  title: string;
-  description: string;
+  titleKey: string;
+  descriptionKey: string;
   icon: typeof Clock3;
 }
 
 const tasks: SchedulerTask[] = [
-  { key: "activation-timeout-cancel", title: "激活超时取消", description: "取消长时间未完成激活支付的租赁订单。", icon: Clock3 },
-  { key: "auto-pause", title: "自动暂停", description: "处理达到自动暂停条件的 API 或租赁任务。", icon: PauseCircle },
-  { key: "commission-generate", title: "佣金生成", description: "根据收益记录生成对应层级的佣金记录。", icon: RotateCw },
-  { key: "daily-profit", title: "每日收益", description: "按日生成或刷新租赁收益记录。", icon: CalendarClock },
-  { key: "expire-settlement", title: "过期结算", description: "对已到期租赁订单执行结算流程。", icon: CheckCircle2 },
+  { key: "activation-timeout-cancel", titleKey: "activationTimeoutCancel", descriptionKey: "cancelRentalOrdersWhoseActivationPaymentHasBeenPendingTooLong", icon: Clock3 },
+  { key: "auto-pause", titleKey: "autoPause", descriptionKey: "processApiOrRentalTasksThatMeetAutoPauseConditions", icon: PauseCircle },
+  { key: "commission-generate", titleKey: "commissionGeneration", descriptionKey: "generateLevelBasedCommissionRecordsFromEarningsRecords", icon: RotateCw },
+  { key: "daily-profit", titleKey: "dailyEarnings", descriptionKey: "generateOrRefreshRentalEarningsRecordsByDay", icon: CalendarClock },
+  { key: "expire-settlement", titleKey: "expirySettlement", descriptionKey: "runSettlementForExpiredRentalOrders", icon: CheckCircle2 },
 ];
 
 export default function AdminSchedulerPage() {
+  const t = useTranslations("AdminPages.scheduler");
   const [results, setResults] = useState<Record<string, SchedulerRunResult>>({});
   const [error, setError] = useState<string | null>(null);
   const [alertData, setAlertData] = useState<{ title: string; description: string } | null>(null);
@@ -55,7 +57,7 @@ export default function AdminSchedulerPage() {
         parsedParams = JSON.parse(triggerParams);
       }
     } catch {
-      setError("参数格式不正确，必须为有效 JSON");
+      setError(t("invalidParameterFormatEnterValidJSON"));
       setIsSubmitting(false);
       return;
     }
@@ -64,8 +66,8 @@ export default function AdminSchedulerPage() {
       const res = await runScheduler(triggerTask.key, parsedParams);
       setResults((current) => ({ ...current, [triggerTask.key]: res.data }));
       setAlertData({
-        title: "执行成功",
-        description: `调度任务 [${triggerTask.title}] 执行完成。总数: ${res.data.totalCount || 0}, 成功: ${res.data.successCount || 0}, 失败: ${res.data.failCount || 0}`,
+        title: t("executionCompleted"),
+        description: t("executionSuccessDetail", { title: t(triggerTask.titleKey), total: res.data.totalCount || 0, success: res.data.successCount || 0, fail: res.data.failCount || 0 }),
       });
       setTriggerTask(null);
     } catch (err) {
@@ -77,30 +79,31 @@ export default function AdminSchedulerPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader eyebrow="SCHEDULER" title="调度任务" description="手动执行平台内置调度任务，允许动态传入特定参数执行。" />
+      <PageHeader eyebrow="SCHEDULER" title={t("schedulerTasks")} description={t("manuallyRunBuiltInPlatformSchedulerTasksWithOptionalRuntimeParameters")} />
       <ErrorAlert message={error} />
       
       <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
         {tasks.map((task) => {
           const Icon = task.icon;
           const result = results[task.key];
+          const taskTitle = t(task.titleKey);
           return (
             <Card key={task.key} className="flex flex-col">
               <CardHeader className="flex flex-row items-start justify-between gap-4 shrink-0">
                 <div>
                   <CardTitle className="flex items-center gap-2 text-sm font-medium">
                     <Icon className="h-4 w-4 text-emerald-500" />
-                    {task.title}
+                    {taskTitle}
                   </CardTitle>
-                  <p className="mt-2 text-xs leading-5 text-muted-foreground">{task.description}</p>
+                  <p className="mt-2 text-xs leading-5 text-muted-foreground">{t(task.descriptionKey)}</p>
                 </div>
                 <StatusBadge status={result?.status ?? "PENDING"} />
               </CardHeader>
               <CardContent className="space-y-4 flex-1 flex flex-col justify-end">
                 <div className="grid grid-cols-3 gap-2 rounded-lg border border-slate-200 bg-slate-50 dark:border-white/10 dark:bg-white/[0.025] p-3 text-center">
-                  <Metric label="总数" value={result?.totalCount} />
-                  <Metric label="成功" value={result?.successCount} />
-                  <Metric label="失败" value={result?.failCount} />
+                  <Metric label={t("total")} value={result?.totalCount} />
+                  <Metric label={t("succeeded")} value={result?.successCount} />
+                  <Metric label={t("failed")} value={result?.failCount} />
                 </div>
                 {result?.errorMessage ? <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-3 text-xs text-rose-600 dark:text-rose-200">{result.errorMessage}</div> : null}
                 <div className="flex gap-2">
@@ -111,8 +114,7 @@ export default function AdminSchedulerPage() {
                     onClick={() => setLogTask(task.key)}
                   >
                     <FileText className="h-4 w-4 mr-2" />
-                    执行历史
-                  </Button>
+                    {t("executionHistory")}</Button>
                   <Button 
                     size="sm"
                     className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white border-none"
@@ -123,8 +125,7 @@ export default function AdminSchedulerPage() {
                     }}
                   >
                     <Play className="h-4 w-4 mr-2" />
-                    传参执行
-                  </Button>
+                    {t("runWithParameters")}</Button>
                 </div>
               </CardContent>
             </Card>
@@ -135,14 +136,13 @@ export default function AdminSchedulerPage() {
       <Dialog open={!!triggerTask} onOpenChange={(open) => !open && setTriggerTask(null)}>
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
-            <DialogTitle>执行调度任务: {triggerTask?.title}</DialogTitle>
+            <DialogTitle>{t("runSchedulerTask")}{triggerTask ? t(triggerTask.titleKey) : ""}</DialogTitle>
             <DialogDescription>
-              此操作会手动触发调度任务执行，可根据后端支持传入特定参数（如特定日期、特定状态等）。
-            </DialogDescription>
+              {t("thisWillManuallyTriggerTheSchedulerTaskYouMayPassSpecificParametersSupportedByTheBackendSuchAsDateOrStatus")}</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
-              <Label htmlFor="params">执行参数 (JSON)</Label>
+              <Label htmlFor="params">{t("executionParametersJSON")}</Label>
               <Textarea
                 id="params"
                 value={triggerParams}
@@ -158,10 +158,9 @@ export default function AdminSchedulerPage() {
             )}
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setTriggerTask(null)} disabled={isSubmitting}>取消</Button>
+            <Button variant="outline" onClick={() => setTriggerTask(null)} disabled={isSubmitting}>{t("cancel")}</Button>
             <Button onClick={execute} disabled={isSubmitting} className="bg-emerald-600 hover:bg-emerald-700 text-white">
-              确认执行
-            </Button>
+              {t("runTask")}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -182,8 +181,7 @@ export default function AdminSchedulerPage() {
               onClick={() => setAlertData(null)} 
               className="bg-emerald-600 text-white hover:bg-emerald-700"
             >
-              知道了
-            </AlertDialogAction>
+              {t("gotIt")}</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
@@ -203,6 +201,7 @@ function Metric({ label, value }: { label: string; value?: number }) {
 }
 
 function SchedulerLogsDrawer({ taskKey, open, onClose }: { taskKey: string | null; open: boolean; onClose: () => void }) {
+  const t = useTranslations("AdminPages.scheduler");
   const loader = useCallback(
     async (params: { pageNo: number; pageSize: number; taskName?: string }) => {
       if (!taskKey) return { records: [], total: 0, pageNo: 1, pageSize: 10 };
@@ -221,18 +220,18 @@ function SchedulerLogsDrawer({ taskKey, open, onClose }: { taskKey: string | nul
     },
     {
       key: "status",
-      title: "状态",
+      title: t("status"),
       render: (row) => <StatusBadge status={row.status} />,
     },
     {
       key: "startedAt",
-      title: "执行时间",
+      title: t("executedAt"),
       render: (row) => (
         <div className="space-y-1">
           <DateTimeText value={row.startedAt} />
           {row.finishedAt && (
             <div className="text-xs text-muted-foreground">
-              至 <DateTimeText value={row.finishedAt} />
+              {t("to")}<DateTimeText value={row.finishedAt} />
             </div>
           )}
         </div>
@@ -240,18 +239,18 @@ function SchedulerLogsDrawer({ taskKey, open, onClose }: { taskKey: string | nul
     },
     {
       key: "counts",
-      title: "执行统计",
+      title: t("executionStatistics"),
       render: (row) => (
         <div className="flex gap-3 text-xs">
-          <span className="text-slate-600 dark:text-zinc-300">总计: {row.totalCount}</span>
-          <span className="text-emerald-600 dark:text-emerald-400">成功: {row.successCount}</span>
-          <span className="text-rose-600 dark:text-rose-400">失败: {row.failCount}</span>
+          <span className="text-slate-600 dark:text-zinc-300">{t("total2")}{row.totalCount}</span>
+          <span className="text-emerald-600 dark:text-emerald-400">{t("succeeded2")}{row.successCount}</span>
+          <span className="text-rose-600 dark:text-rose-400">{t("failed2")}{row.failCount}</span>
         </div>
       ),
     },
     {
       key: "errorMessage",
-      title: "详细日志",
+      title: t("detailedLogs"),
       render: (row) => (
         <div className="max-w-xs truncate text-xs font-mono text-rose-600 dark:text-rose-300" title={row.errorMessage}>
           {formatEmpty(row.errorMessage)}
@@ -264,8 +263,8 @@ function SchedulerLogsDrawer({ taskKey, open, onClose }: { taskKey: string | nul
     <Drawer open={open} onOpenChange={(val) => !val && onClose()}>
       <DrawerContent className="flex h-[90vh] flex-col">
         <DrawerHeader className="mx-auto w-full max-w-6xl flex-shrink-0 border-b border-border px-4 pb-4 sm:px-6">
-          <DrawerTitle className="text-xl">执行历史 - {taskKey}</DrawerTitle>
-          <DrawerDescription>调度任务的历史执行记录</DrawerDescription>
+          <DrawerTitle className="text-xl">{t("executionHistory2")}{taskKey}</DrawerTitle>
+          <DrawerDescription>{t("historicalExecutionRecordsForThisSchedulerTask")}</DrawerDescription>
         </DrawerHeader>
         <div className="flex-1 overflow-auto p-4 sm:p-6 w-full max-w-6xl mx-auto">
           <DataTable
@@ -273,7 +272,7 @@ function SchedulerLogsDrawer({ taskKey, open, onClose }: { taskKey: string | nul
             data={page.records}
             rowKey={(row) => row.id.toString()}
             loading={loading}
-            emptyText="暂无执行历史"
+            emptyText={t("noExecutionHistoryYet")}
             pageNo={page.pageNo}
             pageSize={page.pageSize}
             total={page.total}

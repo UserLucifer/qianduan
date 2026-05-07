@@ -41,6 +41,7 @@ const initialFilters: Filters = { cycleCode: "", status: "" };
 const initialQuery: AdminCatalogQuery = { pageNo: 1, pageSize: 10 };
 
 export default function AdminRulesPage() {
+  const t = useTranslations("AdminPages.rules");
   const tTranslations = useTranslations("AdminTranslations");
   const [filters, setFilters] = useState<Filters>(initialFilters);
   const [actionError, setActionError] = useState<string | null>(null);
@@ -78,36 +79,33 @@ export default function AdminRulesPage() {
   };
 
   const columns: DataTableColumn<RentalCycleRuleResponse>[] = [
-    { key: "cycleCode", title: "周期编码", render: (row) => formatEmpty(row.cycleCode) },
-    { key: "cycleName", title: "租赁周期", render: (row) => formatEmpty(row.cycleName) },
-    { key: "cycleDays", title: "周期天数", render: (row) => `${row.cycleDays} 天` },
-    { key: "yieldMultiplier", title: "收益倍率", render: (row) => formatPercent(row.yieldMultiplier) },
-    { key: "earlyPenaltyRate", title: "提前结算违约率", render: (row) => formatPercent(row.earlyPenaltyRate) },
-    { key: "status", title: "状态", render: (row) => <StatusBadge status={row.status} /> },
-    { key: "updatedAt", title: "更新时间", render: (row) => <DateTimeText value={row.updatedAt} /> },
+    { key: "cycleCode", title: t("cycleCode"), render: (row) => formatEmpty(row.cycleCode) },
+    { key: "cycleName", title: t("rentalCycle"), render: (row) => formatEmpty(row.cycleName) },
+    { key: "cycleDays", title: t("cycleDays"), render: (row) => t("cycleDaysValue", { days: row.cycleDays }) },
+    { key: "yieldMultiplier", title: t("earningsMultiplier"), render: (row) => formatPercent(row.yieldMultiplier) },
+    { key: "earlyPenaltyRate", title: t("earlySettlementPenaltyRate"), render: (row) => formatPercent(row.earlyPenaltyRate) },
+    { key: "status", title: t("status"), render: (row) => <StatusBadge status={row.status} /> },
+    { key: "updatedAt", title: t("updatedAt"), render: (row) => <DateTimeText value={row.updatedAt} /> },
     {
       key: "actions",
-      title: "操作",
+      title: t("actions"),
       render: (row) => (
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="sm" className="font-medium text-blue-500 hover:bg-blue-500/10" onClick={() => openEdit(row)}>
             <Edit2 className="h-4 w-4" />
-            编辑
-          </Button>
+            {t("edit")}</Button>
           <Button variant="ghost" size="sm" className="font-medium text-blue-500 hover:bg-blue-500/10" onClick={() => setTranslationRow(row)}>
             <Languages className="h-4 w-4" />
             {tTranslations("button")}
           </Button>
           {row.status === 0 ? (
-            <ConfirmActionButton title="启用租赁周期" description="启用后用户可选择该租赁周期。" onConfirm={() => toggle(row, true)}>
+            <ConfirmActionButton title={t("enableRentalCycle")} description={t("afterEnablingUsersCanSelectThisRentalCycle")} onConfirm={() => toggle(row, true)}>
               <Power className="h-4 w-4" />
-              启用
-            </ConfirmActionButton>
+              {t("enable")}</ConfirmActionButton>
           ) : (
-            <ConfirmActionButton title="禁用租赁周期" description="禁用后新订单将不能选择该周期。" onConfirm={() => toggle(row, false)}>
+            <ConfirmActionButton title={t("disableRentalCycle")} description={t("afterDisablingNewOrdersCannotSelectThisCycle")} onConfirm={() => toggle(row, false)}>
               <PowerOff className="h-4 w-4" />
-              禁用
-            </ConfirmActionButton>
+              {t("disabled")}</ConfirmActionButton>
           )}
         </div>
       ),
@@ -118,13 +116,12 @@ export default function AdminRulesPage() {
     <div className="space-y-6">
       <PageHeader
         eyebrow="CATALOG OPS"
-        title="租赁周期规则"
-        description="维护租赁周期、收益倍率和提前结算违约参数。"
+        title={t("rentalCycleRules")}
+        description={t("maintainRentalCyclesEarningMultipliersAndEarlySettlementPenaltySettings")}
         actions={
           <Button onClick={() => { setEditingRow(null); setFormOpen(true); }} className="bg-[#5e6ad2] font-semibold text-white hover:bg-[#7170ff]">
             <Plus className="mr-2 h-4 w-4" />
-            新增规则
-          </Button>
+            {t("newRule")}</Button>
         }
       />
       <ErrorAlert message={actionError ?? error} />
@@ -136,28 +133,28 @@ export default function AdminRulesPage() {
         }}
       >
         <div className="space-y-2">
-          <Label htmlFor="cycleCode">周期编码</Label>
-          <Input id="cycleCode" placeholder="输入编码" value={filters.cycleCode} onChange={(event) => setFilters((current) => ({ ...current, cycleCode: event.target.value }))} className="h-9 w-[180px] bg-background text-foreground" />
+          <Label htmlFor="cycleCode">{t("cycleCode")}</Label>
+          <Input id="cycleCode" placeholder={t("enterCode")} value={filters.cycleCode} onChange={(event) => setFilters((current) => ({ ...current, cycleCode: event.target.value }))} className="h-9 w-[180px] bg-background text-foreground" />
         </div>
         <div className="space-y-2">
-          <Label>启用状态</Label>
+          <Label>{t("enabledStatus")}</Label>
           <Select value={filters.status} onValueChange={(val) => setFilters((current) => ({ ...current, status: val }))}>
             <SelectTrigger className="h-9 w-[180px] bg-background text-foreground">
-              <SelectValue placeholder="全部状态" />
+              <SelectValue placeholder={t("allStatuses")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value=" ">全部状态</SelectItem>
-              <SelectItem value="1">已启用</SelectItem>
-              <SelectItem value="0">已禁用</SelectItem>
+              <SelectItem value=" ">{t("allStatuses")}</SelectItem>
+              <SelectItem value="1">{t("enabled")}</SelectItem>
+              <SelectItem value="0">{t("disabled2")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
       </SearchPanel>
-      <DataTable columns={columns} data={page.records} rowKey={(row) => row.cycleCode} loading={loading} emptyText="暂无租赁周期规则" pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
+      <DataTable columns={columns} data={page.records} rowKey={(row) => row.cycleCode} loading={loading} emptyText={t("noRentalCycleRulesYet")} pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
 
       <Dialog open={formOpen} onOpenChange={setFormOpen}>
         <DialogContent className="flex max-w-xl flex-col items-stretch">
-          <DialogTitle className="sr-only">编辑周期规则</DialogTitle>
+          <DialogTitle className="sr-only">{t("editCycleRule")}</DialogTitle>
           <CycleRuleForm
             initialData={editingRow}
             onSuccess={() => { setFormOpen(false); reload(); }}

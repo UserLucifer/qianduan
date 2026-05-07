@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { useTranslations } from "next-intl";
 import { GitBranch } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -26,6 +27,7 @@ const initialFilters: TeamFilters = { ancestorUserId: "", descendantUserId: "", 
 const initialQuery: AdminTeamRelationQuery = { pageNo: 1, pageSize: 10 };
 
 export default function AdminTeamPage() {
+  const t = useTranslations("AdminPages.team");
   const [filters, setFilters] = useState<TeamFilters>(initialFilters);
   const loader = useCallback(async (params: AdminTeamRelationQuery) => (await getAdminTeamRelations(params)).data, []);
   const { page, loading, error, updateParams, changePage } = usePaginatedResource(loader, initialQuery);
@@ -39,19 +41,19 @@ export default function AdminTeamPage() {
   });
 
   const columns: DataTableColumn<UserTeamRelation>[] = [
-    { key: "id", title: "关系 ID", render: (row) => formatEmpty(row.id) },
-    { key: "ancestorUserId", title: "上级用户", render: (row) => formatEmpty(row.ancestorUserId) },
-    { key: "descendantUserId", title: "下级用户", render: (row) => formatEmpty(row.descendantUserId) },
-    { key: "levelDepth", title: "层级", render: (row) => <StatusBadge status={`L${row.levelDepth}`} label={`L${row.levelDepth}`} /> },
-    { key: "createdAt", title: "建立时间", render: (row) => <DateTimeText value={row.createdAt} /> },
+    { key: "id", title: t("relationshipID"), render: (row) => formatEmpty(row.id) },
+    { key: "ancestorUserId", title: t("parentUser"), render: (row) => formatEmpty(row.ancestorUserId) },
+    { key: "descendantUserId", title: t("childUser"), render: (row) => formatEmpty(row.descendantUserId) },
+    { key: "levelDepth", title: t("level"), render: (row) => <StatusBadge status={`L${row.levelDepth}`} label={`L${row.levelDepth}`} /> },
+    { key: "createdAt", title: t("createdAt"), render: (row) => <DateTimeText value={row.createdAt} /> },
   ];
 
   return (
     <div className="space-y-6">
       <PageHeader
         eyebrow="TEAM OPS"
-        title="团队关系管理"
-        description="按上级、下级和层级查看邀请分销关系，用于排查佣金链路。"
+        title={t("teamRelationshipManagement")}
+        description={t("reviewReferralTeamRelationshipsByParentChildAndLevelToTroubleshootCommissionPaths")}
         actions={<GitBranch className="h-5 w-5 text-[#9aa2ff]" />}
       />
       <ErrorAlert message={error} />
@@ -63,29 +65,29 @@ export default function AdminTeamPage() {
         }}
       >
         <div className="space-y-2">
-          <Label htmlFor="ancestor">上级用户 ID</Label>
-          <Input id="ancestor" placeholder="输入 ID" value={filters.ancestorUserId} onChange={(event) => setFilters((current) => ({ ...current, ancestorUserId: event.target.value }))} className="h-9 w-[120px] bg-background text-foreground" />
+          <Label htmlFor="ancestor">{t("parentUserID")}</Label>
+          <Input id="ancestor" placeholder={t("enterID")} value={filters.ancestorUserId} onChange={(event) => setFilters((current) => ({ ...current, ancestorUserId: event.target.value }))} className="h-9 w-[120px] bg-background text-foreground" />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="descendant">下级用户 ID</Label>
-          <Input id="descendant" placeholder="输入 ID" value={filters.descendantUserId} onChange={(event) => setFilters((current) => ({ ...current, descendantUserId: event.target.value }))} className="h-9 w-[120px] bg-background text-foreground" />
+          <Label htmlFor="descendant">{t("childUserID")}</Label>
+          <Input id="descendant" placeholder={t("enterID")} value={filters.descendantUserId} onChange={(event) => setFilters((current) => ({ ...current, descendantUserId: event.target.value }))} className="h-9 w-[120px] bg-background text-foreground" />
         </div>
         <div className="space-y-2">
-          <Label>层级关系</Label>
+          <Label>{t("relationshipLevel")}</Label>
           <Select value={filters.levelDepth} onValueChange={(val) => setFilters((current) => ({ ...current, levelDepth: val }))}>
             <SelectTrigger className="h-9 w-[120px] bg-background text-foreground">
-              <SelectValue placeholder="全部层级" />
+              <SelectValue placeholder={t("allLevels")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value=" ">全部层级</SelectItem>
-              <SelectItem value="1">1级 (直接)</SelectItem>
-              <SelectItem value="2">2级 (间接)</SelectItem>
-              <SelectItem value="3">3级 (间接)</SelectItem>
+              <SelectItem value=" ">{t("allLevels")}</SelectItem>
+              <SelectItem value="1">{t("level1Direct")}</SelectItem>
+              <SelectItem value="2">{t("level2Indirect")}</SelectItem>
+              <SelectItem value="3">{t("level3Indirect")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
       </SearchPanel>
-      <DataTable columns={columns} data={page.records} rowKey={(row) => row.id} loading={loading} emptyText="暂无团队关系" pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
+      <DataTable columns={columns} data={page.records} rowKey={(row) => row.id} loading={loading} emptyText={t("noSYet")} pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
     </div>
   );
 }

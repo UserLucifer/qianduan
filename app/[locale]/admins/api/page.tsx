@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -43,6 +44,7 @@ const credentialFiltersInitial: CredentialFilters = { userId: "", credentialNo: 
 const deployFiltersInitial: DeployFilters = { userId: "", deployNo: "", status: "", startTime: "", endTime: "" };
 
 export default function AdminApiPage() {
+  const t = useTranslations("AdminPages.api");
   const [credentialFilters, setCredentialFilters] = useState<CredentialFilters>(credentialFiltersInitial);
   const [deployFilters, setDeployFilters] = useState<DeployFilters>(deployFiltersInitial);
   const [credentialDetail, setCredentialDetail] = useState<AdminApiCredentialRow | null>(null);
@@ -97,99 +99,97 @@ export default function AdminApiPage() {
   };
 
   const credentialColumns: DataTableColumn<AdminApiCredentialRow>[] = [
-    { key: "credentialNo", title: "凭证编号", render: (row) => <CopyableSecret value={row.credentialNo} maskedValue={row.credentialNo} canReveal={false} /> },
-    { key: "userId", title: "用户 ID", render: (row) => formatEmpty(row.userId) },
-    { key: "apiName", title: "API 名称", render: (row) => formatEmpty(row.apiName) },
-    { key: "apiBaseUrl", title: "API 地址", render: (row) => formatEmpty(row.apiBaseUrl) },
+    { key: "credentialNo", title: t("credentialNo"), render: (row) => <CopyableSecret value={row.credentialNo} maskedValue={row.credentialNo} canReveal={false} /> },
+    { key: "userId", title: t("userID"), render: (row) => formatEmpty(row.userId) },
+    { key: "apiName", title: t("apiName"), render: (row) => formatEmpty(row.apiName) },
+    { key: "apiBaseUrl", title: t("apiURL"), render: (row) => formatEmpty(row.apiBaseUrl) },
     { key: "tokenMasked", title: "Token", render: (row) => <CopyableSecret value={row.tokenMasked} maskedValue={row.tokenMasked} /> },
-    { key: "tokenStatus", title: "Token 状态", render: (row) => <StatusBadge status={row.tokenStatus} /> },
-    { key: "generatedAt", title: "生成时间", render: (row) => <DateTimeText value={typeof row.generatedAt === "string" ? row.generatedAt : null} /> },
+    { key: "tokenStatus", title: t("tokenStatus"), render: (row) => <StatusBadge status={row.tokenStatus} /> },
+    { key: "generatedAt", title: t("generatedAt"), render: (row) => <DateTimeText value={typeof row.generatedAt === "string" ? row.generatedAt : null} /> },
     {
       key: "actions",
-      title: "操作",
+      title: t("actions"),
       render: (row) => (
         <Button variant="ghost" size="sm" className="text-muted-foreground hover:bg-white/5" onClick={() => void openCredentialDetail(row.credentialNo || "")}>
           <Eye className="h-4 w-4" />
-          详情
-        </Button>
+          {t("details")}</Button>
       ),
     },
   ];
 
   const deployColumns: DataTableColumn<ApiDeployOrderResponse>[] = [
-    { key: "deployNo", title: "部署订单号", render: (row) => <CopyableSecret value={row.deployNo} maskedValue={row.deployNo} canReveal={false} /> },
-    { key: "orderNo", title: "租赁订单", render: (row) => <CopyableSecret value={row.orderNo} maskedValue={row.orderNo} canReveal={false} /> },
-    { key: "credentialNo", title: "凭证编号", render: (row) => <CopyableSecret value={row.credentialNo} maskedValue={row.credentialNo} canReveal={false} /> },
-    { key: "modelNameSnapshot", title: "AI 模型", render: (row) => formatEmpty(row.modelNameSnapshot) },
-    { key: "deployFeeAmount", title: "部署费用", render: (row) => <MoneyText value={row.deployFeeAmount} /> },
-    { key: "status", title: "部署状态", render: (row) => <StatusBadge status={row.status} /> },
-    { key: "createdAt", title: "创建时间", render: (row) => <DateTimeText value={row.createdAt} /> },
+    { key: "deployNo", title: t("deploymentOrderNo"), render: (row) => <CopyableSecret value={row.deployNo} maskedValue={row.deployNo} canReveal={false} /> },
+    { key: "orderNo", title: t("rentalOrder"), render: (row) => <CopyableSecret value={row.orderNo} maskedValue={row.orderNo} canReveal={false} /> },
+    { key: "credentialNo", title: t("credentialNo"), render: (row) => <CopyableSecret value={row.credentialNo} maskedValue={row.credentialNo} canReveal={false} /> },
+    { key: "modelNameSnapshot", title: t("aIModel"), render: (row) => formatEmpty(row.modelNameSnapshot) },
+    { key: "deployFeeAmount", title: t("deploymentFee"), render: (row) => <MoneyText value={row.deployFeeAmount} /> },
+    { key: "status", title: t("deploymentStatus"), render: (row) => <StatusBadge status={row.status} /> },
+    { key: "createdAt", title: t("createdAt"), render: (row) => <DateTimeText value={row.createdAt} /> },
     {
       key: "actions",
-      title: "操作",
+      title: t("actions"),
       render: (row) => (
         <Button variant="ghost" size="sm" className="text-muted-foreground hover:bg-white/5" onClick={() => void openDeployDetail(row.deployNo)}>
           <Eye className="h-4 w-4" />
-          详情
-        </Button>
+          {t("details")}</Button>
       ),
     },
   ];
 
   const credentialSections: DetailSectionDef<AdminApiCredentialRow>[] = [
         {
-          title: "凭证信息",
+          title: t("credentialInformation"),
           fields: [
-            { label: "凭证编号", render: (credentialDetail) => <CopyableSecret value={credentialDetail.credentialNo} maskedValue={credentialDetail.credentialNo} canReveal={false} /> },
-            { label: "用户 ID", render: (credentialDetail) => credentialDetail.userId },
-            { label: "API 名称", render: (credentialDetail) => credentialDetail.apiName },
-            { label: "Token 状态", render: (credentialDetail) => <StatusBadge status={credentialDetail.tokenStatus} /> },
-            { label: "API 地址", render: (credentialDetail) => credentialDetail.apiBaseUrl },
+            { label: t("credentialNo"), render: (credentialDetail) => <CopyableSecret value={credentialDetail.credentialNo} maskedValue={credentialDetail.credentialNo} canReveal={false} /> },
+            { label: t("userID"), render: (credentialDetail) => credentialDetail.userId },
+            { label: t("apiName"), render: (credentialDetail) => credentialDetail.apiName },
+            { label: t("tokenStatus"), render: (credentialDetail) => <StatusBadge status={credentialDetail.tokenStatus} /> },
+            { label: t("apiURL"), render: (credentialDetail) => credentialDetail.apiBaseUrl },
             { label: "Token", render: (credentialDetail) => <CopyableSecret value={credentialDetail.tokenMasked} maskedValue={credentialDetail.tokenMasked} /> },
           ],
         },
         {
-          title: "关联业务",
+          title: t("linkedBusiness"),
           fields: [
-            { label: "租赁订单", render: (credentialDetail) => <CopyableSecret value={credentialDetail.orderNo} maskedValue={credentialDetail.orderNo} canReveal={false} /> },
-            { label: "模型", render: (credentialDetail) => credentialDetail.modelNameSnapshot },
-            { label: "部署费用", render: (credentialDetail) => credentialDetail.deployFeeSnapshot },
-            { label: "生成时间", render: (credentialDetail) => <DateTimeText value={typeof credentialDetail.generatedAt === "string" ? credentialDetail.generatedAt : null} /> },
+            { label: t("rentalOrder"), render: (credentialDetail) => <CopyableSecret value={credentialDetail.orderNo} maskedValue={credentialDetail.orderNo} canReveal={false} /> },
+            { label: t("model"), render: (credentialDetail) => credentialDetail.modelNameSnapshot },
+            { label: t("deploymentFee"), render: (credentialDetail) => credentialDetail.deployFeeSnapshot },
+            { label: t("generatedAt"), render: (credentialDetail) => <DateTimeText value={typeof credentialDetail.generatedAt === "string" ? credentialDetail.generatedAt : null} /> },
           ],
         },
       ];
 
   const deploySections: DetailSectionDef<ApiDeployOrderResponse>[] = [
         {
-          title: "部署订单",
+          title: t("deploymentOrder"),
           fields: [
-            { label: "部署订单号", render: (deployDetail) => <CopyableSecret value={deployDetail.deployNo} maskedValue={deployDetail.deployNo} canReveal={false} /> },
-            { label: "租赁订单", render: (deployDetail) => <CopyableSecret value={deployDetail.orderNo} maskedValue={deployDetail.orderNo} canReveal={false} /> },
-            { label: "凭证编号", render: (deployDetail) => <CopyableSecret value={deployDetail.credentialNo} maskedValue={deployDetail.credentialNo} canReveal={false} /> },
-            { label: "状态", render: (deployDetail) => <StatusBadge status={deployDetail.status} /> },
+            { label: t("deploymentOrderNo"), render: (deployDetail) => <CopyableSecret value={deployDetail.deployNo} maskedValue={deployDetail.deployNo} canReveal={false} /> },
+            { label: t("rentalOrder"), render: (deployDetail) => <CopyableSecret value={deployDetail.orderNo} maskedValue={deployDetail.orderNo} canReveal={false} /> },
+            { label: t("credentialNo"), render: (deployDetail) => <CopyableSecret value={deployDetail.credentialNo} maskedValue={deployDetail.credentialNo} canReveal={false} /> },
+            { label: t("status"), render: (deployDetail) => <StatusBadge status={deployDetail.status} /> },
           ],
         },
         {
-          title: "费用与时间",
+          title: t("feesAndTiming"),
           fields: [
-            { label: "AI 模型", render: (deployDetail) => deployDetail.modelNameSnapshot },
-            { label: "部署费用", render: (deployDetail) => <MoneyText value={deployDetail.deployFeeAmount} /> },
-            { label: "钱包流水", render: (deployDetail) => <CopyableSecret value={deployDetail.walletTxNo} maskedValue={deployDetail.walletTxNo} canReveal={false} /> },
-            { label: "支付时间", render: (deployDetail) => <DateTimeText value={deployDetail.paidAt} /> },
-            { label: "创建时间", render: (deployDetail) => <DateTimeText value={deployDetail.createdAt} /> },
+            { label: t("aIModel"), render: (deployDetail) => deployDetail.modelNameSnapshot },
+            { label: t("deploymentFee"), render: (deployDetail) => <MoneyText value={deployDetail.deployFeeAmount} /> },
+            { label: t("walletTransaction"), render: (deployDetail) => <CopyableSecret value={deployDetail.walletTxNo} maskedValue={deployDetail.walletTxNo} canReveal={false} /> },
+            { label: t("paidAt"), render: (deployDetail) => <DateTimeText value={deployDetail.paidAt} /> },
+            { label: t("createdAt"), render: (deployDetail) => <DateTimeText value={deployDetail.createdAt} /> },
           ],
         },
       ];
 
   return (
     <div className="space-y-6">
-      <PageHeader eyebrow="API OPS" title="API 凭证管理" description="查看平台 API 凭证、Token 状态和 API 部署订单。" />
+      <PageHeader eyebrow="API OPS" title={t("apiCredentialManagement")} description={t("reviewPlatformApiCredentialsTokenStatusAndApiDeploymentOrders")} />
       <ErrorAlert message={actionError ?? credentials.error ?? deployOrders.error} />
 
       <Tabs defaultValue="credentials" className="space-y-4">
         <TabsList className="border border-white/10 bg-white/[0.03]">
-          <TabsTrigger value="credentials">API 凭证</TabsTrigger>
-          <TabsTrigger value="deploy">部署订单</TabsTrigger>
+          <TabsTrigger value="credentials">{t("apiCredentials")}</TabsTrigger>
+          <TabsTrigger value="deploy">{t("deploymentOrder")}</TabsTrigger>
         </TabsList>
         <TabsContent value="credentials" className="space-y-4">
           <SearchPanel
@@ -200,37 +200,37 @@ export default function AdminApiPage() {
             }}
           >
             <div className="space-y-2">
-              <Label htmlFor="c_userId">用户 ID</Label>
-              <Input id="c_userId" placeholder="输入 ID" value={credentialFilters.userId} onChange={(event) => setCredentialFilters((current) => ({ ...current, userId: event.target.value }))} className="h-9 w-[120px] bg-background text-foreground" />
+              <Label htmlFor="c_userId">{t("userID")}</Label>
+              <Input id="c_userId" placeholder={t("enterID")} value={credentialFilters.userId} onChange={(event) => setCredentialFilters((current) => ({ ...current, userId: event.target.value }))} className="h-9 w-[120px] bg-background text-foreground" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="credentialNo">凭证编号</Label>
-              <Input id="credentialNo" placeholder="输入编号" value={credentialFilters.credentialNo} onChange={(event) => setCredentialFilters((current) => ({ ...current, credentialNo: event.target.value }))} className="h-9 w-[180px] bg-background text-foreground" />
+              <Label htmlFor="credentialNo">{t("credentialNo")}</Label>
+              <Input id="credentialNo" placeholder={t("enterNumber")} value={credentialFilters.credentialNo} onChange={(event) => setCredentialFilters((current) => ({ ...current, credentialNo: event.target.value }))} className="h-9 w-[180px] bg-background text-foreground" />
             </div>
             <div className="space-y-2">
-              <Label>Token 状态</Label>
+              <Label>{t("tokenStatus")}</Label>
               <Select value={credentialFilters.tokenStatus} onValueChange={(val) => setCredentialFilters((current) => ({ ...current, tokenStatus: val }))}>
                 <SelectTrigger className="h-9 w-[140px] bg-background text-foreground">
-                  <SelectValue placeholder="全部状态" />
+                  <SelectValue placeholder={t("allStatuses")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value=" ">全部状态</SelectItem>
-                  <SelectItem value="NORMAL">正常</SelectItem>
-                  <SelectItem value="ABNORMAL">异常</SelectItem>
-                  <SelectItem value="EXPIRED">已过期</SelectItem>
+                  <SelectItem value=" ">{t("allStatuses")}</SelectItem>
+                  <SelectItem value="NORMAL">{t("normal")}</SelectItem>
+                  <SelectItem value="ABNORMAL">{t("abnormal")}</SelectItem>
+                  <SelectItem value="EXPIRED">{t("expired")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>开始日期</Label>
+              <Label>{t("startDate")}</Label>
               <Input type="date" value={credentialFilters.startTime} onChange={(event) => setCredentialFilters((current) => ({ ...current, startTime: event.target.value }))} className="h-9 w-[150px] bg-background text-foreground" />
             </div>
             <div className="space-y-2">
-              <Label>结束日期</Label>
+              <Label>{t("endDate")}</Label>
               <Input type="date" value={credentialFilters.endTime} onChange={(event) => setCredentialFilters((current) => ({ ...current, endTime: event.target.value }))} className="h-9 w-[150px] bg-background text-foreground" />
             </div>
           </SearchPanel>
-          <DataTable columns={credentialColumns} data={credentials.page.records} rowKey={(row) => row.credentialNo || ""} loading={credentials.loading} emptyText="暂无 API 凭证" pageNo={credentials.page.pageNo} pageSize={credentials.page.pageSize} total={credentials.page.total} onPageChange={credentials.changePage} />
+          <DataTable columns={credentialColumns} data={credentials.page.records} rowKey={(row) => row.credentialNo || ""} loading={credentials.loading} emptyText={t("noApiSYet")} pageNo={credentials.page.pageNo} pageSize={credentials.page.pageSize} total={credentials.page.total} onPageChange={credentials.changePage} />
         </TabsContent>
 
         <TabsContent value="deploy" className="space-y-4">
@@ -242,48 +242,48 @@ export default function AdminApiPage() {
             }}
           >
             <div className="space-y-2">
-              <Label htmlFor="d_userId">用户 ID</Label>
-              <Input id="d_userId" placeholder="输入 ID" value={deployFilters.userId} onChange={(event) => setDeployFilters((current) => ({ ...current, userId: event.target.value }))} className="h-9 w-[120px] bg-background text-foreground" />
+              <Label htmlFor="d_userId">{t("userID")}</Label>
+              <Input id="d_userId" placeholder={t("enterID")} value={deployFilters.userId} onChange={(event) => setDeployFilters((current) => ({ ...current, userId: event.target.value }))} className="h-9 w-[120px] bg-background text-foreground" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="deployNo">部署订单号</Label>
-              <Input id="deployNo" placeholder="输入编号" value={deployFilters.deployNo} onChange={(event) => setDeployFilters((current) => ({ ...current, deployNo: event.target.value }))} className="h-9 w-[180px] bg-background text-foreground" />
+              <Label htmlFor="deployNo">{t("deploymentOrderNo")}</Label>
+              <Input id="deployNo" placeholder={t("enterNumber")} value={deployFilters.deployNo} onChange={(event) => setDeployFilters((current) => ({ ...current, deployNo: event.target.value }))} className="h-9 w-[180px] bg-background text-foreground" />
             </div>
             <div className="space-y-2">
-              <Label>部署状态</Label>
+              <Label>{t("deploymentStatus")}</Label>
               <Select value={deployFilters.status} onValueChange={(val) => setDeployFilters((current) => ({ ...current, status: val }))}>
                 <SelectTrigger className="h-9 w-[140px] bg-background text-foreground">
-                  <SelectValue placeholder="全部状态" />
+                  <SelectValue placeholder={t("allStatuses")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value=" ">全部状态</SelectItem>
-                  <SelectItem value="DEPLOYING">部署中</SelectItem>
-                  <SelectItem value="COMPLETED">已完成</SelectItem>
-                  <SelectItem value="FAILED">失败</SelectItem>
+                  <SelectItem value=" ">{t("allStatuses")}</SelectItem>
+                  <SelectItem value="DEPLOYING">{t("deploying")}</SelectItem>
+                  <SelectItem value="COMPLETED">{t("completed")}</SelectItem>
+                  <SelectItem value="FAILED">{t("failed")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>开始日期</Label>
+              <Label>{t("startDate")}</Label>
               <Input type="date" value={deployFilters.startTime} onChange={(event) => setDeployFilters((current) => ({ ...current, startTime: event.target.value }))} className="h-9 w-[150px] bg-background text-foreground" />
             </div>
             <div className="space-y-2">
-              <Label>结束日期</Label>
+              <Label>{t("endDate")}</Label>
               <Input type="date" value={deployFilters.endTime} onChange={(event) => setDeployFilters((current) => ({ ...current, endTime: event.target.value }))} className="h-9 w-[150px] bg-background text-foreground" />
             </div>
           </SearchPanel>
-          <DataTable columns={deployColumns} data={deployOrders.page.records} rowKey={(row) => row.deployNo} loading={deployOrders.loading} emptyText="暂无部署订单" pageNo={deployOrders.page.pageNo} pageSize={deployOrders.page.pageSize} total={deployOrders.page.total} onPageChange={deployOrders.changePage} />
+          <DataTable columns={deployColumns} data={deployOrders.page.records} rowKey={(row) => row.deployNo} loading={deployOrders.loading} emptyText={t("noDeploymentOrdersYet")} pageNo={deployOrders.page.pageNo} pageSize={deployOrders.page.pageSize} total={deployOrders.page.total} onPageChange={deployOrders.changePage} />
         </TabsContent>
       </Tabs>
 
       <DetailDrawer data={credentialDetail} open={drawer === "credential"}
-        title="API 凭证详情"
+        title={t("apiCredentialDetails")}
         subtitle={(data) => data?.credentialNo}
         sections={credentialSections}
         onClose={() => setDrawer(null)}
       />
       <DetailDrawer data={deployDetail} open={drawer === "deploy"}
-        title="部署订单详情"
+        title={t("deploymentOrderDetails")}
         subtitle={(data) => data?.deployNo}
         sections={deploySections}
         onClose={() => setDrawer(null)}

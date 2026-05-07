@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Eye, Lock, Unlock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -47,6 +48,7 @@ const initialFilters: UserFilters = {
 const initialQuery: AdminUserQuery = { pageNo: 1, pageSize: 10 };
 
 export default function CustomersPage() {
+  const t = useTranslations("AdminPages.users");
   const [filters, setFilters] = useState<UserFilters>(initialFilters);
   const [detail, setDetail] = useState<AdminUserRow | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
@@ -72,7 +74,7 @@ export default function CustomersPage() {
   const showDetail = async (row: AdminUserRow) => {
     const id = resolveUserId(row);
     if (id === null) {
-      setActionError("当前行缺少用户 ID，无法查看详情。");
+      setActionError(t("thisRowIsMissingAUserIDSoDetailsCannotBeOpened"));
       return;
     }
     setDetailOpen(true);
@@ -107,7 +109,7 @@ export default function CustomersPage() {
   const toggleUser = async (row: AdminUserRow, enabled: boolean) => {
     const id = resolveUserId(row);
     if (id === null) {
-      setActionError("当前行缺少用户 ID，无法执行操作。");
+      setActionError(t("thisRowIsMissingAUserIDSoTheActionCannotBePerformed"));
       return;
     }
     setActionError(null);
@@ -124,38 +126,35 @@ export default function CustomersPage() {
   };
 
   const columns: DataTableColumn<AdminUserRow>[] = [
-    { key: "userId", title: "用户 ID", render: (row) => formatEmpty(row.userId) },
-    { key: "email", title: "邮箱", render: (row) => formatEmpty(row.email) },
-    { key: "userName", title: "用户名", render: (row) => formatEmpty(row.userName) },
-    { key: "status", title: "状态", render: (row) => <StatusBadge status={row.status} /> },
-    { key: "createdAt", title: "注册时间", render: (row) => <DateTimeText value={row.createdAt} /> },
+    { key: "userId", title: t("userID"), render: (row) => formatEmpty(row.userId) },
+    { key: "email", title: t("email"), render: (row) => formatEmpty(row.email) },
+    { key: "userName", title: t("username"), render: (row) => formatEmpty(row.userName) },
+    { key: "status", title: t("status"), render: (row) => <StatusBadge status={row.status} /> },
+    { key: "createdAt", title: t("registeredAt"), render: (row) => <DateTimeText value={row.createdAt} /> },
     {
       key: "actions",
-      title: "操作",
+      title: t("actions"),
       render: (row) => (
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="sm" className="font-medium" onClick={() => void showDetail(row)}>
             <Eye className="h-4 w-4" />
-            详情
-          </Button>
+            {t("details")}</Button>
           {row.status === 0 ? (
             <ConfirmActionButton
-              title="启用用户"
-              description="启用后该用户可继续登录和操作平台。"
+              title={t("enableUser")}
+              description={t("afterEnablingThisUserCanContinueSigningInAndUsingThePlatform")}
               onConfirm={() => toggleUser(row, true)}
             >
               <Unlock className="h-4 w-4" />
-              启用
-            </ConfirmActionButton>
+              {t("enable")}</ConfirmActionButton>
           ) : (
             <ConfirmActionButton
-              title="禁用用户"
-              description="禁用后该用户将无法继续使用平台能力。"
+              title={t("disableUser")}
+              description={t("afterDisablingThisUserCanNoLongerUsePlatformCapabilities")}
               onConfirm={() => toggleUser(row, false)}
             >
               <Lock className="h-4 w-4" />
-              禁用
-            </ConfirmActionButton>
+              {t("disabled")}</ConfirmActionButton>
           )}
         </div>
       ),
@@ -164,28 +163,28 @@ export default function CustomersPage() {
 
   const detailSections: DetailSectionDef<AdminUserRow>[] = [
     {
-      title: "基础信息",
+      title: t("basicInformation"),
       fields: [
-        { label: "用户 ID", render: (detail) => formatEmpty(detail.userId) },
-        { label: "邮箱", render: (detail) => formatEmpty(detail.email) },
-        { label: "用户名", render: (detail) => formatEmpty(detail.userName) },
-        { label: "状态", render: (detail) => <StatusBadge status={detail.status} /> },
+        { label: t("userID"), render: (detail) => formatEmpty(detail.userId) },
+        { label: t("email"), render: (detail) => formatEmpty(detail.email) },
+        { label: t("username"), render: (detail) => formatEmpty(detail.userName) },
+        { label: t("status"), render: (detail) => <StatusBadge status={detail.status} /> },
       ],
     },
     {
-      title: "业务信息",
+      title: t("businessInformation"),
       fields: [
-        { label: "钱包余额", render: (detail) => formatEmpty(detail.walletData?.availableBalance ?? detail.availableBalance) },
-        { label: "冻结金额", render: (detail) => formatEmpty(detail.walletData?.frozenBalance ?? detail.frozenBalance) },
-        { label: "团队人数", render: (detail) => formatEmpty(detail.teamData?.totalTeamCount ?? detail.teamCount) },
-        { label: "订单数量", render: (detail) => formatEmpty(detail.orderData?.total ?? detail.orderCount) },
+        { label: t("walletBalance"), render: (detail) => formatEmpty(detail.walletData?.availableBalance ?? detail.availableBalance) },
+        { label: t("frozenAmount"), render: (detail) => formatEmpty(detail.walletData?.frozenBalance ?? detail.frozenBalance) },
+        { label: t("teamSize"), render: (detail) => formatEmpty(detail.teamData?.totalTeamCount ?? detail.teamCount) },
+        { label: t("orderCount"), render: (detail) => formatEmpty(detail.orderData?.total ?? detail.orderCount) },
       ],
     },
     {
-      title: "时间信息",
+      title: t("timeInformation"),
       fields: [
-        { label: "注册时间", render: (detail) => <DateTimeText value={detail.createdAt} /> },
-        { label: "更新时间", render: (detail) => <DateTimeText value={detail.updatedAt} /> },
+        { label: t("registeredAt"), render: (detail) => <DateTimeText value={detail.createdAt} /> },
+        { label: t("updatedAt"), render: (detail) => <DateTimeText value={detail.updatedAt} /> },
       ],
     },
   ];
@@ -194,8 +193,8 @@ export default function CustomersPage() {
     <div className="space-y-6">
       <PageHeader
         eyebrow="USER MANAGEMENT"
-        title="客户列表"
-        description="管理平台 C 端注册用户，查询详情并执行状态控制。"
+        title={t("customerList")}
+        description={t("manageRegisteredCustomerAccountsViewDetailsAndControlAccountStatus")}
       />
 
       <ErrorAlert message={actionError ?? error} />
@@ -208,32 +207,32 @@ export default function CustomersPage() {
         }}
       >
         <div className="space-y-2">
-          <Label htmlFor="userId">用户 ID</Label>
-          <Input id="userId" placeholder="输入 ID" value={filters.userId} onChange={(event) => setFilters((current) => ({ ...current, userId: event.target.value }))} className="h-9 w-[100px] bg-background text-foreground" />
+          <Label htmlFor="userId">{t("userID")}</Label>
+          <Input id="userId" placeholder={t("enterID")} value={filters.userId} onChange={(event) => setFilters((current) => ({ ...current, userId: event.target.value }))} className="h-9 w-[100px] bg-background text-foreground" />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="email">邮箱</Label>
-          <Input id="email" placeholder="输入邮箱" value={filters.email} onChange={(event) => setFilters((current) => ({ ...current, email: event.target.value }))} className="h-9 w-[180px] bg-background text-foreground" />
+          <Label htmlFor="email">{t("email")}</Label>
+          <Input id="email" placeholder={t("enterEmail")} value={filters.email} onChange={(event) => setFilters((current) => ({ ...current, email: event.target.value }))} className="h-9 w-[180px] bg-background text-foreground" />
         </div>
         <div className="space-y-2">
-          <Label>启用状态</Label>
+          <Label>{t("enabledStatus")}</Label>
           <Select value={filters.status} onValueChange={(val) => setFilters((current) => ({ ...current, status: val }))}>
             <SelectTrigger className="h-9 w-[180px] bg-background text-foreground">
-              <SelectValue placeholder="全部状态" />
+              <SelectValue placeholder={t("allStatuses")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value=" ">全部状态</SelectItem>
-              <SelectItem value={CommonStatus.ENABLED.toString()}>已启用</SelectItem>
-              <SelectItem value={CommonStatus.DISABLED.toString()}>已禁用</SelectItem>
+              <SelectItem value=" ">{t("allStatuses")}</SelectItem>
+              <SelectItem value={CommonStatus.ENABLED.toString()}>{t("enabled")}</SelectItem>
+              <SelectItem value={CommonStatus.DISABLED.toString()}>{t("disabled2")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
         <div className="space-y-2">
-          <Label>注册开始</Label>
+          <Label>{t("registrationStart")}</Label>
           <Input type="date" value={filters.startTime} onChange={(event) => setFilters((current) => ({ ...current, startTime: event.target.value }))} className="h-9 w-[150px] bg-background text-foreground" />
         </div>
         <div className="space-y-2">
-          <Label>注册结束</Label>
+          <Label>{t("registrationEnd")}</Label>
           <Input type="date" value={filters.endTime} onChange={(event) => setFilters((current) => ({ ...current, endTime: event.target.value }))} className="h-9 w-[150px] bg-background text-foreground" />
         </div>
       </SearchPanel>
@@ -243,7 +242,7 @@ export default function CustomersPage() {
         data={page.records}
         rowKey={(row) => `${formatEmpty(row.id)}-${formatEmpty(row.userId)}`}
         loading={loading}
-        emptyText="暂无匹配客户"
+        emptyText={t("noSYet")}
         pageNo={page.pageNo}
         pageSize={page.pageSize}
         total={page.total}
@@ -252,8 +251,8 @@ export default function CustomersPage() {
 
       <DetailDrawer data={detail}
         open={detailOpen}
-        title="用户详情"
-        subtitle={(data) => detailLoading ? "加载中" : ((data.email) || "-").toString()}
+        title={t("userDetails")}
+        subtitle={(data) => detailLoading ? t("loading") : ((data.email) || "-").toString()}
         sections={detailSections}
         onClose={() => setDetailOpen(false)}
       />

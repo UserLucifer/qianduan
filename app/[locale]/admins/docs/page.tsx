@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { Edit2, Eye, FileText, FolderTree, Plus, Power, PowerOff, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -49,9 +50,9 @@ import { formatEmpty, toErrorMessage } from "@/lib/format";
 import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 const ALL_VALUE = "all";
-const DOCS_ADMIN_SECTION_ITEMS: Array<{ section: DocsSection; label: string }> = [
-  ...DOCS_SECTION_ITEMS.map(({ section, label }) => ({ section, label })),
-  { section: "support", label: "支持" },
+const DOCS_ADMIN_SECTION_ITEMS: Array<{ section: DocsSection }> = [
+  ...DOCS_SECTION_ITEMS.map(({ section }) => ({ section })),
+  { section: "support" },
 ];
 
 interface CategoryFilters {
@@ -100,10 +101,10 @@ function flattenCategories(categories: DocsCategory[]): DocsCategory[] {
   ]);
 }
 
-function publishLabel(status: number | null | undefined) {
-  if (status === 1) return "已发布";
-  if (status === 2) return "已下线";
-  return "草稿";
+function publishLabel(status: number | null | undefined, t: (key: "published" | "offline" | "draft") => string) {
+  if (status === 1) return t("published");
+  if (status === 2) return t("offline");
+  return t("draft");
 }
 
 function publishBadgeClassName(status: number | null | undefined) {
@@ -117,6 +118,8 @@ function languageLabel(language: DocsLanguage | null | undefined) {
 }
 
 export default function AdminDocsPage() {
+  const t = useTranslations("AdminPages.docs");
+  const locale = useLocale() as DocsLanguage;
   const [categoryFilters, setCategoryFilters] = useState<CategoryFilters>(initialCategoryFilters);
   const [articleFilters, setArticleFilters] = useState<ArticleFilters>(initialArticleFilters);
   const [categories, setCategories] = useState<DocsCategory[]>([]);
@@ -263,39 +266,35 @@ export default function AdminDocsPage() {
 
   const categoryColumns: DataTableColumn<DocsCategory>[] = [
     { key: "id", title: "ID", render: (row) => <span className="font-mono text-xs text-muted-foreground">{row.id}</span> },
-    { key: "language", title: "语言", render: (row) => <Badge variant="outline">{languageLabel(row.language)}</Badge> },
-    { key: "section", title: "分区", render: (row) => <Badge variant="outline">{docsSectionLabel(row.section)}</Badge> },
-    { key: "categoryName", title: "分类名称", render: (row) => <span className="font-medium text-foreground">{row.categoryName}</span> },
-    { key: "categoryCode", title: "编码", render: (row) => <span className="font-mono text-xs text-muted-foreground">{row.categoryCode}</span> },
-    { key: "parentId", title: "父级", render: (row) => formatEmpty(row.parentId) },
-    { key: "sortNo", title: "排序", render: (row) => formatEmpty(row.sortNo) },
-    { key: "status", title: "状态", render: (row) => <StatusBadge status={row.status} /> },
-    { key: "updatedAt", title: "更新时间", render: (row) => <DateTimeText value={row.updatedAt} /> },
+    { key: "language", title: t("language"), render: (row) => <Badge variant="outline">{languageLabel(row.language)}</Badge> },
+    { key: "section", title: t("section"), render: (row) => <Badge variant="outline">{docsSectionLabel(row.section, locale)}</Badge> },
+    { key: "categoryName", title: t("categoryName"), render: (row) => <span className="font-medium text-foreground">{row.categoryName}</span> },
+    { key: "categoryCode", title: t("code"), render: (row) => <span className="font-mono text-xs text-muted-foreground">{row.categoryCode}</span> },
+    { key: "parentId", title: t("parent"), render: (row) => formatEmpty(row.parentId) },
+    { key: "sortNo", title: t("sort"), render: (row) => formatEmpty(row.sortNo) },
+    { key: "status", title: t("status"), render: (row) => <StatusBadge status={row.status} /> },
+    { key: "updatedAt", title: t("updatedAt"), render: (row) => <DateTimeText value={row.updatedAt} /> },
     {
       key: "actions",
-      title: "操作",
+      title: t("actions"),
       render: (row) => (
         <div className="flex flex-wrap items-center gap-2">
           <Button variant="ghost" size="sm" onClick={() => openCategoryForm(row)}>
             <Edit2 className="h-4 w-4" />
-            编辑
-          </Button>
+            {t("edit")}</Button>
           {row.status === 1 ? (
-            <ConfirmActionButton title="停用分类" description="停用后公开文档分类树不再展示该分类。" onConfirm={() => toggleCategory(row, false)}>
+            <ConfirmActionButton title={t("disableCategory")} description={t("afterDisablingThisCategoryWillNoLongerAppearInThePublicDocumentationTree")} onConfirm={() => toggleCategory(row, false)}>
               <PowerOff className="h-4 w-4" />
-              停用
-            </ConfirmActionButton>
+              {t("disable")}</ConfirmActionButton>
           ) : (
-            <ConfirmActionButton title="启用分类" description="启用后该分类可在公开文档树展示。" onConfirm={() => toggleCategory(row, true)}>
+            <ConfirmActionButton title={t("enableCategory")} description={t("afterEnablingThisCategoryCanAppearInThePublicDocumentationTree")} onConfirm={() => toggleCategory(row, true)}>
               <Power className="h-4 w-4" />
-              启用
-            </ConfirmActionButton>
+              {t("enable")}</ConfirmActionButton>
           )}
-          <ConfirmActionButton title="删除分类" description="该操作会调用后端软删除接口，请确认分类下没有需要保留的内容。" onConfirm={() => removeCategory(row)}>
+          <ConfirmActionButton title={t("deleteCategory")} description={t("thisCallsTheBackendSoftDeleteApiConfirmThereIsNoContentUnderThisCategoryThatMustBeKept")} onConfirm={() => removeCategory(row)}>
             <span className="inline-flex items-center gap-2 text-red-500">
               <Trash2 className="h-4 w-4" />
-              删除
-            </span>
+              {t("delete")}</span>
           </ConfirmActionButton>
         </div>
       ),
@@ -304,11 +303,11 @@ export default function AdminDocsPage() {
 
   const articleColumns: DataTableColumn<DocsArticle>[] = [
     { key: "id", title: "ID", render: (row) => <span className="font-mono text-xs text-muted-foreground">{row.id}</span> },
-    { key: "language", title: "语言", render: (row) => <Badge variant="outline">{languageLabel(row.language)}</Badge> },
-    { key: "section", title: "分区", render: (row) => <Badge variant="outline">{docsSectionLabel(row.section)}</Badge> },
+    { key: "language", title: t("language"), render: (row) => <Badge variant="outline">{languageLabel(row.language)}</Badge> },
+    { key: "section", title: t("section"), render: (row) => <Badge variant="outline">{docsSectionLabel(row.section, locale)}</Badge> },
     {
       key: "title",
-      title: "标题",
+      title: t("title"),
       render: (row) => (
         <div className="min-w-0">
           <div className="line-clamp-1 font-medium text-foreground">{row.title}</div>
@@ -316,55 +315,52 @@ export default function AdminDocsPage() {
         </div>
       ),
     },
-    { key: "categoryName", title: "分类", render: (row) => <Badge variant="outline">{row.categoryName ?? "-"}</Badge> },
+    { key: "categoryName", title: t("category"), render: (row) => <Badge variant="outline">{row.categoryName ?? "-"}</Badge> },
     {
       key: "isSectionHome",
-      title: "首页",
+      title: t("home"),
       render: (row) =>
         row.isSectionHome === 1 ? (
           <Badge variant="outline" className="border-emerald-400/20 bg-emerald-400/10 text-emerald-500">
-            分区首页
-          </Badge>
+            {t("sectionHome")}</Badge>
         ) : (
           <span className="text-muted-foreground">-</span>
         ),
     },
     {
       key: "publishStatus",
-      title: "发布状态",
+      title: t("publishingStatus"),
       render: (row) => (
         <StatusBadge
           status={String(row.publishStatus)}
-          label={publishLabel(row.publishStatus)}
+          label={publishLabel(row.publishStatus, t)}
           className={publishBadgeClassName(row.publishStatus)}
         />
       ),
     },
-    { key: "sortNo", title: "排序", render: (row) => formatEmpty(row.sortNo) },
-    { key: "viewCount", title: "浏览量", render: (row) => formatEmpty(row.viewCount) },
-    { key: "updatedAt", title: "更新时间", render: (row) => <DateTimeText value={row.updatedAt} /> },
+    { key: "sortNo", title: t("sort"), render: (row) => formatEmpty(row.sortNo) },
+    { key: "viewCount", title: t("views"), render: (row) => formatEmpty(row.viewCount) },
+    { key: "updatedAt", title: t("updatedAt"), render: (row) => <DateTimeText value={row.updatedAt} /> },
     {
       key: "actions",
-      title: "操作",
+      title: t("actions"),
       render: (row) => (
         <div className="flex flex-wrap items-center gap-2">
           <Button variant="ghost" size="sm" onClick={() => openArticleForm(row)}>
             <Edit2 className="h-4 w-4" />
-            编辑
-          </Button>
+            {t("edit")}</Button>
           <Button variant="ghost" size="sm" onClick={() => openArticleDetail(row)}>
             <Eye className="h-4 w-4" />
-            详情
-          </Button>
+            {t("details")}</Button>
           <ConfirmActionButton
-            title={row.publishStatus === 1 ? "下线文档" : "发布文档"}
-            description={row.publishStatus === 1 ? "下线后公开文档页不再展示该文章。" : "发布后公开文档页可访问该文章。"}
+            title={row.publishStatus === 1 ? t("unpublishDocument") : t("publishDocument")}
+            description={row.publishStatus === 1 ? t("afterUnpublishingThisArticleWillNoLongerAppearOnPublicDocumentationPages") : t("afterPublishingThisArticleWillBeAccessibleOnPublicDocumentationPages")}
             onConfirm={() => toggleArticlePublish(row)}
           >
-            {row.publishStatus === 1 ? "下线" : "发布"}
+            {row.publishStatus === 1 ? t("unpublish") : t("publish")}
           </ConfirmActionButton>
-          <ConfirmActionButton title="删除文档" description="该操作会调用后端软删除接口，删除后不可在列表继续管理。" onConfirm={() => removeArticle(row)}>
-            <span className="text-red-500">删除</span>
+          <ConfirmActionButton title={t("deleteDocument")} description={t("thisCallsTheBackendSoftDeleteApiAfterDeletionItCanNoLongerBeManagedFromTheList")} onConfirm={() => removeArticle(row)}>
+            <span className="text-red-500">{t("delete")}</span>
           </ConfirmActionButton>
         </div>
       ),
@@ -373,20 +369,20 @@ export default function AdminDocsPage() {
 
   const detailSections: DetailSectionDef<DocsArticle>[] = [
     {
-      title: "文档信息",
+      title: t("documentInformation"),
       fields: [
         { label: "ID", render: (detail) => detail.id },
-        { label: "语言", render: (detail) => languageLabel(detail.language) },
-        { label: "分区", render: (detail) => docsSectionLabel(detail.section) },
-        { label: "标题", render: (detail) => detail.title },
+        { label: t("language"), render: (detail) => languageLabel(detail.language) },
+        { label: t("section"), render: (detail) => docsSectionLabel(detail.section, locale) },
+        { label: t("title"), render: (detail) => detail.title },
         { label: "Slug", render: (detail) => detail.slug },
-        { label: "分类", render: (detail) => detail.categoryName ?? "-" },
-        { label: "分区首页", render: (detail) => (detail.isSectionHome === 1 ? "是" : "否") },
-        { label: "发布状态", render: (detail) => publishLabel(detail.publishStatus) },
-        { label: "浏览量", render: (detail) => detail.viewCount ?? 0 },
-        { label: "发布时间", render: (detail) => <DateTimeText value={detail.publishedAt ?? undefined} /> },
-        { label: "更新时间", render: (detail) => <DateTimeText value={detail.updatedAt} /> },
-        { label: "摘要", fullWidth: true, render: (detail) => detail.summary || "-" },
+        { label: t("category"), render: (detail) => detail.categoryName ?? "-" },
+        { label: t("sectionHome"), render: (detail) => (detail.isSectionHome === 1 ? t("yes") : t("no")) },
+        { label: t("publishingStatus"), render: (detail) => publishLabel(detail.publishStatus, t) },
+        { label: t("views"), render: (detail) => detail.viewCount ?? 0 },
+        { label: t("publishedAt"), render: (detail) => <DateTimeText value={detail.publishedAt ?? undefined} /> },
+        { label: t("updatedAt"), render: (detail) => <DateTimeText value={detail.updatedAt} /> },
+        { label: t("summary"), fullWidth: true, render: (detail) => detail.summary || "-" },
       ],
     },
   ];
@@ -404,18 +400,16 @@ export default function AdminDocsPage() {
     <div className="space-y-6">
       <PageHeader
         eyebrow="DOCS OPS"
-        title="文档系统"
-        description="维护公开帮助文档的分类树、Markdown 正文、发布状态和排序。公开页读取 /api/docs/**，后台管理读取 /api/admin/docs/**。"
+        title={t("documentationSystem")}
+        description={t("maintainPublicHelpDocumentationCategoriesMarkdownContentPublishingStatusAndOrderingPublicPagesReadApiDocsWhileAdminPagesReadApiAdminDocs")}
         actions={
           <div className="flex flex-wrap gap-2">
             <Button variant="outline" onClick={() => openCategoryForm()}>
               <FolderTree className="mr-2 h-4 w-4" />
-              新增分类
-            </Button>
+              {t("newCategory")}</Button>
             <Button onClick={() => void openArticleForm()}>
               <Plus className="mr-2 h-4 w-4" />
-              新增文档
-            </Button>
+              {t("newDocument")}</Button>
           </div>
         }
       />
@@ -426,12 +420,10 @@ export default function AdminDocsPage() {
         <TabsList className="border border-border bg-card">
           <TabsTrigger value="articles">
             <FileText className="mr-2 h-4 w-4" />
-            文档文章
-          </TabsTrigger>
+            {t("documentArticles")}</TabsTrigger>
           <TabsTrigger value="categories">
             <FolderTree className="mr-2 h-4 w-4" />
-            分类树
-          </TabsTrigger>
+            {t("categoryTree")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="articles" className="space-y-4">
@@ -443,16 +435,16 @@ export default function AdminDocsPage() {
             }}
           >
             <div className="space-y-2">
-              <Label>关键词</Label>
+              <Label>{t("keyword")}</Label>
               <Input
                 value={articleFilters.keyword}
                 onChange={(event) => setArticleFilters((current) => ({ ...current, keyword: event.target.value }))}
-                placeholder="标题 / 摘要 / 正文"
+                placeholder={t("titleSummaryOrBody")}
                 className="h-9 w-[220px] bg-background"
               />
             </div>
             <div className="space-y-2">
-              <Label>语言</Label>
+              <Label>{t("language")}</Label>
               <Select
                 value={articleFilters.language}
                 onValueChange={(value) =>
@@ -460,10 +452,10 @@ export default function AdminDocsPage() {
                 }
               >
                 <SelectTrigger className="h-9 w-[140px] bg-background">
-                  <SelectValue placeholder="全部语言" />
+                  <SelectValue placeholder={t("allLanguages")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value={ALL_VALUE}>全部语言</SelectItem>
+                  <SelectItem value={ALL_VALUE}>{t("allLanguages")}</SelectItem>
                   {DOCS_LANGUAGE_ITEMS.map((item) => (
                     <SelectItem key={item.language} value={item.language}>
                       {item.label}
@@ -473,7 +465,7 @@ export default function AdminDocsPage() {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>分区</Label>
+              <Label>{t("section")}</Label>
               <Select
                 value={articleFilters.section}
                 onValueChange={(value) =>
@@ -481,26 +473,26 @@ export default function AdminDocsPage() {
                 }
               >
                 <SelectTrigger className="h-9 w-[160px] bg-background">
-                  <SelectValue placeholder="全部分区" />
+                  <SelectValue placeholder={t("allSections")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value={ALL_VALUE}>全部分区</SelectItem>
+                  <SelectItem value={ALL_VALUE}>{t("allSections")}</SelectItem>
                   {DOCS_ADMIN_SECTION_ITEMS.map((item) => (
                     <SelectItem key={item.section} value={item.section}>
-                      {item.label}
+                      {docsSectionLabel(item.section, locale)}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>分类</Label>
+              <Label>{t("category")}</Label>
               <Select value={articleFilters.categoryId} onValueChange={(value) => setArticleFilters((current) => ({ ...current, categoryId: value }))}>
                 <SelectTrigger className="h-9 w-[180px] bg-background">
-                  <SelectValue placeholder="全部分类" />
+                  <SelectValue placeholder={t("allCategories")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value={ALL_VALUE}>全部分类</SelectItem>
+                  <SelectItem value={ALL_VALUE}>{t("allCategories")}</SelectItem>
                   {articleCategoryOptions.map((category) => (
                     <SelectItem key={category.id} value={String(category.id)}>
                       {category.categoryName}
@@ -510,34 +502,34 @@ export default function AdminDocsPage() {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>分区首页</Label>
+              <Label>{t("sectionHome")}</Label>
               <Select value={articleFilters.isSectionHome} onValueChange={(value) => setArticleFilters((current) => ({ ...current, isSectionHome: value }))}>
                 <SelectTrigger className="h-9 w-[160px] bg-background">
-                  <SelectValue placeholder="全部" />
+                  <SelectValue placeholder={t("all")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value={ALL_VALUE}>全部</SelectItem>
-                  <SelectItem value="1">是</SelectItem>
-                  <SelectItem value="0">否</SelectItem>
+                  <SelectItem value={ALL_VALUE}>{t("all")}</SelectItem>
+                  <SelectItem value="1">{t("yes")}</SelectItem>
+                  <SelectItem value="0">{t("no")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>发布状态</Label>
+              <Label>{t("publishingStatus")}</Label>
               <Select value={articleFilters.publishStatus} onValueChange={(value) => setArticleFilters((current) => ({ ...current, publishStatus: value }))}>
                 <SelectTrigger className="h-9 w-[160px] bg-background">
-                  <SelectValue placeholder="全部状态" />
+                  <SelectValue placeholder={t("allStatuses")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value={ALL_VALUE}>全部状态</SelectItem>
-                  <SelectItem value="0">草稿</SelectItem>
-                  <SelectItem value="1">已发布</SelectItem>
-                  <SelectItem value="2">已下线</SelectItem>
+                  <SelectItem value={ALL_VALUE}>{t("allStatuses")}</SelectItem>
+                  <SelectItem value="0">{t("draft")}</SelectItem>
+                  <SelectItem value="1">{t("published")}</SelectItem>
+                  <SelectItem value="2">{t("offline")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>开始时间</Label>
+              <Label>{t("startTime")}</Label>
               <Input
                 value={articleFilters.startTime}
                 onChange={(event) => setArticleFilters((current) => ({ ...current, startTime: event.target.value }))}
@@ -546,7 +538,7 @@ export default function AdminDocsPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label>结束时间</Label>
+              <Label>{t("endTime")}</Label>
               <Input
                 value={articleFilters.endTime}
                 onChange={(event) => setArticleFilters((current) => ({ ...current, endTime: event.target.value }))}
@@ -561,7 +553,7 @@ export default function AdminDocsPage() {
             data={articleResource.page.records}
             rowKey={(row) => row.id}
             loading={articleResource.loading}
-            emptyText="暂无文档文章"
+            emptyText={t("noDocumentArticlesYet")}
             pageNo={articleResource.page.pageNo}
             pageSize={articleResource.page.pageSize}
             total={articleResource.page.total}
@@ -578,7 +570,7 @@ export default function AdminDocsPage() {
             }}
           >
             <div className="space-y-2">
-              <Label>语言</Label>
+              <Label>{t("language")}</Label>
               <Select
                 value={categoryFilters.language}
                 onValueChange={(value) =>
@@ -586,10 +578,10 @@ export default function AdminDocsPage() {
                 }
               >
                 <SelectTrigger className="h-9 w-[140px] bg-background">
-                  <SelectValue placeholder="全部语言" />
+                  <SelectValue placeholder={t("allLanguages")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value={ALL_VALUE}>全部语言</SelectItem>
+                  <SelectItem value={ALL_VALUE}>{t("allLanguages")}</SelectItem>
                   {DOCS_LANGUAGE_ITEMS.map((item) => (
                     <SelectItem key={item.language} value={item.language}>
                       {item.label}
@@ -599,40 +591,40 @@ export default function AdminDocsPage() {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>分区</Label>
+              <Label>{t("section")}</Label>
               <Select value={categoryFilters.section} onValueChange={(value) => setCategoryFilters((current) => ({ ...current, section: value }))}>
                 <SelectTrigger className="h-9 w-[160px] bg-background">
-                  <SelectValue placeholder="全部分区" />
+                  <SelectValue placeholder={t("allSections")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value={ALL_VALUE}>全部分区</SelectItem>
+                  <SelectItem value={ALL_VALUE}>{t("allSections")}</SelectItem>
                   {DOCS_ADMIN_SECTION_ITEMS.map((item) => (
                     <SelectItem key={item.section} value={item.section}>
-                      {item.label}
+                      {docsSectionLabel(item.section, locale)}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>父级 ID</Label>
+              <Label>{t("parentID")}</Label>
               <Input
                 value={categoryFilters.parentId === ALL_VALUE ? "" : categoryFilters.parentId}
                 onChange={(event) => setCategoryFilters((current) => ({ ...current, parentId: event.target.value || ALL_VALUE }))}
-                placeholder="全部"
+                placeholder={t("all")}
                 className="h-9 w-[160px] bg-background"
               />
             </div>
             <div className="space-y-2">
-              <Label>状态</Label>
+              <Label>{t("status")}</Label>
               <Select value={categoryFilters.status} onValueChange={(value) => setCategoryFilters((current) => ({ ...current, status: value }))}>
                 <SelectTrigger className="h-9 w-[160px] bg-background">
-                  <SelectValue placeholder="全部状态" />
+                  <SelectValue placeholder={t("allStatuses")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value={ALL_VALUE}>全部状态</SelectItem>
-                  <SelectItem value="1">启用</SelectItem>
-                  <SelectItem value="0">停用</SelectItem>
+                  <SelectItem value={ALL_VALUE}>{t("allStatuses")}</SelectItem>
+                  <SelectItem value="1">{t("enable")}</SelectItem>
+                  <SelectItem value="0">{t("disable")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -643,7 +635,7 @@ export default function AdminDocsPage() {
             data={categoryResource.page.records}
             rowKey={(row) => row.id}
             loading={categoryResource.loading}
-            emptyText="暂无文档分类"
+            emptyText={t("noSYet")}
             pageNo={categoryResource.page.pageNo}
             pageSize={categoryResource.page.pageSize}
             total={categoryResource.page.total}
@@ -654,7 +646,7 @@ export default function AdminDocsPage() {
 
       <Dialog open={categoryFormOpen} onOpenChange={setCategoryFormOpen}>
         <DialogContent className="flex max-w-2xl flex-col items-stretch">
-          <DialogTitle className="sr-only">编辑文档分类</DialogTitle>
+          <DialogTitle className="sr-only">{t("editDocumentCategory")}</DialogTitle>
           <DocsCategoryForm
             initialData={editingCategory}
             categories={categories}
@@ -669,7 +661,7 @@ export default function AdminDocsPage() {
 
       <Dialog open={articleFormOpen} onOpenChange={setArticleFormOpen}>
         <DialogContent className="flex max-h-[90vh] max-w-4xl flex-col items-stretch overflow-y-auto">
-          <DialogTitle className="sr-only">编辑文档文章</DialogTitle>
+          <DialogTitle className="sr-only">{t("editDocumentArticle")}</DialogTitle>
           <DocsArticleForm
             initialData={editingArticle}
             categories={categories}
@@ -685,7 +677,7 @@ export default function AdminDocsPage() {
       <DetailDrawer
         data={articleDetail}
         open={detailOpen}
-        title="文档详情"
+        title={t("documentDetails")}
         subtitle={(detail) => detail.title}
         sections={detailSections}
         onClose={() => setDetailOpen(false)}
@@ -693,7 +685,7 @@ export default function AdminDocsPage() {
         {(detail) =>
           detail.contentMarkdown ? (
             <section className="rounded-xl border bg-card p-5 text-card-foreground shadow-sm">
-              <h3 className="mb-4 text-sm font-bold text-foreground">正文预览</h3>
+              <h3 className="mb-4 text-sm font-bold text-foreground">{t("bodyPreview")}</h3>
               <div className="max-h-[420px] overflow-y-auto">
                 <MarkdownContent content={detail.contentMarkdown} />
               </div>

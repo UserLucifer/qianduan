@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -39,6 +40,7 @@ const walletFiltersInitial: WalletFilters = { userId: "", walletNo: "" };
 const txFiltersInitial: TxFilters = { userId: "", walletNo: "", txType: "", bizType: "", startTime: "", endTime: "" };
 
 export default function AdminWalletsPage() {
+  const t = useTranslations("AdminPages.wallets");
   const [walletFilters, setWalletFilters] = useState<WalletFilters>(walletFiltersInitial);
   const [txFilters, setTxFilters] = useState<TxFilters>(txFiltersInitial);
   const [detail, setDetail] = useState<UserWallet | null>(null);
@@ -80,73 +82,72 @@ export default function AdminWalletsPage() {
   };
 
   const walletColumns: DataTableColumn<UserWallet>[] = [
-    { key: "walletNo", title: "钱包编号", render: (row) => formatEmpty(row.walletNo) },
-    { key: "userName", title: "用户名称", render: (row) => formatEmpty(row.userName) },
-    { key: "availableBalance", title: "可用余额", render: (row) => <MoneyText value={row.availableBalance} currency={row.currency} /> },
-    { key: "frozenBalance", title: "冻结金额", render: (row) => <MoneyText value={row.frozenBalance} currency={row.currency} /> },
-    { key: "totalRecharge", title: "累计充值", render: (row) => <MoneyText value={row.totalRecharge} currency={row.currency} /> },
-    { key: "totalWithdraw", title: "累计提现", render: (row) => <MoneyText value={row.totalWithdraw} currency={row.currency} /> },
-    { key: "status", title: "状态", render: (row) => <StatusBadge status={row.status} /> },
+    { key: "walletNo", title: t("walletNo"), render: (row) => formatEmpty(row.walletNo) },
+    { key: "userName", title: t("userName"), render: (row) => formatEmpty(row.userName) },
+    { key: "availableBalance", title: t("availableBalance"), render: (row) => <MoneyText value={row.availableBalance} currency={row.currency} /> },
+    { key: "frozenBalance", title: t("frozenAmount"), render: (row) => <MoneyText value={row.frozenBalance} currency={row.currency} /> },
+    { key: "totalRecharge", title: t("totalTopUps"), render: (row) => <MoneyText value={row.totalRecharge} currency={row.currency} /> },
+    { key: "totalWithdraw", title: t("totalWithdrawals"), render: (row) => <MoneyText value={row.totalWithdraw} currency={row.currency} /> },
+    { key: "status", title: t("status"), render: (row) => <StatusBadge status={row.status} /> },
     {
       key: "actions",
-      title: "操作",
+      title: t("actions"),
       render: (row) => (
         <Button variant="ghost" size="sm" className="font-medium" onClick={() => void openWalletDetail(row)}>
           <Eye className="h-4 w-4" />
-          详情
-        </Button>
+          {t("details")}</Button>
       ),
     },
   ];
 
   const txColumns: DataTableColumn<WalletTransactionResponse>[] = [
-    { key: "txNo", title: "流水号", render: (row) => formatEmpty(row.txNo) },
-    { key: "txType", title: "交易类型", render: (row) => txTypeLabel(row.txType) },
-    { key: "bizType", title: "业务类型", render: (row) => bizTypeLabel(row.bizType) },
-    { key: "amount", title: "金额", render: (row) => <MoneyText value={row.amount} signed /> },
-    { key: "bizOrderNo", title: "业务单号", render: (row) => formatEmpty(row.bizOrderNo) },
-    { key: "createdAt", title: "时间", render: (row) => <DateTimeText value={row.createdAt} /> },
+    { key: "txNo", title: t("transactionNo"), render: (row) => formatEmpty(row.txNo) },
+    { key: "txType", title: t("transactionType"), render: (row) => txTypeLabel(row.txType) },
+    { key: "bizType", title: t("businessType"), render: (row) => bizTypeLabel(row.bizType) },
+    { key: "amount", title: t("amount"), render: (row) => <MoneyText value={row.amount} signed /> },
+    { key: "bizOrderNo", title: t("businessNo"), render: (row) => formatEmpty(row.bizOrderNo) },
+    { key: "createdAt", title: t("time"), render: (row) => <DateTimeText value={row.createdAt} /> },
   ];
 
   const detailSections: DetailSectionDef<UserWallet>[] = [
     {
-      title: "钱包信息",
+      title: t("walletInformation"),
       fields: [
-        { label: "钱包编号", render: (detail) => detail.walletNo },
-        { label: "用户名称", render: (detail) => detail.userName },
-        { label: "状态", render: (detail) => <StatusBadge status={detail.status} /> },
-        { label: "币种", render: (detail) => detail.currency },
+        { label: t("walletNo"), render: (detail) => detail.walletNo },
+        { label: t("userName"), render: (detail) => detail.userName },
+        { label: t("status"), render: (detail) => <StatusBadge status={detail.status} /> },
+        { label: t("currency"), render: (detail) => detail.currency },
       ],
     },
     {
-      title: "资金信息",
+      title: t("fundsInformation"),
       fields: [
-        { label: "可用余额", render: (detail) => <MoneyText value={detail.availableBalance} currency={detail.currency} /> },
-        { label: "冻结金额", render: (detail) => <MoneyText value={detail.frozenBalance} currency={detail.currency} /> },
-        { label: "累计充值", render: (detail) => <MoneyText value={detail.totalRecharge} currency={detail.currency} /> },
-        { label: "累计提现", render: (detail) => <MoneyText value={detail.totalWithdraw} currency={detail.currency} /> },
-        { label: "累计收益", render: (detail) => <MoneyText value={detail.totalProfit} currency={detail.currency} /> },
-        { label: "累计佣金", render: (detail) => <MoneyText value={detail.totalCommission} currency={detail.currency} /> },
+        { label: t("availableBalance"), render: (detail) => <MoneyText value={detail.availableBalance} currency={detail.currency} /> },
+        { label: t("frozenAmount"), render: (detail) => <MoneyText value={detail.frozenBalance} currency={detail.currency} /> },
+        { label: t("totalTopUps"), render: (detail) => <MoneyText value={detail.totalRecharge} currency={detail.currency} /> },
+        { label: t("totalWithdrawals"), render: (detail) => <MoneyText value={detail.totalWithdraw} currency={detail.currency} /> },
+        { label: t("totalEarnings"), render: (detail) => <MoneyText value={detail.totalProfit} currency={detail.currency} /> },
+        { label: t("totalCommissions"), render: (detail) => <MoneyText value={detail.totalCommission} currency={detail.currency} /> },
       ],
     },
     {
-      title: "时间信息",
+      title: t("timeInformation"),
       fields: [
-        { label: "创建时间", render: (detail) => <DateTimeText value={detail.createdAt} /> },
-        { label: "更新时间", render: (detail) => <DateTimeText value={detail.updatedAt} /> },
+        { label: t("createdAt"), render: (detail) => <DateTimeText value={detail.createdAt} /> },
+        { label: t("updatedAt"), render: (detail) => <DateTimeText value={detail.updatedAt} /> },
       ],
     },
   ];
 
   return (
     <div className="space-y-6">
-      <PageHeader eyebrow="WALLET OPS" title="钱包管理" description="查看用户钱包余额、冻结金额和平台资金流水。" />
+      <PageHeader eyebrow="WALLET OPS" title={t("walletManagement")} description={t("reviewUserWalletBalancesFrozenAmountsAndPlatformFundTransactions")} />
       <ErrorAlert message={actionError ?? wallets.error ?? txs.error} />
 
       <Tabs defaultValue="wallets" className="space-y-4">
         <TabsList className="border border-border bg-muted/40">
-          <TabsTrigger value="wallets">用户钱包</TabsTrigger>
-          <TabsTrigger value="transactions">资金流水</TabsTrigger>
+          <TabsTrigger value="wallets">{t("userWallets")}</TabsTrigger>
+          <TabsTrigger value="transactions">{t("fundTransactions")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="wallets" className="space-y-4">
@@ -158,15 +159,15 @@ export default function AdminWalletsPage() {
             }}
           >
             <div className="space-y-2">
-              <Label htmlFor="w_userId">用户 ID</Label>
-              <Input id="w_userId" placeholder="输入 ID" value={walletFilters.userId} onChange={(event) => setWalletFilters((current) => ({ ...current, userId: event.target.value }))} className="h-9 w-[120px] bg-background text-foreground" />
+              <Label htmlFor="w_userId">{t("userID")}</Label>
+              <Input id="w_userId" placeholder={t("enterID")} value={walletFilters.userId} onChange={(event) => setWalletFilters((current) => ({ ...current, userId: event.target.value }))} className="h-9 w-[120px] bg-background text-foreground" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="walletNo">钱包编号</Label>
-              <Input id="walletNo" placeholder="输入编号" value={walletFilters.walletNo} onChange={(event) => setWalletFilters((current) => ({ ...current, walletNo: event.target.value }))} className="h-9 w-[180px] bg-background text-foreground" />
+              <Label htmlFor="walletNo">{t("walletNo")}</Label>
+              <Input id="walletNo" placeholder={t("enterNumber")} value={walletFilters.walletNo} onChange={(event) => setWalletFilters((current) => ({ ...current, walletNo: event.target.value }))} className="h-9 w-[180px] bg-background text-foreground" />
             </div>
           </SearchPanel>
-          <DataTable columns={walletColumns} data={wallets.page.records} rowKey={(row) => row.walletNo} loading={wallets.loading} emptyText="暂无钱包数据" pageNo={wallets.page.pageNo} pageSize={wallets.page.pageSize} total={wallets.page.total} onPageChange={wallets.changePage} />
+          <DataTable columns={walletColumns} data={wallets.page.records} rowKey={(row) => row.walletNo} loading={wallets.loading} emptyText={t("noSYet")} pageNo={wallets.page.pageNo} pageSize={wallets.page.pageSize} total={wallets.page.total} onPageChange={wallets.changePage} />
         </TabsContent>
 
         <TabsContent value="transactions" className="space-y-4">
@@ -178,60 +179,60 @@ export default function AdminWalletsPage() {
             }}
           >
             <div className="space-y-2">
-              <Label htmlFor="t_userId">用户 ID</Label>
-              <Input id="t_userId" placeholder="输入 ID" value={txFilters.userId} onChange={(event) => setTxFilters((current) => ({ ...current, userId: event.target.value }))} className="h-9 w-[100px] bg-background text-foreground" />
+              <Label htmlFor="t_userId">{t("userID")}</Label>
+              <Input id="t_userId" placeholder={t("enterID")} value={txFilters.userId} onChange={(event) => setTxFilters((current) => ({ ...current, userId: event.target.value }))} className="h-9 w-[100px] bg-background text-foreground" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="t_walletNo">钱包编号</Label>
-              <Input id="t_walletNo" placeholder="输入编号" value={txFilters.walletNo} onChange={(event) => setTxFilters((current) => ({ ...current, walletNo: event.target.value }))} className="h-9 w-[180px] bg-background text-foreground" />
+              <Label htmlFor="t_walletNo">{t("walletNo")}</Label>
+              <Input id="t_walletNo" placeholder={t("enterNumber")} value={txFilters.walletNo} onChange={(event) => setTxFilters((current) => ({ ...current, walletNo: event.target.value }))} className="h-9 w-[180px] bg-background text-foreground" />
             </div>
             <div className="space-y-2">
-              <Label>收支类型</Label>
+              <Label>{t("direction")}</Label>
               <Select value={txFilters.txType} onValueChange={(val) => setTxFilters((current) => ({ ...current, txType: val }))}>
                 <SelectTrigger className="h-9 w-[120px] bg-background text-foreground">
-                  <SelectValue placeholder="全部类型" />
+                  <SelectValue placeholder={t("allTypes")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value=" ">全部类型</SelectItem>
-                  <SelectItem value="IN">入账 (+)</SelectItem>
-                  <SelectItem value="OUT">出账 (-)</SelectItem>
-                  <SelectItem value="FREEZE">冻结</SelectItem>
-                  <SelectItem value="UNFREEZE">解冻</SelectItem>
+                  <SelectItem value=" ">{t("allTypes")}</SelectItem>
+                  <SelectItem value="IN">{t("credit")}</SelectItem>
+                  <SelectItem value="OUT">{t("debit")}</SelectItem>
+                  <SelectItem value="FREEZE">{t("freeze")}</SelectItem>
+                  <SelectItem value="UNFREEZE">{t("unfreeze")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>业务类型</Label>
+              <Label>{t("businessType")}</Label>
               <Select value={txFilters.bizType} onValueChange={(val) => setTxFilters((current) => ({ ...current, bizType: val }))}>
                 <SelectTrigger className="h-9 w-[140px] bg-background text-foreground">
-                  <SelectValue placeholder="全部业务" />
+                  <SelectValue placeholder={t("allBusinessTypes")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value=" ">全部业务</SelectItem>
-                  <SelectItem value="RECHARGE">充值</SelectItem>
-                  <SelectItem value="WITHDRAW">提现</SelectItem>
-                  <SelectItem value="ORDER_PAY">订单支付</SelectItem>
-                  <SelectItem value="ORDER_PROFIT">订单收益</SelectItem>
-                  <SelectItem value="ORDER_SETTLE">订单结算</SelectItem>
-                  <SelectItem value="COMMISSION">分销佣金</SelectItem>
-                  <SelectItem value="PENALTY">违约扣款</SelectItem>
+                  <SelectItem value=" ">{t("allBusinessTypes")}</SelectItem>
+                  <SelectItem value="RECHARGE">{t("topUp")}</SelectItem>
+                  <SelectItem value="WITHDRAW">{t("withdrawal")}</SelectItem>
+                  <SelectItem value="ORDER_PAY">{t("orderPayment")}</SelectItem>
+                  <SelectItem value="ORDER_PROFIT">{t("orderEarnings")}</SelectItem>
+                  <SelectItem value="ORDER_SETTLE">{t("orderSettlement")}</SelectItem>
+                  <SelectItem value="COMMISSION">{t("referralCommission")}</SelectItem>
+                  <SelectItem value="PENALTY">{t("penaltyDeduction")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>开始日期</Label>
+              <Label>{t("startDate")}</Label>
               <Input type="date" value={txFilters.startTime} onChange={(event) => setTxFilters((current) => ({ ...current, startTime: event.target.value }))} className="h-9 w-[150px] bg-background text-foreground" />
             </div>
             <div className="space-y-2">
-              <Label>结束日期</Label>
+              <Label>{t("endDate")}</Label>
               <Input type="date" value={txFilters.endTime} onChange={(event) => setTxFilters((current) => ({ ...current, endTime: event.target.value }))} className="h-9 w-[150px] bg-background text-foreground" />
             </div>
           </SearchPanel>
-          <DataTable columns={txColumns} data={txs.page.records} rowKey={(row) => row.txNo} loading={txs.loading} emptyText="暂无资金流水" pageNo={txs.page.pageNo} pageSize={txs.page.pageSize} total={txs.page.total} onPageChange={txs.changePage} />
+          <DataTable columns={txColumns} data={txs.page.records} rowKey={(row) => row.txNo} loading={txs.loading} emptyText={t("noFundTransactionsYet")} pageNo={txs.page.pageNo} pageSize={txs.page.pageSize} total={txs.page.total} onPageChange={txs.changePage} />
         </TabsContent>
       </Tabs>
 
-      <DetailDrawer data={detail} open={detailOpen} title="钱包详情" subtitle={(data) => data.walletNo} sections={detailSections} onClose={() => setDetailOpen(false)} />
+      <DetailDrawer data={detail} open={detailOpen} title={t("walletDetails")} subtitle={(data) => data.walletNo} sections={detailSections} onClose={() => setDetailOpen(false)} />
     </div>
   );
 }

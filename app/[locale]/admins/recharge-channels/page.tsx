@@ -32,6 +32,7 @@ const initialFilters: Filters = { status: "" };
 const initialQuery: AdminRechargeChannelQuery = { pageNo: 1, pageSize: 10 };
 
 export default function RechargeChannelsPage() {
+  const t = useTranslations("AdminPages.rechargeChannels");
   const tTranslations = useTranslations("AdminTranslations");
   const [filters, setFilters] = useState<Filters>(initialFilters);
   const [actionError, setActionError] = useState<string | null>(null);
@@ -87,42 +88,38 @@ export default function RechargeChannelsPage() {
   };
 
   const columns: DataTableColumn<AdminRechargeChannelResponse>[] = [
-    { key: "channelCode", title: "渠道编码", render: (row) => formatEmpty(row.channelCode) },
-    { key: "channelName", title: "渠道名称", render: (row) => formatEmpty(row.channelName) },
-    { key: "network", title: "网络", render: (row) => formatEmpty(row.network) },
-    { key: "accountNo", title: "收款账号/地址", render: (row) => <div className="max-w-[200px] truncate font-mono text-xs">{formatEmpty(row.accountNo)}</div> },
-    { key: "feeRate", title: "手续费率", render: (row) => `${(row.feeRate * 100).toFixed(2)}%` },
-    { key: "sortNo", title: "排序", render: (row) => row.sortNo },
-    { key: "status", title: "状态", render: (row) => <StatusBadge status={row.status} /> },
-    { key: "updatedAt", title: "更新时间", render: (row) => <DateTimeText value={row.updatedAt} /> },
+    { key: "channelCode", title: t("channelCode"), render: (row) => formatEmpty(row.channelCode) },
+    { key: "channelName", title: t("channelName"), render: (row) => formatEmpty(row.channelName) },
+    { key: "network", title: t("network"), render: (row) => formatEmpty(row.network) },
+    { key: "accountNo", title: t("receivingAccountAddress"), render: (row) => <div className="max-w-[200px] truncate font-mono text-xs">{formatEmpty(row.accountNo)}</div> },
+    { key: "feeRate", title: t("feeRate"), render: (row) => `${(row.feeRate * 100).toFixed(2)}%` },
+    { key: "sortNo", title: t("sort"), render: (row) => row.sortNo },
+    { key: "status", title: t("status"), render: (row) => <StatusBadge status={row.status} /> },
+    { key: "updatedAt", title: t("updatedAt"), render: (row) => <DateTimeText value={row.updatedAt} /> },
     {
       key: "actions",
-      title: "操作",
+      title: t("actions"),
       render: (row) => (
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="sm" className="font-medium text-blue-500 hover:bg-blue-500/10" onClick={() => openEdit(row)}>
             <Edit2 className="h-3.5 w-3.5 mr-1" />
-            编辑
-          </Button>
+            {t("edit")}</Button>
           <Button variant="ghost" size="sm" className="font-medium text-blue-500 hover:bg-blue-500/10" onClick={() => setTranslationRow(row)}>
             <Languages className="h-3.5 w-3.5 mr-1" />
             {tTranslations("button")}
           </Button>
           {row.status === 0 ? (
-            <ConfirmActionButton title="启用渠道" description="启用后用户可在充值页面看到该渠道。" onConfirm={() => toggleStatus(row, true)}>
+            <ConfirmActionButton title={t("enableChannel")} description={t("afterEnablingUsersCanSeeThisChannelOnTheTopUpPage")} onConfirm={() => toggleStatus(row, true)}>
               <Power className="h-3.5 w-3.5 mr-1" />
-              启用
-            </ConfirmActionButton>
+              {t("enable")}</ConfirmActionButton>
           ) : (
-            <ConfirmActionButton title="禁用渠道" description="禁用后用户将无法通过该渠道充值。" onConfirm={() => toggleStatus(row, false)}>
+            <ConfirmActionButton title={t("disableChannel")} description={t("afterDisablingUsersCannotTopUpThroughThisChannel")} onConfirm={() => toggleStatus(row, false)}>
               <PowerOff className="h-3.5 w-3.5 mr-1" />
-              禁用
-            </ConfirmActionButton>
+              {t("disabled")}</ConfirmActionButton>
           )}
-          <ConfirmActionButton title="删除渠道" description="确定要删除该充值渠道吗？此操作不可撤销。" variant="destructive" onConfirm={() => handleDelete(row)}>
+          <ConfirmActionButton title={t("deleteChannel")} description={t("deleteThisTopUpChannelThisActionCannotBeUndone")} variant="destructive" onConfirm={() => handleDelete(row)}>
             <Trash2 className="h-3.5 w-3.5 mr-1" />
-            删除
-          </ConfirmActionButton>
+            {t("delete")}</ConfirmActionButton>
         </div>
       ),
     },
@@ -132,13 +129,12 @@ export default function RechargeChannelsPage() {
     <div className="space-y-6">
       <PageHeader
         eyebrow="FINANCE OPS"
-        title="充值渠道管理"
-        description="维护系统支持的支付渠道及收币账户信息。"
+        title={t("topUpChannelManagement")}
+        description={t("maintainSupportedPaymentChannelsAndReceivingAccountInformation")}
         actions={
           <Button onClick={() => { setEditingRow(null); setFormOpen(true); }} className="bg-[#5e6ad2] font-semibold text-white hover:bg-[#7170ff]">
             <Plus className="mr-2 h-4 w-4" />
-            新增渠道
-          </Button>
+            {t("newChannel")}</Button>
         }
       />
       
@@ -152,36 +148,36 @@ export default function RechargeChannelsPage() {
         }}
       >
         <div className="space-y-2">
-          <Label>状态</Label>
+          <Label>{t("status")}</Label>
           <Select value={filters.status} onValueChange={(val) => setFilters((current) => ({ ...current, status: val }))}>
             <SelectTrigger className="h-9 w-[180px] bg-background text-foreground">
-              <SelectValue placeholder="全部状态" />
+              <SelectValue placeholder={t("allStatuses")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value=" ">全部状态</SelectItem>
-              <SelectItem value="1">已启用</SelectItem>
-              <SelectItem value="0">已禁用</SelectItem>
+              <SelectItem value=" ">{t("allStatuses")}</SelectItem>
+              <SelectItem value="1">{t("enabled")}</SelectItem>
+              <SelectItem value="0">{t("disabled2")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
       </SearchPanel>
 
-      <DataTable 
-        columns={columns} 
-        data={page.records} 
-        rowKey={(row) => row.channelId} 
-        loading={loading} 
-        emptyText="暂无充值渠道" 
-        pageNo={page.pageNo} 
-        pageSize={page.pageSize} 
-        total={page.total} 
-        onPageChange={changePage} 
+      <DataTable
+        columns={columns}
+        data={page.records}
+        rowKey={(row) => row.channelId}
+        loading={loading}
+        emptyText={t("noSYet")}
+        pageNo={page.pageNo}
+        pageSize={page.pageSize}
+        total={page.total}
+        onPageChange={changePage}
       />
 
       <Dialog open={formOpen} onOpenChange={setFormOpen}>
         <DialogContent className="flex max-w-2xl flex-col items-stretch">
           <DialogTitle className="text-xl font-semibold mb-2">
-            {editingRow ? "编辑充值渠道" : "新增充值渠道"}
+            {editingRow ? t("editTopUpChannel") : t("newTopUpChannel")}
           </DialogTitle>
           <RechargeChannelForm
             initialData={editingRow}

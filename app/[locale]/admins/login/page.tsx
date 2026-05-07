@@ -1,6 +1,7 @@
 "use client";
 
 import type { FormEvent } from "react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { useRouter } from "@/i18n/navigation";
 import { adminLogin } from "@/api/admin";
@@ -17,6 +18,7 @@ import { Label } from "@/components/ui/label";
 import { toErrorMessage } from "@/lib/format";
 
 export default function AdminLoginPage() {
+  const t = useTranslations("AdminPages.login");
   const router = useRouter();
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -44,28 +46,27 @@ export default function AdminLoginPage() {
         <div className="flex flex-col gap-6">
           <Card>
             <CardHeader>
-              <CardTitle className="text-2xl">管理员登录</CardTitle>
+              <CardTitle className="text-2xl">{t("adminLogin")}</CardTitle>
               <CardDescription>
-                输入管理员账号和密码登录后台系统
-              </CardDescription>
+                {t("signInWithYourAdminAccountAndPassword")}</CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleLogin}>
                 <div className="flex flex-col gap-6">
                   <div className="flex w-full flex-col gap-2">
-                    <Label htmlFor="admin-username">管理员账号</Label>
+                    <Label htmlFor="admin-username">{t("adminAccount")}</Label>
                     <Input
                       id="admin-username"
                       value={userName}
                       onChange={(event) => setUserName(event.target.value)}
-                      placeholder="请输入管理员账号"
+                      placeholder={t("enterTheAdminAccount")}
                       autoComplete="username"
                       disabled={isLoading}
                       required
                     />
                   </div>
                   <div className="flex w-full flex-col gap-2">
-                    <Label htmlFor="admin-password">密码</Label>
+                    <Label htmlFor="admin-password">{t("password")}</Label>
                     <Input
                       id="admin-password"
                       type="password"
@@ -80,7 +81,7 @@ export default function AdminLoginPage() {
                     <p className="text-sm text-destructive">{error}</p>
                   ) : null}
                   <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? "登录中..." : "登录"}
+                    {isLoading ? t("signingIn") : t("login")}
                   </Button>
                 </div>
               </form>

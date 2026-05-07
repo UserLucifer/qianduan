@@ -53,6 +53,7 @@ const initialFilters: Filters = { status: "" };
 const initialQuery: BlogPostQueryRequest = { pageNo: 1, pageSize: 10 };
 
 export default function AdminContentPage() {
+  const t = useTranslations("AdminPages.content");
   const tTranslations = useTranslations("AdminTranslations");
   const [filters, setFilters] = useState<Filters>(initialFilters);
   const [categories, setCategories] = useState<BlogCategory[]>([]);
@@ -126,16 +127,16 @@ export default function AdminContentPage() {
   const columns: DataTableColumn<AdminBlogPost>[] = [
     { key: "id", title: "ID", render: (row) => <span className="font-mono text-xs text-muted-foreground">{formatEmpty(row.id)}</span> },
     {
-      key: "title", title: "标题", render: (row) => (
+      key: "title", title: t("title"), render: (row) => (
         <div className="flex items-center gap-2">
           {Number(row.isTop) === 1 && <ArrowUpCircle className="h-4 w-4 text-amber-500 shrink-0" />}
           <span className="line-clamp-1 max-w-[300px] font-medium text-foreground">{((row.title) || "-").toString()}</span>
         </div>
       )
     },
-    { key: "categoryName", title: "分类", render: (row) => <Badge variant="outline" className="font-normal text-muted-foreground">{((row.categoryName) || "-").toString()}</Badge> },
+    { key: "categoryName", title: t("category"), render: (row) => <Badge variant="outline" className="font-normal text-muted-foreground">{((row.categoryName) || "-").toString()}</Badge> },
     {
-      key: "isTop", title: "置顶", render: (row) => (
+      key: "isTop", title: t("pinned"), render: (row) => (
         <Switch
           checked={Number(row.isTop) === 1}
           onCheckedChange={(checked) => toggleTop(row, checked)}
@@ -144,7 +145,7 @@ export default function AdminContentPage() {
       )
     },
     {
-      key: "status", title: "发布状态", render: (row) => (
+      key: "status", title: t("publishingStatus"), render: (row) => (
         <div className="flex items-center gap-2">
           <Switch
             checked={Number(row.status) === 1}
@@ -155,24 +156,22 @@ export default function AdminContentPage() {
         </div>
       )
     },
-    { key: "createdAt", title: "创建时间", render: (row) => <DateTimeText value={typeof row.createdAt === "string" ? row.createdAt : null} /> },
+    { key: "createdAt", title: t("createdAt"), render: (row) => <DateTimeText value={typeof row.createdAt === "string" ? row.createdAt : null} /> },
     {
       key: "actions",
-      title: "操作",
+      title: t("actions"),
       render: (row) => (
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="sm" onClick={() => { setEditingPost(row); setFormOpen(true); }}>
-            编辑
-          </Button>
+            {t("edit")}</Button>
           <Button variant="ghost" size="sm" className="font-medium text-blue-500 hover:bg-blue-500/10" onClick={() => setPostTranslation(row)}>
             <Languages className="mr-1 h-3.5 w-3.5" />
             {tTranslations("button")}
           </Button>
           <Button variant="ghost" size="sm" onClick={() => { setDetail(row); setDetailOpen(true); }}>
-            详情
-          </Button>
-          <ConfirmActionButton title="删除文章" description="确定要删除这篇文章吗？此操作不可撤销。" onConfirm={() => handleDelete(Number(row.id)!)}>
-            <span className="text-red-500">删除</span>
+            {t("details")}</Button>
+          <ConfirmActionButton title={t("delete")} description={t("deleteThisArticleThisActionCannotBeUndone")} onConfirm={() => handleDelete(Number(row.id)!)}>
+            <span className="text-red-500">{t("delete2")}</span>
           </ConfirmActionButton>
         </div>
       ),
@@ -181,18 +180,18 @@ export default function AdminContentPage() {
 
   const detailSections: DetailSectionDef<AdminBlogPost>[] = [
       {
-        title: "文章基本信息",
+        title: t("articleBasics"),
         fields: [
-          { label: "文章 ID", render: (detail) => ((detail.id) || "-").toString() },
-          { label: "标题", render: (detail) => ((detail.title) || "-").toString() },
-          { label: "摘要", render: (detail) => ((detail.summary) || "-").toString() || "无" },
-          { label: "分类", render: (detail) => ((detail.categoryName) || "-").toString() },
-          { label: "标签", render: (detail) => Array.isArray(detail.tagNames) ? detail.tagNames.join(", ") : "无" },
-          { label: "发布状态", render: (detail) => <StatusBadge status={detail.status} /> },
-          { label: "是否置顶", render: (detail) => Number(detail.isTop) === 1 ? "是" : "否" },
-          { label: "封面图", render: (detail) => detail.coverImageUrl ? <img src={detail.coverImageUrl as string} className="h-20 w-32 object-cover rounded border" /> : "无" },
-          { label: "创建时间", render: (detail) => <DateTimeText value={typeof detail.createdAt === "string" ? detail.createdAt : null} /> },
-          { label: "更新时间", render: (detail) => <DateTimeText value={typeof detail.updatedAt === "string" ? detail.updatedAt : null} /> },
+          { label: t("articleID"), render: (detail) => ((detail.id) || "-").toString() },
+          { label: t("title"), render: (detail) => ((detail.title) || "-").toString() },
+          { label: t("summary"), render: (detail) => ((detail.summary) || "-").toString() || t("none") },
+          { label: t("category"), render: (detail) => ((detail.categoryName) || "-").toString() },
+          { label: t("tags"), render: (detail) => Array.isArray(detail.tagNames) ? detail.tagNames.join(", ") : t("none") },
+          { label: t("publishingStatus"), render: (detail) => <StatusBadge status={detail.status} /> },
+          { label: t("pinned2"), render: (detail) => Number(detail.isTop) === 1 ? t("yes") : t("no") },
+          { label: t("coverImage"), render: (detail) => detail.coverImageUrl ? <img src={detail.coverImageUrl as string} className="h-20 w-32 object-cover rounded border" /> : t("none") },
+          { label: t("createdAt"), render: (detail) => <DateTimeText value={typeof detail.createdAt === "string" ? detail.createdAt : null} /> },
+          { label: t("updatedAt"), render: (detail) => <DateTimeText value={typeof detail.updatedAt === "string" ? detail.updatedAt : null} /> },
         ],
       },
     ];
@@ -201,19 +200,16 @@ export default function AdminContentPage() {
     <div className="space-y-6">
       <PageHeader
         eyebrow="CONTENT OPS"
-        title="内容管理"
-        description="管理帮助中心、公告、博客或规则说明文档。支持分类与标签的灵活组织。"
+        title={t("contentManagement")}
+        description={t("manageHelpCenterAnnouncementsBlogPostsAndRuleDocumentsWithFlexibleCategoriesAndTags")}
         actions={
           <div className="flex gap-2">
             <Button variant="outline" size="sm" onClick={() => setCategoryMgrOpen(true)}>
-              <Layers className="mr-2 h-4 w-4" /> 分类管理
-            </Button>
+              <Layers className="mr-2 h-4 w-4" /> {t("categoryManagement")}</Button>
             <Button variant="outline" size="sm" onClick={() => setTagMgrOpen(true)}>
-              <Tags className="mr-2 h-4 w-4" /> 标签管理
-            </Button>
+              <Tags className="mr-2 h-4 w-4" /> {t("tagManagement")}</Button>
             <Button size="sm" onClick={() => { setEditingPost(null); setFormOpen(true); }}>
-              <Plus className="mr-2 h-4 w-4" /> 新建文章
-            </Button>
+              <Plus className="mr-2 h-4 w-4" /> {t("newArticle")}</Button>
           </div>
         }
       />
@@ -232,15 +228,15 @@ export default function AdminContentPage() {
         }}
       >
         <div className="space-y-2">
-          <Label>发布状态</Label>
+          <Label>{t("publishingStatus")}</Label>
           <Select value={filters.status} onValueChange={(val) => setFilters({ status: val })}>
             <SelectTrigger className="h-9 w-[180px] bg-background text-foreground">
-              <SelectValue placeholder="全部状态" />
+              <SelectValue placeholder={t("allStatuses")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value=" ">全部状态</SelectItem>
-              <SelectItem value={BlogPublishStatus.PUBLISHED.toString()}>已发布</SelectItem>
-              <SelectItem value={BlogPublishStatus.DRAFT.toString()}>草稿/下架</SelectItem>
+              <SelectItem value=" ">{t("allStatuses")}</SelectItem>
+              <SelectItem value={BlogPublishStatus.PUBLISHED.toString()}>{t("published")}</SelectItem>
+              <SelectItem value={BlogPublishStatus.DRAFT.toString()}>{t("draftUnpublished")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -251,7 +247,7 @@ export default function AdminContentPage() {
         data={page.records}
         rowKey={(row) => ((row.id) || "-").toString() || "unknown"}
         loading={loading}
-        emptyText="暂无内容数据"
+        emptyText={t("noSYet")}
         pageNo={page.pageNo}
         pageSize={page.pageSize}
         total={page.total}
@@ -259,12 +255,12 @@ export default function AdminContentPage() {
       />
 
       {/* Detail Drawer */}
-      <DetailDrawer data={detail} open={detailOpen} title="文章详情" subtitle={(data) => ((data.title) || "-").toString()} sections={detailSections} onClose={() => setDetailOpen(false)} />
+      <DetailDrawer data={detail} open={detailOpen} title={t("articleDetails")} subtitle={(data) => ((data.title) || "-").toString()} sections={detailSections} onClose={() => setDetailOpen(false)} />
 
       {/* Post Form Dialog */}
       <Dialog open={formOpen} onOpenChange={setFormOpen}>
         <DialogContent className="flex max-h-[90vh] max-w-4xl flex-col items-stretch overflow-y-auto">
-          <DialogTitle className="sr-only">编辑文章</DialogTitle>
+          <DialogTitle className="sr-only">{t("editArticle")}</DialogTitle>
           <BlogPostForm
             initialData={editingPost}
             categories={categories}
@@ -278,7 +274,7 @@ export default function AdminContentPage() {
       {/* Category Manager Dialog */}
       <Dialog open={categoryMgrOpen} onOpenChange={setCategoryMgrOpen}>
         <DialogContent className="flex flex-col items-stretch sm:max-w-[400px]">
-          <DialogTitle className="sr-only">分类管理</DialogTitle>
+          <DialogTitle className="sr-only">{t("categoryManagement")}</DialogTitle>
           <CategoryManager
             items={categories}
             onRefresh={() => { refreshDictionaries(); reload(); }}
@@ -293,7 +289,7 @@ export default function AdminContentPage() {
       {/* Tag Manager Dialog */}
       <Dialog open={tagMgrOpen} onOpenChange={setTagMgrOpen}>
         <DialogContent className="flex flex-col items-stretch sm:max-w-[400px]">
-          <DialogTitle className="sr-only">标签管理</DialogTitle>
+          <DialogTitle className="sr-only">{t("tagManagement")}</DialogTitle>
           <TagManager
             items={tags}
             onRefresh={() => { refreshDictionaries(); reload(); }}

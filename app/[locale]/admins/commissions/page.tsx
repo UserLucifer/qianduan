@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -33,6 +34,7 @@ const initialFilters: CommissionFilters = { userId: "", orderNo: "", levelNo: ""
 const initialQuery: AdminCommissionRecordQuery = { pageNo: 1, pageSize: 10 };
 
 export default function AdminCommissionsPage() {
+  const t = useTranslations("AdminPages.commissions");
   const [filters, setFilters] = useState<CommissionFilters>(initialFilters);
   const [detail, setDetail] = useState<CommissionRecordResponse | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
@@ -64,59 +66,58 @@ export default function AdminCommissionsPage() {
   };
 
   const columns: DataTableColumn<CommissionRecordResponse>[] = [
-    { key: "commissionNo", title: "佣金编号", render: (row) => <CopyableSecret value={row.commissionNo} maskedValue={row.commissionNo} canReveal={false} /> },
-    { key: "sourceUserId", title: "来源用户", render: (row) => formatEmpty(row.sourceUserId) },
-    { key: "levelNo", title: "层级", render: (row) => `L${row.levelNo}` },
-    { key: "sourceProfitAmount", title: "来源收益", render: (row) => <MoneyText value={row.sourceProfitAmount} /> },
-    { key: "commissionRateSnapshot", title: "佣金比例", render: (row) => formatPercent(row.commissionRateSnapshot) },
-    { key: "commissionAmount", title: "佣金金额", render: (row) => <MoneyText value={row.commissionAmount} /> },
-    { key: "status", title: "状态", render: (row) => <StatusBadge status={row.status} /> },
-    { key: "createdAt", title: "创建时间", render: (row) => <DateTimeText value={row.createdAt} /> },
+    { key: "commissionNo", title: t("commissionNo"), render: (row) => <CopyableSecret value={row.commissionNo} maskedValue={row.commissionNo} canReveal={false} /> },
+    { key: "sourceUserId", title: t("sourceUser"), render: (row) => formatEmpty(row.sourceUserId) },
+    { key: "levelNo", title: t("level"), render: (row) => `L${row.levelNo}` },
+    { key: "sourceProfitAmount", title: t("sourceEarnings"), render: (row) => <MoneyText value={row.sourceProfitAmount} /> },
+    { key: "commissionRateSnapshot", title: t("commissionRate"), render: (row) => formatPercent(row.commissionRateSnapshot) },
+    { key: "commissionAmount", title: t("commissionAmount"), render: (row) => <MoneyText value={row.commissionAmount} /> },
+    { key: "status", title: t("status"), render: (row) => <StatusBadge status={row.status} /> },
+    { key: "createdAt", title: t("createdAt"), render: (row) => <DateTimeText value={row.createdAt} /> },
     {
       key: "actions",
-      title: "操作",
+      title: t("actions"),
       render: (row) => (
         <Button variant="ghost" size="sm" className="text-muted-foreground hover:bg-white/5" onClick={() => void openDetail(row.commissionNo)}>
           <Eye className="h-4 w-4" />
-          详情
-        </Button>
+          {t("details")}</Button>
       ),
     },
   ];
 
   const detailSections: DetailSectionDef<CommissionRecordResponse>[] = [
         {
-          title: "佣金信息",
+          title: t("commissionInformation"),
           fields: [
-            { label: "佣金编号", render: (detail) => <CopyableSecret value={detail.commissionNo} maskedValue={detail.commissionNo} canReveal={false} /> },
-            { label: "状态", render: (detail) => <StatusBadge status={detail.status} /> },
-            { label: "层级", render: (detail) => `L${detail.levelNo}` },
-            { label: "佣金金额", render: (detail) => <MoneyText value={detail.commissionAmount} /> },
+            { label: t("commissionNo"), render: (detail) => <CopyableSecret value={detail.commissionNo} maskedValue={detail.commissionNo} canReveal={false} /> },
+            { label: t("status"), render: (detail) => <StatusBadge status={detail.status} /> },
+            { label: t("level"), render: (detail) => `L${detail.levelNo}` },
+            { label: t("commissionAmount"), render: (detail) => <MoneyText value={detail.commissionAmount} /> },
           ],
         },
         {
-          title: "来源信息",
+          title: t("sourceInformation"),
           fields: [
-            { label: "来源用户", render: (detail) => detail.sourceUserId },
-            { label: "来源订单 ID", render: (detail) => detail.sourceOrderId },
-            { label: "来源收益 ID", render: (detail) => detail.sourceProfitId },
-            { label: "来源收益", render: (detail) => <MoneyText value={detail.sourceProfitAmount} /> },
+            { label: t("sourceUser"), render: (detail) => detail.sourceUserId },
+            { label: t("sourceOrderID"), render: (detail) => detail.sourceOrderId },
+            { label: t("sourceEarningsID"), render: (detail) => detail.sourceProfitId },
+            { label: t("sourceEarnings"), render: (detail) => <MoneyText value={detail.sourceProfitAmount} /> },
           ],
         },
         {
-          title: "结算信息",
+          title: t("settlementInformation"),
           fields: [
-            { label: "佣金比例", render: (detail) => formatPercent(detail.commissionRateSnapshot) },
-            { label: "钱包流水", render: (detail) => <CopyableSecret value={detail.walletTxNo} maskedValue={detail.walletTxNo ?? "-"} canReveal={false} /> },
-            { label: "结算时间", render: (detail) => <DateTimeText value={detail.settledAt} /> },
-            { label: "创建时间", render: (detail) => <DateTimeText value={detail.createdAt} /> },
+            { label: t("commissionRate"), render: (detail) => formatPercent(detail.commissionRateSnapshot) },
+            { label: t("walletTransaction"), render: (detail) => <CopyableSecret value={detail.walletTxNo} maskedValue={detail.walletTxNo ?? "-"} canReveal={false} /> },
+            { label: t("settledAt"), render: (detail) => <DateTimeText value={detail.settledAt} /> },
+            { label: t("createdAt"), render: (detail) => <DateTimeText value={detail.createdAt} /> },
           ],
         },
       ];
 
   return (
     <div className="space-y-6">
-      <PageHeader eyebrow="COMMISSION OPS" title="佣金记录管理" description="按用户、订单、层级和状态审计分销佣金。" />
+      <PageHeader eyebrow="COMMISSION OPS" title={t("commissionRecordManagement")} description={t("auditReferralCommissionsByUserOrderLevelAndStatus")} />
       <ErrorAlert message={actionError ?? error} />
       <SearchPanel
         onSearch={() => updateParams(buildQuery(filters))}
@@ -126,52 +127,52 @@ export default function AdminCommissionsPage() {
         }}
       >
         <div className="space-y-2">
-          <Label htmlFor="userId">用户 ID</Label>
-          <Input id="userId" placeholder="输入 ID" value={filters.userId} onChange={(event) => setFilters((current) => ({ ...current, userId: event.target.value }))} className="h-9 w-[100px] bg-background text-foreground" />
+          <Label htmlFor="userId">{t("userID")}</Label>
+          <Input id="userId" placeholder={t("enterID")} value={filters.userId} onChange={(event) => setFilters((current) => ({ ...current, userId: event.target.value }))} className="h-9 w-[100px] bg-background text-foreground" />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="orderNo">订单号</Label>
-          <Input id="orderNo" placeholder="输入单号" value={filters.orderNo} onChange={(event) => setFilters((current) => ({ ...current, orderNo: event.target.value }))} className="h-9 w-[180px] bg-background text-foreground" />
+          <Label htmlFor="orderNo">{t("orderNo")}</Label>
+          <Input id="orderNo" placeholder={t("enterOrderNumber")} value={filters.orderNo} onChange={(event) => setFilters((current) => ({ ...current, orderNo: event.target.value }))} className="h-9 w-[180px] bg-background text-foreground" />
         </div>
         <div className="space-y-2">
-          <Label>佣金层级</Label>
+          <Label>{t("commissionLevel")}</Label>
           <Select value={filters.levelNo} onValueChange={(val) => setFilters((current) => ({ ...current, levelNo: val }))}>
             <SelectTrigger className="h-9 w-[120px] bg-background text-foreground">
-              <SelectValue placeholder="全部层级" />
+              <SelectValue placeholder={t("allLevels")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value=" ">全部层级</SelectItem>
-              <SelectItem value="1">1级</SelectItem>
-              <SelectItem value="2">2级</SelectItem>
-              <SelectItem value="3">3级</SelectItem>
+              <SelectItem value=" ">{t("allLevels")}</SelectItem>
+              <SelectItem value="1">{t("level1")}</SelectItem>
+              <SelectItem value="2">{t("level2")}</SelectItem>
+              <SelectItem value="3">{t("level3")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
         <div className="space-y-2">
-          <Label>结算状态</Label>
+          <Label>{t("settlementStatus")}</Label>
           <Select value={filters.status} onValueChange={(val) => setFilters((current) => ({ ...current, status: val }))}>
             <SelectTrigger className="h-9 w-[120px] bg-background text-foreground">
-              <SelectValue placeholder="全部状态" />
+              <SelectValue placeholder={t("allStatuses")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value=" ">全部状态</SelectItem>
-              <SelectItem value="PENDING">待结算</SelectItem>
-              <SelectItem value="SETTLED">已结算</SelectItem>
-              <SelectItem value="CANCELLED">已取消</SelectItem>
+              <SelectItem value=" ">{t("allStatuses")}</SelectItem>
+              <SelectItem value="PENDING">{t("pendingSettlement")}</SelectItem>
+              <SelectItem value="SETTLED">{t("settled")}</SelectItem>
+              <SelectItem value="CANCELLED">{t("cancelled")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
         <div className="space-y-2">
-          <Label>开始日期</Label>
+          <Label>{t("startDate")}</Label>
           <Input type="date" value={filters.startTime} onChange={(event) => setFilters((current) => ({ ...current, startTime: event.target.value }))} className="h-9 w-[150px] bg-background text-foreground" />
         </div>
         <div className="space-y-2">
-          <Label>结束日期</Label>
+          <Label>{t("endDate")}</Label>
           <Input type="date" value={filters.endTime} onChange={(event) => setFilters((current) => ({ ...current, endTime: event.target.value }))} className="h-9 w-[150px] bg-background text-foreground" />
         </div>
       </SearchPanel>
-      <DataTable columns={columns} data={page.records} rowKey={(row) => row.commissionNo} loading={loading} emptyText="暂无佣金记录" pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
-      <DetailDrawer data={detail} open={detailOpen} title="佣金记录详情" subtitle={(data) => data.commissionNo} sections={detailSections} onClose={() => setDetailOpen(false)} />
+      <DataTable columns={columns} data={page.records} rowKey={(row) => row.commissionNo} loading={loading} emptyText={t("noCommissionRecordsYet")} pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
+      <DetailDrawer data={detail} open={detailOpen} title={t("commissionRecordDetails")} subtitle={(data) => data.commissionNo} sections={detailSections} onClose={() => setDetailOpen(false)} />
     </div>
   );
 }

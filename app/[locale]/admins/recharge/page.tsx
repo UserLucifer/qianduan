@@ -4,6 +4,7 @@ import { HasPermission } from "@/components/shared/HasPermission";
 import { AdminRole } from "@/types/enums";
 
 import { useCallback, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Check, Eye, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -35,6 +36,7 @@ const initialFilters: RechargeFilters = { status: "", startTime: "", endTime: ""
 const initialQuery: RechargeOrderQueryRequest = { pageNo: 1, pageSize: 10 };
 
 export default function AdminRechargePage() {
+  const t = useTranslations("AdminPages.recharge");
   const [filters, setFilters] = useState<RechargeFilters>(initialFilters);
   const [detail, setDetail] = useState<RechargeOrderResponse | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
@@ -88,7 +90,7 @@ export default function AdminRechargePage() {
     if (!actionRow) return;
     const actualAmount = Number(actualAmountInput);
     if (!Number.isFinite(actualAmount) || actualAmount <= 0) {
-      setActionError("实际到账金额必须是大于 0 的数字。");
+      setActionError(t("actualCreditedAmountMustBeANumberGreaterThan0"));
       return;
     }
     try {
@@ -106,7 +108,7 @@ export default function AdminRechargePage() {
   const handleReject = async () => {
     if (!actionRow) return;
     if (!reviewRemark || !reviewRemark.trim()) {
-      setActionError("拒绝充值必须填写原因。");
+      setActionError(t("aRejectionReasonIsRequiredForTopUpRejection"));
       return;
     }
     try {
@@ -122,33 +124,30 @@ export default function AdminRechargePage() {
   };
 
   const columns: DataTableColumn<RechargeOrderResponse>[] = [
-    { key: "rechargeNo", title: "充值订单号", render: (row) => <CopyableSecret value={row.rechargeNo} maskedValue={row.rechargeNo} canReveal={false} /> },
-    { key: "userName", title: "用户名称", render: (row) => formatEmpty(row.userName) },
-    { key: "channelName", title: "支付方式", render: (row) => `${formatEmpty(row.channelName)} / ${formatEmpty(row.network)}` },
-    { key: "applyAmount", title: "申请金额", render: (row) => <MoneyText value={row.applyAmount} currency={row.currency} /> },
-    { key: "actualAmount", title: "到账金额", render: (row) => <MoneyText value={row.actualAmount} currency={row.currency} /> },
-    { key: "status", title: "审核状态", render: (row) => <StatusBadge status={row.status} /> },
-    { key: "createdAt", title: "创建时间", render: (row) => <DateTimeText value={row.createdAt} /> },
+    { key: "rechargeNo", title: t("topUpOrderNo"), render: (row) => <CopyableSecret value={row.rechargeNo} maskedValue={row.rechargeNo} canReveal={false} /> },
+    { key: "userName", title: t("userName"), render: (row) => formatEmpty(row.userName) },
+    { key: "channelName", title: t("paymentMethod"), render: (row) => `${formatEmpty(row.channelName)} / ${formatEmpty(row.network)}` },
+    { key: "applyAmount", title: t("requestedAmount"), render: (row) => <MoneyText value={row.applyAmount} currency={row.currency} /> },
+    { key: "actualAmount", title: t("creditedAmount"), render: (row) => <MoneyText value={row.actualAmount} currency={row.currency} /> },
+    { key: "status", title: t("reviewStatus"), render: (row) => <StatusBadge status={row.status} /> },
+    { key: "createdAt", title: t("createdAt"), render: (row) => <DateTimeText value={row.createdAt} /> },
     {
       key: "actions",
-      title: "操作",
+      title: t("actions"),
       render: (row) => (
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="sm" className="font-medium" onClick={() => void openDetail(row.rechargeNo)}>
             <Eye className="h-4 w-4" />
-            详情
-          </Button>
+            {t("details")}</Button>
           {row.status === "SUBMITTED" || row.status === "PENDING_REVIEW" ? (
             <>
               <HasPermission role={[AdminRole.SUPER_ADMIN, AdminRole.ADMIN]}>
                 <Button variant="ghost" size="sm" className="font-medium text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 dark:text-emerald-400 dark:hover:bg-emerald-500/10" onClick={() => openApprove(row)}>
                   <Check className="h-4 w-4 mr-1" />
-                  通过
-                </Button>
+                  {t("approve")}</Button>
                 <Button variant="ghost" size="sm" className="font-medium text-rose-600 hover:text-rose-700 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-500/10" onClick={() => openReject(row)}>
                   <X className="h-4 w-4 mr-1" />
-                  拒绝
-                </Button>
+                  {t("reject")}</Button>
               </HasPermission>
             </>
           ) : null}
@@ -159,45 +158,45 @@ export default function AdminRechargePage() {
 
   const detailSections: DetailSectionDef<RechargeOrderResponse>[] = [
         {
-          title: "订单信息",
+          title: t("orderInformation"),
           fields: [
-            { label: "充值订单号", render: (detail) => <CopyableSecret value={detail.rechargeNo} maskedValue={detail.rechargeNo} canReveal={false} /> },
-            { label: "用户名称", render: (detail) => detail.userName },
-            { label: "状态", render: (detail) => <StatusBadge status={detail.status} /> },
-            { label: "申请金额", render: (detail) => <MoneyText value={detail.applyAmount} currency={detail.currency} /> },
-            { label: "实际到账", render: (detail) => <MoneyText value={detail.actualAmount} currency={detail.currency} /> },
+            { label: t("topUpOrderNo"), render: (detail) => <CopyableSecret value={detail.rechargeNo} maskedValue={detail.rechargeNo} canReveal={false} /> },
+            { label: t("userName"), render: (detail) => detail.userName },
+            { label: t("status"), render: (detail) => <StatusBadge status={detail.status} /> },
+            { label: t("requestedAmount"), render: (detail) => <MoneyText value={detail.applyAmount} currency={detail.currency} /> },
+            { label: t("actualCredit"), render: (detail) => <MoneyText value={detail.actualAmount} currency={detail.currency} /> },
           ],
         },
         {
-          title: "收款信息",
+          title: t("receivingInformation"),
           fields: [
-            { label: "支付方式", render: (detail) => detail.channelName },
-            { label: "网络", render: (detail) => detail.network },
-            { label: "收款账户", render: (detail) => <CopyableSecret value={detail.accountNo} /> },
-            { label: "外部交易号", render: (detail) => <CopyableSecret value={detail.externalTxNo} /> },
+            { label: t("paymentMethod"), render: (detail) => detail.channelName },
+            { label: t("network"), render: (detail) => detail.network },
+            { label: t("receivingAccount"), render: (detail) => <CopyableSecret value={detail.accountNo} /> },
+            { label: t("externalTransactionNo"), render: (detail) => <CopyableSecret value={detail.externalTxNo} /> },
           ],
         },
         {
-          title: "审核信息",
+          title: t("reviewInformation"),
           fields: [
-            { label: "审核人", render: (detail) => formatEmpty(detail.reviewedBy) },
-            { label: "审核时间", render: (detail) => <DateTimeText value={detail.reviewedAt} /> },
-            { label: "审核备注", render: (detail) => formatEmpty(detail.reviewRemark) },
-            { label: "钱包流水", render: (detail) => <CopyableSecret value={detail.walletTxNo} maskedValue={detail.walletTxNo ?? "-"} canReveal={false} /> },
+            { label: t("reviewer"), render: (detail) => formatEmpty(detail.reviewedBy) },
+            { label: t("reviewedAt"), render: (detail) => <DateTimeText value={detail.reviewedAt} /> },
+            { label: t("reviewNotes"), render: (detail) => formatEmpty(detail.reviewRemark) },
+            { label: t("walletTransaction"), render: (detail) => <CopyableSecret value={detail.walletTxNo} maskedValue={detail.walletTxNo ?? "-"} canReveal={false} /> },
           ],
         },
         {
-          title: "时间信息",
+          title: t("timeInformation"),
           fields: [
-            { label: "创建时间", render: (detail) => <DateTimeText value={detail.createdAt} /> },
-            { label: "到账时间", render: (detail) => <DateTimeText value={detail.creditedAt} /> },
+            { label: t("createdAt"), render: (detail) => <DateTimeText value={detail.createdAt} /> },
+            { label: t("creditedAt"), render: (detail) => <DateTimeText value={detail.creditedAt} /> },
           ],
         },
       ];
 
   return (
     <div className="space-y-6">
-      <PageHeader eyebrow="FINANCE REVIEW" title="充值审核" description="审核用户充值订单，待审核订单支持通过或拒绝。" />
+      <PageHeader eyebrow="FINANCE REVIEW" title={t("topUpReview")} description={t("reviewUserTopUpOrdersAndApproveOrRejectPendingRequests")} />
       <ErrorAlert message={actionError ?? error} />
       <SearchPanel
         onSearch={() => updateParams(buildQuery(filters))}
@@ -207,52 +206,51 @@ export default function AdminRechargePage() {
         }}
       >
         <div className="space-y-2">
-          <Label>充值状态</Label>
+          <Label>{t("topUpStatus")}</Label>
           <Select value={filters.status} onValueChange={(val) => setFilters((current) => ({ ...current, status: val }))}>
             <SelectTrigger className="h-9 w-[180px] bg-background text-foreground">
-              <SelectValue placeholder="全部状态" />
+              <SelectValue placeholder={t("allStatuses")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value=" ">全部状态</SelectItem>
-              <SelectItem value="SUBMITTED">待审核</SelectItem>
-              <SelectItem value="APPROVED">已通过</SelectItem>
-              <SelectItem value="REJECTED">已拒绝</SelectItem>
-              <SelectItem value="CANCELLED">已取消</SelectItem>
+              <SelectItem value=" ">{t("allStatuses")}</SelectItem>
+              <SelectItem value="SUBMITTED">{t("pendingReview")}</SelectItem>
+              <SelectItem value="APPROVED">{t("approved")}</SelectItem>
+              <SelectItem value="REJECTED">{t("rejected")}</SelectItem>
+              <SelectItem value="CANCELLED">{t("cancelled")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
         <div className="space-y-2">
-          <Label>开始日期</Label>
+          <Label>{t("startDate")}</Label>
           <Input type="date" value={filters.startTime} onChange={(event) => setFilters((current) => ({ ...current, startTime: event.target.value }))} className="h-9 w-[150px] bg-background text-foreground" />
         </div>
         <div className="space-y-2">
-          <Label>结束日期</Label>
+          <Label>{t("endDate")}</Label>
           <Input type="date" value={filters.endTime} onChange={(event) => setFilters((current) => ({ ...current, endTime: event.target.value }))} className="h-9 w-[150px] bg-background text-foreground" />
         </div>
       </SearchPanel>
-      <DataTable columns={columns} data={page.records} rowKey={(row) => row.rechargeNo} loading={loading} emptyText="暂无充值订单" pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
-      <DetailDrawer data={detail} open={detailOpen} title="充值订单详情" subtitle={(data) => data.rechargeNo} sections={detailSections} onClose={() => setDetailOpen(false)} />
+      <DataTable columns={columns} data={page.records} rowKey={(row) => row.rechargeNo} loading={loading} emptyText={t("noTopUpOrdersYet")} pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
+      <DetailDrawer data={detail} open={detailOpen} title={t("topUpOrderDetails")} subtitle={(data) => data.rechargeNo} sections={detailSections} onClose={() => setDetailOpen(false)} />
 
       {/* Approve Dialog */}
       <Dialog open={dialogType === "approve"} onOpenChange={(open) => !open && setDialogType(null)}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>通过充值审核</DialogTitle>
+            <DialogTitle>{t("approveTopUp")}</DialogTitle>
             <DialogDescription>
-              请确认实际到账金额，确认后将直接入账至用户钱包。
-            </DialogDescription>
+              {t("confirmTheActualCreditedAmountOnceApprovedItWillBePostedDirectlyToTheUserSWallet")}</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label className="text-right">订单号</Label>
+              <Label className="text-right">{t("orderNo")}</Label>
               <span className="col-span-3 text-sm font-mono text-muted-foreground">{actionRow?.rechargeNo}</span>
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label className="text-right">申请金额</Label>
+              <Label className="text-right">{t("requestedAmount")}</Label>
               <span className="col-span-3 text-sm font-semibold">{actionRow?.applyAmount} {actionRow?.currency}</span>
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="actualAmount" className="text-right">实际到账</Label>
+              <Label htmlFor="actualAmount" className="text-right">{t("actualCredit")}</Label>
               <Input
                 id="actualAmount"
                 type="number"
@@ -262,10 +260,10 @@ export default function AdminRechargePage() {
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="approveRemark" className="text-right">审核备注</Label>
+              <Label htmlFor="approveRemark" className="text-right">{t("reviewNotes")}</Label>
               <Input
                 id="approveRemark"
-                placeholder="可选填写备注"
+                placeholder={t("optionalNotes")}
                 value={reviewRemark}
                 onChange={(e) => setReviewRemark(e.target.value)}
                 className="col-span-3"
@@ -278,10 +276,9 @@ export default function AdminRechargePage() {
             )}
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogType(null)} disabled={isSubmitting}>取消</Button>
+            <Button variant="outline" onClick={() => setDialogType(null)} disabled={isSubmitting}>{t("cancel")}</Button>
             <Button onClick={handleApprove} disabled={isSubmitting} className="bg-emerald-600 hover:bg-emerald-700 text-white">
-              确认通过
-            </Button>
+              {t("confirmApproval")}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -290,21 +287,20 @@ export default function AdminRechargePage() {
       <Dialog open={dialogType === "reject"} onOpenChange={(open) => !open && setDialogType(null)}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>拒绝充值审核</DialogTitle>
+            <DialogTitle>{t("rejectTopUp")}</DialogTitle>
             <DialogDescription>
-              拒绝后订单将被标记为已拒绝。请填写拒绝原因，此原因可能展示给用户。
-            </DialogDescription>
+              {t("afterRejectionTheOrderWillBeMarkedRejectedEnterAReasonWhichMayBeShownToTheUser")}</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label className="text-right">订单号</Label>
+              <Label className="text-right">{t("orderNo")}</Label>
               <span className="col-span-3 text-sm font-mono text-muted-foreground">{actionRow?.rechargeNo}</span>
             </div>
             <div className="grid grid-cols-4 items-start gap-4">
-              <Label htmlFor="rejectRemark" className="text-right mt-2">拒绝原因</Label>
+              <Label htmlFor="rejectRemark" className="text-right mt-2">{t("rejectionReason")}</Label>
               <div className="col-span-3 space-y-2">
                 <div className="flex flex-wrap gap-2 mb-2">
-                  {["支付凭证不清晰", "未查询到实际到账", "金额不匹配"].map((reason) => (
+                  {[t("paymentProofIsUnclear"), t("noActualCreditFound"), t("amountDoesNotMatch")].map((reason) => (
                     <Button
                       key={reason}
                       variant="outline"
@@ -319,7 +315,7 @@ export default function AdminRechargePage() {
                 <Textarea
                   id="rejectRemark"
                   className="min-h-[80px]"
-                  placeholder="必填，输入拒绝原因..."
+                  placeholder={t("requiredEnterTheRejectionReason")}
                   value={reviewRemark}
                   onChange={(e) => setReviewRemark(e.target.value)}
                 />
@@ -332,10 +328,9 @@ export default function AdminRechargePage() {
             )}
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogType(null)} disabled={isSubmitting}>取消</Button>
+            <Button variant="outline" onClick={() => setDialogType(null)} disabled={isSubmitting}>{t("cancel")}</Button>
             <Button variant="destructive" onClick={handleReject} disabled={isSubmitting}>
-              确认拒绝
-            </Button>
+              {t("confirmRejection")}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

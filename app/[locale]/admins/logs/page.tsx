@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,50 +30,57 @@ const initialFilters: LogFilters = { adminId: "", action: "", bizType: "", start
 const initialQuery: AdminLogQuery = { pageNo: 1, pageSize: 10 };
 
 const ACTION_MAP: Record<string, string> = {
-  CREATE: "创建",
-  UPDATE: "更新",
-  DELETE: "删除",
-  ENABLE: "启用",
-  DISABLE: "禁用",
-  APPROVE: "审核通过",
-  REJECT: "审核驳回",
-  LOGIN: "登录",
-  LOGOUT: "登出",
-  PUBLISH: "发布",
-  UNPUBLISH: "撤回",
-  RUN: "执行",
-  CANCEL: "取消",
+  CREATE: "actionCreate",
+  UPDATE: "actionUpdate",
+  DELETE: "actionDelete",
+  ENABLE: "actionEnable",
+  DISABLE: "actionDisable",
+  APPROVE: "actionApprove",
+  REJECT: "actionReject",
+  LOGIN: "actionLogin",
+  LOGOUT: "actionLogout",
+  PUBLISH: "actionPublish",
+  UNPUBLISH: "actionUnpublish",
+  RUN: "actionRun",
+  CANCEL: "actionCancel",
 };
 
 const BIZ_TYPE_MAP: Record<string, string> = {
-  sys_admin: "系统管理员",
-  users: "用户",
-  rental_orders: "租赁订单",
-  user_wallets: "用户钱包",
-  wallet_transactions: "钱包流水",
-  recharge_orders: "充值订单",
-  withdraw_orders: "提现订单",
-  products: "算力产品",
-  regions: "地区管理",
-  gpu_models: "GPU型号",
-  ai_models: "AI模型",
-  rental_cycle_rules: "周期规则",
-  sys_configs: "系统配置",
-  notifications: "通知公告",
-  blog_categories: "博文分类",
-  blog_tags: "博文标签",
-  blog_posts: "博文文章",
-  api_credentials: "API凭证",
-  api_deploy_orders: "部署订单",
-  commission_records: "佣金记录",
-  profit_records: "收益记录",
-  settlement_orders: "结算订单",
+  sys_admin: "bizSystemAdmin",
+  users: "bizUsers",
+  rental_orders: "bizRentalOrders",
+  user_wallets: "bizUserWallets",
+  wallet_transactions: "bizWalletTransactions",
+  recharge_orders: "bizTopUpOrders",
+  withdraw_orders: "bizWithdrawalOrders",
+  products: "bizComputeProducts",
+  regions: "bizRegions",
+  gpu_models: "bizGpuModels",
+  ai_models: "bizAiModels",
+  rental_cycle_rules: "bizRentalCycleRules",
+  sys_configs: "bizSystemConfigs",
+  notifications: "bizNotifications",
+  blog_categories: "bizBlogCategories",
+  blog_tags: "bizBlogTags",
+  blog_posts: "bizBlogPosts",
+  api_credentials: "bizApiCredentials",
+  api_deploy_orders: "bizApiDeployOrders",
+  commission_records: "bizCommissionRecords",
+  profit_records: "bizEarningsRecords",
+  settlement_orders: "bizSettlementOrders",
 };
 
-const translateAction = (action: string) => ACTION_MAP[action?.toUpperCase()] || action;
-const translateBizType = (type: string) => BIZ_TYPE_MAP[type?.toLowerCase()] || type;
+const translateAction = (action: string, t: (key: string) => string) => {
+  const key = ACTION_MAP[action?.toUpperCase()];
+  return key ? t(key) : action;
+};
+const translateBizType = (type: string, t: (key: string) => string) => {
+  const key = BIZ_TYPE_MAP[type?.toLowerCase()];
+  return key ? t(key) : type;
+};
 
 export default function AdminLogsPage() {
+  const t = useTranslations("AdminPages.logs");
   const [filters, setFilters] = useState<LogFilters>(initialFilters);
   const [detail, setDetail] = useState<SysAdminLog | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
@@ -103,56 +111,55 @@ export default function AdminLogsPage() {
   };
 
   const columns: DataTableColumn<SysAdminLog>[] = [
-    { key: "id", title: "日志 ID", render: (row) => formatEmpty(row.id) },
-    { key: "operatorName", title: "操作人", render: (row) => formatEmpty(row.operatorName || row.adminId) },
-    { key: "action", title: "动作", render: (row) => row.actionName || translateAction(row.action) },
-    { key: "targetTable", title: "业务类型", render: (row) => translateBizType(row.targetTable) },
-    { key: "targetId", title: "目标 ID", render: (row) => formatEmpty(row.targetId) },
+    { key: "id", title: t("logID"), render: (row) => formatEmpty(row.id) },
+    { key: "operatorName", title: t("operator"), render: (row) => formatEmpty(row.operatorName || row.adminId) },
+    { key: "action", title: t("action"), render: (row) => row.actionName || translateAction(row.action, t) },
+    { key: "targetTable", title: t("businessType"), render: (row) => translateBizType(row.targetTable, t) },
+    { key: "targetId", title: t("targetID"), render: (row) => formatEmpty(row.targetId) },
     { key: "ip", title: "IP", render: (row) => formatEmpty(row.ip) },
-    { key: "createdAt", title: "时间", render: (row) => <DateTimeText value={row.createdAt} /> },
+    { key: "createdAt", title: t("time"), render: (row) => <DateTimeText value={row.createdAt} /> },
     {
       key: "actions",
-      title: "操作",
+      title: t("actions"),
       render: (row) => (
         <Button variant="ghost" size="sm" className="text-muted-foreground hover:bg-white/5" onClick={() => void openDetail(row.id)}>
           <Eye className="h-4 w-4" />
-          详情
-        </Button>
+          {t("details")}</Button>
       ),
     },
   ];
 
   const detailSections: DetailSectionDef<SysAdminLog>[] = [
         {
-          title: "日志信息",
+          title: t("logInformation"),
           fields: [
-            { label: "日志 ID", render: (detail) => detail.id },
-            { label: "操作人", render: (detail) => formatEmpty(detail.operatorName || detail.adminId) },
-            { label: "动作", render: (detail) => detail.actionName || translateAction(detail.action) },
+            { label: t("logID"), render: (detail) => detail.id },
+            { label: t("operator"), render: (detail) => formatEmpty(detail.operatorName || detail.adminId) },
+            { label: t("action"), render: (detail) => detail.actionName || translateAction(detail.action, t) },
             { label: "IP", render: (detail) => detail.ip },
           ],
         },
         {
-          title: "业务对象",
+          title: t("businessObject"),
           fields: [
-            { label: "业务类型", render: (detail) => translateBizType(detail.targetTable) },
-            { label: "目标 ID", render: (detail) => detail.targetId },
-            { label: "备注", render: (detail) => formatEmpty(detail.remark) },
-            { label: "时间", render: (detail) => <DateTimeText value={detail.createdAt} /> },
+            { label: t("businessType"), render: (detail) => translateBizType(detail.targetTable, t) },
+            { label: t("targetID"), render: (detail) => detail.targetId },
+            { label: t("notes"), render: (detail) => formatEmpty(detail.remark) },
+            { label: t("time"), render: (detail) => <DateTimeText value={detail.createdAt} /> },
           ],
         },
         {
-          title: "变更内容",
+          title: t("changes"),
           fields: [
-            { label: "变更前", render: (detail) => <pre className="whitespace-pre-wrap break-all text-xs text-muted-foreground">{formatEmpty(detail.beforeValue)}</pre> },
-            { label: "变更后", render: (detail) => <pre className="whitespace-pre-wrap break-all text-xs text-muted-foreground">{formatEmpty(detail.afterValue)}</pre> },
+            { label: t("before"), render: (detail) => <pre className="whitespace-pre-wrap break-all text-xs text-muted-foreground">{formatEmpty(detail.beforeValue)}</pre> },
+            { label: t("after"), render: (detail) => <pre className="whitespace-pre-wrap break-all text-xs text-muted-foreground">{formatEmpty(detail.afterValue)}</pre> },
           ],
         },
       ];
 
   return (
     <div className="space-y-6">
-      <PageHeader eyebrow="AUDIT LOG" title="管理员操作日志" description="审计管理端关键操作、目标对象和变更内容。" />
+      <PageHeader eyebrow="AUDIT LOG" title={t("adminOperationLogs")} description={t("auditKeyAdminOperationsTargetObjectsAndChangeDetails")} />
       <ErrorAlert message={actionError ?? error} />
       <SearchPanel
         onSearch={() => updateParams(buildQuery(filters))}
@@ -162,17 +169,17 @@ export default function AdminLogsPage() {
         }}
       >
         <div className="space-y-2">
-          <Label htmlFor="adminId">管理员 ID</Label>
-          <Input id="adminId" placeholder="输入 ID" value={filters.adminId} onChange={(event) => setFilters((current) => ({ ...current, adminId: event.target.value }))} className="h-9 w-[120px] bg-background text-foreground" />
+          <Label htmlFor="adminId">{t("adminID")}</Label>
+          <Input id="adminId" placeholder={t("enterID")} value={filters.adminId} onChange={(event) => setFilters((current) => ({ ...current, adminId: event.target.value }))} className="h-9 w-[120px] bg-background text-foreground" />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="action">操作动作</Label>
+          <Label htmlFor="action">{t("action2")}</Label>
           <Select value={filters.action || "ALL"} onValueChange={(value) => setFilters((current) => ({ ...current, action: value === "ALL" ? "" : value }))}>
             <SelectTrigger id="action" className="h-9 w-[150px] bg-background text-foreground">
-              <SelectValue placeholder="全部动作" />
+              <SelectValue placeholder={t("allActions")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="ALL">全部动作</SelectItem>
+              <SelectItem value="ALL">{t("allActions")}</SelectItem>
               {Object.entries(ACTION_MAP).map(([key, label]) => (
                 <SelectItem key={key} value={key}>
                   {label}
@@ -182,20 +189,20 @@ export default function AdminLogsPage() {
           </Select>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="bizType">业务类型</Label>
-          <Input id="bizType" placeholder="输入表名" value={filters.bizType} onChange={(event) => setFilters((current) => ({ ...current, bizType: event.target.value }))} className="h-9 w-[150px] bg-background text-foreground" />
+          <Label htmlFor="bizType">{t("businessType")}</Label>
+          <Input id="bizType" placeholder={t("enterTableName")} value={filters.bizType} onChange={(event) => setFilters((current) => ({ ...current, bizType: event.target.value }))} className="h-9 w-[150px] bg-background text-foreground" />
         </div>
         <div className="space-y-2">
-          <Label>开始日期</Label>
+          <Label>{t("startDate")}</Label>
           <Input type="date" value={filters.startTime} onChange={(event) => setFilters((current) => ({ ...current, startTime: event.target.value }))} className="h-9 w-[150px] bg-background text-foreground" />
         </div>
         <div className="space-y-2">
-          <Label>结束日期</Label>
+          <Label>{t("endDate")}</Label>
           <Input type="date" value={filters.endTime} onChange={(event) => setFilters((current) => ({ ...current, endTime: event.target.value }))} className="h-9 w-[150px] bg-background text-foreground" />
         </div>
       </SearchPanel>
-      <DataTable columns={columns} data={page.records} rowKey={(row) => row.id} loading={loading} emptyText="暂无操作日志" pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
-      <DetailDrawer data={detail} open={detailOpen} title="操作日志详情" subtitle={(data) => data ? `#${data.id}` : undefined} sections={detailSections} onClose={() => setDetailOpen(false)} />
+      <DataTable columns={columns} data={page.records} rowKey={(row) => row.id} loading={loading} emptyText={t("noSYet")} pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
+      <DetailDrawer data={detail} open={detailOpen} title={t("operationLogDetails")} subtitle={(data) => data ? `#${data.id}` : undefined} sections={detailSections} onClose={() => setDetailOpen(false)} />
     </div>
   );
 }
