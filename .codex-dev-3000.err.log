@@ -1,0 +1,287 @@
+⚠ Slow filesystem detected. The benchmark took 477ms. If E:\业务开发\qianduan\.next/dev is a network drive, consider moving it to a local folder.
+See more: https://nextjs.org/docs/app/guides/local-development
+[browser] Image with src "/images/retool-blocks-login-door.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://E:/业务开发/qianduan/.next/dev/static/chunks/node_modules_next_dist_115brz8._.js:2431:13)
+[browser] Image with src "/images/retool-blocks-login-door.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://E:/业务开发/qianduan/.next/dev/static/chunks/node_modules_next_dist_115brz8._.js:2431:13)
+[browser] Image with src "/images/retool-blocks-login-door.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://E:/业务开发/qianduan/.next/dev/static/chunks/node_modules_next_dist_115brz8._.js:2431:13)
+[browser] Image with src "/images/retool-blocks-login-door.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://E:/业务开发/qianduan/.next/dev/static/chunks/node_modules_next_dist_115brz8._.js:2431:13)
+Error: MISSING_MESSAGE: Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.
+    at async HomeFootCta (components\marketing\HomeFootCta.tsx:12:13)
+  10 | export default async function HomeFootCta({ locale }: { locale?: string }) {
+  11 |   const language = normalizeLocale(locale);
+> 12 |   const t = await getTranslations({
+     |             ^
+  13 |     locale: language,
+  14 |     namespace: "MarketingHome.homeFootCta",
+  15 |   }); {
+  code: 'MISSING_MESSAGE',
+  originalMessage: 'Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.'
+}
+Error: MISSING_MESSAGE: Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.
+    at async HomeFootCta (components\marketing\HomeFootCta.tsx:12:13)
+  10 | export default async function HomeFootCta({ locale }: { locale?: string }) {
+  11 |   const language = normalizeLocale(locale);
+> 12 |   const t = await getTranslations({
+     |             ^
+  13 |     locale: language,
+  14 |     namespace: "MarketingHome.homeFootCta",
+  15 |   }); {
+  code: 'MISSING_MESSAGE',
+  originalMessage: 'Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.'
+}
+Error: MISSING_MESSAGE: Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.
+    at async HomeFootCta (components\marketing\HomeFootCta.tsx:12:13)
+  10 | export default async function HomeFootCta({ locale }: { locale?: string }) {
+  11 |   const language = normalizeLocale(locale);
+> 12 |   const t = await getTranslations({
+     |             ^
+  13 |     locale: language,
+  14 |     namespace: "MarketingHome.homeFootCta",
+  15 |   }); {
+  code: 'MISSING_MESSAGE',
+  originalMessage: 'Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.'
+}
+Error: MISSING_MESSAGE: Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.
+    at async HomeFootCta (components\marketing\HomeFootCta.tsx:12:13)
+  10 | export default async function HomeFootCta({ locale }: { locale?: string }) {
+  11 |   const language = normalizeLocale(locale);
+> 12 |   const t = await getTranslations({
+     |             ^
+  13 |     locale: language,
+  14 |     namespace: "MarketingHome.homeFootCta",
+  15 |   }); {
+  code: 'MISSING_MESSAGE',
+  originalMessage: 'Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.'
+}
+Error: MISSING_MESSAGE: Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.
+    at async HomeFootCta (components\marketing\HomeFootCta.tsx:12:13)
+  10 | export default async function HomeFootCta({ locale }: { locale?: string }) {
+  11 |   const language = normalizeLocale(locale);
+> 12 |   const t = await getTranslations({
+     |             ^
+  13 |     locale: language,
+  14 |     namespace: "MarketingHome.homeFootCta",
+  15 |   }); {
+  code: 'MISSING_MESSAGE',
+  originalMessage: 'Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.'
+}
+Error: MISSING_MESSAGE: Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.
+    at async HomeFootCta (components\marketing\HomeFootCta.tsx:12:13)
+  10 | export default async function HomeFootCta({ locale }: { locale?: string }) {
+  11 |   const language = normalizeLocale(locale);
+> 12 |   const t = await getTranslations({
+     |             ^
+  13 |     locale: language,
+  14 |     namespace: "MarketingHome.homeFootCta",
+  15 |   }); {
+  code: 'MISSING_MESSAGE',
+  originalMessage: 'Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.'
+}
+Error: MISSING_MESSAGE: Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.
+    at async HomeFootCta (components\marketing\HomeFootCta.tsx:12:13)
+  10 | export default async function HomeFootCta({ locale }: { locale?: string }) {
+  11 |   const language = normalizeLocale(locale);
+> 12 |   const t = await getTranslations({
+     |             ^
+  13 |     locale: language,
+  14 |     namespace: "MarketingHome.homeFootCta",
+  15 |   }); {
+  code: 'MISSING_MESSAGE',
+  originalMessage: 'Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.'
+}
+Error: MISSING_MESSAGE: Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.
+    at async HomeFootCta (components\marketing\HomeFootCta.tsx:12:13)
+  10 | export default async function HomeFootCta({ locale }: { locale?: string }) {
+  11 |   const language = normalizeLocale(locale);
+> 12 |   const t = await getTranslations({
+     |             ^
+  13 |     locale: language,
+  14 |     namespace: "MarketingHome.homeFootCta",
+  15 |   }); {
+  code: 'MISSING_MESSAGE',
+  originalMessage: 'Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.'
+}
+Error: MISSING_MESSAGE: Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.
+    at async HomeFootCta (components\marketing\HomeFootCta.tsx:12:13)
+  10 | export default async function HomeFootCta({ locale }: { locale?: string }) {
+  11 |   const language = normalizeLocale(locale);
+> 12 |   const t = await getTranslations({
+     |             ^
+  13 |     locale: language,
+  14 |     namespace: "MarketingHome.homeFootCta",
+  15 |   }); {
+  code: 'MISSING_MESSAGE',
+  originalMessage: 'Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.'
+}
+Error: MISSING_MESSAGE: Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.
+    at async HomeFootCta (components\marketing\HomeFootCta.tsx:12:13)
+  10 | export default async function HomeFootCta({ locale }: { locale?: string }) {
+  11 |   const language = normalizeLocale(locale);
+> 12 |   const t = await getTranslations({
+     |             ^
+  13 |     locale: language,
+  14 |     namespace: "MarketingHome.homeFootCta",
+  15 |   }); {
+  code: 'MISSING_MESSAGE',
+  originalMessage: 'Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.'
+}
+Error: MISSING_MESSAGE: Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.
+    at async HomeFootCta (components\marketing\HomeFootCta.tsx:12:13)
+  10 | export default async function HomeFootCta({ locale }: { locale?: string }) {
+  11 |   const language = normalizeLocale(locale);
+> 12 |   const t = await getTranslations({
+     |             ^
+  13 |     locale: language,
+  14 |     namespace: "MarketingHome.homeFootCta",
+  15 |   }); {
+  code: 'MISSING_MESSAGE',
+  originalMessage: 'Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.'
+}
+Error: MISSING_MESSAGE: Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.
+    at async HomeFootCta (components\marketing\HomeFootCta.tsx:12:13)
+  10 | export default async function HomeFootCta({ locale }: { locale?: string }) {
+  11 |   const language = normalizeLocale(locale);
+> 12 |   const t = await getTranslations({
+     |             ^
+  13 |     locale: language,
+  14 |     namespace: "MarketingHome.homeFootCta",
+  15 |   }); {
+  code: 'MISSING_MESSAGE',
+  originalMessage: 'Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.'
+}
+Error: MISSING_MESSAGE: Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.
+    at async HomeFootCta (components\marketing\HomeFootCta.tsx:12:13)
+  10 | export default async function HomeFootCta({ locale }: { locale?: string }) {
+  11 |   const language = normalizeLocale(locale);
+> 12 |   const t = await getTranslations({
+     |             ^
+  13 |     locale: language,
+  14 |     namespace: "MarketingHome.homeFootCta",
+  15 |   }); {
+  code: 'MISSING_MESSAGE',
+  originalMessage: 'Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.'
+}
+Error: MISSING_MESSAGE: Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.
+    at async HomeFootCta (components\marketing\HomeFootCta.tsx:12:13)
+  10 | export default async function HomeFootCta({ locale }: { locale?: string }) {
+  11 |   const language = normalizeLocale(locale);
+> 12 |   const t = await getTranslations({
+     |             ^
+  13 |     locale: language,
+  14 |     namespace: "MarketingHome.homeFootCta",
+  15 |   }); {
+  code: 'MISSING_MESSAGE',
+  originalMessage: 'Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.'
+}
+Error: MISSING_MESSAGE: Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.
+    at async HomeFootCta (components\marketing\HomeFootCta.tsx:12:13)
+  10 | export default async function HomeFootCta({ locale }: { locale?: string }) {
+  11 |   const language = normalizeLocale(locale);
+> 12 |   const t = await getTranslations({
+     |             ^
+  13 |     locale: language,
+  14 |     namespace: "MarketingHome.homeFootCta",
+  15 |   }); {
+  code: 'MISSING_MESSAGE',
+  originalMessage: 'Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.'
+}
+Error: MISSING_MESSAGE: Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.
+    at async HomeFootCta (components\marketing\HomeFootCta.tsx:12:13)
+  10 | export default async function HomeFootCta({ locale }: { locale?: string }) {
+  11 |   const language = normalizeLocale(locale);
+> 12 |   const t = await getTranslations({
+     |             ^
+  13 |     locale: language,
+  14 |     namespace: "MarketingHome.homeFootCta",
+  15 |   }); {
+  code: 'MISSING_MESSAGE',
+  originalMessage: 'Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.'
+}
+Error: MISSING_MESSAGE: Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.
+    at async HomeFootCta (components\marketing\HomeFootCta.tsx:12:13)
+  10 | export default async function HomeFootCta({ locale }: { locale?: string }) {
+  11 |   const language = normalizeLocale(locale);
+> 12 |   const t = await getTranslations({
+     |             ^
+  13 |     locale: language,
+  14 |     namespace: "MarketingHome.homeFootCta",
+  15 |   }); {
+  code: 'MISSING_MESSAGE',
+  originalMessage: 'Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.'
+}
+Error: MISSING_MESSAGE: Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.
+    at async HomeFootCta (components\marketing\HomeFootCta.tsx:12:13)
+  10 | export default async function HomeFootCta({ locale }: { locale?: string }) {
+  11 |   const language = normalizeLocale(locale);
+> 12 |   const t = await getTranslations({
+     |             ^
+  13 |     locale: language,
+  14 |     namespace: "MarketingHome.homeFootCta",
+  15 |   }); {
+  code: 'MISSING_MESSAGE',
+  originalMessage: 'Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.'
+}
+Error: MISSING_MESSAGE: Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.
+    at async HomeFootCta (components\marketing\HomeFootCta.tsx:12:13)
+  10 | export default async function HomeFootCta({ locale }: { locale?: string }) {
+  11 |   const language = normalizeLocale(locale);
+> 12 |   const t = await getTranslations({
+     |             ^
+  13 |     locale: language,
+  14 |     namespace: "MarketingHome.homeFootCta",
+  15 |   }); {
+  code: 'MISSING_MESSAGE',
+  originalMessage: 'Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.'
+}
+Error: MISSING_MESSAGE: Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.
+    at async HomeFootCta (components\marketing\HomeFootCta.tsx:12:13)
+  10 | export default async function HomeFootCta({ locale }: { locale?: string }) {
+  11 |   const language = normalizeLocale(locale);
+> 12 |   const t = await getTranslations({
+     |             ^
+  13 |     locale: language,
+  14 |     namespace: "MarketingHome.homeFootCta",
+  15 |   }); {
+  code: 'MISSING_MESSAGE',
+  originalMessage: 'Could not resolve `MarketingHome.homeFootCta` in messages for locale `zh-CN`.'
+}
+[browser] Image with src "/images/retool-blocks-login-door.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://E:/业务开发/qianduan/.next/dev/static/chunks/node_modules_next_dist_115brz8._.js:2431:13)
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width. (file://E:/业务开发/qianduan/.next/dev/static/chunks/node_modules_next_dist_115brz8._.js:2431:13)
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width. (file://E:/业务开发/qianduan/.next/dev/static/chunks/node_modules_next_dist_115brz8._.js:2431:13)
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width. (file://E:/业务开发/qianduan/.next/dev/static/chunks/node_modules_next_dist_115brz8._.js:2431:13)
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width. (file://E:/业务开发/qianduan/.next/dev/static/chunks/node_modules_next_dist_115brz8._.js:2431:13)
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width. (file://E:/业务开发/qianduan/.next/dev/static/chunks/node_modules_next_dist_115brz8._.js:2431:13)
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width. (file://E:/业务开发/qianduan/.next/dev/static/chunks/node_modules_next_dist_115brz8._.js:2431:13)
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width. (file://E:/业务开发/qianduan/.next/dev/static/chunks/node_modules_next_dist_115brz8._.js:2431:13)
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width. (file://E:/业务开发/qianduan/.next/dev/static/chunks/node_modules_next_dist_115brz8._.js:2431:13)
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width. (file://E:/业务开发/qianduan/.next/dev/static/chunks/node_modules_next_dist_115brz8._.js:2431:13)
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width. (file://E:/业务开发/qianduan/.next/dev/static/chunks/node_modules_next_dist_115brz8._.js:2431:13)

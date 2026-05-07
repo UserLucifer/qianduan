@@ -13,6 +13,7 @@ import { toErrorMessage, translateErrorMessage } from "@/lib/format";
 import { getUserAccessToken, setUserAccessToken } from "@/lib/auth-session";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -122,7 +123,7 @@ export default function LoginPage() {
               </Button>
             </div>
 
-            {error && <div className="error-message" style={{ marginBottom: "16px" }}>{error}</div>}
+            <ErrorAlert message={error} className="mb-4" />
 
             <Button
               type="submit"

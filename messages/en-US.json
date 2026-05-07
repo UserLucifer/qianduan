@@ -2499,6 +2499,13 @@
           "category": "Infrastructure"
         }
       ]
+    },
+    "homeFootCta": {
+      "title": "Start building today",
+      "primaryCta": "Talk to an expert",
+      "learnMore": "Learn more",
+      "pricing": "CoreWeave classic pricing",
+      "terms": "Spot Terms of Service"
     }
   },
   "SolutionsDetail": {

@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import { Inter } from "next/font/google";
 import { hasLocale } from "next-intl";
 import { NextIntlClientProvider } from "next-intl";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { CustomerService } from "@/components/CustomerService";
+import { ThemeInitializer } from "@/components/shared/ThemeInitializer";
 import { Toaster } from "@/components/ui/sonner";
 import { normalizeLocale } from "@/i18n/locales";
 import { routing } from "@/i18n/routing";
@@ -15,20 +15,6 @@ const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
 });
-
-const themeScript = `
-  (function () {
-    try {
-      const storageKey = "theme";
-      const storedTheme = window.localStorage.getItem(storageKey);
-      const theme = storedTheme || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-      document.documentElement.dataset.theme = theme;
-      document.documentElement.style.colorScheme = theme;
-    } catch (e) {
-      console.error("Theme script failed", e);
-    }
-  })();
-`;
 
 type RootLayoutProps = Readonly<{
   children: React.ReactNode;
@@ -66,14 +52,8 @@ export default async function RootLayout({ children, params }: RootLayoutProps) 
       suppressHydrationWarning
       className={inter.variable}
     >
-      <head>
-        <Script
-          id="theme-script"
-          dangerouslySetInnerHTML={{ __html: themeScript }}
-          strategy="beforeInteractive"
-        />
-      </head>
       <body>
+        <ThemeInitializer />
         <NextIntlClientProvider>
           {children}
           <CustomerService />

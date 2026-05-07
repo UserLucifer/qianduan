@@ -2499,6 +2499,13 @@
           "category": "基础设施"
         }
       ]
+    },
+    "homeFootCta": {
+      "title": "立即开始构建",
+      "primaryCta": "联系专家",
+      "learnMore": "了解更多",
+      "pricing": "算力租赁标准定价",
+      "terms": "Spot 服务条款"
     }
   },
   "SolutionsDetail": {

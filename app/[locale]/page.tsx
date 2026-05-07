@@ -11,6 +11,7 @@ import HubSection from '@/components/marketing/HubSection';
 import EnterpriseSection from '@/components/marketing/EnterpriseSection';
 import AccordionSection from '@/components/marketing/AccordionSection';
 import BlogPreviewSection from '@/components/marketing/BlogPreviewSection';
+import HomeFootCta from '@/components/marketing/HomeFootCta';
 import Footer from '@/components/marketing/Footer';
 import { getTranslations } from "next-intl/server";
 
@@ -61,6 +62,7 @@ export default async function Home({ params }: HomeProps) {
         <FAQSection />
         <HubSection locale={locale} />
         <BlogPreviewSection locale={locale} />
+        <HomeFootCta locale={locale} />
       </main>
 
       <Footer />
