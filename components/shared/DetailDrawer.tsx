@@ -1,6 +1,7 @@
 "use client";
 
 import { X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
@@ -42,6 +43,8 @@ export function DetailDrawer<T>({
   children,
   onClose,
 }: DetailDrawerProps<T>) {
+  const t = useTranslations("SharedControls.detailDrawer");
+
   if (!open || data == null) return null;
 
   const displayTitle = typeof title === "function" ? title(data) : title;
@@ -71,7 +74,7 @@ export function DetailDrawer<T>({
             type="button"
             variant="ghost"
             size="icon"
-            aria-label="关闭详情"
+            aria-label={t("close")}
             className="text-muted-foreground hover:text-foreground"
             onClick={onClose}
           >

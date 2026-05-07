@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -15,19 +16,21 @@ import { createAdminBlogPost, updateAdminBlogPost } from "@/api/admin";
 import type { AdminBlogPost, BlogCategory, BlogTag } from "@/api/types";
 import { toErrorMessage } from "@/lib/format";
 
-const formSchema = z.object({
-  title: z.string().min(1, "请输入标题"),
+function createFormSchema(t: ReturnType<typeof useTranslations>) {
+  return z.object({
+  title: z.string().min(1, t("titleRequired")),
   summary: z.string().optional(),
-  categoryId: z.string().min(1, "请选择分类"),
+  categoryId: z.string().min(1, t("categoryRequired")),
   tagIds: z.array(z.string()).default([]),
-  contentMarkdown: z.string().min(1, "请输入内容"),
+  contentMarkdown: z.string().min(1, t("contentRequired")),
   coverImageUrl: z.string().optional(),
   publishStatus: z.number().default(0),
   isTop: z.number().default(0),
   sortNo: z.number().default(0),
-});
+  });
+}
 
-type FormValues = z.infer<typeof formSchema>;
+type FormValues = z.infer<ReturnType<typeof createFormSchema>>;
 
 interface BlogPostFormProps {
   initialData?: AdminBlogPost | null;
@@ -38,6 +41,8 @@ interface BlogPostFormProps {
 }
 
 export function BlogPostForm({ initialData, categories, tags, onSuccess, onCancel }: BlogPostFormProps) {
+  const t = useTranslations("AdminComponentForms.blogPostForm");
+  const formSchema = createFormSchema(t);
   const [loading, setLoading] = useState(false);
 
   const form = useForm<FormValues>({
@@ -83,19 +88,19 @@ export function BlogPostForm({ initialData, categories, tags, onSuccess, onCance
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 py-4 w-full">
       <div className="grid grid-cols-2 gap-x-6 gap-y-4 w-full">
         <div className="space-y-2 col-span-2">
-          <Label>文章标题</Label>
-          <Input {...form.register("title")} placeholder="输入文章标题" className="bg-background" />
+          <Label>{t("articleTitle")}</Label>
+          <Input {...form.register("title")} placeholder={t("articleTitlePlaceholder")} className="bg-background" />
           {form.formState.errors.title && <p className="text-xs text-red-500">{form.formState.errors.title.message}</p>}
         </div>
 
         <div className="space-y-2">
-          <Label>分类</Label>
+          <Label>{t("category")}</Label>
           <Select
             value={form.watch("categoryId")}
             onValueChange={(val) => form.setValue("categoryId", val)}
           >
             <SelectTrigger className="bg-background">
-              <SelectValue placeholder="选择分类" />
+              <SelectValue placeholder={t("selectCategory")} />
             </SelectTrigger>
             <SelectContent>
               {categories.map((c) => (
@@ -106,35 +111,35 @@ export function BlogPostForm({ initialData, categories, tags, onSuccess, onCance
         </div>
 
         <div className="space-y-2">
-          <Label>标签 (多选)</Label>
+          <Label>{t("tags")}</Label>
           <MultiSelect
             options={tagOptions}
             selected={form.watch("tagIds")}
             onChange={(selected) => form.setValue("tagIds", selected)}
-            placeholder="选择相关标签"
+            placeholder={t("selectTags")}
           />
         </div>
 
         <div className="space-y-2 col-span-2">
-          <Label>封面图片 URL</Label>
+          <Label>{t("coverImageUrl")}</Label>
           <Input {...form.register("coverImageUrl")} placeholder="https://example.com/image.png" className="bg-background" />
         </div>
 
         <div className="space-y-2 col-span-2">
-          <Label>摘要</Label>
-          <Textarea {...form.register("summary")} placeholder="简短的文章摘要" className="bg-background resize-none h-20" />
+          <Label>{t("summary")}</Label>
+          <Textarea {...form.register("summary")} placeholder={t("summaryPlaceholder")} className="bg-background resize-none h-20" />
         </div>
 
         <div className="space-y-2 col-span-2">
-          <Label>Markdown 内容</Label>
-          <Textarea {...form.register("contentMarkdown")} placeholder="支持 Markdown 格式" className="bg-background font-mono min-h-[300px]" />
+          <Label>{t("markdownContent")}</Label>
+          <Textarea {...form.register("contentMarkdown")} placeholder={t("markdownPlaceholder")} className="bg-background font-mono min-h-[300px]" />
           {form.formState.errors.contentMarkdown && <p className="text-xs text-red-500">{form.formState.errors.contentMarkdown.message}</p>}
         </div>
 
         <div className="flex items-center justify-between rounded-lg border bg-card p-3 text-card-foreground">
           <div className="space-y-0.5">
-            <Label>立即发布</Label>
-            <p className="text-[10px] text-muted-foreground">开启后直接进入已发布状态</p>
+            <Label>{t("publishNow")}</Label>
+            <p className="text-[10px] text-muted-foreground">{t("publishNowDescription")}</p>
           </div>
           <Switch
             checked={form.watch("publishStatus") === 1}
@@ -144,8 +149,8 @@ export function BlogPostForm({ initialData, categories, tags, onSuccess, onCance
 
         <div className="flex items-center justify-between rounded-lg border bg-card p-3 text-card-foreground">
           <div className="space-y-0.5">
-            <Label>置顶文章</Label>
-            <p className="text-[10px] text-muted-foreground">置顶文章将显示在列表顶部</p>
+            <Label>{t("pinArticle")}</Label>
+            <p className="text-[10px] text-muted-foreground">{t("pinArticleDescription")}</p>
           </div>
           <Switch
             checked={form.watch("isTop") === 1}
@@ -155,9 +160,9 @@ export function BlogPostForm({ initialData, categories, tags, onSuccess, onCance
       </div>
 
       <div className="flex justify-end gap-3 border-t border-border pt-4">
-        <Button type="button" variant="ghost" onClick={onCancel}>取消</Button>
+        <Button type="button" variant="ghost" onClick={onCancel}>{t("cancel")}</Button>
         <Button type="submit" disabled={loading}>
-          {loading ? "保存中..." : "保存文章"}
+          {loading ? t("saving") : t("saveArticle")}
         </Button>
       </div>
     </form>

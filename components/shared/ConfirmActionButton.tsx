@@ -2,6 +2,7 @@
 
 import type * as React from "react";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,7 +19,7 @@ export function ConfirmActionButton({
   children,
   title,
   description,
-  confirmText = "确认",
+  confirmText,
   loading = false,
   variant = "outline",
   className,
@@ -33,6 +34,7 @@ export function ConfirmActionButton({
   className?: string;
   onConfirm: () => Promise<void> | void;
 }) {
+  const t = useTranslations("SharedControls.confirmAction");
   const [open, setOpen] = useState(false);
 
   const confirm = async () => {
@@ -54,11 +56,11 @@ export function ConfirmActionButton({
         </DialogHeader>
         <DialogFooter>
           <Button type="button" variant="outline" onClick={() => setOpen(false)}>
-            取消
+            {t("cancel")}
           </Button>
           <Button type="button" className="gap-2" onClick={confirm} disabled={loading}>
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-            {confirmText}
+            {confirmText ?? t("confirm")}
           </Button>
         </DialogFooter>
       </DialogContent>

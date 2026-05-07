@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -23,20 +24,21 @@ import type { AdminProductRequest, AiModelResponse, GpuModelResponse, ProductRes
 
 // --- Schemas ---
 
-const productSchema = z.object({
-  productCode: z.string().min(1, "产品编码不能为空"),
-  productName: z.string().min(1, "产品名称不能为空"),
-  machineCode: z.string().min(1, "机器编码不能为空"),
-  machineAlias: z.string().min(1, "机器别名不能为空"),
-  regionId: z.coerce.number().min(1, "请选择地区"),
-  gpuModelId: z.coerce.number().min(1, "请选择 GPU 型号"),
+function createProductSchema(t: ReturnType<typeof useTranslations>) {
+  return z.object({
+  productCode: z.string().min(1, t("productCodeRequired")),
+  productName: z.string().min(1, t("productNameRequired")),
+  machineCode: z.string().min(1, t("machineCodeRequired")),
+  machineAlias: z.string().min(1, t("machineAliasRequired")),
+  regionId: z.coerce.number().min(1, t("regionRequired")),
+  gpuModelId: z.coerce.number().min(1, t("gpuModelRequired")),
   gpuMemoryGb: z.coerce.number().min(0),
   gpuPowerTops: z.coerce.number().min(0),
   rentPrice: z.coerce.number().min(0),
   totalStock: z.coerce.number().min(0),
   availableStock: z.coerce.number().min(0),
   rentedStock: z.coerce.number().min(0),
-  cpuModel: z.string().min(1, "CPU 型号不能为空"),
+  cpuModel: z.string().min(1, t("cpuModelRequired")),
   cpuCores: z.coerce.number().min(1),
   memoryGb: z.coerce.number().min(1),
   systemDiskGb: z.coerce.number().min(1),
@@ -49,43 +51,52 @@ const productSchema = z.object({
   rentableUntil: z.string(),
   tokenOutputPerMinute: z.coerce.number().min(0),
   tokenOutputPerDay: z.coerce.number().min(0),
-});
+  });
+}
 
-const aiModelSchema = z.object({
-  modelCode: z.string().min(1, "模型编码不能为空"),
-  modelName: z.string().min(1, "模型名称不能为空"),
-  vendorName: z.string().min(1, "厂商名称不能为空"),
-  logoUrl: z.string().url("请输入有效的图片 URL").or(z.string().length(0)),
+function createAiModelSchema(t: ReturnType<typeof useTranslations>) {
+  return z.object({
+  modelCode: z.string().min(1, t("modelCodeRequired")),
+  modelName: z.string().min(1, t("modelNameRequired")),
+  vendorName: z.string().min(1, t("vendorNameRequired")),
+  logoUrl: z.string().url(t("validImageUrlRequired")).or(z.string().length(0)),
   monthlyTokenConsumptionTrillion: z.coerce.number().min(0),
   tokenUnitPrice: z.coerce.number().min(0),
   deployTechFee: z.coerce.number().min(0),
   status: z.coerce.number(),
   sortNo: z.coerce.number().optional(),
-});
+  });
+}
 
-const gpuModelSchema = z.object({
-  modelCode: z.string().min(1, "型号编码不能为空"),
-  modelName: z.string().min(1, "型号名称不能为空"),
+function createGpuModelSchema(t: ReturnType<typeof useTranslations>) {
+  return z.object({
+  modelCode: z.string().min(1, t("gpuModelCodeRequired")),
+  modelName: z.string().min(1, t("gpuModelNameRequired")),
   status: z.coerce.number(),
   sortNo: z.coerce.number().optional(),
-});
+  });
+}
 
-const regionSchema = z.object({
-  regionCode: z.string().min(1, "地区编码不能为空"),
-  regionName: z.string().min(1, "地区名称不能为空"),
+function createRegionSchema(t: ReturnType<typeof useTranslations>) {
+  return z.object({
+  regionCode: z.string().min(1, t("regionCodeRequired")),
+  regionName: z.string().min(1, t("regionNameRequired")),
   status: z.coerce.number(),
   sortNo: z.coerce.number().optional(),
-});
+  });
+}
 
-const cycleRuleSchema = z.object({
-  cycleCode: z.string().min(1, "周期编码不能为空"),
-  cycleName: z.string().min(1, "周期名称不能为空"),
+function createCycleRuleSchema(t: ReturnType<typeof useTranslations>) {
+  return z.object({
+  cycleCode: z.string().min(1, t("cycleCodeRequired")),
+  cycleName: z.string().min(1, t("cycleNameRequired")),
   cycleDays: z.coerce.number().min(1),
   yieldMultiplier: z.coerce.number().min(0),
   earlyPenaltyRate: z.coerce.number().min(0).max(1),
   status: z.coerce.number(),
   sortNo: z.coerce.number().optional(),
-});
+  });
+}
 
 // --- Components ---
 
@@ -95,11 +106,11 @@ interface BaseFormProps<T> {
   onCancel: () => void;
 }
 
-type ProductFormValues = z.input<typeof productSchema>;
-type AiModelFormValues = z.infer<typeof aiModelSchema>;
-type GpuModelFormValues = z.infer<typeof gpuModelSchema>;
-type RegionFormValues = z.infer<typeof regionSchema>;
-type CycleRuleFormValues = z.infer<typeof cycleRuleSchema>;
+type ProductFormValues = z.input<ReturnType<typeof createProductSchema>>;
+type AiModelFormValues = z.infer<ReturnType<typeof createAiModelSchema>>;
+type GpuModelFormValues = z.infer<ReturnType<typeof createGpuModelSchema>>;
+type RegionFormValues = z.infer<ReturnType<typeof createRegionSchema>>;
+type CycleRuleFormValues = z.infer<ReturnType<typeof createCycleRuleSchema>>;
 
 interface ProductFormProps extends BaseFormProps<ProductResponse> {
   regions: RegionResponse[];
@@ -107,6 +118,8 @@ interface ProductFormProps extends BaseFormProps<ProductResponse> {
 }
 
 export function ProductForm({ initialData, regions, gpuModels, onSuccess, onCancel }: ProductFormProps) {
+  const t = useTranslations("AdminComponentForms.catalogForms");
+  const productSchema = createProductSchema(t);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [defaultRentableUntil] = useState(() => new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString());
@@ -173,48 +186,48 @@ export function ProductForm({ initialData, regions, gpuModels, onSuccess, onCanc
         {error && <div className="p-3 rounded-md bg-rose-500/10 border border-rose-500/20 text-rose-500 text-sm font-medium">{error}</div>}
         
         <div className="max-h-[60vh] overflow-y-auto px-1 space-y-8 custom-scrollbar">
-          {/* 基础信息 */}
+          {/* Basic information */}
           <section>
             <h3 className="mb-4 flex items-center gap-2 text-sm font-bold text-muted-foreground">
               <span className="h-3 w-1 rounded-full bg-primary"></span>
-              基础信息
+              {t("basicInformation")}
             </h3>
             <div className="grid grid-cols-2 gap-4">
               <FormField control={form.control} name="productCode" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>产品编码</FormLabel>
+                  <FormLabel>{t("productCode")}</FormLabel>
                   <FormControl><Input {...field} disabled={!!initialData} placeholder="P-GPU-001" className="bg-background" /></FormControl>
                   <FormMessage />
                 </FormItem>
               )} />
               <FormField control={form.control} name="productName" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>产品名称</FormLabel>
-                  <FormControl><Input {...field} placeholder="RTX 4090 高级算力" className="bg-background" /></FormControl>
+                  <FormLabel>{t("productName")}</FormLabel>
+                  <FormControl><Input {...field} placeholder={t("productNamePlaceholder")} className="bg-background" /></FormControl>
                   <FormMessage />
                 </FormItem>
               )} />
               <FormField control={form.control} name="machineCode" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>机器编码</FormLabel>
+                  <FormLabel>{t("machineCode")}</FormLabel>
                   <FormControl><Input {...field} placeholder="M-001" className="bg-background" /></FormControl>
                   <FormMessage />
                 </FormItem>
               )} />
               <FormField control={form.control} name="machineAlias" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>机器别名</FormLabel>
+                  <FormLabel>{t("machineAlias")}</FormLabel>
                   <FormControl><Input {...field} placeholder="Alpha-1" className="bg-background" /></FormControl>
                   <FormMessage />
                 </FormItem>
               )} />
               <FormField control={form.control} name="regionId" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>所属地区</FormLabel>
+                  <FormLabel>{t("region")}</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value ? String(field.value) : undefined}>
                     <FormControl>
                       <SelectTrigger className="bg-background">
-                        <SelectValue placeholder="选择地区" />
+                        <SelectValue placeholder={t("selectRegion")} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -226,7 +239,7 @@ export function ProductForm({ initialData, regions, gpuModels, onSuccess, onCanc
               )} />
               <FormField control={form.control} name="rentPrice" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>租赁价格 (USDT/H)</FormLabel>
+                  <FormLabel>{t("rentalPrice")}</FormLabel>
                   <FormControl><Input type="number" step="0.01" {...field} className="bg-background" /></FormControl>
                   <FormMessage />
                 </FormItem>
@@ -234,20 +247,20 @@ export function ProductForm({ initialData, regions, gpuModels, onSuccess, onCanc
             </div>
           </section>
 
-          {/* GPU 与 硬件规格 */}
+          {/* GPU and hardware specs */}
           <section>
             <h3 className="mb-4 flex items-center gap-2 text-sm font-bold text-muted-foreground">
               <span className="h-3 w-1 rounded-full bg-primary"></span>
-              硬件规格
+              {t("hardwareSpecs")}
             </h3>
             <div className="grid grid-cols-2 gap-4">
               <FormField control={form.control} name="gpuModelId" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>GPU 型号</FormLabel>
+                  <FormLabel>{t("gpuModel")}</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value ? String(field.value) : undefined}>
                     <FormControl>
                       <SelectTrigger className="bg-background">
-                        <SelectValue placeholder="选择 GPU" />
+                        <SelectValue placeholder={t("selectGpu")} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -259,35 +272,35 @@ export function ProductForm({ initialData, regions, gpuModels, onSuccess, onCanc
               )} />
               <FormField control={form.control} name="gpuMemoryGb" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>显存 (GB)</FormLabel>
+                  <FormLabel>{t("gpuMemory")}</FormLabel>
                   <FormControl><Input type="number" {...field} className="bg-background" /></FormControl>
                   <FormMessage />
                 </FormItem>
               )} />
               <FormField control={form.control} name="gpuPowerTops" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>算力 (TOPS)</FormLabel>
+                  <FormLabel>{t("gpuPower")}</FormLabel>
                   <FormControl><Input type="number" {...field} className="bg-background" /></FormControl>
                   <FormMessage />
                 </FormItem>
               )} />
               <FormField control={form.control} name="cpuModel" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>CPU 型号</FormLabel>
+                  <FormLabel>{t("cpuModel")}</FormLabel>
                   <FormControl><Input {...field} placeholder="Intel Xeon Gold" className="bg-background" /></FormControl>
                   <FormMessage />
                 </FormItem>
               )} />
               <FormField control={form.control} name="cpuCores" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>CPU 核心数</FormLabel>
+                  <FormLabel>{t("cpuCores")}</FormLabel>
                   <FormControl><Input type="number" {...field} className="bg-background" /></FormControl>
                   <FormMessage />
                 </FormItem>
               )} />
               <FormField control={form.control} name="memoryGb" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>内存 (GB)</FormLabel>
+                  <FormLabel>{t("memory")}</FormLabel>
                   <FormControl><Input type="number" {...field} className="bg-background" /></FormControl>
                   <FormMessage />
                 </FormItem>
@@ -295,37 +308,37 @@ export function ProductForm({ initialData, regions, gpuModels, onSuccess, onCanc
             </div>
           </section>
 
-          {/* 存储与软件 */}
+          {/* Storage and software */}
           <section>
             <h3 className="mb-4 flex items-center gap-2 text-sm font-bold text-muted-foreground">
               <span className="h-3 w-1 rounded-full bg-primary"></span>
-              存储与环境
+              {t("storageEnvironment")}
             </h3>
             <div className="grid grid-cols-2 gap-4">
               <FormField control={form.control} name="systemDiskGb" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>系统盘 (GB)</FormLabel>
+                  <FormLabel>{t("systemDisk")}</FormLabel>
                   <FormControl><Input type="number" {...field} className="bg-background" /></FormControl>
                   <FormMessage />
                 </FormItem>
               )} />
               <FormField control={form.control} name="dataDiskGb" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>数据盘 (GB)</FormLabel>
+                  <FormLabel>{t("dataDisk")}</FormLabel>
                   <FormControl><Input type="number" {...field} className="bg-background" /></FormControl>
                   <FormMessage />
                 </FormItem>
               )} />
               <FormField control={form.control} name="driverVersion" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>驱动版本</FormLabel>
+                  <FormLabel>{t("driverVersion")}</FormLabel>
                   <FormControl><Input {...field} className="bg-background" /></FormControl>
                   <FormMessage />
                 </FormItem>
               )} />
               <FormField control={form.control} name="cudaVersion" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>CUDA 版本</FormLabel>
+                  <FormLabel>{t("cudaVersion")}</FormLabel>
                   <FormControl><Input {...field} className="bg-background" /></FormControl>
                   <FormMessage />
                 </FormItem>
@@ -333,8 +346,8 @@ export function ProductForm({ initialData, regions, gpuModels, onSuccess, onCanc
               <FormField control={form.control} name="hasCacheOptimization" render={({ field }) => (
                 <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm bg-background">
                   <div className="space-y-0.5">
-                    <FormLabel>缓存优化</FormLabel>
-                    <FormDescription className="text-xs">启用后可提升大模型加载速度</FormDescription>
+                    <FormLabel>{t("cacheOptimization")}</FormLabel>
+                    <FormDescription className="text-xs">{t("cacheOptimizationDescription")}</FormDescription>
                   </div>
                   <FormControl>
                     <Switch checked={field.value} onCheckedChange={field.onChange} />
@@ -343,16 +356,16 @@ export function ProductForm({ initialData, regions, gpuModels, onSuccess, onCanc
               )} />
               <FormField control={form.control} name="status" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>状态</FormLabel>
+                  <FormLabel>{t("status")}</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={String(field.value)}>
                     <FormControl>
                       <SelectTrigger className="bg-background">
-                        <SelectValue placeholder="选择状态" />
+                        <SelectValue placeholder={t("selectStatus")} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="1">启用</SelectItem>
-                      <SelectItem value="0">禁用</SelectItem>
+                      <SelectItem value="1">{t("enabled")}</SelectItem>
+                      <SelectItem value="0">{t("disabled")}</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -361,37 +374,37 @@ export function ProductForm({ initialData, regions, gpuModels, onSuccess, onCanc
             </div>
           </section>
 
-          {/* 库存与能力 */}
+          {/* Inventory and throughput */}
           <section>
             <h3 className="mb-4 flex items-center gap-2 text-sm font-bold text-muted-foreground">
               <span className="h-3 w-1 rounded-full bg-primary"></span>
-              库存与处理能力
+              {t("inventoryThroughput")}
             </h3>
             <div className="grid grid-cols-2 gap-4">
               <FormField control={form.control} name="totalStock" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>总库存</FormLabel>
+                  <FormLabel>{t("totalStock")}</FormLabel>
                   <FormControl><Input type="number" {...field} className="bg-background" /></FormControl>
                   <FormMessage />
                 </FormItem>
               )} />
               <FormField control={form.control} name="availableStock" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>可用库存</FormLabel>
+                  <FormLabel>{t("availableStock")}</FormLabel>
                   <FormControl><Input type="number" {...field} className="bg-background" /></FormControl>
                   <FormMessage />
                 </FormItem>
               )} />
               <FormField control={form.control} name="tokenOutputPerMinute" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>每分钟 Token 输出</FormLabel>
+                  <FormLabel>{t("tokenOutputPerMinute")}</FormLabel>
                   <FormControl><Input type="number" {...field} className="bg-background" /></FormControl>
                   <FormMessage />
                 </FormItem>
               )} />
               <FormField control={form.control} name="tokenOutputPerDay" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>每日 Token 输出</FormLabel>
+                  <FormLabel>{t("tokenOutputPerDay")}</FormLabel>
                   <FormControl><Input type="number" {...field} className="bg-background" /></FormControl>
                   <FormMessage />
                 </FormItem>
@@ -402,7 +415,7 @@ export function ProductForm({ initialData, regions, gpuModels, onSuccess, onCanc
 
         <div className="flex justify-end gap-3 border-t border-border pt-4">
           <Button type="button" variant="ghost" onClick={onCancel}>
-            取消
+            {t("cancel")}
           </Button>
           <Button 
             type="submit" 
@@ -410,7 +423,7 @@ export function ProductForm({ initialData, regions, gpuModels, onSuccess, onCanc
             className="min-w-[120px] font-semibold"
           >
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {initialData ? "更新产品" : "创建产品"}
+            {initialData ? t("updateProduct") : t("createProduct")}
           </Button>
         </div>
       </form>
@@ -419,6 +432,8 @@ export function ProductForm({ initialData, regions, gpuModels, onSuccess, onCanc
 }
 
 export function AiModelForm({ initialData, onSuccess, onCancel }: BaseFormProps<AiModelResponse>) {
+  const t = useTranslations("AdminComponentForms.catalogForms");
+  const aiModelSchema = createAiModelSchema(t);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -460,28 +475,28 @@ export function AiModelForm({ initialData, onSuccess, onCancel }: BaseFormProps<
         <div className="grid grid-cols-2 gap-x-6 gap-y-4 py-4 w-full">
           <FormField control={form.control} name="modelCode" render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>模型编码</FormLabel>
+              <FormLabel>{t("modelCode")}</FormLabel>
               <FormControl><Input {...field} disabled={!!initialData} placeholder="gpt-4o" /></FormControl>
               <FormMessage />
             </FormItem>
           )} />
           <FormField control={form.control} name="modelName" render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>模型名称</FormLabel>
+              <FormLabel>{t("modelName")}</FormLabel>
               <FormControl><Input {...field} placeholder="GPT-4 Omni" /></FormControl>
               <FormMessage />
             </FormItem>
           )} />
           <FormField control={form.control} name="vendorName" render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>厂商</FormLabel>
+              <FormLabel>{t("vendor")}</FormLabel>
               <FormControl><Input {...field} placeholder="OpenAI" /></FormControl>
               <FormMessage />
             </FormItem>
           )} />
           <FormField control={form.control} name="tokenUnitPrice" render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>Token 单价 (USDT/M)</FormLabel>
+              <FormLabel>{t("tokenUnitPrice")}</FormLabel>
               <FormControl><Input type="number" step="0.0001" {...field} /></FormControl>
               <FormMessage />
             </FormItem>
@@ -495,10 +510,10 @@ export function AiModelForm({ initialData, onSuccess, onCancel }: BaseFormProps<
           )} />
         </div>
         <div className="flex justify-center gap-3 pt-4 border-t mt-6">
-          <Button type="button" variant="outline" onClick={onCancel} >取消</Button>
+          <Button type="button" variant="outline" onClick={onCancel} >{t("cancel")}</Button>
           <Button type="submit" disabled={loading}>
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            保存模型
+            {t("saveModel")}
           </Button>
         </div>
       </form>
@@ -507,6 +522,8 @@ export function AiModelForm({ initialData, onSuccess, onCancel }: BaseFormProps<
 }
 
 export function GpuModelForm({ initialData, onSuccess, onCancel }: BaseFormProps<GpuModelResponse>) {
+  const t = useTranslations("AdminComponentForms.catalogForms");
+  const gpuModelSchema = createGpuModelSchema(t);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -539,24 +556,24 @@ export function GpuModelForm({ initialData, onSuccess, onCancel }: BaseFormProps
         <div className="grid grid-cols-2 gap-x-6 gap-y-4 py-4 w-full">
           <FormField control={form.control} name="modelCode" render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>型号编码</FormLabel>
+              <FormLabel>{t("gpuModelCode")}</FormLabel>
               <FormControl><Input {...field} placeholder="H100-NVLINK" /></FormControl>
               <FormMessage />
             </FormItem>
           )} />
           <FormField control={form.control} name="modelName" render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>型号名称</FormLabel>
+              <FormLabel>{t("gpuModelName")}</FormLabel>
               <FormControl><Input {...field} placeholder="NVIDIA H100 (80GB)" /></FormControl>
               <FormMessage />
             </FormItem>
           )} />
         </div>
         <div className="flex justify-center gap-3 pt-4 border-t mt-6">
-          <Button type="button" variant="outline" onClick={onCancel} >取消</Button>
+          <Button type="button" variant="outline" onClick={onCancel} >{t("cancel")}</Button>
           <Button type="submit" disabled={loading}>
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            保存型号
+            {t("saveGpuModel")}
           </Button>
         </div>
       </form>
@@ -565,6 +582,8 @@ export function GpuModelForm({ initialData, onSuccess, onCancel }: BaseFormProps
 }
 
 export function RegionForm({ initialData, onSuccess, onCancel }: BaseFormProps<RegionResponse>) {
+  const t = useTranslations("AdminComponentForms.catalogForms");
+  const regionSchema = createRegionSchema(t);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -597,24 +616,24 @@ export function RegionForm({ initialData, onSuccess, onCancel }: BaseFormProps<R
         <div className="grid grid-cols-2 gap-x-6 gap-y-4 py-4 w-full">
           <FormField control={form.control} name="regionCode" render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>地区编码</FormLabel>
+              <FormLabel>{t("regionCode")}</FormLabel>
               <FormControl><Input {...field} placeholder="us-east-1" /></FormControl>
               <FormMessage />
             </FormItem>
           )} />
           <FormField control={form.control} name="regionName" render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>地区名称</FormLabel>
-              <FormControl><Input {...field} placeholder="弗吉尼亚 (美国东部)" /></FormControl>
+              <FormLabel>{t("regionName")}</FormLabel>
+              <FormControl><Input {...field} placeholder={t("regionNamePlaceholder")} /></FormControl>
               <FormMessage />
             </FormItem>
           )} />
         </div>
         <div className="flex justify-center gap-3 pt-4 border-t mt-6">
-          <Button type="button" variant="outline" onClick={onCancel} >取消</Button>
+          <Button type="button" variant="outline" onClick={onCancel} >{t("cancel")}</Button>
           <Button type="submit" disabled={loading}>
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            保存地区
+            {t("saveRegion")}
           </Button>
         </div>
       </form>
@@ -623,6 +642,8 @@ export function RegionForm({ initialData, onSuccess, onCancel }: BaseFormProps<R
 }
 
 export function CycleRuleForm({ initialData, onSuccess, onCancel }: BaseFormProps<RentalCycleRuleResponse>) {
+  const t = useTranslations("AdminComponentForms.catalogForms");
+  const cycleRuleSchema = createCycleRuleSchema(t);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -663,38 +684,38 @@ export function CycleRuleForm({ initialData, onSuccess, onCancel }: BaseFormProp
         <div className="grid grid-cols-2 gap-x-6 gap-y-4 py-4 w-full">
           <FormField control={form.control} name="cycleCode" render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>周期编码</FormLabel>
+              <FormLabel>{t("cycleCode")}</FormLabel>
               <FormControl><Input {...field} disabled={!!initialData} placeholder="daily-01" /></FormControl>
               <FormMessage />
             </FormItem>
           )} />
           <FormField control={form.control} name="cycleName" render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>周期名称</FormLabel>
-              <FormControl><Input {...field} placeholder="按日结算 (低费率)" /></FormControl>
+              <FormLabel>{t("cycleName")}</FormLabel>
+              <FormControl><Input {...field} placeholder={t("cycleNamePlaceholder")} /></FormControl>
               <FormMessage />
             </FormItem>
           )} />
           <FormField control={form.control} name="cycleDays" render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>天数</FormLabel>
+              <FormLabel>{t("days")}</FormLabel>
               <FormControl><Input type="number" {...field} /></FormControl>
               <FormMessage />
             </FormItem>
           )} />
           <FormField control={form.control} name="yieldMultiplier" render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>收益倍率</FormLabel>
+              <FormLabel>{t("yieldMultiplier")}</FormLabel>
               <FormControl><Input type="number" step="0.1" {...field} /></FormControl>
               <FormMessage />
             </FormItem>
           )} />
         </div>
         <div className="flex justify-center gap-3 pt-4 border-t mt-6">
-          <Button type="button" variant="outline" onClick={onCancel} >取消</Button>
+          <Button type="button" variant="outline" onClick={onCancel} >{t("cancel")}</Button>
           <Button type="submit" disabled={loading}>
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            保存规则
+            {t("saveRule")}
           </Button>
         </div>
       </form>

@@ -19,12 +19,16 @@ import {
 } from "@/api/admin";
 import type { SupportedLocale } from "@/api/types";
 
-const notificationSchema = z.object({
+function createNotificationSchema(t: ReturnType<typeof useTranslations>) {
+  return z.object({
   userId: z.number().optional(),
-  title: z.string().min(1, "请输入标题"),
-  content: z.string().min(1, "请输入内容"),
-  type: z.string().min(1, "请选择类型"),
-});
+  title: z.string().min(1, t("titleRequired")),
+  content: z.string().min(1, t("contentRequired")),
+  type: z.string().min(1, t("typeRequired")),
+  });
+}
+
+type NotificationFormValues = z.infer<ReturnType<typeof createNotificationSchema>>;
 
 interface NotificationFormProps {
   isBroadcast?: boolean;
@@ -33,10 +37,12 @@ interface NotificationFormProps {
 }
 
 export function NotificationForm({ isBroadcast = false, onSuccess, onCancel }: NotificationFormProps) {
+  const t = useTranslations("AdminComponentForms.notificationForm");
+  const notificationSchema = createNotificationSchema(t);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const form = useForm<z.infer<typeof notificationSchema>>({
+  const form = useForm<NotificationFormValues>({
     resolver: zodResolver(notificationSchema),
     defaultValues: {
       userId: undefined,
@@ -46,7 +52,7 @@ export function NotificationForm({ isBroadcast = false, onSuccess, onCancel }: N
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof notificationSchema>) => {
+  const onSubmit = async (values: NotificationFormValues) => {
     setLoading(true);
     setError(null);
     try {
@@ -59,7 +65,7 @@ export function NotificationForm({ isBroadcast = false, onSuccess, onCancel }: N
         });
       } else {
         if (values.userId === undefined) {
-          throw new Error("请输入接收用户 ID");
+          throw new Error(t("recipientRequired"));
         }
         await createAdminNotification({
           userId: values.userId,
@@ -88,11 +94,11 @@ export function NotificationForm({ isBroadcast = false, onSuccess, onCancel }: N
               name="userId"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>接收用户 ID</FormLabel>
+                  <FormLabel>{t("recipientUserId")}</FormLabel>
                   <FormControl>
                     <Input 
                       type="number" 
-                      placeholder="例如: 10001" 
+                      placeholder={t("recipientPlaceholder")}
                       className="bg-background"
                       {...field}
                       value={field.value ?? ""}
@@ -111,9 +117,9 @@ export function NotificationForm({ isBroadcast = false, onSuccess, onCancel }: N
               name="title"
               render={({ field }) => (
                 <FormItem className="w-full col-span-2">
-                  <FormLabel>通知标题</FormLabel>
+                  <FormLabel>{t("notificationTitle")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="输入简明扼要的标题" className="bg-background" {...field} />
+                    <Input placeholder={t("titlePlaceholder")} className="bg-background" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -125,17 +131,17 @@ export function NotificationForm({ isBroadcast = false, onSuccess, onCancel }: N
               name="type"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>通知类型</FormLabel>
+                  <FormLabel>{t("notificationType")}</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="bg-background">
-                        <SelectValue placeholder="选择类型" />
+                        <SelectValue placeholder={t("selectType")} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="SYSTEM">系统通知</SelectItem>
-                      <SelectItem value="ORDER">订单通知</SelectItem>
-                      <SelectItem value="WALLET">资金通知</SelectItem>
+                      <SelectItem value="SYSTEM">{t("systemNotification")}</SelectItem>
+                      <SelectItem value="ORDER">{t("orderNotification")}</SelectItem>
+                      <SelectItem value="WALLET">{t("walletNotification")}</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -149,10 +155,10 @@ export function NotificationForm({ isBroadcast = false, onSuccess, onCancel }: N
             name="content"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>通知内容</FormLabel>
+                <FormLabel>{t("notificationContent")}</FormLabel>
                 <FormControl>
                   <Textarea 
-                    placeholder="请输入详细的通知内容..." 
+                    placeholder={t("contentPlaceholder")}
                     className="bg-background min-h-[120px] resize-none" 
                     {...field} 
                   />
@@ -163,10 +169,10 @@ export function NotificationForm({ isBroadcast = false, onSuccess, onCancel }: N
           />
         </div>
 
-        {/* 预览区域 */}
+        {/* Preview */}
         <div className="mt-2 rounded-lg border border-border bg-muted/40 p-4">
           <div className="mb-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-            实时预览 (模拟展示)
+            {t("preview")}
           </div>
           <div className="flex gap-3 items-start">
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
@@ -175,12 +181,12 @@ export function NotificationForm({ isBroadcast = false, onSuccess, onCancel }: N
             <div className="min-w-0 flex-1 space-y-1">
               <div className="flex items-center justify-between gap-2">
                 <p className="truncate text-sm font-medium text-foreground">
-                  {form.watch("title") || "在此输入标题..."}
+                  {form.watch("title") || t("previewTitlePlaceholder")}
                 </p>
-                <span className="whitespace-nowrap text-[10px] text-muted-foreground">刚刚</span>
+                <span className="whitespace-nowrap text-[10px] text-muted-foreground">{t("justNow")}</span>
               </div>
               <p className="whitespace-pre-wrap break-words text-xs text-muted-foreground">
-                {form.watch("content") || "通知内容将展示在这里。"}
+                {form.watch("content") || t("previewContentPlaceholder")}
               </p>
             </div>
           </div>
@@ -188,7 +194,7 @@ export function NotificationForm({ isBroadcast = false, onSuccess, onCancel }: N
 
         <div className="flex justify-end gap-3 border-t border-border pt-4">
           <Button type="button" variant="ghost" onClick={onCancel}>
-            取消
+            {t("cancel")}
           </Button>
           <Button 
             type="submit" 
@@ -196,7 +202,7 @@ export function NotificationForm({ isBroadcast = false, onSuccess, onCancel }: N
             className="min-w-[100px] font-semibold"
           >
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {isBroadcast ? "发布广播" : "发送通知"}
+            {isBroadcast ? t("publishBroadcast") : t("sendNotification")}
           </Button>
         </div>
       </form>

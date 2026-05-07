@@ -24,21 +24,23 @@ import type {
 import { useState } from "react";
 import { toErrorMessage } from "@/lib/format";
 
-const channelSchema = z.object({
-  channelCode: z.string().min(1, "请输入渠道编码").max(64),
-  channelName: z.string().min(1, "请输入渠道名称").max(64),
+function createChannelSchema(t: ReturnType<typeof useTranslations>) {
+  return z.object({
+  channelCode: z.string().min(1, t("channelCodeRequired")).max(64),
+  channelName: z.string().min(1, t("channelNameRequired")).max(64),
   network: z.string().max(64).optional(),
   displayUrl: z.string().max(255).optional(),
   accountName: z.string().max(128).optional(),
   accountNo: z.string().max(255).optional(),
   minAmount: z.coerce.number().min(0),
   maxAmount: z.coerce.number().min(0),
-  feeRate: z.coerce.number().min(0, "请输入手续费率"),
+  feeRate: z.coerce.number().min(0, t("feeRateRequired")),
   sortNo: z.number().int().default(0),
   status: z.number().int().min(0).max(1).default(1),
-});
+  });
+}
 
-type ChannelFormValues = z.infer<typeof channelSchema>;
+type ChannelFormValues = z.infer<ReturnType<typeof createChannelSchema>>;
 
 interface RechargeChannelFormProps {
   initialData?: AdminRechargeChannelResponse | null;
@@ -47,6 +49,8 @@ interface RechargeChannelFormProps {
 }
 
 export function RechargeChannelForm({ initialData, onSuccess, onCancel }: RechargeChannelFormProps) {
+  const t = useTranslations("AdminComponentForms.rechargeForm");
+  const channelSchema = createChannelSchema(t);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -117,19 +121,19 @@ export function RechargeChannelForm({ initialData, onSuccess, onCancel }: Rechar
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 py-4">
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label>渠道编码</Label>
+          <Label>{t("channelCode")}</Label>
           <Input
             {...register("channelCode")}
-            placeholder="如: USDT_TRC20"
+            placeholder={t("channelCodePlaceholder")}
             className="h-10"
           />
           {errors.channelCode && <p className="text-xs text-rose-500">{errors.channelCode.message}</p>}
         </div>
         <div className="space-y-2">
-          <Label>渠道名称</Label>
+          <Label>{t("channelName")}</Label>
           <Input
             {...register("channelName")}
-            placeholder="如: USDT (TRC20)"
+            placeholder={t("channelNamePlaceholder")}
             className="h-10"
           />
           {errors.channelName && <p className="text-xs text-rose-500">{errors.channelName.message}</p>}
@@ -138,18 +142,18 @@ export function RechargeChannelForm({ initialData, onSuccess, onCancel }: Rechar
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label>网络类型</Label>
+          <Label>{t("networkType")}</Label>
           <Input
             {...register("network")}
-            placeholder="如: TRC20, ERC20"
+            placeholder={t("networkPlaceholder")}
             className="h-10"
           />
         </div>
         <div className="space-y-2">
-          <Label>显示图标 URL</Label>
+          <Label>{t("displayIconUrl")}</Label>
           <Input
             {...register("displayUrl")}
-            placeholder="图标链接"
+            placeholder={t("iconUrlPlaceholder")}
             className="h-10"
           />
         </div>
@@ -157,18 +161,18 @@ export function RechargeChannelForm({ initialData, onSuccess, onCancel }: Rechar
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label>账户/钱包名称</Label>
+          <Label>{t("accountWalletName")}</Label>
           <Input
             {...register("accountName")}
-            placeholder="显示给用户的账户名"
+            placeholder={t("accountNamePlaceholder")}
             className="h-10"
           />
         </div>
         <div className="space-y-2">
-          <Label>账户/钱包地址</Label>
+          <Label>{t("accountWalletAddress")}</Label>
           <Input
             {...register("accountNo")}
-            placeholder="收币地址"
+            placeholder={t("receivingAddressPlaceholder")}
             className="h-10"
           />
         </div>
@@ -176,7 +180,7 @@ export function RechargeChannelForm({ initialData, onSuccess, onCancel }: Rechar
 
       <div className="grid grid-cols-3 gap-4">
         <div className="space-y-2">
-          <Label>最小金额</Label>
+          <Label>{t("minAmount")}</Label>
           <Input
             type="number"
             step="0.01"
@@ -185,7 +189,7 @@ export function RechargeChannelForm({ initialData, onSuccess, onCancel }: Rechar
           />
         </div>
         <div className="space-y-2">
-          <Label>最大金额</Label>
+          <Label>{t("maxAmount")}</Label>
           <Input
             type="number"
             step="0.01"
@@ -194,7 +198,7 @@ export function RechargeChannelForm({ initialData, onSuccess, onCancel }: Rechar
           />
         </div>
         <div className="space-y-2">
-          <Label>手续费率 (如 0.01)</Label>
+          <Label>{t("feeRate")}</Label>
           <Input
             type="number"
             step="0.0001"
@@ -206,7 +210,7 @@ export function RechargeChannelForm({ initialData, onSuccess, onCancel }: Rechar
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label>排序号</Label>
+          <Label>{t("sortNo")}</Label>
           <Input
             type="number"
             {...register("sortNo", { valueAsNumber: true })}
@@ -214,7 +218,7 @@ export function RechargeChannelForm({ initialData, onSuccess, onCancel }: Rechar
           />
         </div>
         <div className="space-y-2">
-          <Label>状态</Label>
+          <Label>{t("status")}</Label>
           <Select
             value={String(status)}
             onValueChange={(val) => setValue("status", Number(val))}
@@ -223,8 +227,8 @@ export function RechargeChannelForm({ initialData, onSuccess, onCancel }: Rechar
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="1">启用</SelectItem>
-              <SelectItem value="0">禁用</SelectItem>
+              <SelectItem value="1">{t("enabled")}</SelectItem>
+              <SelectItem value="0">{t("disabled")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -239,14 +243,14 @@ export function RechargeChannelForm({ initialData, onSuccess, onCancel }: Rechar
           onClick={onCancel}
           className="text-muted-foreground hover:text-foreground"
         >
-          取消
+          {t("cancel")}
         </Button>
         <Button
           type="submit"
           disabled={isLoading}
           className="min-w-[80px]"
         >
-          {isLoading ? "保存中..." : "保存"}
+          {isLoading ? t("saving") : t("save")}
         </Button>
       </div>
     </form>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Check, Copy, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -17,6 +18,7 @@ export function CopyableSecret({
   canReveal?: boolean;
   className?: string;
 }) {
+  const t = useTranslations("SharedControls.copyableSecret");
   const [visible, setVisible] = useState(false);
   const [copied, setCopied] = useState(false);
   const display = visible ? value ?? "-" : maskedValue || maskSecret(value);
@@ -43,7 +45,7 @@ export function CopyableSecret({
           size="icon"
           className="h-6 w-6 shrink-0 text-muted-foreground hover:text-foreground"
           onClick={() => setVisible((current) => !current)}
-          aria-label={visible ? "隐藏内容" : "显示内容"}
+          aria-label={visible ? t("hide") : t("show")}
         >
           {visible ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
         </Button>
@@ -55,7 +57,7 @@ export function CopyableSecret({
         className="h-6 w-6 shrink-0 text-muted-foreground hover:text-foreground"
         onClick={copyValue}
         disabled={!value}
-        aria-label="复制内容"
+        aria-label={t("copy")}
       >
         {copied ? <Check className="h-3.5 w-3.5 text-emerald-500" /> : <Copy className="h-3.5 w-3.5" />}
       </Button>

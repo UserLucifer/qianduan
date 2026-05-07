@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { useTranslations } from "next-intl";
 import { 
   CheckCircle2, 
   Circle, 
@@ -28,6 +29,7 @@ interface TimelineNode {
 }
 
 export function OrderTimeline({ data }: { data: RentalOrderDetailResponse }) {
+  const t = useTranslations("OrderTimeline");
   const nodes = useMemo(() => {
     const list: TimelineNode[] = [];
     const s = data.orderStatus as RentalOrderStatus;
@@ -35,30 +37,30 @@ export function OrderTimeline({ data }: { data: RentalOrderDetailResponse }) {
     // 1. Order Created
     list.push({
       id: "created",
-      title: "订单已创建",
+      title: t("createdTitle"),
       time: data.createdAt,
       status: "completed",
       icon: Clock,
-      description: "系统已收到租赁申请"
+      description: t("createdDescription")
     });
 
     // 2. Payment
     if (data.paidAt) {
       list.push({
         id: "paid",
-        title: "支付已入账",
+        title: t("paidTitle"),
         time: data.paidAt,
         status: "completed",
         icon: CreditCard,
-        description: <span className="flex items-center gap-1">支付金额: <MoneyText value={data.paidAmount ?? data.orderAmount} /></span>
+        description: <span className="flex items-center gap-1">{t("paidAmount")} <MoneyText value={data.paidAmount ?? data.orderAmount} /></span>
       });
     } else if (s === RentalOrderStatus.PENDING_PAY) {
       list.push({
         id: "paid",
-        title: "等待支付",
+        title: t("waitingPaymentTitle"),
         status: "active",
         icon: CreditCard,
-        description: "请尽快完成支付以启动资源"
+        description: t("waitingPaymentDescription")
       });
     }
 
@@ -66,19 +68,19 @@ export function OrderTimeline({ data }: { data: RentalOrderDetailResponse }) {
     if (data.activatedAt) {
       list.push({
         id: "activated",
-        title: "算力节点激活",
+        title: t("activatedTitle"),
         time: data.activatedAt,
         status: "completed",
         icon: Zap,
-        description: "节点已分配并进入初始化阶段"
+        description: t("activatedDescription")
       });
     } else if (s === RentalOrderStatus.ACTIVATING || s === RentalOrderStatus.PAID) {
       list.push({
         id: "activated",
-        title: "算力节点激活中",
+        title: t("activatingTitle"),
         status: "active",
         icon: Zap,
-        description: "正在调度算力集群资源..."
+        description: t("activatingDescription")
       });
     }
 
@@ -86,13 +88,13 @@ export function OrderTimeline({ data }: { data: RentalOrderDetailResponse }) {
     if (s === RentalOrderStatus.RUNNING) {
       list.push({
         id: "running",
-        title: "集群持续运行中",
+        title: t("runningTitle"),
         status: "active",
         icon: Play,
         description: (
           <div className="space-y-1">
-            <p>算力运行状态正常，正在产生收益</p>
-            <p className="text-emerald-500 font-bold font-mono">预计总收益: <MoneyText value={data.expectedTotalProfit} /></p>
+            <p>{t("runningDescription")}</p>
+            <p className="text-emerald-500 font-bold font-mono">{t("expectedProfit")} <MoneyText value={data.expectedTotalProfit} /></p>
           </div>
         )
       });
@@ -102,22 +104,22 @@ export function OrderTimeline({ data }: { data: RentalOrderDetailResponse }) {
     if (s === RentalOrderStatus.PAUSED) {
       list.push({
         id: "paused",
-        title: "算力已暂停",
+        title: t("pausedTitle"),
         time: data.pausedAt,
         status: "warning",
         icon: AlertCircle,
-        description: "资源由于系统维护或策略已暂停"
+        description: t("pausedDescription")
       });
     }
 
     if (s === RentalOrderStatus.EARLY_CLOSED) {
       list.push({
         id: "early_closed",
-        title: "提前终止结算",
+        title: t("earlyClosedTitle"),
         time: data.finishedAt,
         status: "danger",
         icon: XCircle,
-        description: "用户已申请提前终止，正在进行违约结算"
+        description: t("earlyClosedDescription")
       });
     }
 
@@ -125,36 +127,36 @@ export function OrderTimeline({ data }: { data: RentalOrderDetailResponse }) {
     if (s === RentalOrderStatus.SETTLED || s === RentalOrderStatus.EXPIRED) {
       list.push({
         id: "finished",
-        title: s === RentalOrderStatus.SETTLED ? "租赁已结算" : "租赁已到期",
+        title: s === RentalOrderStatus.SETTLED ? t("settledTitle") : t("expiredTitle"),
         time: data.finishedAt || data.expiredAt,
         status: "completed",
         icon: CheckCircle2,
-        description: "资产租赁生命周期已结束"
+        description: t("finishedDescription")
       });
     } else if (s !== RentalOrderStatus.CANCELED && s !== RentalOrderStatus.EARLY_CLOSED) {
       list.push({
         id: "finished_pending",
-        title: "到期自动结算",
+        title: t("autoSettlementTitle"),
         time: data.expiredAt,
         status: "pending",
         icon: Circle,
-        description: "系统将在租赁期满后自动发起结算"
+        description: t("autoSettlementDescription")
       });
     }
 
     if (s === RentalOrderStatus.CANCELED) {
       list.push({
         id: "canceled",
-        title: "订单已取消",
+        title: t("canceledTitle"),
         time: data.canceledAt,
         status: "danger",
         icon: XCircle,
-        description: "订单由于超时或手动操作已关闭"
+        description: t("canceledDescription")
       });
     }
 
     return list;
-  }, [data]);
+  }, [data, t]);
 
   return (
     <div className="relative space-y-0 pb-4">

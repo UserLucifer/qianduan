@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Plus, Edit2, CheckCircle2, XCircle, Languages } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,6 +25,7 @@ interface CategoryManagerProps {
 }
 
 export function CategoryManager({ items, onRefresh, onTranslate }: CategoryManagerProps) {
+  const t = useTranslations("AdminComponentForms.blogManagers");
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -42,7 +44,7 @@ export function CategoryManager({ items, onRefresh, onTranslate }: CategoryManag
   };
 
   const handleUpdate = async (id: number, currentName: string) => {
-    const newName = window.prompt("修改分类名称", currentName);
+    const newName = window.prompt(t("editCategoryPrompt"), currentName);
     if (!newName || newName === currentName) return;
     try {
       await updateAdminBlogCategory(id, { categoryName: newName });
@@ -69,7 +71,7 @@ export function CategoryManager({ items, onRefresh, onTranslate }: CategoryManag
     <div className="space-y-4 w-[300px] p-2">
       <div className="flex gap-2">
         <Input 
-          placeholder="新分类名称" 
+          placeholder={t("newCategoryName")}
           value={name} 
           onChange={(e) => setName(e.target.value)}
           className="h-8 text-sm"
@@ -92,7 +94,7 @@ export function CategoryManager({ items, onRefresh, onTranslate }: CategoryManag
                 <Edit2 className="h-3 w-3 text-primary" />
               </Button>
               {onTranslate ? (
-                <Button type="button" variant="ghost" size="icon" className="h-7 w-7" title="翻译" aria-label="翻译" onClick={() => onTranslate(item)}>
+                <Button type="button" variant="ghost" size="icon" className="h-7 w-7" title={t("translate")} aria-label={t("translate")} onClick={() => onTranslate(item)}>
                   <Languages className="h-3 w-3 text-blue-500" />
                 </Button>
               ) : null}
@@ -111,6 +113,7 @@ interface TagManagerProps {
 }
 
 export function TagManager({ items, onRefresh, onTranslate }: TagManagerProps) {
+  const t = useTranslations("AdminComponentForms.blogManagers");
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -129,7 +132,7 @@ export function TagManager({ items, onRefresh, onTranslate }: TagManagerProps) {
   };
 
   const handleUpdate = async (id: number, currentName: string) => {
-    const newName = window.prompt("修改标签名称", currentName);
+    const newName = window.prompt(t("editTagPrompt"), currentName);
     if (!newName || newName === currentName) return;
     try {
       await updateAdminBlogTag(id, { tagName: newName });
@@ -156,7 +159,7 @@ export function TagManager({ items, onRefresh, onTranslate }: TagManagerProps) {
     <div className="space-y-4 w-[300px] p-2">
       <div className="flex gap-2">
         <Input 
-          placeholder="新标签名称" 
+          placeholder={t("newTagName")}
           value={name} 
           onChange={(e) => setName(e.target.value)}
           className="h-8 text-sm"
@@ -179,7 +182,7 @@ export function TagManager({ items, onRefresh, onTranslate }: TagManagerProps) {
                 <Edit2 className="h-3 w-3 text-primary" />
               </Button>
               {onTranslate ? (
-                <Button type="button" variant="ghost" size="icon" className="h-7 w-7" title="翻译" aria-label="翻译" onClick={() => onTranslate(item)}>
+                <Button type="button" variant="ghost" size="icon" className="h-7 w-7" title={t("translate")} aria-label={t("translate")} onClick={() => onTranslate(item)}>
                   <Languages className="h-3 w-3 text-blue-500" />
                 </Button>
               ) : null}
