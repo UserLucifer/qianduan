@@ -297,6 +297,7 @@ export interface RentalOrderDetailResponse extends RentalOrderSummaryResponse {
 }
 
 export interface RentalOrderQueryRequest extends PageQuery {
+  orderNo?: string;
   orderStatus?: string;
   startTime?: string;
   endTime?: string;

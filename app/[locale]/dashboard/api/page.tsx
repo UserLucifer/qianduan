@@ -1,9 +1,12 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { Suspense, useCallback, useState } from "react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Eye, ReceiptText } from "lucide-react";
+import { Eye, PackageOpen, PlayCircle, ReceiptText } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { ConfirmActionButton } from "@/components/shared/ConfirmActionButton";
 import { CopyableSecret } from "@/components/shared/CopyableSecret";
 import { DataTable, type DataTableColumn } from "@/components/shared/DataTable";
@@ -12,21 +15,65 @@ import { DetailDrawer, type DetailSectionDef } from "@/components/shared/DetailD
 import { MoneyText } from "@/components/shared/MoneyText";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { StatusBadge } from "@/components/shared/StatusBadge";
-import { getRentalApiManagement, getRentalDeployInfo, payDeployFee } from "@/api/rental";
+import { getRentalApiManagement, getRentalDeployInfo, payDeployFee, startOrder } from "@/api/rental";
 import type { ApiDeployInfoResponse, PageResult, RentalOrderQueryRequest } from "@/api/types";
 import { usePaginatedResource } from "@/hooks/usePaginatedResource";
 import { formatEmpty } from "@/lib/format";
 import { ErrorAlert } from "@/components/shared/ErrorAlert";
+import { ApiDeployOrderStatus, ApiTokenStatus, RentalOrderStatus } from "@/types/enums";
 
 const initialParams: RentalOrderQueryRequest = { pageNo: 1, pageSize: 10 };
+type ApiStage = "PAY_DEPLOY" | "DEPLOYING" | "READY_TO_START" | "RUNNING" | "ENDED" | "CANCELED" | "BLOCKED";
+
+function getApiStage(row: ApiDeployInfoResponse): ApiStage {
+  if (row.orderStatus === RentalOrderStatus.CANCELED || row.tokenStatus === ApiTokenStatus.REVOKED) return "CANCELED";
+  if (
+    row.orderStatus === RentalOrderStatus.EXPIRED ||
+    row.orderStatus === RentalOrderStatus.EARLY_CLOSED ||
+    row.orderStatus === RentalOrderStatus.SETTLED ||
+    row.tokenStatus === ApiTokenStatus.EXPIRED
+  ) {
+    return "ENDED";
+  }
+  if (
+    row.orderStatus === RentalOrderStatus.PENDING_ACTIVATION &&
+    row.tokenStatus === ApiTokenStatus.GENERATED &&
+    row.deployOrderStatus !== ApiDeployOrderStatus.PAID
+  ) {
+    return "PAY_DEPLOY";
+  }
+  if (row.orderStatus === RentalOrderStatus.ACTIVATING || row.tokenStatus === ApiTokenStatus.ACTIVATING) return "DEPLOYING";
+  if (row.orderStatus === RentalOrderStatus.PAUSED && row.tokenStatus === ApiTokenStatus.PAUSED) return "READY_TO_START";
+  if (row.orderStatus === RentalOrderStatus.RUNNING && row.tokenStatus === ApiTokenStatus.ACTIVE) return "RUNNING";
+  return "BLOCKED";
+}
+
+function canPayDeploy(row: ApiDeployInfoResponse) {
+  return getApiStage(row) === "PAY_DEPLOY";
+}
+
+function canStart(row: ApiDeployInfoResponse) {
+  return getApiStage(row) === "READY_TO_START";
+}
 
 export default function DashboardApiPage() {
+  return (
+    <Suspense fallback={null}>
+      <DashboardApiContent />
+    </Suspense>
+  );
+}
+
+function DashboardApiContent() {
   const t = useTranslations("DashboardApi");
+  const searchParams = useSearchParams();
+  const focusedOrderNo = searchParams.get("orderNo")?.trim() ?? "";
+  const scopedInitialParams: RentalOrderQueryRequest = focusedOrderNo ? { ...initialParams, orderNo: focusedOrderNo } : initialParams;
   const loader = useCallback(async (params: RentalOrderQueryRequest): Promise<PageResult<ApiDeployInfoResponse>> => {
     const res = await getRentalApiManagement(params);
     return res.data;
   }, []);
-  const { page, loading, error, changePage, reload } = usePaginatedResource(loader, initialParams);
+  const { page, loading, error, changePage, reload } = usePaginatedResource(loader, scopedInitialParams);
   const [detail, setDetail] = useState<ApiDeployInfoResponse | null>(null);
 
   const openDeployInfo = async (orderNo: string) => {
@@ -51,6 +98,19 @@ export default function DashboardApiPage() {
     }
   };
 
+  const startAsset = async (orderNo: string) => {
+    try {
+      await startOrder(orderNo);
+      await reload();
+      if (detail?.orderNo === orderNo) {
+        const next = await getRentalDeployInfo(orderNo);
+        setDetail(next.data);
+      }
+    } catch {
+      // API errors are surfaced by the request interceptor.
+    }
+  };
+
   const columns: DataTableColumn<ApiDeployInfoResponse>[] = [
     { key: "orderNo", title: t("columns.order"), render: (row) => <span className="font-mono text-xs">{row.orderNo}</span> },
     {
@@ -64,15 +124,18 @@ export default function DashboardApiPage() {
       ),
     },
     { key: "modelNameSnapshot", title: t("columns.model"), render: (row) => formatEmpty(row.modelNameSnapshot) },
-    { key: "orderStatus", title: t("columns.orderStatus"), render: (row) => <StatusBadge status={row.orderStatus} /> },
-    { key: "tokenStatus", title: t("columns.tokenStatus"), render: (row) => <StatusBadge status={row.tokenStatus} /> },
     {
-      key: "deployOrderStatus",
+      key: "stage",
+      title: t("columns.stage"),
+      render: (row) => <ApiStageCell row={row} />,
+    },
+    {
+      key: "deployFeeSnapshot",
       title: t("columns.deployCost"),
       render: (row) => (
         <div className="space-y-1">
-          <StatusBadge status={row.deployOrderStatus} />
           <MoneyText value={row.deployFeeSnapshot} className="block text-xs" />
+          {row.deployOrderStatus ? <StatusBadge status={row.deployOrderStatus} /> : <span className="text-xs text-muted-foreground">{t("status.notPaid")}</span>}
         </div>
       ),
     },
@@ -86,9 +149,15 @@ export default function DashboardApiPage() {
           <Button variant="ghost" size="sm" className="text-muted-foreground hover:bg-muted" onClick={() => void openDeployInfo(row.orderNo)}>
             <Eye className="h-3.5 w-3.5" />
             {t("actions.view")}</Button>
-          {!row.paidAt ? (
+          {canPayDeploy(row) ? (
             <ConfirmActionButton title={t("actions.payTitle")} description={t("actions.payDescription")} confirmText={t("actions.payConfirm")} onConfirm={() => payDeploy(row.orderNo)}>
               <ReceiptText className="h-3.5 w-3.5" />{t("actions.payButton")}</ConfirmActionButton>
+          ) : null}
+          {canStart(row) ? (
+            <Button variant="default" size="sm" className="gap-1.5" onClick={() => void startAsset(row.orderNo)}>
+              <PlayCircle className="h-3.5 w-3.5" />
+              {t("actions.startButton")}
+            </Button>
           ) : null}
         </div>
       ),
@@ -99,6 +168,7 @@ export default function DashboardApiPage() {
     {
       title: t("detail.credentialInfo"),
       fields: [
+        { label: t("detail.currentStage"), render: (detail) => <ApiStageCell row={detail} /> },
         { label: t("detail.credentialNo"), render: (detail) => <span className="font-mono">{formatEmpty(detail.credentialNo)}</span> },
         { label: t("detail.tokenStatus"), render: (detail) => <StatusBadge status={detail.tokenStatus} /> },
         { label: t("detail.apiName"), render: (detail) => formatEmpty(detail.apiName) },
@@ -126,7 +196,48 @@ export default function DashboardApiPage() {
       <DataTable columns={columns} data={page.records} rowKey={(row) => row.orderNo} loading={loading} emptyText={t("empty")} pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
       <div className="rounded-lg border border-border bg-muted/40 p-4 text-sm leading-6 text-muted-foreground">
         {t("info")}</div>
-      <DetailDrawer data={detail} open={Boolean(detail)} title={t("drawerTitle")} subtitle={(data) => data.orderNo} sections={detailSections} onClose={() => setDetail(null)} />
+      <DetailDrawer
+        data={detail}
+        open={Boolean(detail)}
+        title={t("drawerTitle")}
+        subtitle={(data) => data.orderNo}
+        sections={detailSections}
+        onClose={() => setDetail(null)}
+      >
+        {(data) => (
+          <div className="rounded-xl border bg-card p-4 text-card-foreground shadow-sm">
+            <Button asChild variant="outline" size="sm">
+              <Link href={`/dashboard/orders?orderNo=${encodeURIComponent(data.orderNo)}`}>
+                <PackageOpen className="mr-2 h-4 w-4" />
+                {t("detail.viewAssetOrder")}
+              </Link>
+            </Button>
+          </div>
+        )}
+      </DetailDrawer>
+    </div>
+  );
+}
+
+function ApiStageCell({ row }: { row: ApiDeployInfoResponse }) {
+  const t = useTranslations("DashboardApi");
+  const stage = getApiStage(row);
+  const className = {
+    PAY_DEPLOY: "border-amber-500/20 bg-amber-500/10 text-amber-300",
+    DEPLOYING: "border-primary/20 bg-primary/10 text-primary",
+    READY_TO_START: "border-violet-500/20 bg-violet-500/10 text-violet-300",
+    RUNNING: "border-emerald-500/20 bg-emerald-500/10 text-emerald-300",
+    ENDED: "border-border bg-muted text-muted-foreground",
+    CANCELED: "border-rose-500/20 bg-rose-500/10 text-rose-400",
+    BLOCKED: "border-border bg-muted text-muted-foreground",
+  }[stage];
+
+  return (
+    <div className="space-y-1">
+      <Badge variant="outline" className={`rounded-full px-2.5 py-0.5 text-[11px] font-medium ${className}`}>
+        {t(`status.${stage}`)}
+      </Badge>
+      <p className="max-w-[220px] text-xs leading-5 text-muted-foreground">{t(`statusHelp.${stage}`)}</p>
     </div>
   );
 }

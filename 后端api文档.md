@@ -88,3 +88,50 @@
 | `walletTxNo` | string | 钱包流水号 |
 | `settledAt` | string | 入账时间 |
 | `createdAt` | string | 创建时间 |
+
+## 算力租赁订单与 API 部署
+
+### POST `/api/rental/orders/{orderNo}/deploy/pay`
+
+说明：支付当前用户租赁订单的 API 部署费。
+
+鉴权：需要用户登录。
+
+业务状态：
+
+| 阶段 | 订单状态 | API Token 状态 | 说明 |
+| --- | --- | --- | --- |
+| 支付机器费后 | `PENDING_ACTIVATION` | `GENERATED` | API 凭证已生成，等待支付部署费 |
+| 支付部署费成功后 | `RUNNING` | `ACTIVE` | 资产立即运行并开始产生收益，同时写入 `profitStartAt`、`profitEndAt`、`autoPauseAt=支付时间+24小时` |
+| 支付部署费 24 小时后 | `PAUSED` | `PAUSED` | 定时任务自动暂停资产，收益状态同步为 `PAUSED` |
+| 用户重新启动后 | `RUNNING` | `ACTIVE` | 恢复收益；已有收益周期不会重新计算 |
+
+响应字段：
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `deployNo` | string | 部署支付单号 |
+| `userName` | string | 用户名 |
+| `orderNo` | string | 租赁订单号 |
+| `credentialNo` | string | API 凭证编号 |
+| `modelNameSnapshot` | string | 模型快照名称 |
+| `deployFeeAmount` | number | 部署费用 |
+| `status` | string | 部署支付单状态，支付成功为 `PAID` |
+| `walletTxNo` | string | 钱包流水号 |
+| `paidAt` | string | 部署费支付时间 |
+| `createdAt` | string | 部署支付单创建时间 |
+
+### POST `/api/rental/orders/{orderNo}/start`
+
+说明：启动已自动暂停的资产。
+
+鉴权：需要用户登录。
+
+限制：
+
+| 前置状态 | 结果 |
+| --- | --- |
+| 订单 `PAUSED` 且 API Token `PAUSED` | 订单变为 `RUNNING`，API Token 变为 `ACTIVE`，收益状态变为 `RUNNING` |
+| 非暂停状态 | 返回订单不可启动错误 |
+
+说明：启动不会重置已存在的收益周期；仅兼容补齐历史数据中缺失的 `profitStartAt`、`profitEndAt`。

@@ -6158,21 +6158,21 @@
           "editCycleRule": "编辑周期规则"
       },
       "scheduler": {
-          "invalidParameterFormatEnterValidJSON": "参数格式不正确，必须为有效 JSON",
           "executionCompleted": "执行成功",
-          "executionSuccessDetail": "调度任务 [{title}] 执行完成。总数: {total}, 成功: {success}, 失败: {fail}",
-          "schedulerTasks": "调度任务",
-          "manuallyRunBuiltInPlatformSchedulerTasksWithOptionalRuntimeParameters": "手动执行平台内置调度任务，允许动态传入特定参数执行。",
+          "executionSuccessDetail": "自动任务 [{title}] 手动补偿执行完成。总数: {total}, 成功: {success}, 失败: {fail}",
+          "automatedTaskMonitoring": "自动任务监控",
+          "systemRunsTheseTasksAutomaticallyManualRunsAreOnlyForOperationalRecoveryOrTechnicalTroubleshooting": "系统会按配置自动执行以下任务。手动执行仅用于故障补偿或技术排障，正常业务无需操作。",
+          "theseTasksAreScheduledAutomaticallyMonitoringOnlyManualRunsReservedForOperationalRecovery": "这些任务由系统自动调度执行。后台页面仅用于查看执行记录；手动执行是技术补偿能力，正常业务不需要点击。",
+          "automaticFrequency": "自动频率",
+          "latestExecutionTime": "最近执行时间",
+          "loading": "加载中",
+          "noRecentExecution": "暂无记录",
           "total": "总数",
           "succeeded": "成功",
           "failed": "失败",
           "executionHistory": "执行历史",
-          "runWithParameters": "传参执行",
-          "runSchedulerTask": "执行调度任务:",
-          "thisWillManuallyTriggerTheSchedulerTaskYouMayPassSpecificParametersSupportedByTheBackendSuchAsDateOrStatus": "此操作会手动触发调度任务执行，可根据后端支持传入特定参数（如特定日期、特定状态等）。",
-          "executionParametersJSON": "执行参数 (JSON)",
           "cancel": "取消",
-          "runTask": "确认执行",
+          "confirmRun": "确认执行",
           "gotIt": "知道了",
           "status": "状态",
           "executedAt": "执行时间",
@@ -6185,16 +6185,25 @@
           "executionHistory2": "执行历史 -",
           "historicalExecutionRecordsForThisSchedulerTask": "调度任务的历史执行记录",
           "noExecutionHistoryYet": "暂无执行历史",
-          "activationTimeoutCancel": "激活超时取消",
-          "cancelRentalOrdersWhoseActivationPaymentHasBeenPendingTooLong": "取消长时间未完成激活支付的租赁订单。",
-          "autoPause": "自动暂停",
-          "processApiOrRentalTasksThatMeetAutoPauseConditions": "处理达到自动暂停条件的 API 或租赁任务。",
-          "commissionGeneration": "佣金生成",
-          "generateLevelBasedCommissionRecordsFromEarningsRecords": "根据收益记录生成对应层级的佣金记录。",
-          "dailyEarnings": "每日收益",
-          "generateOrRefreshRentalEarningsRecordsByDay": "按日生成或刷新租赁收益记录。",
-          "expirySettlement": "过期结算",
-          "runSettlementForExpiredRentalOrders": "对已到期租赁订单执行结算流程。"
+          "advancedActions": "高级操作",
+          "manualRecoveryRun": "手动补偿执行",
+          "manualRecoveryRunConfirmation": "系统已自动定时执行该任务。请仅在自动任务失败、系统停机恢复或技术排障时手动执行。重复执行可能产生额外处理压力，请确认已完成核对。",
+          "recoveryRunHint": "仅在自动任务失败、系统停机恢复或研发运维排障时使用。正常业务运营不需要手动执行。",
+          "copyErrorMessage": "复制错误信息",
+          "everyTenMinutes": "每 10 分钟",
+          "everyFiveMinutes": "每 5 分钟",
+          "dailyAt0005": "每天 00:05",
+          "dailyAt0010": "每天 00:10",
+          "activationTimeoutCancel": "部署费超时取消",
+          "cancelRentalOrdersWhoseDeploymentFeeHasBeenPendingTooLong": "自动取消长时间未支付部署费的订单。",
+          "autoPause": "资产自动暂停",
+          "autoPauseRunningAssetsAfterDeploymentFeePaidForTwentyFourHours": "支付部署费 24 小时后，自动暂停运行中的资产。",
+          "commissionGeneration": "佣金自动生成",
+          "generateUplineCommissionsFromSettledEarnings": "根据已结算收益生成上级佣金。",
+          "dailyEarnings": "每日收益生成",
+          "generateDailyEarningsForRunningAssets": "为运行中的资产生成每日收益。",
+          "expirySettlement": "到期自动结算",
+          "settleExpiredRentalOrdersAutomatically": "对已到期的租赁订单执行结算。"
       },
       "settlements": {
           "settlementNo": "结算编号",
@@ -6716,21 +6725,25 @@
       "order": "关联订单",
       "credential": "API / 凭证",
       "model": "模型",
+      "stage": "当前阶段",
       "orderStatus": "订单状态",
       "tokenStatus": "Token 状态",
-      "deployCost": "部署 / 费用",
+      "deployCost": "部署费",
       "paidAt": "部署支付",
       "actions": "操作"
     },
     "actions": {
       "view": "查看",
       "payTitle": "支付 API 部署费",
-      "payDescription": "支付后后端会继续部署并生成访问凭证。",
+      "payDescription": "支付后资产会立即运行并开始产生收益，24 小时后系统自动暂停。",
       "payConfirm": "确认支付",
-      "payButton": "支付部署费"
+      "payButton": "支付部署费",
+      "startButton": "启动资产"
     },
     "detail": {
       "credentialInfo": "凭证信息",
+      "currentStage": "当前阶段",
+      "viewAssetOrder": "查看资产订单",
       "credentialNo": "凭证编号",
       "tokenStatus": "Token 状态",
       "apiName": "API 名称",
@@ -6742,8 +6755,27 @@
       "deployFee": "部署费用",
       "paidAt": "支付时间"
     },
+    "status": {
+      "PAY_DEPLOY": "待支付部署费",
+      "DEPLOYING": "状态同步中",
+      "READY_TO_START": "待启动资产",
+      "RUNNING": "运行中",
+      "ENDED": "已结束",
+      "CANCELED": "已取消",
+      "BLOCKED": "状态待确认",
+      "notPaid": "未支付"
+    },
+    "statusHelp": {
+      "PAY_DEPLOY": "下一步：支付部署费，支付后立即运行并开始收益。",
+      "DEPLOYING": "系统正在同步部署状态，正常支付后会直接运行。",
+      "READY_TO_START": "系统已自动暂停，下一步：启动资产，恢复收益。",
+      "RUNNING": "资产运行中，正在产生收益；部署支付 24 小时后会自动暂停。",
+      "ENDED": "生命周期已结束，无需继续操作。",
+      "CANCELED": "订单已关闭，凭证不可使用。",
+      "BLOCKED": "订单与凭证状态不一致，请查看详情或联系客服。"
+    },
     "empty": "暂无可关联的租赁订单。",
-    "info": "API 调用说明由后端凭证详情返回的 API Base URL 和 Token 组成。前端不明文暴露未脱敏 Token，复制操作仅对后端已返回字段生效。",
+    "info": "只需要关注“当前阶段”：支付部署费后立即运行并开始收益，24 小时后自动暂停，再点击启动资产恢复收益。Token 默认脱敏展示。",
     "drawerTitle": "API 部署详情"
   },
   "DashboardCommissions": {
@@ -6832,18 +6864,21 @@
   "DashboardOrders": {
     "header": {
       "title": "算力资产列表",
-      "description": "实时监控您的租赁实例运行状态与收益数据。"
+      "description": "查看算力资产生命周期、机器费、部署费、运行收益和自动暂停状态。"
     },
     "tabs": {
       "ALL": "全部",
       "IN_PROGRESS": "运行中",
-      "PENDING_PAY": "待支付",
+      "PENDING_PAY": "待支付机器费",
+      "PENDING_ACTIVATION": "待支付部署费",
+      "PAUSED": "待启动",
+      "RUNNING": "运行中",
       "FINISHED": "已完成"
     },
     "columns": {
       "instance": "实例信息",
       "plan": "配置方案",
-      "status": "运行状态",
+      "status": "当前阶段",
       "cycle": "租赁周期",
       "amount": "订单金额"
     },
@@ -6854,9 +6889,12 @@
       "label": "操作菜单",
       "detail": "详情",
       "console": "控制台",
-      "earlyTerminate": "提前终止",
-      "payNow": "立即支付",
-      "cancelOrder": "取消订单"
+      "earlyTerminate": "提前结算",
+      "payNow": "支付机器费",
+      "payDeployFee": "去支付部署费",
+      "startAsset": "启动资产",
+      "cancelOrder": "取消订单",
+      "viewSettlement": "查看结算记录"
     },
     "pagination": {
       "summary": "Page {pageNo} / {pageCount}",
@@ -6867,6 +6905,8 @@
       "title": "资产详情",
       "core": "核心配置",
       "finance": "财务统计",
+      "lifecycle": "生命周期",
+      "currentStage": "当前阶段",
       "orderNo": "订单号",
       "gpuModel": "算力型号",
       "gpuMemory": "显存容量",
@@ -6874,11 +6914,15 @@
       "aiModel": "AI 模型",
       "orderAmount": "订单总额",
       "expectedTotalProfit": "预计总收益",
-      "expectedDailyProfit": "日均预计收益"
+      "expectedDailyProfit": "日均预计收益",
+      "paidAt": "机器费支付",
+      "deployFeePaidAt": "部署费支付",
+      "startedAt": "启动时间",
+      "profitEndAt": "预计结束"
     },
     "payment": {
       "success": "支付成功",
-      "assigning": "正在分配算力节点...",
+      "assigning": "机器费已支付，下一步请到 API 凭证与部署支付部署费。",
       "title": "算力收银台",
       "amountDue": "应付金额",
       "walletBalance": "钱包余额",
@@ -6888,8 +6932,29 @@
     },
     "status": {
       "running": "运行中",
-      "pendingPay": "待支付",
-      "finished": "已完成"
+      "pendingPay": "待支付机器费",
+      "pendingDeploy": "待支付部署费",
+      "deploying": "状态同步中",
+      "readyToStart": "待启动",
+      "settling": "结算中",
+      "canceled": "已取消",
+      "finished": "已结束"
+    },
+    "stageHelp": {
+      "PENDING_PAY": "下一步：支付机器费，支付后会生成 API 凭证。",
+      "PENDING_DEPLOY": "下一步：到 API 凭证与部署页支付部署费。支付后资产会立即运行并开始收益。",
+      "DEPLOYING": "系统正在同步部署状态，正常支付后会直接运行。",
+      "READY_TO_START": "系统已自动暂停，下一步：启动资产恢复收益。",
+      "RUNNING": "资产运行中，收益按任务生成；部署支付 24 小时后会自动暂停。",
+      "SETTLING": "正在结算本金与收益。",
+      "FINISHED": "资产生命周期已结束。",
+      "CANCELED": "订单已关闭。"
+    },
+    "earlySettlement": {
+      "title": "确认提前结算",
+      "description": "提前结算将结束该资产，API Token 将失效。系统会返还机器租赁本金扣除违约金后的金额，API 部署费不退。",
+      "cancel": "取消",
+      "confirm": "确认提前结算"
     }
   },
   "DashboardProducts": {
@@ -7239,8 +7304,10 @@
       "frozenDesc": "审核或订单锁定资金",
       "income": "累计收入",
       "incomeDesc": "充值 + 收益 + 佣金",
-      "expense": "累计支出",
-      "expenseDesc": "历史提现金额",
+      "expense": "累计消费",
+      "expenseDesc": "累计租机与平台服务消费",
+      "withdraw": "累计提现",
+      "withdrawDesc": "历史累计提现总额",
       "historyDesc": "按交易类型和业务类型筛选资金流水"
     },
     "cardTitle": "资金流水",
@@ -7274,6 +7341,26 @@
       "REFUND": "退款",
       "ADJUST": "系统调账",
       "ACTIVATE_TIMEOUT_REFUND": "激活超时退款"
+    },
+    "remarks": {
+      "apiDeployFeePaid": "API 部署费已支付",
+      "rentalOrderCanceledRefund": "租赁订单取消退款",
+      "rentalMachineFeePaid": "租赁机器费用支付",
+      "activationTimeoutRefund": "激活超时退款",
+      "dailyRentalProfit": "每日租赁收益",
+      "commissionProfit": "佣金收益",
+      "rechargeApproved": "充值审核通过",
+      "withdrawFreeze": "提现冻结",
+      "withdrawCanceled": "提现已取消",
+      "withdrawRejected": "提现已拒绝",
+      "withdrawPaid": "提现已打款",
+      "earlySettlementPenaltyRetainedFromPrincipal": "提前结算违约金从本金中扣留",
+      "earlySettlementPrincipalReturned": "提前结算本金返还",
+      "expiredRentalPrincipalReturned": "到期租赁本金返还"
+    },
+    "linkage": {
+      "target": "正在定位钱包流水",
+      "notFound": "当前页未找到该流水，可调整时间或业务类型筛选。"
     },
     "empty": "暂无资金流水。"
   },

@@ -13,6 +13,7 @@ import {
   FileText
 } from "lucide-react";
 import { toast } from "sonner";
+import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { 
   Select, 
@@ -31,7 +32,6 @@ import { getSettlementOrderDetail, getSettlementOrders } from "@/api/settlement"
 import type { PageResult, SettlementOrderQueryRequest, SettlementOrderResponse } from "@/api/types";
 import { usePaginatedResource } from "@/hooks/usePaginatedResource";
 import { toErrorMessage } from "@/lib/format";
-import { cn } from "@/lib/utils";
 
 const initialParams: SettlementOrderQueryRequest = { pageNo: 1, pageSize: 12 };
 
@@ -123,7 +123,18 @@ export default function BillingPage() {
         { label: t("detail.profit"), render: (d) => <MoneyText value={d.profitAmount} signed /> },
         { label: t("detail.penalty"), render: (d) => <MoneyText value={d.penaltyAmount} /> },
         { label: t("detail.actual"), render: (d) => <MoneyText value={d.actualSettleAmount} signed /> },
-        { label: t("detail.walletTx"), render: (d) => d.walletTxNo || "-" },
+        {
+          label: t("detail.walletTx"),
+          render: (d) => d.walletTxNo ? (
+            <Link
+              href={`/dashboard/wallet?txNo=${encodeURIComponent(d.walletTxNo)}`}
+              className="inline-flex max-w-full items-center gap-1.5 rounded-md border border-border bg-muted/40 px-2 py-1 font-mono text-xs font-semibold text-primary transition-colors hover:bg-primary/5"
+            >
+              <span className="truncate">{d.walletTxNo}</span>
+              <ArrowRightLeft className="h-3 w-3 shrink-0" />
+            </Link>
+          ) : "-",
+        },
         { label: t("detail.remark"), render: (d) => d.remark || "-" },
       ],
     },

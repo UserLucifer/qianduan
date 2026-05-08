@@ -1,6 +1,8 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { Suspense, useCallback, useState } from "react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import {
   Loader2,
@@ -11,13 +13,16 @@ import {
   MoreHorizontal,
   LayoutDashboard,
   History,
-  Info
+  Info,
+  PlayCircle,
+  ReceiptText
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle
@@ -48,12 +53,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
+import { StatusBadge } from "@/components/shared/StatusBadge";
 import {
   cancelRentalOrder,
   getRentalOrderDetail,
   getRentalOrders,
   payRentalOrder,
-  settleEarly
+  settleEarly,
+  startOrder
 } from "@/api/rental";
 import { getWalletInfo } from "@/api/wallet";
 import type {
@@ -65,32 +72,65 @@ import type {
 } from "@/api/types";
 import { usePaginatedResource } from "@/hooks/usePaginatedResource";
 import { RentalOrderStatus } from "@/types/enums";
+import { cn } from "@/lib/utils";
 
 const initialParams: RentalOrderQueryRequest = { pageNo: 1, pageSize: 10 };
+type OrderTab = "ALL" | "PENDING_PAY" | "PENDING_ACTIVATION" | "PAUSED" | "RUNNING";
+type AssetStage = "PENDING_PAY" | "PENDING_DEPLOY" | "DEPLOYING" | "READY_TO_START" | "RUNNING" | "SETTLING" | "FINISHED" | "CANCELED";
+
+const orderTabs: OrderTab[] = ["ALL", "PENDING_PAY", "PENDING_ACTIVATION", "PAUSED", "RUNNING"];
+const orderTabStatus: Partial<Record<OrderTab, RentalOrderStatus>> = {
+  PENDING_PAY: RentalOrderStatus.PENDING_PAY,
+  PENDING_ACTIVATION: RentalOrderStatus.PENDING_ACTIVATION,
+  PAUSED: RentalOrderStatus.PAUSED,
+  RUNNING: RentalOrderStatus.RUNNING,
+};
+
+function getAssetStage(status: string): AssetStage {
+  if (status === RentalOrderStatus.PENDING_PAY) return "PENDING_PAY";
+  if (status === RentalOrderStatus.PENDING_ACTIVATION) return "PENDING_DEPLOY";
+  if (status === RentalOrderStatus.ACTIVATING) return "DEPLOYING";
+  if (status === RentalOrderStatus.PAUSED) return "READY_TO_START";
+  if (status === RentalOrderStatus.RUNNING) return "RUNNING";
+  if (status === RentalOrderStatus.SETTLING) return "SETTLING";
+  if (status === RentalOrderStatus.CANCELED) return "CANCELED";
+  return "FINISHED";
+}
 
 export default function DashboardOrdersPage() {
+  return (
+    <Suspense fallback={null}>
+      <DashboardOrdersContent />
+    </Suspense>
+  );
+}
+
+function DashboardOrdersContent() {
   const t = useTranslations("DashboardOrders");
+  const searchParams = useSearchParams();
+  const focusedOrderNo = searchParams.get("orderNo")?.trim() ?? "";
+  const scopedInitialParams: RentalOrderQueryRequest = focusedOrderNo ? { ...initialParams, orderNo: focusedOrderNo } : initialParams;
   const loader = useCallback(async (params: RentalOrderQueryRequest): Promise<PageResult<RentalOrderSummaryResponse>> => {
     const res = await getRentalOrders(params);
     return res.data;
   }, []);
 
-  const { page, loading, updateParams, reload, changePage } = usePaginatedResource(loader, initialParams);
-  const [activeTab, setActiveTab] = useState("ALL");
+  const { page, loading, updateParams, reload, changePage } = usePaginatedResource(loader, scopedInitialParams);
+  const [activeTab, setActiveTab] = useState<OrderTab>("ALL");
   
   const [detail, setDetail] = useState<RentalOrderDetailResponse | null>(null);
   const [payTarget, setPayTarget] = useState<RentalOrderSummaryResponse | null>(null);
   const [wallet, setWallet] = useState<WalletMeResponse | null>(null);
   const [paying, setPaying] = useState(false);
   const [paymentState, setPaymentState] = useState<"idle" | "processing" | "success_anim" | "completed">("idle");
+  const [settleTarget, setSettleTarget] = useState<RentalOrderSummaryResponse | null>(null);
+  const [settling, setSettling] = useState(false);
 
   const handleTabChange = (val: string) => {
-    setActiveTab(val);
-    let status: string | undefined = undefined;
-    if (val === "IN_PROGRESS") status = RentalOrderStatus.RUNNING;
-    if (val === "PENDING_PAY") status = RentalOrderStatus.PENDING_PAY;
-    if (val === "FINISHED") status = RentalOrderStatus.SETTLED;
-    updateParams({ ...initialParams, orderStatus: status });
+    const nextTab = val as OrderTab;
+    setActiveTab(nextTab);
+    const status = orderTabStatus[nextTab];
+    updateParams({ ...scopedInitialParams, orderStatus: status });
   };
 
   const openDetail = async (orderNo: string) => {
@@ -141,7 +181,31 @@ export default function DashboardOrdersPage() {
     }
   };
 
+  const executeEarlySettle = async () => {
+    if (!settleTarget) return;
+    setSettling(true);
+    try {
+      await settleEarly(settleTarget.orderNo);
+      setSettleTarget(null);
+      reload();
+    } catch {
+      // API errors are surfaced by the request interceptor.
+    } finally {
+      setSettling(false);
+    }
+  };
+
   const detailSections: DetailSectionDef<RentalOrderDetailResponse>[] = [
+    {
+      title: t("detail.lifecycle"),
+      fields: [
+        { label: t("detail.currentStage"), render: (d) => <OrderStateBadge status={d.orderStatus as RentalOrderStatus} /> },
+        { label: t("detail.paidAt"), render: (d) => <DateTimeText value={d.paidAt} /> },
+        { label: t("detail.deployFeePaidAt"), render: (d) => <DateTimeText value={d.deployFeePaidAt} /> },
+        { label: t("detail.startedAt"), render: (d) => <DateTimeText value={d.startedAt} /> },
+        { label: t("detail.profitEndAt"), render: (d) => <DateTimeText value={d.profitEndAt} /> },
+      ]
+    },
     {
       title: t("detail.core"),
       fields: [
@@ -173,13 +237,13 @@ export default function DashboardOrdersPage() {
 
       <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
         <TabsList className="bg-transparent h-auto p-0 gap-8 border-b rounded-none w-full justify-start overflow-x-auto no-scrollbar">
-          {["ALL", "IN_PROGRESS", "PENDING_PAY", "FINISHED"].map((v) => (
+          {orderTabs.map((v) => (
             <TabsTrigger 
               key={v} 
               value={v} 
               className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-2 pb-3 font-bold text-muted-foreground data-[state=active]:text-foreground transition-all uppercase text-[11px] tracking-widest"
             >
-              {v === "ALL" ? t("tabs.ALL") : v === "IN_PROGRESS" ? t("tabs.IN_PROGRESS") : v === "PENDING_PAY" ? t("tabs.PENDING_PAY") : t("tabs.FINISHED")}
+              {t(`tabs.${v}`)}
             </TabsTrigger>
           ))}
         </TabsList>
@@ -214,7 +278,13 @@ export default function DashboardOrdersPage() {
               </TableRow>
             ) : (
               page.records.map((order) => (
-                <TableRow key={order.orderNo} className="group hover:bg-muted/30 transition-colors">
+                <TableRow
+                  key={order.orderNo}
+                  className={cn(
+                    "group hover:bg-muted/30 transition-colors",
+                    focusedOrderNo === order.orderNo && "bg-primary/5 ring-1 ring-inset ring-primary/30",
+                  )}
+                >
                   <TableCell>
                     <div className="flex flex-col gap-1">
                       <div className="font-bold text-sm tracking-tight flex items-center gap-2">
@@ -230,7 +300,12 @@ export default function DashboardOrdersPage() {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <OrderStateBadge status={order.orderStatus as RentalOrderStatus} />
+                    <div className="space-y-1">
+                      <OrderStateBadge status={order.orderStatus as RentalOrderStatus} />
+                      <p className="text-[10px] leading-4 text-muted-foreground">
+                        {t(`stageHelp.${getAssetStage(order.orderStatus)}`)}
+                      </p>
+                    </div>
                   </TableCell>
                   <TableCell>
                     <div className="text-xs font-bold">{t("cycleDays", { days: order.cycleDaysSnapshot })}</div>
@@ -255,7 +330,15 @@ export default function DashboardOrdersPage() {
                           <>
                             <DropdownMenuItem className="text-primary font-bold">
                               <LayoutDashboard className="mr-2 h-4 w-4" /> {t("menu.console")}</DropdownMenuItem>
-                            <DropdownMenuItem className="text-destructive font-bold" onClick={() => runAction(() => settleEarly(order.orderNo))}>
+                            <DropdownMenuItem className="text-destructive font-bold" onClick={() => setSettleTarget(order)}>
+                              <History className="mr-2 h-4 w-4" /> {t("menu.earlyTerminate")}</DropdownMenuItem>
+                          </>
+                        )}
+                        {order.orderStatus === RentalOrderStatus.PAUSED && (
+                          <>
+                            <DropdownMenuItem className="text-primary font-bold" onClick={() => runAction(() => startOrder(order.orderNo))}>
+                              <PlayCircle className="mr-2 h-4 w-4" /> {t("menu.startAsset")}</DropdownMenuItem>
+                            <DropdownMenuItem className="text-destructive font-bold" onClick={() => setSettleTarget(order)}>
                               <History className="mr-2 h-4 w-4" /> {t("menu.earlyTerminate")}</DropdownMenuItem>
                           </>
                         )}
@@ -266,6 +349,20 @@ export default function DashboardOrdersPage() {
                             <DropdownMenuItem className="text-destructive font-bold" onClick={() => runAction(() => cancelRentalOrder(order.orderNo))}>
                               <XCircle className="mr-2 h-4 w-4" /> {t("menu.cancelOrder")}</DropdownMenuItem>
                           </>
+                        )}
+                        {order.orderStatus === RentalOrderStatus.PENDING_ACTIVATION && (
+                          <DropdownMenuItem asChild className="text-primary font-bold">
+                            <Link href={`/dashboard/api?orderNo=${encodeURIComponent(order.orderNo)}`}>
+                              <ReceiptText className="mr-2 h-4 w-4" /> {t("menu.payDeployFee")}
+                            </Link>
+                          </DropdownMenuItem>
+                        )}
+                        {getAssetStage(order.orderStatus) === "FINISHED" && (
+                          <DropdownMenuItem asChild>
+                            <Link href="/dashboard/billing">
+                              <History className="mr-2 h-4 w-4" /> {t("menu.viewSettlement")}
+                            </Link>
+                          </DropdownMenuItem>
                         )}
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -294,6 +391,22 @@ export default function DashboardOrdersPage() {
 
       {/* --- Detail Drawer & Payment Modal remain logic-wise the same --- */}
       <DetailDrawer title={t("detail.title")} open={!!detail} onClose={() => setDetail(null)} data={detail} sections={detailSections} />
+
+      <Dialog open={!!settleTarget} onOpenChange={(open) => { if (!open && !settling) setSettleTarget(null); }}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>{t("earlySettlement.title")}</DialogTitle>
+            <DialogDescription>{t("earlySettlement.description")}</DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setSettleTarget(null)} disabled={settling}>{t("earlySettlement.cancel")}</Button>
+            <Button variant="destructive" onClick={executeEarlySettle} disabled={settling}>
+              {settling ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <History className="mr-2 h-4 w-4" />}
+              {t("earlySettlement.confirm")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={!!payTarget} onOpenChange={(o) => { if (paymentState === "processing" || paymentState === "success_anim") return; if (!o) setPayTarget(null); }}>
         <DialogContent className="max-w-md">
@@ -342,6 +455,7 @@ export default function DashboardOrdersPage() {
 
 function OrderStateBadge({ status }: { status: RentalOrderStatus }) {
   const t = useTranslations("DashboardOrders");
+  const stage = getAssetStage(status);
   if (status === RentalOrderStatus.RUNNING) {
     return (
       <Badge className="bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20 px-2 py-0.5 font-bold uppercase text-[10px]">
@@ -355,8 +469,43 @@ function OrderStateBadge({ status }: { status: RentalOrderStatus }) {
         {t("status.pendingPay")}</Badge>
     );
   }
+  if (stage === "PENDING_DEPLOY") {
+    return (
+      <Badge variant="outline" className="bg-sky-500/10 text-sky-400 border-sky-500/20 px-2 py-0.5 font-bold uppercase text-[10px]">
+        {t("status.pendingDeploy")}</Badge>
+    );
+  }
+  if (stage === "DEPLOYING") {
+    return (
+      <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 px-2 py-0.5 font-bold uppercase text-[10px]">
+        {t("status.deploying")}</Badge>
+    );
+  }
+  if (stage === "READY_TO_START") {
+    return (
+      <Badge variant="outline" className="bg-violet-500/10 text-violet-300 border-violet-500/20 px-2 py-0.5 font-bold uppercase text-[10px]">
+        {t("status.readyToStart")}</Badge>
+    );
+  }
+  if (stage === "SETTLING") {
+    return (
+      <Badge variant="outline" className="bg-amber-500/10 text-amber-500 border-amber-500/20 px-2 py-0.5 font-bold uppercase text-[10px]">
+        {t("status.settling")}</Badge>
+    );
+  }
+  if (stage === "CANCELED") {
+    return (
+      <Badge variant="outline" className="bg-rose-500/10 text-rose-400 border-rose-500/20 px-2 py-0.5 font-bold uppercase text-[10px]">
+        {t("status.canceled")}</Badge>
+    );
+  }
+  if (stage === "FINISHED") {
+    return (
+      <Badge variant="outline" className="bg-muted text-muted-foreground border-border px-2 py-0.5 font-bold uppercase text-[10px]">
+        {t("status.finished")}</Badge>
+    );
+  }
   return (
-    <Badge variant="secondary" className="px-2 py-0.5 font-bold uppercase text-[10px]">
-      {t("status.finished")}</Badge>
+    <StatusBadge status={status} className="px-2 py-0.5 font-bold uppercase text-[10px]" />
   );
 }

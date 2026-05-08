@@ -33,13 +33,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Badge } from "@/components/ui/badge";
 import { BentoCard, BentoGrid } from "@/components/shared/BentoGrid";
 import { DateTimeText } from "@/components/shared/DateTimeText";
 import { MoneyText } from "@/components/shared/MoneyText";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { StatusBadge } from "@/components/shared/StatusBadge";
-import { StatusIndicator } from "@/components/shared/StatusIndicator";
 import { useAsyncResource } from "@/hooks/useAsyncResource";
 import { cn } from "@/lib/utils";
 import { bizTypeLabel, txTypeLabel } from "@/lib/status";
@@ -103,7 +101,6 @@ function buildProfitTrend(records: ProfitRecordResponse[]): TrendPoint[] {
 
 export default function DashboardPage() {
   const t = useTranslations("DashboardHome");
-  const statusT = useTranslations("Status");
   const [chartReady, setChartReady] = useState(false);
 
   const loader = useCallback(async (): Promise<DashboardData> => {
@@ -433,13 +430,7 @@ export default function DashboardPage() {
                         <span className="text-[10px] text-muted-foreground">{order.aiModelNameSnapshot}</span>
                       </div>
                     </div>
-                    <Badge variant="secondary" className={cn(
-                      "font-bold uppercase text-[9px] px-2 py-0",
-                      order.orderStatus === "RUNNING" ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" : "bg-muted text-muted-foreground"
-                    )}>
-                      {order.orderStatus === "RUNNING" && <span className="mr-1.5 h-1 w-1 rounded-full bg-emerald-500 animate-pulse" />}
-                      {order.orderStatus === "RUNNING" ? t("orders.status.running") : order.orderStatus === "PENDING_PAY" ? t("orders.status.pendingPay") : t("orders.status.settled")}
-                    </Badge>
+                    <StatusBadge status={order.orderStatus} className="px-2 py-0 text-[9px] font-bold uppercase" />
                   </div>
                   <div className="text-[11px] font-mono text-muted-foreground mb-4 opacity-70">
                     ID: {order.orderNo}

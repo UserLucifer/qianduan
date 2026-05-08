@@ -1,21 +1,20 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
-import { CalendarClock, CheckCircle2, Clock3, PauseCircle, Play, RotateCw, FileText } from "lucide-react";
+import { CalendarClock, Check, CheckCircle2, Clock3, Copy, FileText, Info, PauseCircle, Play, RotateCw, Wrench } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import { DataTable, type DataTableColumn } from "@/components/shared/DataTable";
 import { runScheduler, getAdminSchedulerLogs } from "@/api/admin";
-import type { SchedulerRunResult, SchedulerLogResponse } from "@/api/types";
+import type { SchedulerLogResponse } from "@/api/types";
 import { formatEmpty, formatNumber, toErrorMessage } from "@/lib/format";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogAction } from "@/components/ui/alert-dialog";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from "@/components/ui/alert-dialog";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } from "@/components/ui/drawer";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { usePaginatedResource } from "@/hooks/usePaginatedResource";
 import { DateTimeText } from "@/components/shared/DateTimeText";
 import { ErrorAlert } from "@/components/shared/ErrorAlert";
@@ -24,52 +23,62 @@ interface SchedulerTask {
   key: string;
   titleKey: string;
   descriptionKey: string;
+  frequencyKey: string;
   icon: typeof Clock3;
 }
 
 const tasks: SchedulerTask[] = [
-  { key: "activation-timeout-cancel", titleKey: "activationTimeoutCancel", descriptionKey: "cancelRentalOrdersWhoseActivationPaymentHasBeenPendingTooLong", icon: Clock3 },
-  { key: "auto-pause", titleKey: "autoPause", descriptionKey: "processApiOrRentalTasksThatMeetAutoPauseConditions", icon: PauseCircle },
-  { key: "commission-generate", titleKey: "commissionGeneration", descriptionKey: "generateLevelBasedCommissionRecordsFromEarningsRecords", icon: RotateCw },
-  { key: "daily-profit", titleKey: "dailyEarnings", descriptionKey: "generateOrRefreshRentalEarningsRecordsByDay", icon: CalendarClock },
-  { key: "expire-settlement", titleKey: "expirySettlement", descriptionKey: "runSettlementForExpiredRentalOrders", icon: CheckCircle2 },
+  { key: "activation-timeout-cancel", titleKey: "activationTimeoutCancel", descriptionKey: "cancelRentalOrdersWhoseDeploymentFeeHasBeenPendingTooLong", frequencyKey: "everyTenMinutes", icon: Clock3 },
+  { key: "auto-pause", titleKey: "autoPause", descriptionKey: "autoPauseRunningAssetsAfterDeploymentFeePaidForTwentyFourHours", frequencyKey: "everyFiveMinutes", icon: PauseCircle },
+  { key: "daily-profit", titleKey: "dailyEarnings", descriptionKey: "generateDailyEarningsForRunningAssets", frequencyKey: "dailyAt0005", icon: CalendarClock },
+  { key: "expire-settlement", titleKey: "expirySettlement", descriptionKey: "settleExpiredRentalOrdersAutomatically", frequencyKey: "dailyAt0010", icon: CheckCircle2 },
+  { key: "commission-generate", titleKey: "commissionGeneration", descriptionKey: "generateUplineCommissionsFromSettledEarnings", frequencyKey: "everyFiveMinutes", icon: RotateCw },
 ];
 
 export default function AdminSchedulerPage() {
   const t = useTranslations("AdminPages.scheduler");
-  const [results, setResults] = useState<Record<string, SchedulerRunResult>>({});
+  const [latestLogs, setLatestLogs] = useState<Record<string, SchedulerLogResponse | null>>({});
+  const [latestLoading, setLatestLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [alertData, setAlertData] = useState<{ title: string; description: string } | null>(null);
-  const [logTask, setLogTask] = useState<string | null>(null);
-  
-  // Trigger Dialog state
+  const [logTask, setLogTask] = useState<SchedulerTask | null>(null);
   const [triggerTask, setTriggerTask] = useState<SchedulerTask | null>(null);
-  const [triggerParams, setTriggerParams] = useState<string>("{\n  \n}");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [refreshVersion, setRefreshVersion] = useState(0);
+
+  const loadLatestLogs = useCallback(async () => {
+    setLatestLoading(true);
+    try {
+      const entries = await Promise.all(
+        tasks.map(async (task) => {
+          const res = await getAdminSchedulerLogs({ taskName: task.key, pageNo: 1, pageSize: 1 });
+          return [task.key, res.data.records[0] ?? null] as const;
+        }),
+      );
+      setLatestLogs(Object.fromEntries(entries));
+    } catch (err) {
+      setError(toErrorMessage(err));
+    } finally {
+      setLatestLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    void loadLatestLogs();
+  }, [loadLatestLogs, refreshVersion]);
 
   const execute = async () => {
     if (!triggerTask) return;
     setError(null);
     setIsSubmitting(true);
-    let parsedParams = {};
     try {
-      if (triggerParams.trim()) {
-        parsedParams = JSON.parse(triggerParams);
-      }
-    } catch {
-      setError(t("invalidParameterFormatEnterValidJSON"));
-      setIsSubmitting(false);
-      return;
-    }
-
-    try {
-      const res = await runScheduler(triggerTask.key, parsedParams);
-      setResults((current) => ({ ...current, [triggerTask.key]: res.data }));
+      const res = await runScheduler(triggerTask.key);
       setAlertData({
         title: t("executionCompleted"),
         description: t("executionSuccessDetail", { title: t(triggerTask.titleKey), total: res.data.totalCount || 0, success: res.data.successCount || 0, fail: res.data.failCount || 0 }),
       });
       setTriggerTask(null);
+      setRefreshVersion((current) => current + 1);
     } catch (err) {
       setError(toErrorMessage(err));
     } finally {
@@ -79,13 +88,17 @@ export default function AdminSchedulerPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader eyebrow="SCHEDULER" title={t("schedulerTasks")} description={t("manuallyRunBuiltInPlatformSchedulerTasksWithOptionalRuntimeParameters")} />
+      <PageHeader eyebrow="SCHEDULER" title={t("automatedTaskMonitoring")} description={t("systemRunsTheseTasksAutomaticallyManualRunsAreOnlyForOperationalRecoveryOrTechnicalTroubleshooting")} />
       <ErrorAlert message={error} />
+      <Alert className="border-sky-200 bg-sky-50 text-sky-950 dark:border-sky-400/20 dark:bg-sky-400/10 dark:text-sky-100">
+        <Info className="h-4 w-4" />
+        <AlertDescription>{t("theseTasksAreScheduledAutomaticallyMonitoringOnlyManualRunsReservedForOperationalRecovery")}</AlertDescription>
+      </Alert>
       
       <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
         {tasks.map((task) => {
           const Icon = task.icon;
-          const result = results[task.key];
+          const latestLog = latestLogs[task.key] ?? null;
           const taskTitle = t(task.titleKey);
           return (
             <Card key={task.key} className="flex flex-col">
@@ -97,35 +110,31 @@ export default function AdminSchedulerPage() {
                   </CardTitle>
                   <p className="mt-2 text-xs leading-5 text-muted-foreground">{t(task.descriptionKey)}</p>
                 </div>
-                <StatusBadge status={result?.status ?? "PENDING"} />
+                <StatusBadge status={latestLog?.status ?? "PENDING"} label={latestLoading ? t("loading") : latestLog ? undefined : t("noRecentExecution")} />
               </CardHeader>
               <CardContent className="space-y-4 flex-1 flex flex-col justify-end">
-                <div className="grid grid-cols-3 gap-2 rounded-lg border border-slate-200 bg-slate-50 dark:border-white/10 dark:bg-white/[0.025] p-3 text-center">
-                  <Metric label={t("total")} value={result?.totalCount} />
-                  <Metric label={t("succeeded")} value={result?.successCount} />
-                  <Metric label={t("failed")} value={result?.failCount} />
+                <div className="space-y-2 rounded-lg border border-border bg-muted/30 p-3 text-xs">
+                  <InfoRow label={t("automaticFrequency")} value={t(task.frequencyKey)} />
+                  <InfoRow
+                    label={t("latestExecutionTime")}
+                    value={latestLog?.startedAt ? <DateTimeText value={latestLog.startedAt} /> : formatEmpty(undefined)}
+                  />
                 </div>
-                {result?.errorMessage ? <div className="rounded-lg border border-rose-400/20 bg-rose-400/10 p-3 text-xs text-rose-600 dark:text-rose-200">{result.errorMessage}</div> : null}
+                <div className="grid grid-cols-3 gap-2 rounded-lg border border-slate-200 bg-slate-50 dark:border-white/10 dark:bg-white/[0.025] p-3 text-center">
+                  <Metric label={t("total")} value={latestLog?.totalCount} />
+                  <Metric label={t("succeeded")} value={latestLog?.successCount} />
+                  <Metric label={t("failed")} value={latestLog?.failCount} />
+                </div>
+                {latestLog?.errorMessage ? <CopyableErrorMessage value={latestLog.errorMessage} /> : null}
                 <div className="flex gap-2">
                   <Button
                     variant="outline"
                     size="sm"
-                    className="border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:border-white/10 dark:bg-white/[0.03] dark:text-zinc-300 dark:hover:bg-white/[0.06] dark:hover:text-white"
-                    onClick={() => setLogTask(task.key)}
+                    className="w-full border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:border-white/10 dark:bg-white/[0.03] dark:text-zinc-300 dark:hover:bg-white/[0.06] dark:hover:text-white"
+                    onClick={() => setLogTask(task)}
                   >
                     <FileText className="h-4 w-4 mr-2" />
                     {t("executionHistory")}</Button>
-                  <Button 
-                    size="sm"
-                    className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white border-none"
-                    onClick={() => {
-                      setTriggerTask(task);
-                      setTriggerParams("{\n  \n}");
-                      setError(null);
-                    }}
-                  >
-                    <Play className="h-4 w-4 mr-2" />
-                    {t("runWithParameters")}</Button>
                 </div>
               </CardContent>
             </Card>
@@ -133,37 +142,23 @@ export default function AdminSchedulerPage() {
         })}
       </div>
 
-      <Dialog open={!!triggerTask} onOpenChange={(open) => !open && setTriggerTask(null)}>
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle>{t("runSchedulerTask")}{triggerTask ? t(triggerTask.titleKey) : ""}</DialogTitle>
-            <DialogDescription>
-              {t("thisWillManuallyTriggerTheSchedulerTaskYouMayPassSpecificParametersSupportedByTheBackendSuchAsDateOrStatus")}</DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid gap-2">
-              <Label htmlFor="params">{t("executionParametersJSON")}</Label>
-              <Textarea
-                id="params"
-                value={triggerParams}
-                onChange={(e) => setTriggerParams(e.target.value)}
-                placeholder='{"date": "2024-01-01"}'
-                className="min-h-[150px] font-mono"
-              />
-            </div>
-            {error && (
-              <div className="text-sm text-rose-500 mt-2 font-medium">
-                {error}
-              </div>
-            )}
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setTriggerTask(null)} disabled={isSubmitting}>{t("cancel")}</Button>
+      <AlertDialog open={!!triggerTask} onOpenChange={(open: boolean) => !open && !isSubmitting && setTriggerTask(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("manualRecoveryRun")}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {triggerTask ? `${t(triggerTask.titleKey)} - ` : ""}
+              {t("manualRecoveryRunConfirmation")}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isSubmitting}>{t("cancel")}</AlertDialogCancel>
             <Button onClick={execute} disabled={isSubmitting} className="bg-emerald-600 hover:bg-emerald-700 text-white">
-              {t("runTask")}</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+              {t("confirmRun")}
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <AlertDialog open={!!alertData} onOpenChange={(open: boolean) => !open && setAlertData(null)}>
         <AlertDialogContent>
@@ -186,7 +181,27 @@ export default function AdminSchedulerPage() {
         </AlertDialogContent>
       </AlertDialog>
 
-      {logTask && <SchedulerLogsDrawer taskKey={logTask} open={!!logTask} onClose={() => setLogTask(null)} />}
+      {logTask && (
+        <SchedulerLogsDrawer
+          key={`${logTask.key}-${refreshVersion}`}
+          task={logTask}
+          open={!!logTask}
+          onClose={() => setLogTask(null)}
+          onRunRecovery={(task) => {
+            setError(null);
+            setTriggerTask(task);
+          }}
+        />
+      )}
+    </div>
+  );
+}
+
+function InfoRow({ label, value }: { label: string; value: ReactNode }) {
+  return (
+    <div className="flex items-center justify-between gap-3">
+      <span className="text-muted-foreground">{label}</span>
+      <span className="text-right font-medium text-foreground">{value}</span>
     </div>
   );
 }
@@ -194,23 +209,52 @@ export default function AdminSchedulerPage() {
 function Metric({ label, value }: { label: string; value?: number }) {
   return (
     <div>
-      <div className="text-lg font-semibold tabular-nums text-foreground dark:text-zinc-50">{formatNumber(value ?? 0)}</div>
+      <div className="text-lg font-semibold tabular-nums text-foreground dark:text-zinc-50">{value == null ? formatEmpty(undefined) : formatNumber(value)}</div>
       <div className="mt-1 text-[11px] text-muted-foreground">{label}</div>
     </div>
   );
 }
 
-function SchedulerLogsDrawer({ taskKey, open, onClose }: { taskKey: string | null; open: boolean; onClose: () => void }) {
+function CopyableErrorMessage({ value }: { value: string }) {
+  const t = useTranslations("AdminPages.scheduler");
+  const [copied, setCopied] = useState(false);
+
+  const copyValue = async () => {
+    await navigator.clipboard.writeText(value);
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 1400);
+  };
+
+  return (
+    <div className="flex items-start gap-2 rounded-lg border border-rose-400/20 bg-rose-400/10 p-3 text-xs text-rose-600 dark:text-rose-200">
+      <span className="min-w-0 flex-1 break-words font-mono">{value}</span>
+      <Button type="button" variant="ghost" size="icon" className="h-6 w-6 shrink-0 text-rose-600 hover:text-rose-700 dark:text-rose-200 dark:hover:text-rose-100" onClick={copyValue} aria-label={t("copyErrorMessage")}>
+        {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+      </Button>
+    </div>
+  );
+}
+
+function SchedulerLogsDrawer({
+  task,
+  open,
+  onClose,
+  onRunRecovery,
+}: {
+  task: SchedulerTask;
+  open: boolean;
+  onClose: () => void;
+  onRunRecovery: (task: SchedulerTask) => void;
+}) {
   const t = useTranslations("AdminPages.scheduler");
   const loader = useCallback(
     async (params: { pageNo: number; pageSize: number; taskName?: string }) => {
-      if (!taskKey) return { records: [], total: 0, pageNo: 1, pageSize: 10 };
-      return (await getAdminSchedulerLogs({ ...params, taskName: taskKey })).data;
+      return (await getAdminSchedulerLogs({ ...params, taskName: task.key })).data;
     },
-    [taskKey]
+    [task.key]
   );
 
-  const { page, loading, changePage } = usePaginatedResource(loader, { pageNo: 1, pageSize: 10, taskName: taskKey || undefined });
+  const { page, loading, changePage } = usePaginatedResource(loader, { pageNo: 1, pageSize: 10, taskName: task.key });
 
   const columns: DataTableColumn<SchedulerLogResponse>[] = [
     {
@@ -252,9 +296,11 @@ function SchedulerLogsDrawer({ taskKey, open, onClose }: { taskKey: string | nul
       key: "errorMessage",
       title: t("detailedLogs"),
       render: (row) => (
-        <div className="max-w-xs truncate text-xs font-mono text-rose-600 dark:text-rose-300" title={row.errorMessage}>
-          {formatEmpty(row.errorMessage)}
-        </div>
+        row.errorMessage ? (
+          <CopyableErrorMessage value={row.errorMessage} />
+        ) : (
+          <span className="text-xs text-muted-foreground">{formatEmpty(row.errorMessage)}</span>
+        )
       ),
     },
   ];
@@ -263,10 +309,10 @@ function SchedulerLogsDrawer({ taskKey, open, onClose }: { taskKey: string | nul
     <Drawer open={open} onOpenChange={(val) => !val && onClose()}>
       <DrawerContent className="flex h-[90vh] flex-col">
         <DrawerHeader className="mx-auto w-full max-w-6xl flex-shrink-0 border-b border-border px-4 pb-4 sm:px-6">
-          <DrawerTitle className="text-xl">{t("executionHistory2")}{taskKey}</DrawerTitle>
+          <DrawerTitle className="text-xl">{t("executionHistory2")}{t(task.titleKey)}</DrawerTitle>
           <DrawerDescription>{t("historicalExecutionRecordsForThisSchedulerTask")}</DrawerDescription>
         </DrawerHeader>
-        <div className="flex-1 overflow-auto p-4 sm:p-6 w-full max-w-6xl mx-auto">
+        <div className="flex-1 overflow-auto p-4 sm:p-6 w-full max-w-6xl mx-auto space-y-4">
           <DataTable
             columns={columns}
             data={page.records}
@@ -278,6 +324,23 @@ function SchedulerLogsDrawer({ taskKey, open, onClose }: { taskKey: string | nul
             total={page.total}
             onPageChange={changePage}
           />
+          <Accordion type="single" collapsible className="rounded-lg border border-border px-4">
+            <AccordionItem value="advanced-actions" className="border-b-0">
+              <AccordionTrigger className="hover:no-underline">
+                <span className="inline-flex items-center gap-2">
+                  <Wrench className="h-4 w-4 text-muted-foreground" />
+                  {t("advancedActions")}
+                </span>
+              </AccordionTrigger>
+              <AccordionContent className="space-y-3 text-muted-foreground">
+                <p>{t("recoveryRunHint")}</p>
+                <Button variant="outline" size="sm" onClick={() => onRunRecovery(task)}>
+                  <Play className="mr-2 h-4 w-4" />
+                  {t("manualRecoveryRun")}
+                </Button>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </div>
       </DrawerContent>
     </Drawer>

@@ -6158,21 +6158,21 @@
           "editCycleRule": "Edit Cycle Rule"
       },
       "scheduler": {
-          "invalidParameterFormatEnterValidJSON": "Invalid parameter format. Enter valid JSON.",
           "executionCompleted": "Execution completed",
-          "executionSuccessDetail": "Scheduler task [{title}] completed. Total: {total}, succeeded: {success}, failed: {fail}",
-          "schedulerTasks": "Scheduler Tasks",
-          "manuallyRunBuiltInPlatformSchedulerTasksWithOptionalRuntimeParameters": "Manually run built-in platform scheduler tasks with optional runtime parameters.",
+          "executionSuccessDetail": "Automated task [{title}] recovery run completed. Total: {total}, succeeded: {success}, failed: {fail}",
+          "automatedTaskMonitoring": "Automated Task Monitoring",
+          "systemRunsTheseTasksAutomaticallyManualRunsAreOnlyForOperationalRecoveryOrTechnicalTroubleshooting": "The system runs these tasks automatically. Manual runs are only for operational recovery or technical troubleshooting.",
+          "theseTasksAreScheduledAutomaticallyMonitoringOnlyManualRunsReservedForOperationalRecovery": "These tasks are scheduled automatically. This page is for monitoring execution history; manual runs are reserved for operational recovery.",
+          "automaticFrequency": "Automatic frequency",
+          "latestExecutionTime": "Latest execution time",
+          "loading": "Loading",
+          "noRecentExecution": "No records",
           "total": "Total",
           "succeeded": "Succeeded",
           "failed": "Failed",
           "executionHistory": "Execution History",
-          "runWithParameters": "Run with Parameters",
-          "runSchedulerTask": "Run scheduler task:",
-          "thisWillManuallyTriggerTheSchedulerTaskYouMayPassSpecificParametersSupportedByTheBackendSuchAsDateOrStatus": "This will manually trigger the scheduler task. You may pass specific parameters supported by the backend, such as date or status.",
-          "executionParametersJSON": "Execution parameters (JSON)",
           "cancel": "Cancel",
-          "runTask": "Run Task",
+          "confirmRun": "Confirm Run",
           "gotIt": "Got it",
           "status": "Status",
           "executedAt": "Executed at",
@@ -6185,16 +6185,25 @@
           "executionHistory2": "Execution History -",
           "historicalExecutionRecordsForThisSchedulerTask": "Historical execution records for this scheduler task",
           "noExecutionHistoryYet": "No execution history yet",
-          "activationTimeoutCancel": "Activation Timeout Cancellation",
-          "cancelRentalOrdersWhoseActivationPaymentHasBeenPendingTooLong": "Cancel rental orders whose activation payment has been pending too long.",
-          "autoPause": "Auto Pause",
-          "processApiOrRentalTasksThatMeetAutoPauseConditions": "Process API or rental tasks that meet auto-pause conditions.",
-          "commissionGeneration": "Commission Generation",
-          "generateLevelBasedCommissionRecordsFromEarningsRecords": "Generate level-based commission records from earnings records.",
-          "dailyEarnings": "Daily Earnings",
-          "generateOrRefreshRentalEarningsRecordsByDay": "Generate or refresh rental earnings records by day.",
-          "expirySettlement": "Expiry Settlement",
-          "runSettlementForExpiredRentalOrders": "Run settlement for expired rental orders."
+          "advancedActions": "Advanced Actions",
+          "manualRecoveryRun": "Run Recovery",
+          "manualRecoveryRunConfirmation": "The system already runs this task on a schedule. Run it manually only when an automated task failed, the system recovered from downtime, or technical troubleshooting requires it. Repeated runs may add extra processing pressure; confirm that you have completed the necessary checks.",
+          "recoveryRunHint": "Use only after automated task failures, system recovery from downtime, or engineering operations troubleshooting. Normal business operations do not require manual runs.",
+          "copyErrorMessage": "Copy error message",
+          "everyTenMinutes": "Every 10 minutes",
+          "everyFiveMinutes": "Every 5 minutes",
+          "dailyAt0005": "Daily at 00:05",
+          "dailyAt0010": "Daily at 00:10",
+          "activationTimeoutCancel": "Deployment Fee Timeout Cancellation",
+          "cancelRentalOrdersWhoseDeploymentFeeHasBeenPendingTooLong": "Automatically cancel orders whose deployment fee has not been paid for too long.",
+          "autoPause": "Asset Auto Pause",
+          "autoPauseRunningAssetsAfterDeploymentFeePaidForTwentyFourHours": "Automatically pause running assets 24 hours after the deployment fee is paid.",
+          "commissionGeneration": "Commission Auto Generation",
+          "generateUplineCommissionsFromSettledEarnings": "Generate upline commissions from settled earnings.",
+          "dailyEarnings": "Daily Earnings Generation",
+          "generateDailyEarningsForRunningAssets": "Generate daily earnings for running assets.",
+          "expirySettlement": "Expiration Auto Settlement",
+          "settleExpiredRentalOrdersAutomatically": "Settle expired rental orders automatically."
       },
       "settlements": {
           "settlementNo": "Settlement No.",
@@ -6716,21 +6725,25 @@
       "order": "Linked order",
       "credential": "API / Credential",
       "model": "Model",
+      "stage": "Current stage",
       "orderStatus": "Order status",
       "tokenStatus": "Token status",
-      "deployCost": "Deployment / Fee",
+      "deployCost": "Deployment fee",
       "paidAt": "Deployment payment",
       "actions": "Actions"
     },
     "actions": {
       "view": "View",
       "payTitle": "Pay API deployment fee",
-      "payDescription": "After payment, the backend will continue deployment and generate access credentials.",
+      "payDescription": "After payment, the asset runs and starts earning immediately. The system auto-pauses it after 24 hours.",
       "payConfirm": "Confirm payment",
-      "payButton": "Pay deployment fee"
+      "payButton": "Pay deployment fee",
+      "startButton": "Start asset"
     },
     "detail": {
       "credentialInfo": "Credential details",
+      "currentStage": "Current stage",
+      "viewAssetOrder": "View asset order",
       "credentialNo": "Credential No.",
       "tokenStatus": "Token status",
       "apiName": "API name",
@@ -6742,8 +6755,27 @@
       "deployFee": "Deployment fee",
       "paidAt": "Paid at"
     },
+    "status": {
+      "PAY_DEPLOY": "Pay deployment fee",
+      "DEPLOYING": "Syncing status",
+      "READY_TO_START": "Ready to start",
+      "RUNNING": "Running",
+      "ENDED": "Ended",
+      "CANCELED": "Canceled",
+      "BLOCKED": "Needs review",
+      "notPaid": "Not paid"
+    },
+    "statusHelp": {
+      "PAY_DEPLOY": "Next: pay the deployment fee. After payment it runs and starts earning immediately.",
+      "DEPLOYING": "The system is syncing deployment state. Normal paid deployments run directly.",
+      "READY_TO_START": "The system auto-paused the asset. Next: start it to resume earning.",
+      "RUNNING": "The asset is running and earning. It auto-pauses 24 hours after deployment payment.",
+      "ENDED": "The lifecycle has ended. No action is needed.",
+      "CANCELED": "The order is closed and the credential cannot be used.",
+      "BLOCKED": "The order and credential states do not match. Check details or contact support."
+    },
     "empty": "No linked rental orders yet.",
-    "info": "API access is made up of the API Base URL and Token returned by the backend credential details. The frontend does not expose unmasked tokens; copy actions only use fields returned by the backend.",
+    "info": "Focus on Current stage: pay the deployment fee to run and earn immediately, then start the asset again after the 24-hour auto-pause. Tokens stay masked by default.",
     "drawerTitle": "API deployment details"
   },
   "DashboardCommissions": {
@@ -6832,18 +6864,21 @@
   "DashboardOrders": {
     "header": {
       "title": "Compute asset list",
-      "description": "Monitor your rental instances, runtime status, and earnings in real time."
+      "description": "Track compute asset lifecycle, machine fees, deployment fees, earnings, and auto-pause state."
     },
     "tabs": {
       "ALL": "All",
       "IN_PROGRESS": "Running",
-      "PENDING_PAY": "Pending payment",
+      "PENDING_PAY": "Pay machine fee",
+      "PENDING_ACTIVATION": "Pay deployment fee",
+      "PAUSED": "Ready to start",
+      "RUNNING": "Running",
       "FINISHED": "Finished"
     },
     "columns": {
       "instance": "Instance",
       "plan": "Plan",
-      "status": "Runtime status",
+      "status": "Current stage",
       "cycle": "Rental cycle",
       "amount": "Order amount"
     },
@@ -6854,9 +6889,12 @@
       "label": "Actions",
       "detail": "Details",
       "console": "Console",
-      "earlyTerminate": "Terminate early",
-      "payNow": "Pay now",
-      "cancelOrder": "Cancel order"
+      "earlyTerminate": "Settle early",
+      "payNow": "Pay machine fee",
+      "payDeployFee": "Pay deployment fee",
+      "startAsset": "Start asset",
+      "cancelOrder": "Cancel order",
+      "viewSettlement": "View settlement records"
     },
     "pagination": {
       "summary": "Page {pageNo} / {pageCount}",
@@ -6867,6 +6905,8 @@
       "title": "Asset details",
       "core": "Core configuration",
       "finance": "Financial summary",
+      "lifecycle": "Lifecycle",
+      "currentStage": "Current stage",
       "orderNo": "Order No.",
       "gpuModel": "Compute model",
       "gpuMemory": "GPU memory",
@@ -6874,11 +6914,15 @@
       "aiModel": "AI model",
       "orderAmount": "Order total",
       "expectedTotalProfit": "Estimated total earnings",
-      "expectedDailyProfit": "Estimated daily earnings"
+      "expectedDailyProfit": "Estimated daily earnings",
+      "paidAt": "Machine fee paid",
+      "deployFeePaidAt": "Deployment fee paid",
+      "startedAt": "Started at",
+      "profitEndAt": "Expected end"
     },
     "payment": {
       "success": "Payment successful",
-      "assigning": "Allocating compute node...",
+      "assigning": "Machine fee paid. Next, pay the deployment fee in API credentials and deployment.",
       "title": "Compute checkout",
       "amountDue": "Amount due",
       "walletBalance": "Wallet balance",
@@ -6888,8 +6932,29 @@
     },
     "status": {
       "running": "Running",
-      "pendingPay": "Pending payment",
-      "finished": "Finished"
+      "pendingPay": "Pay machine fee",
+      "pendingDeploy": "Pay deployment fee",
+      "deploying": "Syncing status",
+      "readyToStart": "Ready to start",
+      "settling": "Settling",
+      "canceled": "Canceled",
+      "finished": "Ended"
+    },
+    "stageHelp": {
+      "PENDING_PAY": "Next: pay the machine fee. API credentials are generated after payment.",
+      "PENDING_DEPLOY": "Next: pay the deployment fee in API credentials and deployment. The asset runs and starts earning immediately after payment.",
+      "DEPLOYING": "The system is syncing deployment state. Normal paid deployments run directly.",
+      "READY_TO_START": "The system auto-paused the asset. Next: start it to resume earning.",
+      "RUNNING": "The asset is running and earnings are generated by scheduled jobs. It auto-pauses 24 hours after deployment payment.",
+      "SETTLING": "Principal and earnings are being settled.",
+      "FINISHED": "The asset lifecycle has ended.",
+      "CANCELED": "The order is closed."
+    },
+    "earlySettlement": {
+      "title": "Confirm early settlement",
+      "description": "Early settlement ends this asset and invalidates the API Token. The system returns the machine-rental principal after deducting the penalty; the API deployment fee is not refunded.",
+      "cancel": "Cancel",
+      "confirm": "Confirm early settlement"
     }
   },
   "DashboardProducts": {
@@ -7239,8 +7304,10 @@
       "frozenDesc": "Funds locked by review or orders",
       "income": "Total income",
       "incomeDesc": "Top-ups + earnings + commission",
-      "expense": "Total spending",
-      "expenseDesc": "Historical withdrawal amount",
+      "expense": "Total Consumption",
+      "expenseDesc": "Total consumption on platform services",
+      "withdraw": "Total Withdrawal",
+      "withdrawDesc": "Total amount withdrawn to date",
       "historyDesc": "Filter fund transactions by transaction and business type"
     },
     "cardTitle": "Fund transactions",
@@ -7274,6 +7341,26 @@
       "REFUND": "Refund",
       "ADJUST": "System adjustment",
       "ACTIVATE_TIMEOUT_REFUND": "Activation timeout refund"
+    },
+    "remarks": {
+      "apiDeployFeePaid": "API deploy fee paid",
+      "rentalOrderCanceledRefund": "Rental order canceled refund",
+      "rentalMachineFeePaid": "Rental machine fee paid",
+      "activationTimeoutRefund": "Activation timeout refund",
+      "dailyRentalProfit": "Daily rental profit",
+      "commissionProfit": "Commission profit",
+      "rechargeApproved": "Recharge approved",
+      "withdrawFreeze": "Withdraw freeze",
+      "withdrawCanceled": "Withdraw canceled",
+      "withdrawRejected": "Withdraw rejected",
+      "withdrawPaid": "Withdraw paid",
+      "earlySettlementPenaltyRetainedFromPrincipal": "Early settlement penalty retained from principal",
+      "earlySettlementPrincipalReturned": "Early settlement principal returned",
+      "expiredRentalPrincipalReturned": "Expired rental principal returned"
+    },
+    "linkage": {
+      "target": "Locating wallet transaction",
+      "notFound": "This transaction was not found on the current page. Adjust the time or business filters."
     },
     "empty": "No fund transactions yet."
   },

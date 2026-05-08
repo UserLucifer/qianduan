@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { 
   Lock, 
@@ -64,6 +65,53 @@ const walletTxTypeAliases: Record<string, string> = {
   UNFROZEN: "UNFREEZE",
 };
 
+const walletRemarkKeys: Record<string, string> = {
+  API_DEPLOY_FEE_PAID: "apiDeployFeePaid",
+  RENTAL_ORDER_CANCELED_REFUND: "rentalOrderCanceledRefund",
+  RENTAL_ORDER_CANCELLED_REFUND: "rentalOrderCanceledRefund",
+  RENTAL_MACHINE_FEE_PAID: "rentalMachineFeePaid",
+  RENTAL_MACHINE_FEE_PAYMENT: "rentalMachineFeePaid",
+  RENTAL_MACHINE_PAYMENT: "rentalMachineFeePaid",
+  MACHINE_RENTAL_FEE_PAID: "rentalMachineFeePaid",
+  MACHINE_RENTAL_FEE_PAYMENT: "rentalMachineFeePaid",
+  ACTIVATION_TIMEOUT_REFUND: "activationTimeoutRefund",
+  ACTIVATE_TIMEOUT_REFUND: "activationTimeoutRefund",
+  DAILY_RENTAL_PROFIT: "dailyRentalProfit",
+  COMMISSION_PROFIT: "commissionProfit",
+  RECHARGE_APPROVED: "rechargeApproved",
+  WITHDRAW_FREEZE: "withdrawFreeze",
+  WITHDRAW_CANCELED: "withdrawCanceled",
+  WITHDRAW_CANCELLED: "withdrawCanceled",
+  WITHDRAW_REJECTED: "withdrawRejected",
+  WITHDRAW_PAID: "withdrawPaid",
+  EARLY_SETTLEMENT_PENALTY_RETAINED_FROM_PRINCIPAL: "earlySettlementPenaltyRetainedFromPrincipal",
+  EARLY_SETTLEMENT_PRINCIPAL_RETURNED: "earlySettlementPrincipalReturned",
+  EXPIRED_RENTAL_PRINCIPAL_RETURNED: "expiredRentalPrincipalReturned",
+};
+
+const walletRemarkExactKeys: Record<string, string> = {
+  "API 部署费已支付": "apiDeployFeePaid",
+  "API部署费已支付": "apiDeployFeePaid",
+  "租赁订单取消退款": "rentalOrderCanceledRefund",
+  "租赁机器费用支付": "rentalMachineFeePaid",
+  "租赁机器费支付": "rentalMachineFeePaid",
+  "租赁机器费用已支付": "rentalMachineFeePaid",
+  "激活超时退款": "activationTimeoutRefund",
+  "每日租赁收益": "dailyRentalProfit",
+  "佣金收益": "commissionProfit",
+  "充值审核通过": "rechargeApproved",
+  "提现冻结": "withdrawFreeze",
+  "提现已取消": "withdrawCanceled",
+  "提现取消": "withdrawCanceled",
+  "提现已拒绝": "withdrawRejected",
+  "提现拒绝": "withdrawRejected",
+  "提现已打款": "withdrawPaid",
+  "提现打款": "withdrawPaid",
+  "提前结算违约金从本金中扣留": "earlySettlementPenaltyRetainedFromPrincipal",
+  "提前结算本金返还": "earlySettlementPrincipalReturned",
+  "到期租赁本金返还": "expiredRentalPrincipalReturned",
+};
+
 function normalizeDisplayKey(value: string): string {
   return value
     .trim()
@@ -74,8 +122,21 @@ function normalizeDisplayKey(value: string): string {
 }
 
 export default function WalletPage() {
+  return (
+    <Suspense fallback={null}>
+      <WalletPageContent />
+    </Suspense>
+  );
+}
+
+function WalletPageContent() {
   const t = useTranslations("DashboardWallet");
   const dt = useTranslations("DataTable");
+  const hasWalletMessage = t.has as unknown as (key: string) => boolean;
+  const translateWalletMessage = t as unknown as (key: string) => string;
+  const searchParams = useSearchParams();
+  const highlightedTxNo = searchParams.get("txNo")?.trim() ?? "";
+  const txRowRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   const walletLoader = useCallback(async (): Promise<WalletMeResponse> => {
     const res = await getWalletInfo();
@@ -98,6 +159,15 @@ export default function WalletPage() {
     if (wallet.error) toast.error(wallet.error);
     if (transactions.error) toast.error(transactions.error);
   }, [wallet.error, transactions.error]);
+
+  useEffect(() => {
+    if (!highlightedTxNo || transactions.loading) return;
+
+    const target = txRowRefs.current[highlightedTxNo];
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [highlightedTxNo, transactions.loading, transactions.page.records]);
 
   const handleTabChange = (val: string) => {
     setActiveTab(val);
@@ -141,19 +211,32 @@ export default function WalletPage() {
     const normalized = normalizeDisplayKey(type);
     const bizTypeKey = walletBizTypeAliases[normalized] ?? normalized;
     const key = `bizTypes.${bizTypeKey}`;
-    return t.has(key as any) ? t(key as any) : type;
+    return hasWalletMessage(key) ? translateWalletMessage(key) : type;
   };
 
   const getRemarkLabel = (remark: string | null | undefined) => {
     if (!remark) return "";
-    const normalized = normalizeDisplayKey(remark);
+    const trimmedRemark = remark.trim();
+    const exactRemarkKey = walletRemarkExactKeys[trimmedRemark];
+    if (exactRemarkKey) {
+      const key = `remarks.${exactRemarkKey}`;
+      if (hasWalletMessage(key)) return translateWalletMessage(key);
+    }
+
+    const normalized = normalizeDisplayKey(trimmedRemark);
+    const remarkKey = walletRemarkKeys[normalized];
+    if (remarkKey) {
+      const key = `remarks.${remarkKey}`;
+      if (hasWalletMessage(key)) return translateWalletMessage(key);
+    }
+
     const bizTypeKey = walletBizTypeAliases[normalized] ?? normalized;
     const bizKey = `bizTypes.${bizTypeKey}`;
-    if (t.has(bizKey as any)) return t(bizKey as any);
+    if (hasWalletMessage(bizKey)) return translateWalletMessage(bizKey);
 
     const txTypeKey = walletTxTypeAliases[normalized] ?? normalized;
     const txKey = `txTypes.${txTypeKey}`;
-    if (t.has(txKey as any)) return t(txKey as any);
+    if (hasWalletMessage(txKey)) return translateWalletMessage(txKey);
 
     return remark;
   };
@@ -195,96 +278,121 @@ export default function WalletPage() {
         return "text-emerald-500 dark:text-emerald-400";
       case "OUT":
       case "FREEZE":
-        return "text-foreground"; // Keep out/freeze neutral or default color
+        return "text-rose-500 dark:text-rose-400";
       default:
         return "text-foreground";
     }
   };
 
+  const getDisplayAmount = (row: WalletTransactionResponse) => {
+    const amount = Math.abs(Number(row.amount) || 0);
+    if (row.txType === "OUT" || row.txType === "FREEZE") {
+      return -amount;
+    }
+    return amount;
+  };
+
   const totalIncome = (wallet.data?.totalRecharge ?? 0) + (wallet.data?.totalProfit ?? 0) + (wallet.data?.totalCommission ?? 0);
+  const totalSpending = wallet.data 
+    ? (totalIncome - (wallet.data.availableBalance + wallet.data.frozenBalance) - (wallet.data.totalWithdraw ?? 0))
+    : 0;
+  const highlightedTxFound = Boolean(
+    highlightedTxNo && transactions.page.records.some((row) => row.txNo === highlightedTxNo),
+  );
 
   return (
     <div className="space-y-6 pb-20">
       <PageHeader eyebrow={t("header.eyebrow")} title={t("header.title")} description={t("header.description")} />
 
-      {/* Hero Asset Dashboard */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Main Available Balance Card */}
-        <div className="md:col-span-2 relative overflow-hidden rounded-3xl border border-border bg-card p-8 shadow-sm flex flex-col justify-between">
-          <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-primary/5 blur-[80px]" />
-          <div className="absolute -left-10 -bottom-10 h-40 w-40 rounded-full bg-emerald-500/10 blur-[60px]" />
-          
-          <div className="relative z-10">
-            <div className="flex items-center gap-2 mb-2">
-              <div className="rounded-full bg-primary/10 p-2">
-                <Wallet className="h-5 w-5 text-primary" strokeWidth={1.5} />
-              </div>
-              <h2 className="text-sm font-medium text-muted-foreground">{t("stats.available")}</h2>
+      {/* Premium 5-Card Grid Stats */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        {/* Available Balance Card */}
+        <div className="group relative overflow-hidden rounded-3xl border border-border bg-card p-6 shadow-sm transition-all hover:border-primary/30">
+          <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-primary/5 blur-3xl transition-all group-hover:bg-primary/10" />
+          <div className="flex items-center justify-between mb-5">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary border border-primary/20 shadow-inner">
+              <Wallet className="h-6 w-6" strokeWidth={1.5} />
             </div>
-            
-            <div className="mt-6 flex items-baseline gap-2">
-              {wallet.loading ? (
-                <div className="h-12 w-48 animate-pulse rounded bg-muted" />
-              ) : (
-                <>
-                  <MoneyText value={wallet.data?.availableBalance} className="text-5xl font-black tracking-tighter" />
-                  <span className="text-lg font-semibold text-muted-foreground">{wallet.data?.currency ?? "USDT"}</span>
-                </>
-              )}
-            </div>
+            <span className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">{t("stats.available")}</span>
           </div>
-
-          <div className="relative z-10 mt-8 grid grid-cols-2 gap-4 border-t border-border/50 pt-6">
-            <div>
-              <p className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
-                <ArrowDown className="h-3 w-3 text-emerald-500" strokeWidth={2} />
-                {t("stats.income")}
-              </p>
-              {wallet.loading ? (
-                <div className="h-6 w-24 animate-pulse rounded bg-muted" />
-              ) : (
-                <MoneyText value={totalIncome} className="text-lg font-bold" />
-              )}
-            </div>
-            <div>
-              <p className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
-                <ArrowUp className="h-3 w-3 text-rose-500" strokeWidth={2} />
-                {t("stats.expense")}
-              </p>
-              {wallet.loading ? (
-                <div className="h-6 w-24 animate-pulse rounded bg-muted" />
-              ) : (
-                <MoneyText value={wallet.data?.totalWithdraw} className="text-lg font-bold" />
-              )}
-            </div>
+          <div className="space-y-1">
+            {wallet.loading ? (
+              <div className="h-10 w-32 animate-pulse rounded bg-muted" />
+            ) : (
+              <MoneyText value={wallet.data?.availableBalance} className="text-3xl font-black tracking-tight" />
+            )}
           </div>
         </div>
 
-        {/* Secondary Stats */}
-        <div className="flex flex-col gap-4">
-          <div className="rounded-2xl border border-border bg-card p-6 shadow-sm flex-1 flex flex-col justify-center">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="rounded-full bg-blue-500/10 p-2">
-                <Lock className="h-4 w-4 text-blue-500" strokeWidth={2} />
-              </div>
-              <h3 className="text-sm font-medium text-muted-foreground">{t("stats.frozen")}</h3>
+        {/* Frozen Balance Card */}
+        <div className="group relative overflow-hidden rounded-3xl border border-border bg-card p-6 shadow-sm transition-all hover:border-blue-500/30">
+          <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-blue-500/5 blur-3xl transition-all group-hover:bg-blue-500/10" />
+          <div className="flex items-center justify-between mb-5">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-500/10 text-blue-500 border border-blue-500/20 shadow-inner">
+              <Lock className="h-6 w-6" strokeWidth={1.5} />
             </div>
-            {wallet.loading ? (
-              <div className="h-8 w-32 animate-pulse rounded bg-muted" />
-            ) : (
-              <MoneyText value={wallet.data?.frozenBalance} className="text-2xl font-bold" />
-            )}
-            <p className="text-xs text-muted-foreground mt-2">{t("stats.frozenDesc")}</p>
+            <span className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">{t("stats.frozen")}</span>
           </div>
-          
-          <div className="rounded-2xl border border-dashed border-border bg-muted/20 p-6 flex-1 flex flex-col items-center justify-center text-center">
-             <div className="rounded-full bg-muted p-3 mb-3">
-               <History className="h-5 w-5 text-muted-foreground" strokeWidth={1.5} />
-             </div>
-             <p className="text-sm font-medium text-foreground">{t("cardTitle")}</p>
-             <p className="text-xs text-muted-foreground mt-1 max-w-[180px]">
-                {t("stats.historyDesc")}
-             </p>
+          <div className="space-y-1">
+            {wallet.loading ? (
+              <div className="h-10 w-32 animate-pulse rounded bg-muted" />
+            ) : (
+              <MoneyText value={wallet.data?.frozenBalance} className="text-3xl font-black tracking-tight" />
+            )}
+          </div>
+        </div>
+
+        {/* Total Income Card */}
+        <div className="group relative overflow-hidden rounded-3xl border border-border bg-card p-6 shadow-sm transition-all hover:border-emerald-500/30">
+          <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-emerald-500/5 blur-3xl transition-all group-hover:bg-emerald-500/10" />
+          <div className="flex items-center justify-between mb-5">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 shadow-inner">
+              <ArrowDownLeft className="h-6 w-6" strokeWidth={1.5} />
+            </div>
+            <span className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">{t("stats.income")}</span>
+          </div>
+          <div className="space-y-1">
+            {wallet.loading ? (
+              <div className="h-10 w-32 animate-pulse rounded bg-muted" />
+            ) : (
+              <MoneyText value={totalIncome} className="text-3xl font-black tracking-tight text-emerald-500" />
+            )}
+          </div>
+        </div>
+
+        {/* Total Consumption Card */}
+        <div className="group relative overflow-hidden rounded-3xl border border-border bg-card p-6 shadow-sm transition-all hover:border-rose-500/30">
+          <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-rose-500/5 blur-3xl transition-all group-hover:bg-rose-500/10" />
+          <div className="flex items-center justify-between mb-5">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-rose-500/10 text-rose-500 border border-rose-500/20 shadow-inner">
+              <ArrowUpRight className="h-6 w-6" strokeWidth={1.5} />
+            </div>
+            <span className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">{t("stats.expense")}</span>
+          </div>
+          <div className="space-y-1">
+            {wallet.loading ? (
+              <div className="h-10 w-32 animate-pulse rounded bg-muted" />
+            ) : (
+              <MoneyText value={totalSpending} className="text-3xl font-black tracking-tight text-rose-500" />
+            )}
+          </div>
+        </div>
+
+        {/* Total Withdrawal Card */}
+        <div className="group relative overflow-hidden rounded-3xl border border-border bg-card p-6 shadow-sm transition-all hover:border-amber-500/30">
+          <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-amber-500/5 blur-3xl transition-all group-hover:bg-amber-500/10" />
+          <div className="flex items-center justify-between mb-5">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-500 border border-amber-500/20 shadow-inner">
+              <ArrowUp className="h-6 w-6" strokeWidth={1.5} />
+            </div>
+            <span className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">{t("stats.withdraw")}</span>
+          </div>
+          <div className="space-y-1">
+            {wallet.loading ? (
+              <div className="h-10 w-32 animate-pulse rounded bg-muted" />
+            ) : (
+              <MoneyText value={wallet.data?.totalWithdraw} className="text-3xl font-black tracking-tight" />
+            )}
           </div>
         </div>
       </div>
@@ -301,12 +409,6 @@ export default function WalletPage() {
             </TabsTrigger>
             <TabsTrigger value="OUT" className="rounded-md px-4 py-1.5 text-xs font-semibold transition-all data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm whitespace-nowrap">
               {t("txTypes.OUT")}
-            </TabsTrigger>
-            <TabsTrigger value="FREEZE" className="rounded-md px-4 py-1.5 text-xs font-semibold transition-all data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm whitespace-nowrap">
-              {t("txTypes.FREEZE")}
-            </TabsTrigger>
-            <TabsTrigger value="UNFREEZE" className="rounded-md px-4 py-1.5 text-xs font-semibold transition-all data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm whitespace-nowrap">
-              {t("txTypes.UNFREEZE")}
             </TabsTrigger>
           </TabsList>
         </Tabs>
@@ -346,6 +448,18 @@ export default function WalletPage() {
         </div>
       </div>
 
+      {highlightedTxNo ? (
+        <div className="flex flex-col gap-1 rounded-xl border border-primary/20 bg-primary/5 px-4 py-3 text-sm text-foreground sm:flex-row sm:items-center sm:justify-between">
+          <span>
+            {t("linkage.target")}{" "}
+            <span className="font-mono text-xs font-semibold text-primary">{highlightedTxNo}</span>
+          </span>
+          {!transactions.loading && !highlightedTxFound ? (
+            <span className="text-xs text-muted-foreground">{t("linkage.notFound")}</span>
+          ) : null}
+        </div>
+      ) : null}
+
       {/* Transactions List */}
       <div className="min-h-[400px]">
         {transactions.loading && transactions.page.records.length === 0 ? (
@@ -363,7 +477,13 @@ export default function WalletPage() {
             {transactions.page.records.map((row) => (
               <div
                 key={row.txNo}
-                className="group flex flex-col sm:flex-row sm:items-center justify-between rounded-2xl border border-border bg-card p-5 shadow-sm transition-all hover:border-primary/30 hover:shadow-md hover:bg-muted/10 gap-4"
+                ref={(node) => {
+                  txRowRefs.current[row.txNo] = node;
+                }}
+                className={cn(
+                  "group flex flex-col sm:flex-row sm:items-center justify-between rounded-2xl border border-border bg-card p-5 shadow-sm transition-all hover:border-primary/30 hover:shadow-md hover:bg-muted/10 gap-4",
+                  row.txNo === highlightedTxNo && "border-primary/50 bg-primary/5 shadow-md ring-2 ring-primary/15",
+                )}
               >
                 <div className="flex items-start sm:items-center gap-4">
                   <div className={cn("flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border bg-background shadow-inner transition-colors", getTxColorClass(row.txType))}>
@@ -376,7 +496,7 @@ export default function WalletPage() {
                       </span>
                       {row.bizOrderNo && (
                         <span className="rounded bg-muted px-1.5 py-0.5 font-mono text-[10px] font-medium text-muted-foreground">
-                          {row.bizOrderNo}
+                          {t("columns.bizOrderNo")}: {row.bizOrderNo}
                         </span>
                       )}
                     </div>
@@ -387,14 +507,14 @@ export default function WalletPage() {
                     )}
                     <span className="text-xs text-muted-foreground/70 flex items-center gap-2">
                       <DateTimeText value={row.createdAt} />
-                      <span className="font-mono text-[9px] opacity-50">#{row.txNo}</span>
+                      <span className="font-mono text-[10px] opacity-70">TXID: {row.txNo.slice(-12)}</span>
                     </span>
                   </div>
                 </div>
 
                 <div className="flex flex-col sm:items-end pl-16 sm:pl-0 mt-2 sm:mt-0 bg-muted/20 sm:bg-transparent p-3 sm:p-0 rounded-lg sm:rounded-none">
                   <MoneyText 
-                    value={row.amount} 
+                    value={getDisplayAmount(row)}
                     signed={row.txType === "IN" || row.txType === "UNFREEZE" || row.txType === "OUT" || row.txType === "FREEZE"} 
                     className={cn("text-lg font-black tracking-tight drop-shadow-sm", getAmountColorClass(row.txType))} 
                   />
@@ -402,10 +522,6 @@ export default function WalletPage() {
                      <span className="flex items-center gap-1.5">
                         <span className="h-1 w-1 rounded-full bg-emerald-500/50"></span>
                         {t("columns.available")}: <MoneyText value={row.afterAvailableBalance} className="font-medium text-foreground/80" />
-                     </span>
-                     <span className="flex items-center gap-1.5">
-                        <span className="h-1 w-1 rounded-full bg-blue-500/50"></span>
-                        {t("columns.frozen")}: <MoneyText value={row.afterFrozenBalance} className="font-medium text-foreground/80" />
                      </span>
                   </div>
                 </div>
