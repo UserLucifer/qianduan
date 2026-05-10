@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { toErrorMessage } from "@/lib/format";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 import {
   getAdminNotificationTranslations,
   updateAdminNotificationTranslation,
@@ -85,7 +86,7 @@ export function NotificationForm({ isBroadcast = false, onSuccess, onCancel }: N
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 w-full">
-        {error && <div className="p-3 rounded-md bg-rose-500/10 border border-rose-500/20 text-rose-500 text-sm font-medium">{error}</div>}
+        <ErrorAlert message={error} />
         
         <div className="space-y-4 w-full">
           {!isBroadcast && (
@@ -308,11 +309,7 @@ export function NotificationTranslationForm({
         <p className="mt-1 text-sm leading-6 text-muted-foreground">{t("description")}</p>
       </div>
 
-      {error ? (
-        <div className="rounded-md border border-rose-500/20 bg-rose-500/10 p-3 text-sm font-medium text-rose-500">
-          {error}
-        </div>
-      ) : null}
+      <ErrorAlert message={error} />
 
       {loading ? (
         <div className="flex items-center gap-2 rounded-lg border border-border p-4 text-sm text-muted-foreground">

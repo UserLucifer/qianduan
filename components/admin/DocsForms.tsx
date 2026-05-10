@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,6 +27,7 @@ import type {
 } from "@/api/types";
 import { DOCS_LANGUAGE_ITEMS, DOCS_SECTION_ITEMS, docsSectionLabel } from "@/components/docs/sections";
 import { toErrorMessage } from "@/lib/format";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 const ROOT_CATEGORY_VALUE = "root";
 const languageValues = ["zh-CN", "en-US"] as const;
@@ -162,6 +163,7 @@ export function DocsCategoryForm({
   const section = useWatch({ control: form.control, name: "section" });
   const parentId = useWatch({ control: form.control, name: "parentId" });
   const status = useWatch({ control: form.control, name: "status" });
+  const [error, setError] = useState<string | null>(null);
 
   const parentOptions = flattenCategories(categories).filter(
     (category) =>
@@ -178,6 +180,7 @@ export function DocsCategoryForm({
   }, [form, parentId, parentOptions]);
 
   const onSubmit = async (values: CategoryFormValues) => {
+    setError(null);
     try {
       const payload: DocsCategoryRequest = {
         language: values.language,
@@ -196,13 +199,14 @@ export function DocsCategoryForm({
         await createAdminDocsCategory(payload);
       }
       onSuccess();
-    } catch (error) {
-      alert(toErrorMessage(error));
+    } catch (err) {
+      setError(toErrorMessage(err));
     }
   };
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 py-2">
+      <ErrorAlert message={error} />
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
           <Label>{t("language")}</Label>
@@ -309,6 +313,7 @@ export function DocsArticleForm({
   const publishStatus = useWatch({ control: form.control, name: "publishStatus" });
   const isSectionHome = useWatch({ control: form.control, name: "isSectionHome" });
   const titleRegister = form.register("title");
+  const [error, setError] = useState<string | null>(null);
 
   const categoryOptions = flattenCategories(categories).filter(
     (category) => category.language === language && category.section === section,
@@ -322,6 +327,7 @@ export function DocsArticleForm({
   }, [categoryId, categoryOptions, form]);
 
   const onSubmit = async (values: ArticleFormValues) => {
+    setError(null);
     try {
       const payload: DocsArticleRequest = {
         language: values.language,
@@ -342,13 +348,14 @@ export function DocsArticleForm({
         await createAdminDocsArticle(payload);
       }
       onSuccess();
-    } catch (error) {
-      alert(toErrorMessage(error));
+    } catch (err) {
+      setError(toErrorMessage(err));
     }
   };
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 py-2">
+      <ErrorAlert message={error} />
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
           <Label>{t("language")}</Label>

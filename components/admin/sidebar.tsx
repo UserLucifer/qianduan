@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   Users,
   Wallet,
+  HandCoins,
   CircleDollarSign,
   ClipboardList,
   TrendingUp,
@@ -59,6 +60,7 @@ export const ADMIN_NAV_ITEMS: NavGroup[] = [
     labelKey: "groups.finance",
     items: [
       { titleKey: "items.wallets", icon: Wallet, href: "/admins/wallets" },
+      { titleKey: "items.walletAdjust", icon: HandCoins, href: "/admins/wallet-adjust" },
       { titleKey: "items.recharge", icon: CircleDollarSign, href: "/admins/recharge" },
       { titleKey: "items.withdraw", icon: Wallet, href: "/admins/withdraw" },
       { titleKey: "items.profits", icon: TrendingUp, href: "/admins/profits" },

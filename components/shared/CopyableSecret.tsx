@@ -12,11 +12,13 @@ export function CopyableSecret({
   maskedValue,
   canReveal = true,
   className,
+  truncate = true,
 }: {
   value: string | null | undefined;
   maskedValue?: string | null;
   canReveal?: boolean;
   className?: string;
+  truncate?: boolean;
 }) {
   const t = useTranslations("SharedControls.copyableSecret");
   const [visible, setVisible] = useState(false);
@@ -33,11 +35,12 @@ export function CopyableSecret({
   return (
     <span
       className={cn(
-        "inline-flex max-w-full items-center gap-1 rounded-md border bg-muted/50 px-2 py-1 font-mono text-xs text-muted-foreground",
+        "inline-flex max-w-full gap-1 rounded-md border bg-muted/50 px-2 py-1 font-mono text-xs text-muted-foreground",
+        truncate ? "items-center" : "items-start whitespace-normal",
         className,
       )}
     >
-      <span className="truncate">{display}</span>
+      <span className={cn(truncate ? "truncate" : "break-all whitespace-normal")}>{display}</span>
       {canReveal ? (
         <Button
           type="button"

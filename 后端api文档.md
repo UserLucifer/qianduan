@@ -276,6 +276,190 @@
 | `subTeamCount` | number | 该成员的直接和间接下级总数 |
 | `parentId` | string | 该成员的直接上级公开用户 ID |
 
+## 后台团队管理
+
+说明：以下接口均需要管理员登录。后台团队接口只返回两级团队关系；用户名称统一返回 `userName`，来源为后端 `user_name` 字段。
+
+统计口径：
+
+| 字段 | 口径 |
+| --- | --- |
+| `directCount` | `user_team_relation.level_depth = 1` |
+| `indirectCount` | `user_team_relation.level_depth = 2` |
+| `totalTeamCount` | `directCount + indirectCount` |
+| `totalCommission` | `commission_record.status = SETTLED` 且 `level_no <= 2` 的累计佣金 |
+| `yesterdayCommission` | 昨日 `[00:00, 24:00)` 已结算团队佣金 |
+| `todayEstimatedCommission` | 查询时间范围内非 `CANCELED` 团队佣金；未传时间时默认今日 `[00:00, 24:00)` |
+| `activeOrderCount` | 团队成员当前 `RUNNING` 或 `PAUSED` 订单数 |
+| `runningOrderCount` | 团队成员当前 `RUNNING` 订单数 |
+
+分页响应统一为：
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `records` | array | 当前页数据 |
+| `total` | number | 总数 |
+| `pageNo` | number | 当前页 |
+| `pageSize` | number | 每页数量 |
+
+### GET `/api/admin/team/overview`
+
+说明：后台团队入口顶部统计。
+
+查询参数：
+
+| 参数 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| `start_time` | string | 否 | 佣金统计开始时间，格式 `yyyy-MM-dd HH:mm:ss` |
+| `end_time` | string | 否 | 佣金统计结束时间，格式 `yyyy-MM-dd HH:mm:ss` |
+
+响应字段：
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `activeTeamCount` | number | 存在两级内下级关系且至少有一个启用下级用户的团队数 |
+| `todayEstimatedCommission` | number | 今日或指定时间范围内预估佣金 |
+| `currency` | string | 固定 `USDT` |
+| `activeTeamGrowthRate` | number/null | 暂不返回趋势，当前为 `null` |
+| `commissionGrowthRate` | number/null | 暂不返回趋势，当前为 `null` |
+
+### GET `/api/admin/team/list`
+
+说明：后台团队入口用户列表。
+
+查询参数：
+
+| 参数 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| `pageNo` | number | 否 | 页码，默认 `1` |
+| `pageSize` | number | 否 | 每页数量，默认 `10`，最大 `100` |
+| `keyword` | string | 否 | 匹配用户主键 ID、公开用户 ID、邮箱或用户名；昵称当前无存储字段 |
+| `status` | number | 否 | 用户状态 |
+| `sortBy` | string | 否 | `totalCommission`、`yesterdayCommission`、`directCount`、`lastCommissionAt`；默认 `lastCommissionAt` |
+
+记录字段：
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `userId` | number | 用户主键 ID |
+| `userName` | string | 用户名 |
+| `email` | string | 邮箱 |
+| `avatarKey` | string/null | 头像 key |
+| `userStatus` | number | 用户状态 |
+| `directCount` | number | 直推人数 |
+| `indirectCount` | number | 间推人数 |
+| `totalTeamCount` | number | 团队总人数 |
+| `yesterdayCommission` | number | 昨日已结算团队佣金 |
+| `totalCommission` | number | 累计已结算团队佣金 |
+| `activeOrderCount` | number | 团队成员当前有效订单数 |
+| `runningOrderCount` | number | 团队成员当前运行中订单数 |
+| `lastCommissionAt` | string/null | 最近一次已结算团队佣金时间 |
+| `currency` | string | 固定 `USDT` |
+
+### GET `/api/admin/team/leaderboard`
+
+说明：后台团队排行榜。
+
+查询参数：
+
+| 参数 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| `pageNo` | number | 否 | 页码，默认 `1` |
+| `pageSize` | number | 否 | 每页数量，默认 `10`，最大 `100` |
+| `sortBy` | string | 否 | `totalCommission`、`yesterdayCommission`、`directCount`；默认 `totalCommission` |
+
+记录字段：
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `rankNo` | number | 当前排序口径下的全站名次 |
+| `userId` | number | 用户主键 ID |
+| `userName` | string | 用户名 |
+| `avatarKey` | string/null | 头像 key |
+| `userStatus` | number | 用户状态 |
+| `directCount` | number | 直推人数 |
+| `indirectCount` | number | 间推人数 |
+| `yesterdayCommission` | number | 昨日已结算团队佣金 |
+| `totalCommission` | number | 累计已结算团队佣金 |
+| `activeOrderCount` | number | 团队成员当前有效订单数 |
+| `currency` | string | 固定 `USDT` |
+
+### GET `/api/admin/team/user-summary`
+
+说明：团队详情页顶部用户摘要。
+
+查询参数：
+
+| 参数 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| `user_id` | number | 是 | 用户主键 ID |
+
+响应字段同 `/api/admin/team/list` 的记录字段，但不包含 `lastCommissionAt`。
+
+### GET `/api/admin/team/children`
+
+说明：团队详情页左侧树按需加载。首次传 `root_user_id={userId}&parent_user_id={userId}` 加载一级，下钻一级节点时传该一级节点作为 `parent_user_id`。二级节点不再返回可展开子节点。
+
+查询参数：
+
+| 参数 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| `root_user_id` | number | 是 | 当前团队根用户主键 ID |
+| `parent_user_id` | number | 是 | 当前加载父节点用户主键 ID |
+| `pageNo` | number | 否 | 页码，默认 `1` |
+| `pageSize` | number | 否 | 每页数量，默认 `50`，最大 `100` |
+
+记录字段：
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `userId` | number | 节点用户主键 ID |
+| `userName` | string | 用户名 |
+| `avatarKey` | string/null | 头像 key |
+| `userStatus` | number | 用户状态 |
+| `levelDepth` | number | 相对 `root_user_id` 的层级：`1` 或 `2` |
+| `parentUserId` | number | 直接父节点用户主键 ID |
+| `directCount` | number | 该节点自己的直推人数 |
+| `indirectCount` | number | 该节点自己的间推人数 |
+| `hasChildren` | boolean | 是否可继续展开；仅一级节点可能为 `true` |
+| `childrenCount` | number | 可加载子节点数 |
+| `totalContributionAmount` | number | 当前节点给根用户带来的累计已结算佣金 |
+| `yesterdayContributionAmount` | number | 当前节点昨日给根用户带来的已结算佣金 |
+| `currency` | string | 固定 `USDT` |
+
+### GET `/api/admin/team/members`
+
+说明：团队详情页右侧下级佣金排查表。
+
+查询参数：
+
+| 参数 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| `ancestor_user_id` | number | 是 | 当前查看的上级用户主键 ID |
+| `pageNo` | number | 否 | 页码，默认 `1` |
+| `pageSize` | number | 否 | 每页数量，默认 `10`，最大 `100` |
+| `level_depth` | number | 否 | `1` 或 `2` |
+| `keyword` | string | 否 | 匹配成员主键 ID、公开用户 ID、邮箱或用户名；可与 `level_depth` 组合 |
+
+记录字段：
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `relationId` | number | 团队关系主键 ID |
+| `ancestorUserId` | number | 当前查看的上级用户主键 ID |
+| `parentUserId` | number | 成员直接上级用户主键 ID |
+| `userId` | number | 成员用户主键 ID |
+| `userName` | string | 用户名 |
+| `avatarKey` | string/null | 头像 key |
+| `userStatus` | number | 用户状态 |
+| `levelDepth` | number | 相对 `ancestor_user_id` 的层级 |
+| `relationshipCreatedAt` | string | 团队关系创建时间 |
+| `orderStatus` | string | `RUNNING`、`PAUSED` 或 `NONE` |
+| `latestOrderNo` | string/null | 最新有效订单号；无有效订单时为 `null` |
+| `yesterdayContributionAmount` | number | 昨日给上级带来的已结算佣金 |
+| `totalContributionAmount` | number | 累计给上级带来的已结算佣金 |
+| `currency` | string | 固定 `USDT` |
+
 ## 当前用户
 
 ### GET `/api/user/me`

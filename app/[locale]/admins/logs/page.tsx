@@ -40,6 +40,7 @@ const ACTION_MAP: Record<string, string> = {
   UNPUBLISH: "actionUnpublish",
   RUN: "actionRun",
   CANCEL: "actionCancel",
+  ADMIN_WALLET_ADJUST: "actionAdminWalletAdjust",
 };
 
 const BIZ_TYPE_MAP: Record<string, string> = {

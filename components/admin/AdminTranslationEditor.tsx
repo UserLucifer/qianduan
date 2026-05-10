@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toErrorMessage } from "@/lib/format";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 import type { ApiResponse, SupportedLocale } from "@/api/types";
 
 type TranslationRecord = {
@@ -142,11 +143,7 @@ export function AdminTranslationEditor<TRecord extends TranslationRecord>({
         <p className="mt-1 text-sm leading-6 text-muted-foreground">{t("description")}</p>
       </div>
 
-      {error ? (
-        <div className="rounded-md border border-rose-500/20 bg-rose-500/10 p-3 text-sm font-medium text-rose-500">
-          {error}
-        </div>
-      ) : null}
+      <ErrorAlert message={error} />
 
       {loading ? (
         <div className="flex items-center gap-2 rounded-lg border border-border p-4 text-sm text-muted-foreground">

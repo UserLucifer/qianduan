@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -43,15 +44,31 @@ const initialFilters: OrderFilters = {
 };
 const initialQuery: AdminRentalOrderQuery = { pageNo: 1, pageSize: 10 };
 
+const parseQueryUserId = (value: string | null) => {
+  const next = Number(value);
+  return Number.isFinite(next) && next > 0 ? String(next) : "";
+};
+
 export default function AdminOrdersPage() {
   const t = useTranslations("AdminPages.orders");
-  const [filters, setFilters] = useState<OrderFilters>(initialFilters);
+  const searchParams = useSearchParams();
+  const initialFiltersFromUrl = useMemo<OrderFilters>(() => ({
+    ...initialFilters,
+    userId: parseQueryUserId(searchParams.get("user_id")),
+    orderNo: searchParams.get("order_no")?.trim() ?? "",
+  }), [searchParams]);
+  const initialQueryFromUrl = useMemo<AdminRentalOrderQuery>(() => ({
+    ...initialQuery,
+    user_id: initialFiltersFromUrl.userId ? Number(initialFiltersFromUrl.userId) : undefined,
+    order_no: initialFiltersFromUrl.orderNo || undefined,
+  }), [initialFiltersFromUrl]);
+  const [filters, setFilters] = useState<OrderFilters>(initialFiltersFromUrl);
   const [detail, setDetail] = useState<RentalOrderDetailResponse | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
 
   const loader = useCallback(async (params: AdminRentalOrderQuery) => (await getAdminRentalOrders(params)).data, []);
-  const { page, loading, error, updateParams, changePage } = usePaginatedResource(loader, initialQuery);
+  const { page, loading, error, updateParams, changePage } = usePaginatedResource(loader, initialQueryFromUrl);
 
   const buildQuery = (nextFilters: OrderFilters): AdminRentalOrderQuery => ({
     pageNo: 1,

@@ -18,6 +18,7 @@ export const useAdminAuth = () => useContext(AdminAuthContext);
 const roleRoutes: Record<string, AdminRole[]> = {
   "/admins/recharge": [AdminRole.SUPER_ADMIN, AdminRole.ADMIN],
   "/admins/withdraw": [AdminRole.SUPER_ADMIN, AdminRole.ADMIN],
+  "/admins/wallet-adjust": [AdminRole.SUPER_ADMIN, AdminRole.ADMIN],
   "/admins/config": [AdminRole.SUPER_ADMIN],
   "/admins/scheduler": [AdminRole.SUPER_ADMIN],
   "/admins/logs": [AdminRole.SUPER_ADMIN],

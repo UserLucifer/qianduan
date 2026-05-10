@@ -20,6 +20,7 @@ import { Switch } from "@/components/ui/switch";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toErrorMessage } from "@/lib/format";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 import type { AdminProductRequest, AiModelResponse, GpuModelResponse, ProductResponse, RegionResponse, RentalCycleRuleResponse } from "@/api/types";
 
 // --- Schemas ---
@@ -220,7 +221,7 @@ export function ProductForm({ initialData, regions, gpuModels, onSuccess, onCanc
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        {error && <div className="p-3 rounded-md bg-rose-500/10 border border-rose-500/20 text-rose-500 text-sm font-medium">{error}</div>}
+        <ErrorAlert message={error} />
         
         <div className="max-h-[60vh] overflow-y-auto px-1 space-y-8 custom-scrollbar">
           {/* Basic information */}
@@ -490,6 +491,7 @@ export function AiModelForm({ initialData, onSuccess, onCancel }: BaseFormProps<
 
   const onSubmit = async (values: AiModelFormValues) => {
     setLoading(true);
+    setError(null);
     try {
       const { createAdminAiModel, updateAdminAiModel } = await import("@/api/admin");
       if (initialData) {
@@ -508,7 +510,7 @@ export function AiModelForm({ initialData, onSuccess, onCancel }: BaseFormProps<
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        {error && <div className="mb-4 text-sm font-medium text-destructive">{error}</div>}
+        <ErrorAlert message={error} className="mb-4" />
         <div className="grid grid-cols-2 gap-x-6 gap-y-4 py-4 w-full">
           <FormField control={form.control} name="modelCode" render={({ field }) => (
             <FormItem className="w-full">
@@ -571,6 +573,7 @@ export function GpuModelForm({ initialData, onSuccess, onCancel }: BaseFormProps
 
   const onSubmit = async (values: GpuModelFormValues) => {
     setLoading(true);
+    setError(null);
     try {
       const { createAdminGpuModel, updateAdminGpuModel } = await import("@/api/admin");
       if (initialData) {
@@ -589,7 +592,7 @@ export function GpuModelForm({ initialData, onSuccess, onCancel }: BaseFormProps
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        {error && <div className="mb-4 text-sm font-medium text-destructive">{error}</div>}
+        <ErrorAlert message={error} className="mb-4" />
         <div className="grid grid-cols-2 gap-x-6 gap-y-4 py-4 w-full">
           <FormField control={form.control} name="modelCode" render={({ field }) => (
             <FormItem className="w-full">
@@ -631,6 +634,7 @@ export function RegionForm({ initialData, onSuccess, onCancel }: BaseFormProps<R
 
   const onSubmit = async (values: RegionFormValues) => {
     setLoading(true);
+    setError(null);
     try {
       const { createAdminRegion, updateAdminRegion } = await import("@/api/admin");
       if (initialData) {
@@ -649,7 +653,7 @@ export function RegionForm({ initialData, onSuccess, onCancel }: BaseFormProps<R
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        {error && <div className="mb-4 text-sm font-medium text-destructive">{error}</div>}
+        <ErrorAlert message={error} className="mb-4" />
         <div className="grid grid-cols-2 gap-x-6 gap-y-4 py-4 w-full">
           <FormField control={form.control} name="regionCode" render={({ field }) => (
             <FormItem className="w-full">
@@ -699,6 +703,7 @@ export function CycleRuleForm({ initialData, onSuccess, onCancel }: BaseFormProp
 
   const onSubmit = async (values: CycleRuleFormValues) => {
     setLoading(true);
+    setError(null);
     try {
       const { createAdminCycleRule, updateAdminCycleRule } = await import("@/api/admin");
       if (initialData) {
@@ -717,7 +722,7 @@ export function CycleRuleForm({ initialData, onSuccess, onCancel }: BaseFormProp
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        {error && <div className="mb-4 text-sm font-medium text-destructive">{error}</div>}
+        <ErrorAlert message={error} className="mb-4" />
         <div className="grid grid-cols-2 gap-x-6 gap-y-4 py-4 w-full">
           <FormField control={form.control} name="cycleCode" render={({ field }) => (
             <FormItem className="w-full">

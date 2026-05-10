@@ -23,6 +23,7 @@ import type {
 } from "@/api/types";
 import { useState } from "react";
 import { toErrorMessage } from "@/lib/format";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 function createChannelSchema(t: ReturnType<typeof useTranslations>) {
   return z.object({
@@ -234,7 +235,7 @@ export function RechargeChannelForm({ initialData, onSuccess, onCancel }: Rechar
         </div>
       </div>
 
-      {error && <div className="text-sm font-medium text-rose-500">{error}</div>}
+      <ErrorAlert message={error} />
 
       <div className="flex justify-end gap-3 pt-4">
         <Button
@@ -359,11 +360,7 @@ export function RechargeChannelTranslationForm({
         <p className="mt-1 text-sm leading-6 text-muted-foreground">{t("description")}</p>
       </div>
 
-      {error ? (
-        <div className="rounded-md border border-rose-500/20 bg-rose-500/10 p-3 text-sm font-medium text-rose-500">
-          {error}
-        </div>
-      ) : null}
+      <ErrorAlert message={error} />
 
       {loading ? (
         <div className="flex items-center gap-2 rounded-lg border border-border p-4 text-sm text-muted-foreground">

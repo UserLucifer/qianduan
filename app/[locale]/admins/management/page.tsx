@@ -47,6 +47,7 @@ function CreateAdminDialog({ onSuccess }: { onSuccess: () => void }) {
   const formSchema = createFormSchema(t);
   const [open, setOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   
   const form = useForm<CreateAdminFormValues>({
     resolver: zodResolver(formSchema),
@@ -57,22 +58,28 @@ function CreateAdminDialog({ onSuccess }: { onSuccess: () => void }) {
     },
   });
 
+  const handleOpenChange = (nextOpen: boolean) => {
+    setOpen(nextOpen);
+    if (!nextOpen) setError(null);
+  };
+
   const onSubmit = async (values: CreateAdminFormValues) => {
     try {
       setSubmitting(true);
+      setError(null);
       await createAdminUser(values);
       setOpen(false);
       form.reset();
       onSuccess();
     } catch (err) {
-      alert(toErrorMessage(err));
+      setError(toErrorMessage(err));
     } finally {
       setSubmitting(false);
     }
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button className="font-semibold">
           <Plus className="mr-2 h-4 w-4" />
@@ -84,6 +91,7 @@ function CreateAdminDialog({ onSuccess }: { onSuccess: () => void }) {
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4">
+            <ErrorAlert message={error} />
             <FormField
               control={form.control}
               name="userName"

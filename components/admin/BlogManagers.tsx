@@ -17,6 +17,7 @@ import {
 } from "@/api/admin";
 import { BlogCategory, BlogTag } from "@/api/types";
 import { toErrorMessage } from "@/lib/format";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 interface CategoryManagerProps {
   items: BlogCategory[];
@@ -28,16 +29,18 @@ export function CategoryManager({ items, onRefresh, onTranslate }: CategoryManag
   const t = useTranslations("AdminComponentForms.blogManagers");
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleAdd = async () => {
     if (!name.trim()) return;
     setLoading(true);
+    setError(null);
     try {
       await createAdminBlogCategory({ categoryName: name });
       setName("");
       onRefresh();
     } catch (err) {
-      alert(toErrorMessage(err));
+      setError(toErrorMessage(err));
     } finally {
       setLoading(false);
     }
@@ -46,15 +49,17 @@ export function CategoryManager({ items, onRefresh, onTranslate }: CategoryManag
   const handleUpdate = async (id: number, currentName: string) => {
     const newName = window.prompt(t("editCategoryPrompt"), currentName);
     if (!newName || newName === currentName) return;
+    setError(null);
     try {
       await updateAdminBlogCategory(id, { categoryName: newName });
       onRefresh();
     } catch (err) {
-      alert(toErrorMessage(err));
+      setError(toErrorMessage(err));
     }
   };
 
   const toggleStatus = async (item: BlogCategory) => {
+    setError(null);
     try {
       if (item.status === 1) {
         await disableAdminBlogCategory(item.id);
@@ -63,7 +68,7 @@ export function CategoryManager({ items, onRefresh, onTranslate }: CategoryManag
       }
       onRefresh();
     } catch (err) {
-      alert(toErrorMessage(err));
+      setError(toErrorMessage(err));
     }
   };
 
@@ -80,6 +85,7 @@ export function CategoryManager({ items, onRefresh, onTranslate }: CategoryManag
           <Plus className="h-4 w-4" />
         </Button>
       </div>
+      <ErrorAlert message={error} />
       <div className="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
         {items.map((item) => (
           <div key={item.id} className="flex items-center justify-between rounded border border-border bg-card p-2 text-card-foreground">
@@ -116,16 +122,18 @@ export function TagManager({ items, onRefresh, onTranslate }: TagManagerProps) {
   const t = useTranslations("AdminComponentForms.blogManagers");
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleAdd = async () => {
     if (!name.trim()) return;
     setLoading(true);
+    setError(null);
     try {
       await createAdminBlogTag({ tagName: name });
       setName("");
       onRefresh();
     } catch (err) {
-      alert(toErrorMessage(err));
+      setError(toErrorMessage(err));
     } finally {
       setLoading(false);
     }
@@ -134,15 +142,17 @@ export function TagManager({ items, onRefresh, onTranslate }: TagManagerProps) {
   const handleUpdate = async (id: number, currentName: string) => {
     const newName = window.prompt(t("editTagPrompt"), currentName);
     if (!newName || newName === currentName) return;
+    setError(null);
     try {
       await updateAdminBlogTag(id, { tagName: newName });
       onRefresh();
     } catch (err) {
-      alert(toErrorMessage(err));
+      setError(toErrorMessage(err));
     }
   };
 
   const toggleStatus = async (item: BlogTag) => {
+    setError(null);
     try {
       if (item.status === 1) {
         await disableAdminBlogTag(item.id);
@@ -151,7 +161,7 @@ export function TagManager({ items, onRefresh, onTranslate }: TagManagerProps) {
       }
       onRefresh();
     } catch (err) {
-      alert(toErrorMessage(err));
+      setError(toErrorMessage(err));
     }
   };
 
@@ -168,6 +178,7 @@ export function TagManager({ items, onRefresh, onTranslate }: TagManagerProps) {
           <Plus className="h-4 w-4" />
         </Button>
       </div>
+      <ErrorAlert message={error} />
       <div className="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
         {items.map((item) => (
           <div key={item.id} className="flex items-center justify-between rounded border border-border bg-card p-2 text-card-foreground">

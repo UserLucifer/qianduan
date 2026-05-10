@@ -695,6 +695,33 @@ export interface UserWallet {
   updatedAt: string;
 }
 
+export type AdminWalletAdjustTxType = "IN" | "OUT";
+
+export interface AdminWalletAdjustRequest {
+  txType: AdminWalletAdjustTxType;
+  amount: number;
+  adjustNo: string;
+  reason: string;
+}
+
+export interface AdminWalletAdjustResponse {
+  transactionId: number;
+  txNo: string;
+  userId: number;
+  walletId: number;
+  currency: string;
+  txType: AdminWalletAdjustTxType | string;
+  amount: number;
+  beforeAvailableBalance: number;
+  afterAvailableBalance: number;
+  beforeFrozenBalance: number;
+  afterFrozenBalance: number;
+  bizType: string;
+  adjustNo: string;
+  reason: string;
+  createdAt: string;
+}
+
 export interface AdminWalletTransactionQuery extends PageQuery {
   keyword?: string;
   user_id?: number;
@@ -790,6 +817,122 @@ export interface AdminTeamRelationQuery extends PageQuery {
   descendant_user_id?: number;
   level_depth?: number;
 }
+
+export interface AdminTeamOverviewQuery {
+  start_time?: string;
+  end_time?: string;
+}
+
+export interface AdminTeamOverviewResponse {
+  activeTeamCount: number;
+  todayEstimatedCommission: number;
+  currency?: string | null;
+  activeTeamGrowthRate?: number | null;
+  commissionGrowthRate?: number | null;
+}
+
+export interface AdminTeamListQuery extends PageQuery {
+  keyword?: string;
+  status?: number;
+  sortBy?: string;
+}
+
+export interface AdminTeamListRow {
+  userId: number;
+  userName: string;
+  email?: string | null;
+  avatarKey?: string | null;
+  userStatus: number;
+  directCount: number;
+  indirectCount: number;
+  totalTeamCount: number;
+  yesterdayCommission: number;
+  totalCommission: number;
+  activeOrderCount: number;
+  runningOrderCount: number;
+  lastCommissionAt?: string | null;
+  currency?: string | null;
+}
+
+export interface AdminTeamLeaderboardQuery extends PageQuery {
+  sortBy?: string;
+}
+
+export interface AdminTeamLeaderboardRow {
+  rankNo: number;
+  userId: number;
+  userName: string;
+  avatarKey?: string | null;
+  userStatus: number;
+  directCount: number;
+  indirectCount: number;
+  yesterdayCommission: number;
+  totalCommission: number;
+  activeOrderCount: number;
+  currency?: string | null;
+}
+
+export interface AdminTeamUserSummaryResponse {
+  userId: number;
+  userName: string;
+  email?: string | null;
+  avatarKey?: string | null;
+  userStatus: number;
+  directCount: number;
+  indirectCount: number;
+  totalTeamCount: number;
+  yesterdayCommission: number;
+  totalCommission: number;
+  activeOrderCount: number;
+  runningOrderCount: number;
+  currency?: string | null;
+}
+
+export interface AdminTeamChildrenQuery extends PageQuery {
+  root_user_id: number;
+  parent_user_id: number;
+}
+
+export interface AdminTeamTreeNode {
+  userId: number;
+  userName: string;
+  avatarKey?: string | null;
+  userStatus: number;
+  levelDepth: number;
+  parentUserId: number;
+  directCount: number;
+  indirectCount: number;
+  hasChildren: boolean;
+  childrenCount: number;
+  totalContributionAmount: number;
+  yesterdayContributionAmount: number;
+  currency?: string | null;
+}
+
+export interface AdminTeamMemberQuery extends PageQuery {
+  ancestor_user_id: number;
+  level_depth?: number;
+  keyword?: string;
+}
+
+export interface AdminTeamMemberRow {
+  relationId: number;
+  ancestorUserId: number;
+  parentUserId: number;
+  userId: number;
+  userName: string;
+  avatarKey?: string | null;
+  userStatus: number;
+  levelDepth: number;
+  relationshipCreatedAt?: string | null;
+  orderStatus?: "RUNNING" | "PAUSED" | "NONE" | string | null;
+  latestOrderNo?: string | null;
+  yesterdayContributionAmount: number;
+  totalContributionAmount: number;
+  currency?: string | null;
+}
+
+export type TeamLeaderboardRow = AdminTeamLeaderboardRow;
 
 export interface AdminCatalogQuery extends PageQuery {
   status?: number;

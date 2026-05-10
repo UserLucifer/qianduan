@@ -15,6 +15,7 @@ import { Switch } from "@/components/ui/switch";
 import { createAdminBlogPost, updateAdminBlogPost } from "@/api/admin";
 import type { AdminBlogPost, BlogCategory, BlogTag } from "@/api/types";
 import { toErrorMessage } from "@/lib/format";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 function createFormSchema(t: ReturnType<typeof useTranslations>) {
   return z.object({
@@ -44,6 +45,7 @@ export function BlogPostForm({ initialData, categories, tags, onSuccess, onCance
   const t = useTranslations("AdminComponentForms.blogPostForm");
   const formSchema = createFormSchema(t);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -62,6 +64,7 @@ export function BlogPostForm({ initialData, categories, tags, onSuccess, onCance
 
   const onSubmit = async (values: FormValues) => {
     setLoading(true);
+    setError(null);
     try {
       const payload: Partial<AdminBlogPost> = {
         ...values,
@@ -76,7 +79,7 @@ export function BlogPostForm({ initialData, categories, tags, onSuccess, onCance
       }
       onSuccess();
     } catch (err) {
-      alert(toErrorMessage(err));
+      setError(toErrorMessage(err));
     } finally {
       setLoading(false);
     }
@@ -86,6 +89,7 @@ export function BlogPostForm({ initialData, categories, tags, onSuccess, onCance
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 py-4 w-full">
+      <ErrorAlert message={error} />
       <div className="grid grid-cols-2 gap-x-6 gap-y-4 w-full">
         <div className="space-y-2 col-span-2">
           <Label>{t("articleTitle")}</Label>

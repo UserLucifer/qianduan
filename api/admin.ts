@@ -23,10 +23,23 @@ import type {
   AdminSettlementOrderQuery,
   AdminSysConfigQueryRequest,
   AdminSysConfigResponse,
+  AdminTeamChildrenQuery,
+  AdminTeamLeaderboardQuery,
+  AdminTeamLeaderboardRow,
+  AdminTeamListQuery,
+  AdminTeamListRow,
+  AdminTeamMemberQuery,
+  AdminTeamMemberRow,
+  AdminTeamOverviewQuery,
+  AdminTeamOverviewResponse,
   AdminTeamRelationQuery,
+  AdminTeamTreeNode,
+  AdminTeamUserSummaryResponse,
   AdminUserQuery,
   AdminUserRow,
   AdminWalletQuery,
+  AdminWalletAdjustRequest,
+  AdminWalletAdjustResponse,
   AdminWalletTransactionQuery,
   AiModelResponse,
   AiModelTranslationRequest,
@@ -114,10 +127,23 @@ export type {
   AdminSettlementOrderQuery,
   AdminSysConfigQueryRequest,
   AdminSysConfigResponse,
+  AdminTeamChildrenQuery,
+  AdminTeamLeaderboardQuery,
+  AdminTeamLeaderboardRow,
+  AdminTeamListQuery,
+  AdminTeamListRow,
+  AdminTeamMemberQuery,
+  AdminTeamMemberRow,
+  AdminTeamOverviewQuery,
+  AdminTeamOverviewResponse,
   AdminTeamRelationQuery,
+  AdminTeamTreeNode,
+  AdminTeamUserSummaryResponse,
   AdminUserQuery,
   AdminUserRow,
   AdminWalletQuery,
+  AdminWalletAdjustRequest,
+  AdminWalletAdjustResponse,
   AdminWalletTransactionQuery,
   ApiDeployOrderResponse as AdminApiDeployOrderResponse,
   BlogCategory,
@@ -248,6 +274,9 @@ export const getAdminWallets = (params: AdminWalletQuery = {}) =>
 export const getAdminWalletByUser = (userId: number) =>
   adminApiGet<UserWallet>(`/api/admin/wallets/${userId}`);
 
+export const adjustAdminWallet = (userId: number, data: AdminWalletAdjustRequest) =>
+  adminApiPost<AdminWalletAdjustResponse, AdminWalletAdjustRequest>(`/api/admin/wallets/${userId}/adjust`, data);
+
 export const getAdminWalletTransactions = (params: AdminWalletTransactionQuery = {}) =>
   adminApiGet<PageResult<WalletTransactionResponse>>("/api/admin/wallet-transactions", { params });
 
@@ -370,6 +399,26 @@ export const getAdminSettlementOrderDetail = (settlementNo: string) =>
 
 export const getAdminTeamRelations = (params: AdminTeamRelationQuery = {}) =>
   adminApiGet<PageResult<UserTeamRelation>>("/api/admin/team/relations", { params });
+
+export const getAdminTeamOverview = (params: AdminTeamOverviewQuery = {}) =>
+  adminApiGet<AdminTeamOverviewResponse>("/api/admin/team/overview", { params });
+
+export const getAdminTeamList = (params: AdminTeamListQuery = {}) =>
+  adminApiGet<PageResult<AdminTeamListRow>>("/api/admin/team/list", { params });
+
+export const getAdminTeamLeaderboard = (params: AdminTeamLeaderboardQuery = {}) =>
+  adminApiGet<PageResult<AdminTeamLeaderboardRow>>("/api/admin/team/leaderboard", { params });
+
+export const getAdminTeamUserSummary = (userId: number) =>
+  adminApiGet<AdminTeamUserSummaryResponse>("/api/admin/team/user-summary", {
+    params: { user_id: userId },
+  });
+
+export const getAdminTeamChildren = (params: AdminTeamChildrenQuery) =>
+  adminApiGet<PageResult<AdminTeamTreeNode>>("/api/admin/team/children", { params });
+
+export const getAdminTeamMembers = (params: AdminTeamMemberQuery) =>
+  adminApiGet<PageResult<AdminTeamMemberRow>>("/api/admin/team/members", { params });
 
 export const getAdminProducts = (params: AdminCatalogQuery = {}) =>
   adminApiGet<PageResult<ProductResponse>>("/api/admin/products", { params });

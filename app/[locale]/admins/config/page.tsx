@@ -172,7 +172,7 @@ function ConfigCard({ item, onSaved }: ConfigCardProps) {
         </div>
       )}
 
-      {error && <p className="text-xs text-destructive">{error}</p>}
+      <ErrorAlert message={error} />
 
       {/* Footer */}
       <div className="text-[11px] text-muted-foreground/60 border-t border-border/50 pt-2">

@@ -16,6 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toErrorMessage } from "@/lib/format";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 export default function AdminLoginPage() {
   const t = useTranslations("AdminPages.login");
@@ -77,9 +78,7 @@ export default function AdminLoginPage() {
                       required
                     />
                   </div>
-                  {error ? (
-                    <p className="text-sm text-destructive">{error}</p>
-                  ) : null}
+                  <ErrorAlert message={error} />
                   <Button type="submit" className="w-full" disabled={isLoading}>
                     {isLoading ? t("signingIn") : t("login")}
                   </Button>

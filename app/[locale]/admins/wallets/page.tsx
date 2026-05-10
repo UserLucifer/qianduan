@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { ChevronRight, Eye, Loader2, Search } from "lucide-react";
+import { ChevronRight, Eye, HandCoins, Loader2, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -18,15 +19,26 @@ import { DateTimeText } from "@/components/shared/DateTimeText";
 import { usePaginatedResource } from "@/hooks/usePaginatedResource";
 import { getAdminWalletByUser, getAdminWalletTransactions, getAdminWallets } from "@/api/admin";
 import type { AdminWalletQuery, AdminWalletTransactionQuery, UserWallet, WalletTransactionResponse } from "@/api/types";
+import { Link } from "@/i18n/navigation";
 import { bizTypeLabel, txTypeLabel } from "@/lib/status";
 import { formatEmpty, toErrorMessage } from "@/lib/format";
 import { ErrorAlert } from "@/components/shared/ErrorAlert";
 import { cn } from "@/lib/utils";
-import { WalletTransactionType } from "@/types/enums";
+import { WalletBusinessType, WalletTransactionType } from "@/types/enums";
 
 const walletInitial: AdminWalletQuery = { pageNo: 1, pageSize: 10 };
 const txInitial: AdminWalletTransactionQuery = { pageNo: 1, pageSize: 10 };
 const ALL_VALUE = "ALL";
+
+const parseQueryUserId = (value: string | null) => {
+  const next = Number(value);
+  return Number.isFinite(next) && next > 0 ? next : undefined;
+};
+
+const parseQueryBizType = (value: string | null) => {
+  if (!value) return ALL_VALUE;
+  return Object.values(WalletBusinessType).includes(value as WalletBusinessType) ? value : ALL_VALUE;
+};
 
 const formatLocalDateStart = (date: Date) => {
   const year = date.getFullYear();
@@ -132,10 +144,23 @@ export default function AdminWalletsPage() {
   const t = useTranslations("AdminPages.wallets");
   const tableT = useTranslations("DataTable");
   const statusT = useTranslations("Status");
+  const searchParams = useSearchParams();
+  const queryUserId = useMemo(() => parseQueryUserId(searchParams.get("user_id")), [searchParams]);
+  const queryBizType = useMemo(() => parseQueryBizType(searchParams.get("biz_type")), [searchParams]);
+  const walletInitialParams = useMemo<AdminWalletQuery>(() => ({
+    ...walletInitial,
+    user_id: queryUserId,
+  }), [queryUserId]);
+  const txInitialParams = useMemo<AdminWalletTransactionQuery>(() => ({
+    ...txInitial,
+    user_id: queryUserId,
+    biz_type: queryBizType === ALL_VALUE ? undefined : queryBizType,
+  }), [queryUserId, queryBizType]);
   const [walletKeyword, setWalletKeyword] = useState("");
   const [walletNo, setWalletNo] = useState("");
   const [txKeyword, setTxKeyword] = useState("");
   const [txType, setTxType] = useState(ALL_VALUE);
+  const [txBizType, setTxBizType] = useState(queryBizType);
   const [txDateRange, setTxDateRange] = useState(ALL_VALUE);
   const [detail, setDetail] = useState<UserWallet | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
@@ -147,25 +172,29 @@ export default function AdminWalletsPage() {
 
   const walletLoader = useCallback(async (params: AdminWalletQuery) => (await getAdminWallets(params)).data, []);
   const txLoader = useCallback(async (params: AdminWalletTransactionQuery) => (await getAdminWalletTransactions(params)).data, []);
-  const wallets = usePaginatedResource(walletLoader, walletInitial);
-  const txs = usePaginatedResource(txLoader, txInitial);
+  const wallets = usePaginatedResource(walletLoader, walletInitialParams);
+  const txs = usePaginatedResource(txLoader, txInitialParams);
 
   const walletQuery = (keyword: string, nextWalletNo: string, pageNo = 1): AdminWalletQuery => ({
     pageNo,
     pageSize: wallets.page.pageSize,
     keyword: keyword.trim() || undefined,
+    user_id: queryUserId,
     wallet_no: nextWalletNo.trim() || undefined,
   });
   const txQuery = (
     keyword: string,
     type: string,
+    bizType: string,
     dateRange: string,
     pageNo = 1,
   ): AdminWalletTransactionQuery => ({
     pageNo,
     pageSize: txs.page.pageSize,
     keyword: keyword.trim() || undefined,
+    user_id: queryUserId,
     tx_type: type === ALL_VALUE ? undefined : type,
+    biz_type: bizType === ALL_VALUE ? undefined : bizType,
     start_time: getStartTimeByDateRange(dateRange),
   });
 
@@ -180,7 +209,7 @@ export default function AdminWalletsPage() {
     }, 300);
 
     return () => window.clearTimeout(timer);
-  }, [walletKeyword, walletNo, wallets.page.pageSize]);
+  }, [queryUserId, walletKeyword, walletNo, wallets.page.pageSize]);
 
   useEffect(() => {
     if (!txFiltersInitialized.current) {
@@ -189,11 +218,11 @@ export default function AdminWalletsPage() {
     }
 
     const timer = window.setTimeout(() => {
-      txs.updateParams(txQuery(txKeyword, txType, txDateRange));
+      txs.updateParams(txQuery(txKeyword, txType, txBizType, txDateRange));
     }, 300);
 
     return () => window.clearTimeout(timer);
-  }, [txKeyword, txType, txDateRange, txs.page.pageSize]);
+  }, [queryUserId, txKeyword, txType, txBizType, txDateRange, txs.page.pageSize]);
 
   const openWalletDetail = async (wallet: UserWallet) => {
     setActionError(null);
@@ -216,10 +245,18 @@ export default function AdminWalletsPage() {
       key: "actions",
       title: t("actions"),
       render: (row) => (
-        <Button variant="ghost" size="sm" className="font-medium" onClick={() => void openWalletDetail(row)}>
-          <Eye className="h-4 w-4" />
-          {t("details")}
-        </Button>
+        <div className="flex flex-wrap items-center gap-2">
+          <Button variant="ghost" size="sm" className="font-medium" onClick={() => void openWalletDetail(row)}>
+            <Eye className="h-4 w-4" />
+            {t("details")}
+          </Button>
+          <Button asChild variant="ghost" size="sm" className="font-medium">
+            <Link href={`/admins/wallet-adjust?user_id=${row.userId}`}>
+              <HandCoins className="h-4 w-4" />
+              {t("manualAdjust")}
+            </Link>
+          </Button>
+        </div>
       ),
     },
   ];
@@ -310,7 +347,7 @@ export default function AdminWalletsPage() {
         <PageHeader eyebrow="WALLET OPS" title={t("walletManagement")} description={t("reviewUserWalletBalancesFrozenAmountsAndPlatformFundTransactions")} />
         <ErrorAlert message={actionError ?? wallets.error ?? txs.error} />
 
-        <Tabs defaultValue="wallets" className="space-y-4">
+        <Tabs defaultValue={queryUserId || queryBizType !== ALL_VALUE ? "transactions" : "wallets"} className="space-y-4">
           <TabsList className="border border-border bg-muted/40">
             <TabsTrigger value="wallets">{t("userWallets")}</TabsTrigger>
             <TabsTrigger value="transactions">{t("fundTransactions")}</TabsTrigger>
@@ -369,6 +406,23 @@ export default function AdminWalletsPage() {
                     className="h-10 pl-9 border-border bg-card text-xs font-medium focus-visible:ring-1 focus-visible:ring-primary"
                   />
                 </div>
+                <Select
+                  value={txBizType}
+                  onValueChange={setTxBizType}
+                >
+                  <SelectTrigger className="h-10 w-[150px] bg-card border-border text-xs font-medium">
+                    <SelectValue placeholder={t("allBusinessTypes")} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={ALL_VALUE}>{t("allBusinessTypes")}</SelectItem>
+                    <SelectItem value={WalletBusinessType.RECHARGE}>{t("topUp")}</SelectItem>
+                    <SelectItem value={WalletBusinessType.WITHDRAW}>{t("withdrawal")}</SelectItem>
+                    <SelectItem value={WalletBusinessType.RENT_PAY}>{t("orderPayment")}</SelectItem>
+                    <SelectItem value={WalletBusinessType.RENT_PROFIT}>{t("orderEarnings")}</SelectItem>
+                    <SelectItem value={WalletBusinessType.COMMISSION_PROFIT}>{t("referralCommission")}</SelectItem>
+                    <SelectItem value={WalletBusinessType.ADJUST}>{t("manualAdjust")}</SelectItem>
+                  </SelectContent>
+                </Select>
                 <Select
                   value={txDateRange}
                   onValueChange={setTxDateRange}

@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import {
-  AlertCircle,
   ArrowLeft,
   CheckCircle2,
   ClipboardCheck,
@@ -686,12 +685,7 @@ function WithdrawReviewWorkspace({
               </div>
             ) : null}
 
-            {actionError ? (
-              <div className="flex gap-2 rounded-lg border border-rose-500/20 bg-rose-500/10 p-3 text-sm text-rose-500">
-                <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
-                <span>{actionError}</span>
-              </div>
-            ) : null}
+            <ErrorAlert message={actionError} />
           </CardContent>
         </Card>
       </div>
