@@ -1,12 +1,20 @@
 "use client";
 
-import { Suspense, useCallback, useState } from "react";
+import { Suspense, useCallback, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Eye, PackageOpen, PlayCircle, ReceiptText } from "lucide-react";
+import { CheckCircle2, Eye, History, Loader2, PackageOpen, PlayCircle, ReceiptText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { ConfirmActionButton } from "@/components/shared/ConfirmActionButton";
 import { CopyableSecret } from "@/components/shared/CopyableSecret";
 import { DataTable, type DataTableColumn } from "@/components/shared/DataTable";
@@ -15,10 +23,10 @@ import { DetailDrawer, type DetailSectionDef } from "@/components/shared/DetailD
 import { MoneyText } from "@/components/shared/MoneyText";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { StatusBadge } from "@/components/shared/StatusBadge";
-import { getRentalApiManagement, getRentalDeployInfo, payDeployFee, startOrder } from "@/api/rental";
-import type { ApiDeployInfoResponse, PageResult, RentalOrderQueryRequest } from "@/api/types";
+import { getRentalApiManagement, getRentalDeployInfo, getRentalOrderDetail, payDeployFee, settleEarly, startOrder } from "@/api/rental";
+import type { ApiDeployInfoResponse, PageResult, RentalOrderDetailResponse, RentalOrderQueryRequest, SettlementOrderResponse } from "@/api/types";
 import { usePaginatedResource } from "@/hooks/usePaginatedResource";
-import { formatEmpty } from "@/lib/format";
+import { formatEmpty, formatPercent } from "@/lib/format";
 import { ErrorAlert } from "@/components/shared/ErrorAlert";
 import { ApiDeployOrderStatus, ApiTokenStatus, RentalOrderStatus } from "@/types/enums";
 
@@ -75,6 +83,11 @@ function DashboardApiContent() {
   }, []);
   const { page, loading, error, changePage, reload } = usePaginatedResource(loader, scopedInitialParams);
   const [detail, setDetail] = useState<ApiDeployInfoResponse | null>(null);
+  const [settlementTarget, setSettlementTarget] = useState<ApiDeployInfoResponse | null>(null);
+  const [settlementPreview, setSettlementPreview] = useState<RentalOrderDetailResponse | null>(null);
+  const [settlementResult, setSettlementResult] = useState<SettlementOrderResponse | null>(null);
+  const [settlementLoading, setSettlementLoading] = useState(false);
+  const [settlementSubmitting, setSettlementSubmitting] = useState(false);
 
   const openDeployInfo = async (orderNo: string) => {
     try {
@@ -111,15 +124,57 @@ function DashboardApiContent() {
     }
   };
 
+  const openEarlySettlement = async (row: ApiDeployInfoResponse) => {
+    setSettlementTarget(row);
+    setSettlementPreview(null);
+    setSettlementResult(null);
+    setSettlementLoading(true);
+    try {
+      const res = await getRentalOrderDetail(row.orderNo);
+      setSettlementPreview(res.data);
+    } catch {
+      setSettlementTarget(null);
+    } finally {
+      setSettlementLoading(false);
+    }
+  };
+
+  const closeEarlySettlement = () => {
+    if (settlementLoading || settlementSubmitting) return;
+    setSettlementTarget(null);
+    setSettlementPreview(null);
+    setSettlementResult(null);
+  };
+
+  const confirmEarlySettlement = async () => {
+    if (!settlementPreview) return;
+    setSettlementSubmitting(true);
+    try {
+      const res = await settleEarly(settlementPreview.orderNo);
+      setSettlementResult(res.data);
+      await reload();
+      if (detail?.orderNo === settlementPreview.orderNo) {
+        const next = await getRentalDeployInfo(settlementPreview.orderNo);
+        setDetail(next.data);
+      }
+    } catch {
+      // API errors are surfaced by the request interceptor.
+    } finally {
+      setSettlementSubmitting(false);
+    }
+  };
+
   const columns: DataTableColumn<ApiDeployInfoResponse>[] = [
     { key: "orderNo", title: t("columns.order"), render: (row) => <span className="font-mono text-xs">{row.orderNo}</span> },
+
     {
       key: "apiName",
       title: t("columns.credential"),
       render: (row) => (
-        <div>
+        <div className="space-y-1">
           <div className="font-medium text-foreground">{formatEmpty(row.apiName)}</div>
-          <div className="font-mono text-xs text-muted-foreground">{formatEmpty(row.credentialNo)}</div>
+
+          <CopyableSecret value={row.tokenMasked} maskedValue={row.tokenMasked} canReveal={false} className="max-w-[180px]" />
         </div>
       ),
     },
@@ -139,6 +194,7 @@ function DashboardApiContent() {
         </div>
       ),
     },
+    { key: "tokenStatus", title: t("columns.tokenStatus"), render: (row) => <StatusBadge status={row.tokenStatus} /> },
     { key: "paidAt", title: t("columns.paidAt"), render: (row) => <DateTimeText value={row.paidAt} /> },
     {
       key: "actions",
@@ -157,6 +213,18 @@ function DashboardApiContent() {
             <Button variant="default" size="sm" className="gap-1.5" onClick={() => void startAsset(row.orderNo)}>
               <PlayCircle className="h-3.5 w-3.5" />
               {t("actions.startButton")}
+            </Button>
+          ) : null}
+          {(getApiStage(row) === "RUNNING" || getApiStage(row) === "READY_TO_START") ? (
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-1.5 border-destructive/30 text-destructive hover:bg-destructive/10 hover:text-destructive"
+              title={t("actions.settleHint")}
+              onClick={() => void openEarlySettlement(row)}
+            >
+              <History className="h-3.5 w-3.5" />
+              {t("actions.settleEarly")}
             </Button>
           ) : null}
         </div>
@@ -196,6 +264,15 @@ function DashboardApiContent() {
       <DataTable columns={columns} data={page.records} rowKey={(row) => row.orderNo} loading={loading} emptyText={t("empty")} pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
       <div className="rounded-lg border border-border bg-muted/40 p-4 text-sm leading-6 text-muted-foreground">
         {t("info")}</div>
+      <EarlySettlementDialog
+        open={Boolean(settlementTarget)}
+        preview={settlementPreview}
+        result={settlementResult}
+        loading={settlementLoading}
+        submitting={settlementSubmitting}
+        onClose={closeEarlySettlement}
+        onConfirm={confirmEarlySettlement}
+      />
       <DetailDrawer
         data={detail}
         open={Boolean(detail)}
@@ -217,6 +294,103 @@ function DashboardApiContent() {
       </DetailDrawer>
     </div>
   );
+}
+
+function EarlySettlementDialog({
+  open,
+  preview,
+  result,
+  loading,
+  submitting,
+  onClose,
+  onConfirm,
+}: {
+  open: boolean;
+  preview: RentalOrderDetailResponse | null;
+  result: SettlementOrderResponse | null;
+  loading: boolean;
+  submitting: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+}) {
+  const t = useTranslations("DashboardApi.earlySettlement");
+  const principalAmount = preview?.orderAmount ?? 0;
+  const penaltyRate = preview?.earlyPenaltyRateSnapshot ?? 0;
+  const penaltyAmount = principalAmount * penaltyRate / 100;
+  const estimatedRefundAmount = Math.max(0, principalAmount - penaltyAmount);
+  const currency = preview?.currency ?? result?.currency ?? "USDT";
+
+  return (
+    <Dialog open={open} onOpenChange={(nextOpen) => { if (!nextOpen) onClose(); }}>
+      <DialogContent className="sm:max-w-[540px]">
+        {result ? (
+          <>
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+                {t("successTitle")}
+              </DialogTitle>
+              <DialogDescription>
+                {t("successDescription", { amount: formatMoneyForMessage(result.actualSettleAmount, result.currency) })}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-3 rounded-lg border bg-muted/30 p-4 text-sm">
+              <SettlementInfoRow label={t("settlementNo")} value={<span className="font-mono">{result.settlementNo}</span>} />
+              <SettlementInfoRow label={t("actualRefund")} value={<MoneyText value={result.actualSettleAmount} currency={result.currency} />} />
+              <SettlementInfoRow label={t("penaltyAmount")} value={<MoneyText value={result.penaltyAmount} currency={result.currency} />} />
+              <SettlementInfoRow label={t("walletTxNo")} value={formatEmpty(result.walletTxNo)} />
+            </div>
+            <DialogFooter>
+              <Button onClick={onClose}>{t("close")}</Button>
+            </DialogFooter>
+          </>
+        ) : (
+          <>
+            <DialogHeader>
+              <DialogTitle>{t("title")}</DialogTitle>
+              <DialogDescription>{t("description")}</DialogDescription>
+            </DialogHeader>
+            {loading || !preview ? (
+              <div className="flex h-40 items-center justify-center text-sm text-muted-foreground">
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                {t("loading")}
+              </div>
+            ) : (
+              <div className="grid gap-3 rounded-lg border bg-muted/30 p-4 text-sm">
+                <SettlementInfoRow label={t("principalAmount")} value={<MoneyText value={principalAmount} currency={currency} />} />
+                <SettlementInfoRow label={t("penaltyRate")} value={formatPercent(penaltyRate)} />
+                <SettlementInfoRow label={t("penaltyAmount")} value={<MoneyText value={penaltyAmount} currency={currency} />} />
+                <SettlementInfoRow label={t("estimatedRefund")} value={<MoneyText value={estimatedRefundAmount} currency={currency} />} />
+                <SettlementInfoRow label={t("deployFee")} value={t("nonRefundable")} />
+              </div>
+            )}
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={onClose} disabled={loading || submitting}>
+                {t("cancel")}
+              </Button>
+              <Button type="button" variant="destructive" onClick={onConfirm} disabled={loading || submitting || !preview}>
+                {submitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <History className="mr-2 h-4 w-4" />}
+                {t("confirm")}
+              </Button>
+            </DialogFooter>
+          </>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function SettlementInfoRow({ label, value }: { label: string; value: ReactNode }) {
+  return (
+    <div className="flex items-center justify-between gap-4">
+      <span className="text-muted-foreground">{label}</span>
+      <span className="text-right font-medium text-foreground">{value}</span>
+    </div>
+  );
+}
+
+function formatMoneyForMessage(value: number, currency: string) {
+  return `${Number(value || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ${currency}`;
 }
 
 function ApiStageCell({ row }: { row: ApiDeployInfoResponse }) {

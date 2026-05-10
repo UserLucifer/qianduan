@@ -1,16 +1,15 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { Eye } from "lucide-react";
+import { Eye, Search } from "lucide-react";
 import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PageHeader } from "@/components/shared/PageHeader";
-import { SearchPanel } from "@/components/shared/SearchPanel";
 import { DataTable, type DataTableColumn } from "@/components/shared/DataTable";
 import { DetailDrawer, type DetailSectionDef } from "@/components/shared/DetailDrawer";
 import { StatusBadge } from "@/components/shared/StatusBadge";
@@ -24,16 +23,23 @@ import { formatDate, formatEmpty, toErrorMessage } from "@/lib/format";
 import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 interface ProfitFilters {
-  userId: string;
+  keyword: string;
   orderNo: string;
   status: string;
-  profitDate: string;
-  startTime: string;
-  endTime: string;
+  dateRange: string;
 }
 
-const initialFilters: ProfitFilters = { userId: "", orderNo: "", status: "", profitDate: "", startTime: "", endTime: "" };
+const ALL_STATUS = "ALL";
+const ALL_TIME = "ALL";
+const initialFilters: ProfitFilters = { keyword: "", orderNo: "", status: ALL_STATUS, dateRange: ALL_TIME };
 const initialQuery: AdminProfitRecordQuery = { pageNo: 1, pageSize: 10 };
+
+function formatStartOfDay(date: Date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day} 00:00:00`;
+}
 
 export default function AdminProfitsPage() {
   const t = useTranslations("AdminPages.profits");
@@ -42,20 +48,56 @@ export default function AdminProfitsPage() {
   const [detail, setDetail] = useState<ProfitRecordResponse | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
+  const queryTimer = useRef<number | null>(null);
 
   const loader = useCallback(async (params: AdminProfitRecordQuery) => (await getAdminProfitRecords(params)).data, []);
   const { page, loading, error, updateParams, changePage } = usePaginatedResource(loader, initialQuery);
 
-  const buildQuery = (nextFilters: ProfitFilters): AdminProfitRecordQuery => ({
-    pageNo: 1,
-    pageSize: page.pageSize,
-    user_id: nextFilters.userId ? Number(nextFilters.userId) : undefined,
-    order_no: nextFilters.orderNo || undefined,
-    status: nextFilters.status || undefined,
-    profit_date: nextFilters.profitDate || undefined,
-    start_time: nextFilters.startTime || undefined,
-    end_time: nextFilters.endTime || undefined,
-  });
+  const buildQuery = useCallback((nextFilters: ProfitFilters): AdminProfitRecordQuery => {
+    let startTime: string | undefined = undefined;
+    if (nextFilters.dateRange !== ALL_TIME) {
+      const d = new Date();
+      const days = Number(nextFilters.dateRange);
+      if (Number.isFinite(days)) {
+        d.setDate(d.getDate() - days);
+        startTime = formatStartOfDay(d);
+      }
+    }
+
+    return {
+      pageNo: 1,
+      pageSize: page.pageSize,
+      keyword: nextFilters.keyword.trim() || undefined,
+      order_no: nextFilters.orderNo.trim() || undefined,
+      status: nextFilters.status === ALL_STATUS ? undefined : nextFilters.status || undefined,
+      start_time: startTime,
+    };
+  }, [page.pageSize]);
+
+  const applyFilters = useCallback((nextFilters: ProfitFilters, delay = 0) => {
+    if (queryTimer.current) {
+      window.clearTimeout(queryTimer.current);
+      queryTimer.current = null;
+    }
+
+    if (delay <= 0) {
+      updateParams(buildQuery(nextFilters));
+      return;
+    }
+
+    queryTimer.current = window.setTimeout(() => {
+      updateParams(buildQuery(nextFilters));
+      queryTimer.current = null;
+    }, delay);
+  }, [buildQuery, updateParams]);
+
+  useEffect(() => {
+    return () => {
+      if (queryTimer.current) {
+        window.clearTimeout(queryTimer.current);
+      }
+    };
+  }, []);
 
   const trendData = useMemo(() => {
     const bucket = new Map<string, number>();
@@ -133,7 +175,7 @@ export default function AdminProfitsPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader eyebrow="PROFIT OPS" title={t("earningsRecordManagement")} description={t("reviewUserRentalEarningsEarningStatusAndLinkedSettlementTransactions")} />
+      <PageHeader eyebrow={t("headerEyebrow")} title={t("earningsRecordManagement")} description={t("reviewUserRentalEarningsEarningStatusAndLinkedSettlementTransactions")} />
       <ErrorAlert message={actionError ?? error} />
       <Card>
         <CardHeader>
@@ -152,49 +194,83 @@ export default function AdminProfitsPage() {
           ) : null}
         </CardContent>
       </Card>
-      <SearchPanel
-        onSearch={() => updateParams(buildQuery(filters))}
-        onReset={() => {
-          setFilters(initialFilters);
-          updateParams(initialQuery);
-        }}
-      >
-        <div className="space-y-2">
-          <Label htmlFor="userId">{t("userID")}</Label>
-          <Input id="userId" placeholder={t("enterID")} value={filters.userId} onChange={(event) => setFilters((current) => ({ ...current, userId: event.target.value }))} className="h-9 w-[100px] bg-background text-foreground" />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="orderNo">{t("orderNo")}</Label>
-          <Input id="orderNo" placeholder={t("enterOrderNumber")} value={filters.orderNo} onChange={(event) => setFilters((current) => ({ ...current, orderNo: event.target.value }))} className="h-9 w-[180px] bg-background text-foreground" />
-        </div>
-        <div className="space-y-2">
-          <Label>{t("earningsStatus")}</Label>
-          <Select value={filters.status} onValueChange={(val) => setFilters((current) => ({ ...current, status: val }))}>
-            <SelectTrigger className="h-9 w-[130px] bg-background text-foreground">
-              <SelectValue placeholder={t("allStatuses")} />
+      <div className="flex flex-col gap-4 border-b border-border pb-4 lg:flex-row lg:items-center lg:justify-between">
+        <Tabs
+          value={filters.status}
+          onValueChange={(value) => {
+            const nextFilters = { ...filters, status: value };
+            setFilters(nextFilters);
+            applyFilters(nextFilters);
+          }}
+          className="w-full lg:w-auto overflow-x-auto"
+        >
+          <TabsList className="inline-flex h-10 items-center justify-center rounded-lg bg-muted/50 p-1 text-muted-foreground border border-border/50">
+            <TabsTrigger value={ALL_STATUS} className="rounded-md px-4 py-1.5 text-xs font-semibold transition-all data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm whitespace-nowrap">
+              {t("allStatuses")}
+            </TabsTrigger>
+            <TabsTrigger value="PENDING" className="rounded-md px-4 py-1.5 text-xs font-semibold transition-all data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm whitespace-nowrap">
+              {t("pending")}
+            </TabsTrigger>
+            <TabsTrigger value="SETTLING" className="rounded-md px-4 py-1.5 text-xs font-semibold transition-all data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm whitespace-nowrap">
+              {t("settling")}
+            </TabsTrigger>
+            <TabsTrigger value="SETTLED" className="rounded-md px-4 py-1.5 text-xs font-semibold transition-all data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm whitespace-nowrap">
+              {t("settled")}
+            </TabsTrigger>
+            <TabsTrigger value="FAILED" className="rounded-md px-4 py-1.5 text-xs font-semibold transition-all data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm whitespace-nowrap">
+              {t("invalid")}
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="relative w-full sm:w-[220px]">
+            <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              placeholder={t("searchEmailOrUsername")}
+              value={filters.keyword}
+              onChange={(event) => {
+                const nextFilters = { ...filters, keyword: event.target.value };
+                setFilters(nextFilters);
+                applyFilters(nextFilters, 300);
+              }}
+              className="h-10 pl-9 border-border bg-card text-xs font-medium focus-visible:ring-1 focus-visible:ring-primary"
+            />
+          </div>
+
+          <div className="relative w-full sm:w-[180px]">
+            <Input
+              placeholder={t("enterOrderNumber")}
+              value={filters.orderNo}
+              onChange={(event) => {
+                const nextFilters = { ...filters, orderNo: event.target.value };
+                setFilters(nextFilters);
+                applyFilters(nextFilters, 300);
+              }}
+              className="h-10 border-border bg-card text-xs font-medium focus-visible:ring-1 focus-visible:ring-primary"
+            />
+          </div>
+
+          <Select
+            value={filters.dateRange}
+            onValueChange={(value) => {
+              const nextFilters = { ...filters, dateRange: value };
+              setFilters(nextFilters);
+              applyFilters(nextFilters);
+            }}
+          >
+            <SelectTrigger className="h-10 w-[120px] bg-card border-border text-xs font-medium">
+              <SelectValue placeholder={t("allTime")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value=" ">{t("allStatuses")}</SelectItem>
-              <SelectItem value="PENDING">{t("pending")}</SelectItem>
-              <SelectItem value="SETTLING">{t("settling")}</SelectItem>
-              <SelectItem value="SETTLED">{t("settled")}</SelectItem>
-              <SelectItem value="FAILED">{t("invalid")}</SelectItem>
+              <SelectItem value={ALL_TIME}>{t("allTime")}</SelectItem>
+              <SelectItem value="3">{t("last3Days")}</SelectItem>
+              <SelectItem value="7">{t("last7Days")}</SelectItem>
+              <SelectItem value="30">{t("last30Days")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
-        <div className="space-y-2">
-          <Label>{t("earningsDate")}</Label>
-          <Input type="date" value={filters.profitDate} onChange={(event) => setFilters((current) => ({ ...current, profitDate: event.target.value }))} className="h-9 w-[150px] bg-background text-foreground" />
-        </div>
-        <div className="space-y-2">
-          <Label>{t("startTime")}</Label>
-          <Input type="date" value={filters.startTime} onChange={(event) => setFilters((current) => ({ ...current, startTime: event.target.value }))} className="h-9 w-[150px] bg-background text-foreground" />
-        </div>
-        <div className="space-y-2">
-          <Label>{t("endTime")}</Label>
-          <Input type="date" value={filters.endTime} onChange={(event) => setFilters((current) => ({ ...current, endTime: event.target.value }))} className="h-9 w-[150px] bg-background text-foreground" />
-        </div>
-      </SearchPanel>
+      </div>
       <DataTable columns={columns} data={page.records} rowKey={(row) => row.profitNo} loading={loading} emptyText={t("noEarningsRecordsYet")} pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
       <DetailDrawer data={detail} open={detailOpen} title={t("earningsRecordDetails")} subtitle={(data) => data.profitNo} sections={detailSections} onClose={() => setDetailOpen(false)} />
     </div>

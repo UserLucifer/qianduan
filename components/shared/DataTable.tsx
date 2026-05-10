@@ -92,7 +92,7 @@ export function DataTable<T extends object>({
       ref={parentRef}
       className={cn(
         "rounded-xl border bg-card text-card-foreground shadow-sm",
-        isVirtual ? "max-h-[800px] overflow-y-auto" : "overflow-hidden"
+        isVirtual ? "max-h-[800px] overflow-auto" : "overflow-x-auto"
       )}
     >
       <Table>

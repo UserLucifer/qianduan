@@ -48,7 +48,7 @@ export default function AdminCommissionsPage() {
     pageSize: page.pageSize,
     user_id: nextFilters.userId ? Number(nextFilters.userId) : undefined,
     order_no: nextFilters.orderNo || undefined,
-    level_no: nextFilters.levelNo ? Number(nextFilters.levelNo) : undefined,
+    level_no: nextFilters.levelNo && nextFilters.levelNo !== "ALL" ? Number(nextFilters.levelNo) : undefined,
     status: nextFilters.status || undefined,
     start_time: nextFilters.startTime || undefined,
     end_time: nextFilters.endTime || undefined,
@@ -141,10 +141,9 @@ export default function AdminCommissionsPage() {
               <SelectValue placeholder={t("allLevels")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value=" ">{t("allLevels")}</SelectItem>
+              <SelectItem value="ALL">{t("allLevels")}</SelectItem>
               <SelectItem value="1">{t("level1")}</SelectItem>
               <SelectItem value="2">{t("level2")}</SelectItem>
-              <SelectItem value="3">{t("level3")}</SelectItem>
             </SelectContent>
           </Select>
         </div>

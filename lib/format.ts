@@ -30,10 +30,12 @@ export function formatMoney(
   const currency = options.currency ?? "USDT";
   const amount = Number.isFinite(value) ? Number(value) : 0;
   const sign = options.signed && amount > 0 ? "+" : "";
-  return `${sign}${amount.toLocaleString(resolveFormatLocale(options.locale), {
+  const formattedAmount = amount.toLocaleString(resolveFormatLocale(options.locale), {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-  })} ${currency}`;
+  });
+  if (currency === "$") return `${sign}$${formattedAmount}`;
+  return `${sign}${formattedAmount} ${currency}`;
 }
 
 export function formatNumber(value: number | null | undefined, locale?: string): string {

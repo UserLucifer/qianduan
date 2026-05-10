@@ -1,21 +1,21 @@
 "use client";
 
-import { Suspense, useCallback, useState } from "react";
+import { Suspense, useCallback, useState, useEffect } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import {
   Loader2,
   Zap,
-  XCircle,
   Wallet,
   CheckCircle2,
   MoreHorizontal,
-  LayoutDashboard,
   History,
   Info,
+  ReceiptText,
   PlayCircle,
-  ReceiptText
+  LayoutDashboard,
+  XCircle
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -195,6 +195,36 @@ function DashboardOrdersContent() {
     }
   };
 
+  const renderProfitCycle = (order: RentalOrderSummaryResponse) => {
+    if (order.orderStatus === RentalOrderStatus.CANCELED) {
+      return <div className="text-[10px] text-muted-foreground/70">{t("cycleNotStarted")}</div>;
+    }
+
+    if (order.profitStartAt || order.profitEndAt) {
+      return (
+        <div className="space-y-0.5 text-[10px] text-muted-foreground/70">
+          <div>{t("cycleStart")}<DateTimeText value={order.profitStartAt} className="text-[10px] text-muted-foreground/70" /></div>
+          <div>{t("cycleEnd")}<DateTimeText value={order.profitEndAt} className="text-[10px] text-muted-foreground/70" /></div>
+        </div>
+      );
+    }
+
+    return <div className="text-[10px] text-muted-foreground/70">{t("cycleStartsAfterDeploymentPay")}</div>;
+  };
+
+  const [hasAutoOpened, setHasAutoOpened] = useState(false);
+
+  // 1. Auto-open detail if orderNo is in URL (only once)
+  useEffect(() => {
+    if (focusedOrderNo && page.records.length > 0 && !loading && !hasAutoOpened) {
+      const found = page.records.find(r => r.orderNo === focusedOrderNo);
+      if (found) {
+        openDetail(found.orderNo);
+        setHasAutoOpened(true);
+      }
+    }
+  }, [focusedOrderNo, page.records, loading, hasAutoOpened]);
+
   const detailSections: DetailSectionDef<RentalOrderDetailResponse>[] = [
     {
       title: t("detail.lifecycle"),
@@ -235,143 +265,221 @@ function DashboardOrdersContent() {
         description={t("header.description")}
       />
 
-      <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-        <TabsList className="bg-transparent h-auto p-0 gap-8 border-b rounded-none w-full justify-start overflow-x-auto no-scrollbar">
-          {orderTabs.map((v) => (
-            <TabsTrigger 
-              key={v} 
-              value={v} 
-              className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-2 pb-3 font-bold text-muted-foreground data-[state=active]:text-foreground transition-all uppercase text-[11px] tracking-widest"
-            >
-              {t(`tabs.${v}`)}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-      </Tabs>
+      <div className="flex flex-col gap-4 border-b border-border pb-4 md:flex-row md:items-center md:justify-between">
+        <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full md:w-auto overflow-x-auto">
+          <TabsList className="inline-flex h-10 items-center justify-center rounded-lg bg-muted/50 p-1 text-muted-foreground border border-border/50">
+            {orderTabs.map((v) => (
+              <TabsTrigger
+                key={v}
+                value={v}
+                className="rounded-md px-4 py-1.5 text-xs font-semibold transition-all data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm whitespace-nowrap"
+              >
+                {t(`tabs.${v}`)}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
+      </div>
 
-      <div className="rounded-md border border-border bg-card overflow-hidden">
-        <Table>
-          <TableHeader className="bg-muted/30">
-            <TableRow>
-              <TableHead className="w-[200px]">{t("columns.instance")}</TableHead>
-              <TableHead>{t("columns.plan")}</TableHead>
-              <TableHead>{t("columns.status")}</TableHead>
-              <TableHead>{t("columns.cycle")}</TableHead>
-              <TableHead className="text-right">{t("columns.amount")}</TableHead>
-              <TableHead className="w-[80px]"></TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {loading && page.records.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={6} className="h-64 text-center">
-                  <div className="flex flex-col items-center justify-center gap-3">
-                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                    <span className="text-xs text-muted-foreground font-medium">{t("loading")}</span>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ) : page.records.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={6} className="h-64 text-center text-muted-foreground text-sm">
-                  {t("empty")}</TableCell>
-              </TableRow>
-            ) : (
-              page.records.map((order) => (
-                <TableRow
+      <div className="min-h-[400px]">
+        {loading && page.records.length === 0 ? (
+          <div className="flex h-64 flex-col items-center justify-center gap-3">
+            <Loader2 className="h-8 w-8 animate-spin text-primary/60" />
+            <span className="text-sm font-medium text-muted-foreground">{t("loading")}</span>
+          </div>
+        ) : page.records.length === 0 ? (
+          <div className="flex h-64 flex-col items-center justify-center gap-4 rounded-2xl border border-dashed border-border bg-card/30">
+            <div className="rounded-full bg-muted/50 p-4">
+              <ReceiptText className="h-8 w-8 text-muted-foreground/40" />
+            </div>
+            <span className="text-sm font-medium text-muted-foreground">{t("empty")}</span>
+          </div>
+        ) : (
+          <>
+            {/* Desktop Table View */}
+            <div className="hidden md:block rounded-xl border border-border bg-card overflow-hidden shadow-sm">
+              <Table>
+                <TableHeader className="bg-muted/30">
+                  <TableRow className="hover:bg-transparent border-none">
+                    <TableHead className="py-4 font-bold text-xs uppercase tracking-wider">{t("columns.instance")}</TableHead>
+                    <TableHead className="py-4 font-bold text-xs uppercase tracking-wider">{t("columns.plan")}</TableHead>
+                    <TableHead className="py-4 font-bold text-xs uppercase tracking-wider">{t("columns.status")}</TableHead>
+                    <TableHead className="py-4 font-bold text-xs uppercase tracking-wider">{t("columns.cycle")}</TableHead>
+                    <TableHead className="py-4 font-bold text-xs uppercase tracking-wider text-right">{t("columns.amount")}</TableHead>
+                    <TableHead className="w-[100px]"></TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {page.records.map((order) => (
+                    <TableRow
+                      key={order.orderNo}
+                      className={cn(
+                        "group transition-all hover:bg-muted/20 border-border/50",
+                        focusedOrderNo === order.orderNo && "bg-primary/5 ring-1 ring-inset ring-primary/20",
+                      )}
+                    >
+                      <TableCell className="py-4">
+                        <div className="flex flex-col gap-1">
+                          <span className="font-bold text-sm tracking-tight">{order.productNameSnapshot}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex flex-col gap-0.5">
+                          <span className="text-xs font-semibold">{order.aiModelNameSnapshot}</span>
+                          <span className="text-[10px] text-muted-foreground/80">{order.machineAliasSnapshot}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="space-y-1.5">
+                          <OrderStateBadge status={order.orderStatus as RentalOrderStatus} />
+                          <p className="text-[10px] leading-tight text-muted-foreground/60 max-w-[140px]">
+                            {t(`stageHelp.${getAssetStage(order.orderStatus)}`)}
+                          </p>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex flex-col gap-0.5">
+                          <span className="text-xs font-bold">{t("cycleDays", { days: order.cycleDaysSnapshot })}</span>
+                          {renderProfitCycle(order)}
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <MoneyText value={order.orderAmount} className="text-sm font-bold" />
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center justify-end gap-2">
+                          {/* Exposed Primary Actions for UX */}
+                          {order.orderStatus === RentalOrderStatus.PENDING_PAY && (
+                             <Button size="icon" variant="ghost" className="h-8 w-8 text-primary hover:bg-primary/10" onClick={() => openPayment(order)}>
+                               <Zap className="h-4 w-4" />
+                             </Button>
+                          )}
+                          {order.orderStatus === RentalOrderStatus.PAUSED && (
+                             <Button size="icon" variant="ghost" className="h-8 w-8 text-primary hover:bg-primary/10" onClick={() => runAction(() => startOrder(order.orderNo))}>
+                               <PlayCircle className="h-4 w-4" />
+                             </Button>
+                          )}
+
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" size="icon" className="h-8 w-8 opacity-50 group-hover:opacity-100">
+                                <MoreHorizontal className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-48">
+                              <DropdownMenuLabel className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{t("menu.label")}</DropdownMenuLabel>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem onClick={() => openDetail(order.orderNo)}>
+                                <Info className="mr-2 h-4 w-4" /> {t("menu.detail")}</DropdownMenuItem>
+                              {order.orderStatus === RentalOrderStatus.RUNNING && (
+                                <>
+                                  <DropdownMenuItem className="text-primary font-bold">
+                                    <LayoutDashboard className="mr-2 h-4 w-4" /> {t("menu.console")}</DropdownMenuItem>
+                                  <DropdownMenuItem className="text-destructive font-bold" onClick={() => setSettleTarget(order)}>
+                                    <History className="mr-2 h-4 w-4" /> {t("menu.earlyTerminate")}</DropdownMenuItem>
+                                </>
+                              )}
+                              {order.orderStatus === RentalOrderStatus.PAUSED && (
+                                <>
+                                  <DropdownMenuItem className="text-primary font-bold" onClick={() => runAction(() => startOrder(order.orderNo))}>
+                                    <PlayCircle className="mr-2 h-4 w-4" /> {t("menu.startAsset")}</DropdownMenuItem>
+                                  <DropdownMenuItem className="text-destructive font-bold" onClick={() => setSettleTarget(order)}>
+                                    <History className="mr-2 h-4 w-4" /> {t("menu.earlyTerminate")}</DropdownMenuItem>
+                                </>
+                              )}
+                              {order.orderStatus === RentalOrderStatus.PENDING_PAY && (
+                                <>
+                                  <DropdownMenuItem className="bg-primary/10 text-primary font-bold" onClick={() => openPayment(order)}>
+                                    <Zap className="mr-2 h-4 w-4" /> {t("menu.payNow")}</DropdownMenuItem>
+                                  <DropdownMenuItem className="text-destructive font-bold" onClick={() => runAction(() => cancelRentalOrder(order.orderNo))}>
+                                    <XCircle className="mr-2 h-4 w-4" /> {t("menu.cancelOrder")}</DropdownMenuItem>
+                                </>
+                              )}
+                              {order.orderStatus === RentalOrderStatus.PENDING_ACTIVATION && (
+                                <DropdownMenuItem asChild className="text-primary font-bold">
+                                  <Link href={`/dashboard/api?orderNo=${encodeURIComponent(order.orderNo)}`}>
+                                    <ReceiptText className="mr-2 h-4 w-4" /> {t("menu.payDeployFee")}
+                                  </Link>
+                                </DropdownMenuItem>
+                              )}
+                              {getAssetStage(order.orderStatus) === "FINISHED" && (
+                                <DropdownMenuItem asChild>
+                                  <Link href="/dashboard/billing">
+                                    <History className="mr-2 h-4 w-4" /> {t("menu.viewSettlement")}
+                                  </Link>
+                                </DropdownMenuItem>
+                              )}
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+
+            {/* Mobile Card View */}
+            <div className="grid gap-4 md:hidden">
+              {page.records.map((order) => (
+                <div
                   key={order.orderNo}
                   className={cn(
-                    "group hover:bg-muted/30 transition-colors",
-                    focusedOrderNo === order.orderNo && "bg-primary/5 ring-1 ring-inset ring-primary/30",
+                    "flex flex-col gap-4 rounded-2xl border border-border bg-card p-5 shadow-sm transition-all active:scale-[0.98]",
+                    focusedOrderNo === order.orderNo && "ring-2 ring-primary/20 bg-primary/5"
                   )}
+                  onClick={() => openDetail(order.orderNo)}
                 >
-                  <TableCell>
+                  <div className="flex items-start justify-between">
                     <div className="flex flex-col gap-1">
-                      <div className="font-bold text-sm tracking-tight flex items-center gap-2">
-                        {order.productNameSnapshot}
+                      <span className="font-bold text-sm tracking-tight">{order.productNameSnapshot}</span>
+                    </div>
+                    <OrderStateBadge status={order.orderStatus as RentalOrderStatus} />
+                  </div>
+
+                  <div className="space-y-3 border-y border-border/50 py-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground">{t("columns.plan")}</span>
+                      <div className="text-right">
+                        <div className="text-xs font-semibold">{order.aiModelNameSnapshot}</div>
+                        <div className="text-[10px] text-muted-foreground/80">{order.machineAliasSnapshot}</div>
                       </div>
-                      <div className="text-[10px] font-mono text-muted-foreground uppercase">ID: {order.orderNo}</div>
                     </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex flex-col gap-1 text-left">
-                      <div className="text-xs font-semibold">{order.aiModelNameSnapshot}</div>
-                      <div className="text-[10px] text-muted-foreground">{order.machineAliasSnapshot}</div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground">{t("columns.cycle")}</span>
+                      <div className="text-right">
+                        <div className="text-xs font-bold">{t("cycleDays", { days: order.cycleDaysSnapshot })}</div>
+                        {renderProfitCycle(order)}
+                      </div>
                     </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="space-y-1">
-                      <OrderStateBadge status={order.orderStatus as RentalOrderStatus} />
-                      <p className="text-[10px] leading-4 text-muted-foreground">
-                        {t(`stageHelp.${getAssetStage(order.orderStatus)}`)}
-                      </p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground">{t("columns.amount")}</span>
+                      <MoneyText value={order.orderAmount} className="text-sm font-bold" />
                     </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="text-xs font-bold">{t("cycleDays", { days: order.cycleDaysSnapshot })}</div>
-                    <div className="text-[10px] text-muted-foreground"><DateTimeText value={order.createdAt} /></div>
-                  </TableCell>
-                  <TableCell className="text-right font-black">
-                    <MoneyText value={order.orderAmount} />
-                  </TableCell>
-                  <TableCell>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-48">
-                        <DropdownMenuLabel className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{t("menu.label")}</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={() => openDetail(order.orderNo)}>
-                          <Info className="mr-2 h-4 w-4" /> {t("menu.detail")}</DropdownMenuItem>
-                        {order.orderStatus === RentalOrderStatus.RUNNING && (
-                          <>
-                            <DropdownMenuItem className="text-primary font-bold">
-                              <LayoutDashboard className="mr-2 h-4 w-4" /> {t("menu.console")}</DropdownMenuItem>
-                            <DropdownMenuItem className="text-destructive font-bold" onClick={() => setSettleTarget(order)}>
-                              <History className="mr-2 h-4 w-4" /> {t("menu.earlyTerminate")}</DropdownMenuItem>
-                          </>
-                        )}
-                        {order.orderStatus === RentalOrderStatus.PAUSED && (
-                          <>
-                            <DropdownMenuItem className="text-primary font-bold" onClick={() => runAction(() => startOrder(order.orderNo))}>
-                              <PlayCircle className="mr-2 h-4 w-4" /> {t("menu.startAsset")}</DropdownMenuItem>
-                            <DropdownMenuItem className="text-destructive font-bold" onClick={() => setSettleTarget(order)}>
-                              <History className="mr-2 h-4 w-4" /> {t("menu.earlyTerminate")}</DropdownMenuItem>
-                          </>
-                        )}
-                        {order.orderStatus === RentalOrderStatus.PENDING_PAY && (
-                          <>
-                            <DropdownMenuItem className="bg-primary/10 text-primary font-bold" onClick={() => openPayment(order)}>
-                              <Zap className="mr-2 h-4 w-4" /> {t("menu.payNow")}</DropdownMenuItem>
-                            <DropdownMenuItem className="text-destructive font-bold" onClick={() => runAction(() => cancelRentalOrder(order.orderNo))}>
-                              <XCircle className="mr-2 h-4 w-4" /> {t("menu.cancelOrder")}</DropdownMenuItem>
-                          </>
-                        )}
-                        {order.orderStatus === RentalOrderStatus.PENDING_ACTIVATION && (
-                          <DropdownMenuItem asChild className="text-primary font-bold">
-                            <Link href={`/dashboard/api?orderNo=${encodeURIComponent(order.orderNo)}`}>
-                              <ReceiptText className="mr-2 h-4 w-4" /> {t("menu.payDeployFee")}
-                            </Link>
-                          </DropdownMenuItem>
-                        )}
-                        {getAssetStage(order.orderStatus) === "FINISHED" && (
-                          <DropdownMenuItem asChild>
-                            <Link href="/dashboard/billing">
-                              <History className="mr-2 h-4 w-4" /> {t("menu.viewSettlement")}
-                            </Link>
-                          </DropdownMenuItem>
-                        )}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
+                  </div>
+
+
+
+                  <div className="flex items-center gap-2">
+                    {order.orderStatus === RentalOrderStatus.PENDING_PAY && (
+                      <Button className="flex-1 text-xs font-bold" size="sm" onClick={(e) => { e.stopPropagation(); openPayment(order); }}>
+                        <Zap className="mr-2 h-3 w-3" /> {t("menu.payNow")}
+                      </Button>
+                    )}
+                    {order.orderStatus === RentalOrderStatus.PAUSED && (
+                      <Button className="flex-1 text-xs font-bold" size="sm" onClick={(e) => { e.stopPropagation(); runAction(() => startOrder(order.orderNo)); }}>
+                        <PlayCircle className="mr-2 h-3 w-3" /> {t("menu.startAsset")}
+                      </Button>
+                    )}
+                    <Button variant="outline" className="flex-1 text-xs font-bold" size="sm">
+                      <Info className="mr-2 h-3 w-3" /> {t("menu.detail")}
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
       </div>
 
       {/* Pagination */}

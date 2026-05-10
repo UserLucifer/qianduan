@@ -7,7 +7,6 @@ import {
   Users, 
   Award, 
   ShieldCheck, 
-  Coins, 
   Loader2, 
   FileText,
   Search
@@ -125,7 +124,6 @@ export default function CommissionsPage() {
     switch (level) {
       case 1: return <Award className="h-4 w-4" />;
       case 2: return <ShieldCheck className="h-4 w-4" />;
-      case 3: return <Coins className="h-4 w-4" />;
       default: return <Users className="h-4 w-4" />;
     }
   };
@@ -134,7 +132,6 @@ export default function CommissionsPage() {
     switch (level) {
       case 1: return "text-amber-500 group-hover:bg-amber-500/10";
       case 2: return "text-slate-400 group-hover:bg-slate-500/10";
-      case 3: return "text-orange-700 group-hover:bg-orange-700/10";
       default: return "text-muted-foreground group-hover:bg-primary/10";
     }
   };
@@ -147,7 +144,7 @@ export default function CommissionsPage() {
         <StatsCard title={t("stats.total")} value={<MoneyText value={summary.data?.totalCommission} />} description={t("stats.totalDesc")} icon={CircleDollarSign} loading={summary.loading} status="good" />
         <StatsCard title={t("stats.today")} value={<MoneyText value={summary.data?.todayCommission} />} description={t("stats.todayDesc")} icon={CircleDollarSign} loading={summary.loading} />
         <StatsCard title={t("stats.level1")} value={<MoneyText value={summary.data?.level1Commission} />} description={t("stats.level1Desc")} icon={Users} loading={summary.loading} />
-        <StatsCard title={t("stats.level23")} value={<MoneyText value={(summary.data?.level2Commission ?? 0) + (summary.data?.level3Commission ?? 0)} />} description={t("stats.level23Desc")} icon={Users} loading={summary.loading} />
+        <StatsCard title={t("stats.level2")} value={<MoneyText value={summary.data?.level2Commission} />} description={t("stats.level2Desc")} icon={Users} loading={summary.loading} />
       </div>
 
       <div className="flex flex-col gap-4 border-b border-border pb-4 lg:flex-row lg:items-center lg:justify-between">
@@ -161,9 +158,6 @@ export default function CommissionsPage() {
             </TabsTrigger>
             <TabsTrigger value="2" className="rounded-md px-4 py-1.5 text-xs font-semibold transition-all data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm whitespace-nowrap">
               {t("filters.level2")}
-            </TabsTrigger>
-            <TabsTrigger value="3" className="rounded-md px-4 py-1.5 text-xs font-semibold transition-all data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm whitespace-nowrap">
-              {t("filters.level3")}
             </TabsTrigger>
           </TabsList>
         </Tabs>

@@ -154,7 +154,6 @@ function RentalCard({
   const runtimeSpecs = [
     `CUDA ${item.cudaVersion || "-"}`,
     `Driver ${item.driverVersion || "-"}`,
-    t("runtime.stock", { available: item.availableStock, total: item.totalStock }),
   ];
 
   const handleRentClick = () => {

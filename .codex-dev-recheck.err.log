@@ -1,0 +1,1680 @@
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/zh-CN/adm..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="__next_bui...">
+                      <SegmentTrieNode>
+                      <DefaultLayout>
+                        <html
+-                         data-immersive-translate-page-theme="light"
+                        >
+                  ...
+ 
+[browser] Image with src "/images/retool-blocks-login-door.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.searchEmailOrUsername` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:230:28)
+  228 |             <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-mu...
+  229 |             <Input
+> 230 |               placeholder={t("searchEmailOrUsername")}
+      |                            ^
+  231 |               value={filters.keyword}
+  232 |               onChange={(event) => {
+  233 |                 const nextFilters = { ...filters, keyword: event.target.value }; (app\[locale]\admins\profits\page.tsx:230:28)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.allTime` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:263:41)
+  261 |           >
+  262 |             <SelectTrigger className="h-10 w-[120px] bg-card border-border text-xs font-m...
+> 263 |               <SelectValue placeholder={t("allTime")} />
+      |                                         ^
+  264 |             </SelectTrigger>
+  265 |             <SelectContent>
+  266 |               <SelectItem value={ALL_TIME}>{t("allTime")}</SelectItem> (app\[locale]\admins\profits\page.tsx:263:41)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.allTime` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:266:45)
+  264 |             </SelectTrigger>
+  265 |             <SelectContent>
+> 266 |               <SelectItem value={ALL_TIME}>{t("allTime")}</SelectItem>
+      |                                             ^
+  267 |               <SelectItem value="3">{t("last3Days")}</SelectItem>
+  268 |               <SelectItem value="7">{t("last7Days")}</SelectItem>
+  269 |               <SelectItem value="30">{t("last30Days")}</SelectItem> (app\[locale]\admins\profits\page.tsx:266:45)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.last3Days` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:267:38)
+  265 |             <SelectContent>
+  266 |               <SelectItem value={ALL_TIME}>{t("allTime")}</SelectItem>
+> 267 |               <SelectItem value="3">{t("last3Days")}</SelectItem>
+      |                                      ^
+  268 |               <SelectItem value="7">{t("last7Days")}</SelectItem>
+  269 |               <SelectItem value="30">{t("last30Days")}</SelectItem>
+  270 |             </SelectContent> (app\[locale]\admins\profits\page.tsx:267:38)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.last7Days` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:268:38)
+  266 |               <SelectItem value={ALL_TIME}>{t("allTime")}</SelectItem>
+  267 |               <SelectItem value="3">{t("last3Days")}</SelectItem>
+> 268 |               <SelectItem value="7">{t("last7Days")}</SelectItem>
+      |                                      ^
+  269 |               <SelectItem value="30">{t("last30Days")}</SelectItem>
+  270 |             </SelectContent>
+  271 |           </Select> (app\[locale]\admins\profits\page.tsx:268:38)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.last30Days` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:269:39)
+  267 |               <SelectItem value="3">{t("last3Days")}</SelectItem>
+  268 |               <SelectItem value="7">{t("last7Days")}</SelectItem>
+> 269 |               <SelectItem value="30">{t("last30Days")}</SelectItem>
+      |                                       ^
+  270 |             </SelectContent>
+  271 |           </Select>
+  272 |         </div> (app\[locale]\admins\profits\page.tsx:269:39)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.searchEmailOrUsername` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:230:28)
+  228 |             <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-mu...
+  229 |             <Input
+> 230 |               placeholder={t("searchEmailOrUsername")}
+      |                            ^
+  231 |               value={filters.keyword}
+  232 |               onChange={(event) => {
+  233 |                 const nextFilters = { ...filters, keyword: event.target.value }; (app\[locale]\admins\profits\page.tsx:230:28)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.allTime` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:263:41)
+  261 |           >
+  262 |             <SelectTrigger className="h-10 w-[120px] bg-card border-border text-xs font-m...
+> 263 |               <SelectValue placeholder={t("allTime")} />
+      |                                         ^
+  264 |             </SelectTrigger>
+  265 |             <SelectContent>
+  266 |               <SelectItem value={ALL_TIME}>{t("allTime")}</SelectItem> (app\[locale]\admins\profits\page.tsx:263:41)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.allTime` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:266:45)
+  264 |             </SelectTrigger>
+  265 |             <SelectContent>
+> 266 |               <SelectItem value={ALL_TIME}>{t("allTime")}</SelectItem>
+      |                                             ^
+  267 |               <SelectItem value="3">{t("last3Days")}</SelectItem>
+  268 |               <SelectItem value="7">{t("last7Days")}</SelectItem>
+  269 |               <SelectItem value="30">{t("last30Days")}</SelectItem> (app\[locale]\admins\profits\page.tsx:266:45)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.last3Days` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:267:38)
+  265 |             <SelectContent>
+  266 |               <SelectItem value={ALL_TIME}>{t("allTime")}</SelectItem>
+> 267 |               <SelectItem value="3">{t("last3Days")}</SelectItem>
+      |                                      ^
+  268 |               <SelectItem value="7">{t("last7Days")}</SelectItem>
+  269 |               <SelectItem value="30">{t("last30Days")}</SelectItem>
+  270 |             </SelectContent> (app\[locale]\admins\profits\page.tsx:267:38)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.last7Days` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:268:38)
+  266 |               <SelectItem value={ALL_TIME}>{t("allTime")}</SelectItem>
+  267 |               <SelectItem value="3">{t("last3Days")}</SelectItem>
+> 268 |               <SelectItem value="7">{t("last7Days")}</SelectItem>
+      |                                      ^
+  269 |               <SelectItem value="30">{t("last30Days")}</SelectItem>
+  270 |             </SelectContent>
+  271 |           </Select> (app\[locale]\admins\profits\page.tsx:268:38)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.last30Days` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:269:39)
+  267 |               <SelectItem value="3">{t("last3Days")}</SelectItem>
+  268 |               <SelectItem value="7">{t("last7Days")}</SelectItem>
+> 269 |               <SelectItem value="30">{t("last30Days")}</SelectItem>
+      |                                       ^
+  270 |             </SelectContent>
+  271 |           </Select>
+  272 |         </div> (app\[locale]\admins\profits\page.tsx:269:39)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.searchEmailOrUsername` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:230:28)
+  228 |             <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-mu...
+  229 |             <Input
+> 230 |               placeholder={t("searchEmailOrUsername")}
+      |                            ^
+  231 |               value={filters.keyword}
+  232 |               onChange={(event) => {
+  233 |                 const nextFilters = { ...filters, keyword: event.target.value }; (app\[locale]\admins\profits\page.tsx:230:28)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.allTime` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:263:41)
+  261 |           >
+  262 |             <SelectTrigger className="h-10 w-[120px] bg-card border-border text-xs font-m...
+> 263 |               <SelectValue placeholder={t("allTime")} />
+      |                                         ^
+  264 |             </SelectTrigger>
+  265 |             <SelectContent>
+  266 |               <SelectItem value={ALL_TIME}>{t("allTime")}</SelectItem> (app\[locale]\admins\profits\page.tsx:263:41)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.allTime` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:266:45)
+  264 |             </SelectTrigger>
+  265 |             <SelectContent>
+> 266 |               <SelectItem value={ALL_TIME}>{t("allTime")}</SelectItem>
+      |                                             ^
+  267 |               <SelectItem value="3">{t("last3Days")}</SelectItem>
+  268 |               <SelectItem value="7">{t("last7Days")}</SelectItem>
+  269 |               <SelectItem value="30">{t("last30Days")}</SelectItem> (app\[locale]\admins\profits\page.tsx:266:45)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.last3Days` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:267:38)
+  265 |             <SelectContent>
+  266 |               <SelectItem value={ALL_TIME}>{t("allTime")}</SelectItem>
+> 267 |               <SelectItem value="3">{t("last3Days")}</SelectItem>
+      |                                      ^
+  268 |               <SelectItem value="7">{t("last7Days")}</SelectItem>
+  269 |               <SelectItem value="30">{t("last30Days")}</SelectItem>
+  270 |             </SelectContent> (app\[locale]\admins\profits\page.tsx:267:38)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.last7Days` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:268:38)
+  266 |               <SelectItem value={ALL_TIME}>{t("allTime")}</SelectItem>
+  267 |               <SelectItem value="3">{t("last3Days")}</SelectItem>
+> 268 |               <SelectItem value="7">{t("last7Days")}</SelectItem>
+      |                                      ^
+  269 |               <SelectItem value="30">{t("last30Days")}</SelectItem>
+  270 |             </SelectContent>
+  271 |           </Select> (app\[locale]\admins\profits\page.tsx:268:38)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.last30Days` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:269:39)
+  267 |               <SelectItem value="3">{t("last3Days")}</SelectItem>
+  268 |               <SelectItem value="7">{t("last7Days")}</SelectItem>
+> 269 |               <SelectItem value="30">{t("last30Days")}</SelectItem>
+      |                                       ^
+  270 |             </SelectContent>
+  271 |           </Select>
+  272 |         </div> (app\[locale]\admins\profits\page.tsx:269:39)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.searchEmailOrUsername` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:230:28)
+  228 |             <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-mu...
+  229 |             <Input
+> 230 |               placeholder={t("searchEmailOrUsername")}
+      |                            ^
+  231 |               value={filters.keyword}
+  232 |               onChange={(event) => {
+  233 |                 const nextFilters = { ...filters, keyword: event.target.value }; (app\[locale]\admins\profits\page.tsx:230:28)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.allTime` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:263:41)
+  261 |           >
+  262 |             <SelectTrigger className="h-10 w-[120px] bg-card border-border text-xs font-m...
+> 263 |               <SelectValue placeholder={t("allTime")} />
+      |                                         ^
+  264 |             </SelectTrigger>
+  265 |             <SelectContent>
+  266 |               <SelectItem value={ALL_TIME}>{t("allTime")}</SelectItem> (app\[locale]\admins\profits\page.tsx:263:41)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.allTime` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:266:45)
+  264 |             </SelectTrigger>
+  265 |             <SelectContent>
+> 266 |               <SelectItem value={ALL_TIME}>{t("allTime")}</SelectItem>
+      |                                             ^
+  267 |               <SelectItem value="3">{t("last3Days")}</SelectItem>
+  268 |               <SelectItem value="7">{t("last7Days")}</SelectItem>
+  269 |               <SelectItem value="30">{t("last30Days")}</SelectItem> (app\[locale]\admins\profits\page.tsx:266:45)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.last3Days` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:267:38)
+  265 |             <SelectContent>
+  266 |               <SelectItem value={ALL_TIME}>{t("allTime")}</SelectItem>
+> 267 |               <SelectItem value="3">{t("last3Days")}</SelectItem>
+      |                                      ^
+  268 |               <SelectItem value="7">{t("last7Days")}</SelectItem>
+  269 |               <SelectItem value="30">{t("last30Days")}</SelectItem>
+  270 |             </SelectContent> (app\[locale]\admins\profits\page.tsx:267:38)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.last7Days` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:268:38)
+  266 |               <SelectItem value={ALL_TIME}>{t("allTime")}</SelectItem>
+  267 |               <SelectItem value="3">{t("last3Days")}</SelectItem>
+> 268 |               <SelectItem value="7">{t("last7Days")}</SelectItem>
+      |                                      ^
+  269 |               <SelectItem value="30">{t("last30Days")}</SelectItem>
+  270 |             </SelectContent>
+  271 |           </Select> (app\[locale]\admins\profits\page.tsx:268:38)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.last30Days` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:269:39)
+  267 |               <SelectItem value="3">{t("last3Days")}</SelectItem>
+  268 |               <SelectItem value="7">{t("last7Days")}</SelectItem>
+> 269 |               <SelectItem value="30">{t("last30Days")}</SelectItem>
+      |                                       ^
+  270 |             </SelectContent>
+  271 |           </Select>
+  272 |         </div> (app\[locale]\admins\profits\page.tsx:269:39)
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.searchEmailOrUsername` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:230:28)
+  228 |             <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-mu...
+  229 |             <Input
+> 230 |               placeholder={t("searchEmailOrUsername")}
+      |                            ^
+  231 |               value={filters.keyword}
+  232 |               onChange={(event) => {
+  233 |                 const nextFilters = { ...filters, keyword: event.target.value }; (app\[locale]\admins\profits\page.tsx:230:28)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.allTime` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:263:41)
+  261 |           >
+  262 |             <SelectTrigger className="h-10 w-[120px] bg-card border-border text-xs font-m...
+> 263 |               <SelectValue placeholder={t("allTime")} />
+      |                                         ^
+  264 |             </SelectTrigger>
+  265 |             <SelectContent>
+  266 |               <SelectItem value={ALL_TIME}>{t("allTime")}</SelectItem> (app\[locale]\admins\profits\page.tsx:263:41)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.allTime` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:266:45)
+  264 |             </SelectTrigger>
+  265 |             <SelectContent>
+> 266 |               <SelectItem value={ALL_TIME}>{t("allTime")}</SelectItem>
+      |                                             ^
+  267 |               <SelectItem value="3">{t("last3Days")}</SelectItem>
+  268 |               <SelectItem value="7">{t("last7Days")}</SelectItem>
+  269 |               <SelectItem value="30">{t("last30Days")}</SelectItem> (app\[locale]\admins\profits\page.tsx:266:45)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.last3Days` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:267:38)
+  265 |             <SelectContent>
+  266 |               <SelectItem value={ALL_TIME}>{t("allTime")}</SelectItem>
+> 267 |               <SelectItem value="3">{t("last3Days")}</SelectItem>
+      |                                      ^
+  268 |               <SelectItem value="7">{t("last7Days")}</SelectItem>
+  269 |               <SelectItem value="30">{t("last30Days")}</SelectItem>
+  270 |             </SelectContent> (app\[locale]\admins\profits\page.tsx:267:38)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.last7Days` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:268:38)
+  266 |               <SelectItem value={ALL_TIME}>{t("allTime")}</SelectItem>
+  267 |               <SelectItem value="3">{t("last3Days")}</SelectItem>
+> 268 |               <SelectItem value="7">{t("last7Days")}</SelectItem>
+      |                                      ^
+  269 |               <SelectItem value="30">{t("last30Days")}</SelectItem>
+  270 |             </SelectContent>
+  271 |           </Select> (app\[locale]\admins\profits\page.tsx:268:38)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.last30Days` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:269:39)
+  267 |               <SelectItem value="3">{t("last3Days")}</SelectItem>
+  268 |               <SelectItem value="7">{t("last7Days")}</SelectItem>
+> 269 |               <SelectItem value="30">{t("last30Days")}</SelectItem>
+      |                                       ^
+  270 |             </SelectContent>
+  271 |           </Select>
+  272 |         </div> (app\[locale]\admins\profits\page.tsx:269:39)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.searchEmailOrUsername` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:230:28)
+  228 |             <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-mu...
+  229 |             <Input
+> 230 |               placeholder={t("searchEmailOrUsername")}
+      |                            ^
+  231 |               value={filters.keyword}
+  232 |               onChange={(event) => {
+  233 |                 const nextFilters = { ...filters, keyword: event.target.value }; (app\[locale]\admins\profits\page.tsx:230:28)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.allTime` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:263:41)
+  261 |           >
+  262 |             <SelectTrigger className="h-10 w-[120px] bg-card border-border text-xs font-m...
+> 263 |               <SelectValue placeholder={t("allTime")} />
+      |                                         ^
+  264 |             </SelectTrigger>
+  265 |             <SelectContent>
+  266 |               <SelectItem value={ALL_TIME}>{t("allTime")}</SelectItem> (app\[locale]\admins\profits\page.tsx:263:41)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.allTime` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:266:45)
+  264 |             </SelectTrigger>
+  265 |             <SelectContent>
+> 266 |               <SelectItem value={ALL_TIME}>{t("allTime")}</SelectItem>
+      |                                             ^
+  267 |               <SelectItem value="3">{t("last3Days")}</SelectItem>
+  268 |               <SelectItem value="7">{t("last7Days")}</SelectItem>
+  269 |               <SelectItem value="30">{t("last30Days")}</SelectItem> (app\[locale]\admins\profits\page.tsx:266:45)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.last3Days` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:267:38)
+  265 |             <SelectContent>
+  266 |               <SelectItem value={ALL_TIME}>{t("allTime")}</SelectItem>
+> 267 |               <SelectItem value="3">{t("last3Days")}</SelectItem>
+      |                                      ^
+  268 |               <SelectItem value="7">{t("last7Days")}</SelectItem>
+  269 |               <SelectItem value="30">{t("last30Days")}</SelectItem>
+  270 |             </SelectContent> (app\[locale]\admins\profits\page.tsx:267:38)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.last7Days` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:268:38)
+  266 |               <SelectItem value={ALL_TIME}>{t("allTime")}</SelectItem>
+  267 |               <SelectItem value="3">{t("last3Days")}</SelectItem>
+> 268 |               <SelectItem value="7">{t("last7Days")}</SelectItem>
+      |                                      ^
+  269 |               <SelectItem value="30">{t("last30Days")}</SelectItem>
+  270 |             </SelectContent>
+  271 |           </Select> (app\[locale]\admins\profits\page.tsx:268:38)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.last30Days` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:269:39)
+  267 |               <SelectItem value="3">{t("last3Days")}</SelectItem>
+  268 |               <SelectItem value="7">{t("last7Days")}</SelectItem>
+> 269 |               <SelectItem value="30">{t("last30Days")}</SelectItem>
+      |                                       ^
+  270 |             </SelectContent>
+  271 |           </Select>
+  272 |         </div> (app\[locale]\admins\profits\page.tsx:269:39)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.searchEmailOrUsername` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:230:28)
+  228 |             <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-mu...
+  229 |             <Input
+> 230 |               placeholder={t("searchEmailOrUsername")}
+      |                            ^
+  231 |               value={filters.keyword}
+  232 |               onChange={(event) => {
+  233 |                 const nextFilters = { ...filters, keyword: event.target.value }; (app\[locale]\admins\profits\page.tsx:230:28)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.allTime` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:263:41)
+  261 |           >
+  262 |             <SelectTrigger className="h-10 w-[120px] bg-card border-border text-xs font-m...
+> 263 |               <SelectValue placeholder={t("allTime")} />
+      |                                         ^
+  264 |             </SelectTrigger>
+  265 |             <SelectContent>
+  266 |               <SelectItem value={ALL_TIME}>{t("allTime")}</SelectItem> (app\[locale]\admins\profits\page.tsx:263:41)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.allTime` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:266:45)
+  264 |             </SelectTrigger>
+  265 |             <SelectContent>
+> 266 |               <SelectItem value={ALL_TIME}>{t("allTime")}</SelectItem>
+      |                                             ^
+  267 |               <SelectItem value="3">{t("last3Days")}</SelectItem>
+  268 |               <SelectItem value="7">{t("last7Days")}</SelectItem>
+  269 |               <SelectItem value="30">{t("last30Days")}</SelectItem> (app\[locale]\admins\profits\page.tsx:266:45)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.last3Days` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:267:38)
+  265 |             <SelectContent>
+  266 |               <SelectItem value={ALL_TIME}>{t("allTime")}</SelectItem>
+> 267 |               <SelectItem value="3">{t("last3Days")}</SelectItem>
+      |                                      ^
+  268 |               <SelectItem value="7">{t("last7Days")}</SelectItem>
+  269 |               <SelectItem value="30">{t("last30Days")}</SelectItem>
+  270 |             </SelectContent> (app\[locale]\admins\profits\page.tsx:267:38)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.last7Days` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:268:38)
+  266 |               <SelectItem value={ALL_TIME}>{t("allTime")}</SelectItem>
+  267 |               <SelectItem value="3">{t("last3Days")}</SelectItem>
+> 268 |               <SelectItem value="7">{t("last7Days")}</SelectItem>
+      |                                      ^
+  269 |               <SelectItem value="30">{t("last30Days")}</SelectItem>
+  270 |             </SelectContent>
+  271 |           </Select> (app\[locale]\admins\profits\page.tsx:268:38)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.last30Days` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:269:39)
+  267 |               <SelectItem value="3">{t("last3Days")}</SelectItem>
+  268 |               <SelectItem value="7">{t("last7Days")}</SelectItem>
+> 269 |               <SelectItem value="30">{t("last30Days")}</SelectItem>
+      |                                       ^
+  270 |             </SelectContent>
+  271 |           </Select>
+  272 |         </div> (app\[locale]\admins\profits\page.tsx:269:39)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.searchEmailOrUsername` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:230:28)
+  228 |             <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-mu...
+  229 |             <Input
+> 230 |               placeholder={t("searchEmailOrUsername")}
+      |                            ^
+  231 |               value={filters.keyword}
+  232 |               onChange={(event) => {
+  233 |                 const nextFilters = { ...filters, keyword: event.target.value }; (app\[locale]\admins\profits\page.tsx:230:28)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.allTime` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:263:41)
+  261 |           >
+  262 |             <SelectTrigger className="h-10 w-[120px] bg-card border-border text-xs font-m...
+> 263 |               <SelectValue placeholder={t("allTime")} />
+      |                                         ^
+  264 |             </SelectTrigger>
+  265 |             <SelectContent>
+  266 |               <SelectItem value={ALL_TIME}>{t("allTime")}</SelectItem> (app\[locale]\admins\profits\page.tsx:263:41)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.allTime` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:266:45)
+  264 |             </SelectTrigger>
+  265 |             <SelectContent>
+> 266 |               <SelectItem value={ALL_TIME}>{t("allTime")}</SelectItem>
+      |                                             ^
+  267 |               <SelectItem value="3">{t("last3Days")}</SelectItem>
+  268 |               <SelectItem value="7">{t("last7Days")}</SelectItem>
+  269 |               <SelectItem value="30">{t("last30Days")}</SelectItem> (app\[locale]\admins\profits\page.tsx:266:45)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.last3Days` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:267:38)
+  265 |             <SelectContent>
+  266 |               <SelectItem value={ALL_TIME}>{t("allTime")}</SelectItem>
+> 267 |               <SelectItem value="3">{t("last3Days")}</SelectItem>
+      |                                      ^
+  268 |               <SelectItem value="7">{t("last7Days")}</SelectItem>
+  269 |               <SelectItem value="30">{t("last30Days")}</SelectItem>
+  270 |             </SelectContent> (app\[locale]\admins\profits\page.tsx:267:38)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.last7Days` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:268:38)
+  266 |               <SelectItem value={ALL_TIME}>{t("allTime")}</SelectItem>
+  267 |               <SelectItem value="3">{t("last3Days")}</SelectItem>
+> 268 |               <SelectItem value="7">{t("last7Days")}</SelectItem>
+      |                                      ^
+  269 |               <SelectItem value="30">{t("last30Days")}</SelectItem>
+  270 |             </SelectContent>
+  271 |           </Select> (app\[locale]\admins\profits\page.tsx:268:38)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.last30Days` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:269:39)
+  267 |               <SelectItem value="3">{t("last3Days")}</SelectItem>
+  268 |               <SelectItem value="7">{t("last7Days")}</SelectItem>
+> 269 |               <SelectItem value="30">{t("last30Days")}</SelectItem>
+      |                                       ^
+  270 |             </SelectContent>
+  271 |           </Select>
+  272 |         </div> (app\[locale]\admins\profits\page.tsx:269:39)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.searchEmailOrUsername` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:230:28)
+  228 |             <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-mu...
+  229 |             <Input
+> 230 |               placeholder={t("searchEmailOrUsername")}
+      |                            ^
+  231 |               value={filters.keyword}
+  232 |               onChange={(event) => {
+  233 |                 const nextFilters = { ...filters, keyword: event.target.value }; (app\[locale]\admins\profits\page.tsx:230:28)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.searchEmailOrUsername` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:230:28)
+  228 |             <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-mu...
+  229 |             <Input
+> 230 |               placeholder={t("searchEmailOrUsername")}
+      |                            ^
+  231 |               value={filters.keyword}
+  232 |               onChange={(event) => {
+  233 |                 const nextFilters = { ...filters, keyword: event.target.value }; (app\[locale]\admins\profits\page.tsx:230:28)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.searchEmailOrUsername` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:230:28)
+  228 |             <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-mu...
+  229 |             <Input
+> 230 |               placeholder={t("searchEmailOrUsername")}
+      |                            ^
+  231 |               value={filters.keyword}
+  232 |               onChange={(event) => {
+  233 |                 const nextFilters = { ...filters, keyword: event.target.value }; (app\[locale]\admins\profits\page.tsx:230:28)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.searchEmailOrUsername` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:230:28)
+  228 |             <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-mu...
+  229 |             <Input
+> 230 |               placeholder={t("searchEmailOrUsername")}
+      |                            ^
+  231 |               value={filters.keyword}
+  232 |               onChange={(event) => {
+  233 |                 const nextFilters = { ...filters, keyword: event.target.value }; (app\[locale]\admins\profits\page.tsx:230:28)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.searchEmailOrUsername` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:230:28)
+  228 |             <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-mu...
+  229 |             <Input
+> 230 |               placeholder={t("searchEmailOrUsername")}
+      |                            ^
+  231 |               value={filters.keyword}
+  232 |               onChange={(event) => {
+  233 |                 const nextFilters = { ...filters, keyword: event.target.value }; (app\[locale]\admins\profits\page.tsx:230:28)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.searchEmailOrUsername` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:230:28)
+  228 |             <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-mu...
+  229 |             <Input
+> 230 |               placeholder={t("searchEmailOrUsername")}
+      |                            ^
+  231 |               value={filters.keyword}
+  232 |               onChange={(event) => {
+  233 |                 const nextFilters = { ...filters, keyword: event.target.value }; (app\[locale]\admins\profits\page.tsx:230:28)
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.searchEmailOrUsername` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:230:28)
+  228 |             <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-mu...
+  229 |             <Input
+> 230 |               placeholder={t("searchEmailOrUsername")}
+      |                            ^
+  231 |               value={filters.keyword}
+  232 |               onChange={(event) => {
+  233 |                 const nextFilters = { ...filters, keyword: event.target.value }; (app\[locale]\admins\profits\page.tsx:230:28)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.searchEmailOrUsername` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:230:28)
+  228 |             <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-mu...
+  229 |             <Input
+> 230 |               placeholder={t("searchEmailOrUsername")}
+      |                            ^
+  231 |               value={filters.keyword}
+  232 |               onChange={(event) => {
+  233 |                 const nextFilters = { ...filters, keyword: event.target.value }; (app\[locale]\admins\profits\page.tsx:230:28)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.realData` in messages for locale `zh-CN`.
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:550:32)
+  548 |           <Button variant={usingSampleData ? "secondary" : "outline"} onClick={toggleSamp...
+  549 |             <Database className="h-4 w-4" />
+> 550 |             {usingSampleData ? t("realData") : t("sampleData")}
+      |                                ^
+  551 |           </Button>
+  552 |         )}
+  553 |       /> (app\[locale]\admins\withdraw\page.tsx:550:32)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.sampleDataNotice` in messages for locale `zh-CN`.
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:557:12)
+  555 |       {usingSampleData ? (
+  556 |         <div className="rounded-lg border border-dashed border-primary/30 bg-primary/5 px...
+> 557 |           {t("sampleDataNotice")}
+      |            ^
+  558 |         </div>
+  559 |       ) : null}
+  560 | (app\[locale]\admins\withdraw\page.tsx:557:12)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.realData` in messages for locale `zh-CN`.
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:550:32)
+  548 |           <Button variant={usingSampleData ? "secondary" : "outline"} onClick={toggleSamp...
+  549 |             <Database className="h-4 w-4" />
+> 550 |             {usingSampleData ? t("realData") : t("sampleData")}
+      |                                ^
+  551 |           </Button>
+  552 |         )}
+  553 |       /> (app\[locale]\admins\withdraw\page.tsx:550:32)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.sampleDataNotice` in messages for locale `zh-CN`.
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:557:12)
+  555 |       {usingSampleData ? (
+  556 |         <div className="rounded-lg border border-dashed border-primary/30 bg-primary/5 px...
+> 557 |           {t("sampleDataNotice")}
+      |            ^
+  558 |         </div>
+  559 |       ) : null}
+  560 | (app\[locale]\admins\withdraw\page.tsx:557:12)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.realData` in messages for locale `zh-CN`.
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:550:32)
+  548 |           <Button variant={usingSampleData ? "secondary" : "outline"} onClick={toggleSamp...
+  549 |             <Database className="h-4 w-4" />
+> 550 |             {usingSampleData ? t("realData") : t("sampleData")}
+      |                                ^
+  551 |           </Button>
+  552 |         )}
+  553 |       /> (app\[locale]\admins\withdraw\page.tsx:550:32)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.sampleDataNotice` in messages for locale `zh-CN`.
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:557:12)
+  555 |       {usingSampleData ? (
+  556 |         <div className="rounded-lg border border-dashed border-primary/30 bg-primary/5 px...
+> 557 |           {t("sampleDataNotice")}
+      |            ^
+  558 |         </div>
+  559 |       ) : null}
+  560 | (app\[locale]\admins\withdraw\page.tsx:557:12)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.realData` in messages for locale `zh-CN`.
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:550:32)
+  548 |           <Button variant={usingSampleData ? "secondary" : "outline"} onClick={toggleSamp...
+  549 |             <Database className="h-4 w-4" />
+> 550 |             {usingSampleData ? t("realData") : t("sampleData")}
+      |                                ^
+  551 |           </Button>
+  552 |         )}
+  553 |       /> (app\[locale]\admins\withdraw\page.tsx:550:32)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.sampleDataNotice` in messages for locale `zh-CN`.
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:557:12)
+  555 |       {usingSampleData ? (
+  556 |         <div className="rounded-lg border border-dashed border-primary/30 bg-primary/5 px...
+> 557 |           {t("sampleDataNotice")}
+      |            ^
+  558 |         </div>
+  559 |       ) : null}
+  560 | (app\[locale]\admins\withdraw\page.tsx:557:12)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.realData` in messages for locale `zh-CN`.
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:550:32)
+  548 |           <Button variant={usingSampleData ? "secondary" : "outline"} onClick={toggleSamp...
+  549 |             <Database className="h-4 w-4" />
+> 550 |             {usingSampleData ? t("realData") : t("sampleData")}
+      |                                ^
+  551 |           </Button>
+  552 |         )}
+  553 |       /> (app\[locale]\admins\withdraw\page.tsx:550:32)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.sampleDataNotice` in messages for locale `zh-CN`.
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:557:12)
+  555 |       {usingSampleData ? (
+  556 |         <div className="rounded-lg border border-dashed border-primary/30 bg-primary/5 px...
+> 557 |           {t("sampleDataNotice")}
+      |            ^
+  558 |         </div>
+  559 |       ) : null}
+  560 | (app\[locale]\admins\withdraw\page.tsx:557:12)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.realData` in messages for locale `zh-CN`.
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:550:32)
+  548 |           <Button variant={usingSampleData ? "secondary" : "outline"} onClick={toggleSamp...
+  549 |             <Database className="h-4 w-4" />
+> 550 |             {usingSampleData ? t("realData") : t("sampleData")}
+      |                                ^
+  551 |           </Button>
+  552 |         )}
+  553 |       /> (app\[locale]\admins\withdraw\page.tsx:550:32)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.sampleDataNotice` in messages for locale `zh-CN`.
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:557:12)
+  555 |       {usingSampleData ? (
+  556 |         <div className="rounded-lg border border-dashed border-primary/30 bg-primary/5 px...
+> 557 |           {t("sampleDataNotice")}
+      |            ^
+  558 |         </div>
+  559 |       ) : null}
+  560 | (app\[locale]\admins\withdraw\page.tsx:557:12)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.amountCheck` in messages for locale `zh-CN`.
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:568:14)
+  566 |     {
+  567 |       key: "applyAmount",
+> 568 |       title: t("amountCheck"),
+      |              ^
+  569 |       className: "min-w-[190px]",
+  570 |       render: (row) => (
+  571 |         <div className="space-y-1.5"> (app\[locale]\admins\withdraw\page.tsx:568:14)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.amountCheck` in messages for locale `zh-CN`.
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:568:14)
+  566 |     {
+  567 |       key: "applyAmount",
+> 568 |       title: t("amountCheck"),
+      |              ^
+  569 |       className: "min-w-[190px]",
+  570 |       render: (row) => (
+  571 |         <div className="space-y-1.5"> (app\[locale]\admins\withdraw\page.tsx:568:14)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.reviewStatus` in messages for locale `zh-CN`.
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:585:14)
+  583 |     {
+  584 |       key: "status",
+> 585 |       title: t("reviewStatus"),
+      |              ^
+  586 |       className: "w-[120px]",
+  587 |       render: (row) => <StatusBadge status={row.status} />,
+  588 |     }, (app\[locale]\admins\withdraw\page.tsx:585:14)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.amountCheck` in messages for locale `zh-CN`.
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:568:14)
+  566 |     {
+  567 |       key: "applyAmount",
+> 568 |       title: t("amountCheck"),
+      |              ^
+  569 |       className: "min-w-[190px]",
+  570 |       render: (row) => (
+  571 |         <div className="space-y-1.5"> (app\[locale]\admins\withdraw\page.tsx:568:14)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.reviewStatus` in messages for locale `zh-CN`.
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:585:14)
+  583 |     {
+  584 |       key: "status",
+> 585 |       title: t("reviewStatus"),
+      |              ^
+  586 |       className: "w-[120px]",
+  587 |       render: (row) => <StatusBadge status={row.status} />,
+  588 |     }, (app\[locale]\admins\withdraw\page.tsx:585:14)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.process` in messages for locale `zh-CN`.
+    at Object.render (app\[locale]\admins\withdraw\page.tsx:599:18)
+    at eval (components\shared\DataTable.tsx:82:39)
+    at Array.map (<anonymous>)
+    at renderRow (components\shared\DataTable.tsx:75:18)
+    at eval (components\shared\DataTable.tsx:145:38)
+    at Array.map (<anonymous>)
+    at DataTable (components\shared\DataTable.tsx:145:18)
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:709:7)
+  597 |               <Button size="sm" onClick={() => void openWorkspace(row)}>
+  598 |                 <ClipboardCheck className="h-4 w-4" />
+> 599 |                 {t("process")}
+      |                  ^
+  600 |               </Button>
+  601 |             </HasPermission>
+  602 |           ) : ( (app\[locale]\admins\withdraw\page.tsx:599:18)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.process` in messages for locale `zh-CN`.
+    at Object.render (app\[locale]\admins\withdraw\page.tsx:599:18)
+    at eval (components\shared\DataTable.tsx:82:39)
+    at Array.map (<anonymous>)
+    at renderRow (components\shared\DataTable.tsx:75:18)
+    at eval (components\shared\DataTable.tsx:145:38)
+    at Array.map (<anonymous>)
+    at DataTable (components\shared\DataTable.tsx:145:18)
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:709:7)
+  597 |               <Button size="sm" onClick={() => void openWorkspace(row)}>
+  598 |                 <ClipboardCheck className="h-4 w-4" />
+> 599 |                 {t("process")}
+      |                  ^
+  600 |               </Button>
+  601 |             </HasPermission>
+  602 |           ) : ( (app\[locale]\admins\withdraw\page.tsx:599:18)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.process` in messages for locale `zh-CN`.
+    at Object.render (app\[locale]\admins\withdraw\page.tsx:599:18)
+    at eval (components\shared\DataTable.tsx:82:39)
+    at Array.map (<anonymous>)
+    at renderRow (components\shared\DataTable.tsx:75:18)
+    at eval (components\shared\DataTable.tsx:145:38)
+    at Array.map (<anonymous>)
+    at DataTable (components\shared\DataTable.tsx:145:18)
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:709:7)
+  597 |               <Button size="sm" onClick={() => void openWorkspace(row)}>
+  598 |                 <ClipboardCheck className="h-4 w-4" />
+> 599 |                 {t("process")}
+      |                  ^
+  600 |               </Button>
+  601 |             </HasPermission>
+  602 |           ) : ( (app\[locale]\admins\withdraw\page.tsx:599:18)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.process` in messages for locale `zh-CN`.
+    at Object.render (app\[locale]\admins\withdraw\page.tsx:599:18)
+    at eval (components\shared\DataTable.tsx:82:39)
+    at Array.map (<anonymous>)
+    at renderRow (components\shared\DataTable.tsx:75:18)
+    at eval (components\shared\DataTable.tsx:145:38)
+    at Array.map (<anonymous>)
+    at DataTable (components\shared\DataTable.tsx:145:18)
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:709:7)
+  597 |               <Button size="sm" onClick={() => void openWorkspace(row)}>
+  598 |                 <ClipboardCheck className="h-4 w-4" />
+> 599 |                 {t("process")}
+      |                  ^
+  600 |               </Button>
+  601 |             </HasPermission>
+  602 |           ) : ( (app\[locale]\admins\withdraw\page.tsx:599:18)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.process` in messages for locale `zh-CN`.
+    at Object.render (app\[locale]\admins\withdraw\page.tsx:599:18)
+    at eval (components\shared\DataTable.tsx:82:39)
+    at Array.map (<anonymous>)
+    at renderRow (components\shared\DataTable.tsx:75:18)
+    at eval (components\shared\DataTable.tsx:145:38)
+    at Array.map (<anonymous>)
+    at DataTable (components\shared\DataTable.tsx:145:18)
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:709:7)
+  597 |               <Button size="sm" onClick={() => void openWorkspace(row)}>
+  598 |                 <ClipboardCheck className="h-4 w-4" />
+> 599 |                 {t("process")}
+      |                  ^
+  600 |               </Button>
+  601 |             </HasPermission>
+  602 |           ) : ( (app\[locale]\admins\withdraw\page.tsx:599:18)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.process` in messages for locale `zh-CN`.
+    at Object.render (app\[locale]\admins\withdraw\page.tsx:599:18)
+    at eval (components\shared\DataTable.tsx:82:39)
+    at Array.map (<anonymous>)
+    at renderRow (components\shared\DataTable.tsx:75:18)
+    at eval (components\shared\DataTable.tsx:145:38)
+    at Array.map (<anonymous>)
+    at DataTable (components\shared\DataTable.tsx:145:18)
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:709:7)
+  597 |               <Button size="sm" onClick={() => void openWorkspace(row)}>
+  598 |                 <ClipboardCheck className="h-4 w-4" />
+> 599 |                 {t("process")}
+      |                  ^
+  600 |               </Button>
+  601 |             </HasPermission>
+  602 |           ) : ( (app\[locale]\admins\withdraw\page.tsx:599:18)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.reviewStatus` in messages for locale `zh-CN`.
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:585:14)
+  583 |     {
+  584 |       key: "status",
+> 585 |       title: t("reviewStatus"),
+      |              ^
+  586 |       className: "w-[120px]",
+  587 |       render: (row) => <StatusBadge status={row.status} />,
+  588 |     }, (app\[locale]\admins\withdraw\page.tsx:585:14)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.amountCheck` in messages for locale `zh-CN`.
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:568:14)
+  566 |     {
+  567 |       key: "applyAmount",
+> 568 |       title: t("amountCheck"),
+      |              ^
+  569 |       className: "min-w-[190px]",
+  570 |       render: (row) => (
+  571 |         <div className="space-y-1.5"> (app\[locale]\admins\withdraw\page.tsx:568:14)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.reviewStatus` in messages for locale `zh-CN`.
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:585:14)
+  583 |     {
+  584 |       key: "status",
+> 585 |       title: t("reviewStatus"),
+      |              ^
+  586 |       className: "w-[120px]",
+  587 |       render: (row) => <StatusBadge status={row.status} />,
+  588 |     }, (app\[locale]\admins\withdraw\page.tsx:585:14)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.process` in messages for locale `zh-CN`.
+    at Object.render (app\[locale]\admins\withdraw\page.tsx:599:18)
+    at eval (components\shared\DataTable.tsx:82:39)
+    at Array.map (<anonymous>)
+    at renderRow (components\shared\DataTable.tsx:75:18)
+    at eval (components\shared\DataTable.tsx:145:38)
+    at Array.map (<anonymous>)
+    at DataTable (components\shared\DataTable.tsx:145:18)
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:709:7)
+  597 |               <Button size="sm" onClick={() => void openWorkspace(row)}>
+  598 |                 <ClipboardCheck className="h-4 w-4" />
+> 599 |                 {t("process")}
+      |                  ^
+  600 |               </Button>
+  601 |             </HasPermission>
+  602 |           ) : ( (app\[locale]\admins\withdraw\page.tsx:599:18)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.process` in messages for locale `zh-CN`.
+    at Object.render (app\[locale]\admins\withdraw\page.tsx:599:18)
+    at eval (components\shared\DataTable.tsx:82:39)
+    at Array.map (<anonymous>)
+    at renderRow (components\shared\DataTable.tsx:75:18)
+    at eval (components\shared\DataTable.tsx:145:38)
+    at Array.map (<anonymous>)
+    at DataTable (components\shared\DataTable.tsx:145:18)
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:709:7)
+  597 |               <Button size="sm" onClick={() => void openWorkspace(row)}>
+  598 |                 <ClipboardCheck className="h-4 w-4" />
+> 599 |                 {t("process")}
+      |                  ^
+  600 |               </Button>
+  601 |             </HasPermission>
+  602 |           ) : ( (app\[locale]\admins\withdraw\page.tsx:599:18)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.process` in messages for locale `zh-CN`.
+    at Object.render (app\[locale]\admins\withdraw\page.tsx:599:18)
+    at eval (components\shared\DataTable.tsx:82:39)
+    at Array.map (<anonymous>)
+    at renderRow (components\shared\DataTable.tsx:75:18)
+    at eval (components\shared\DataTable.tsx:145:38)
+    at Array.map (<anonymous>)
+    at DataTable (components\shared\DataTable.tsx:145:18)
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:709:7)
+  597 |               <Button size="sm" onClick={() => void openWorkspace(row)}>
+  598 |                 <ClipboardCheck className="h-4 w-4" />
+> 599 |                 {t("process")}
+      |                  ^
+  600 |               </Button>
+  601 |             </HasPermission>
+  602 |           ) : ( (app\[locale]\admins\withdraw\page.tsx:599:18)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.process` in messages for locale `zh-CN`.
+    at Object.render (app\[locale]\admins\withdraw\page.tsx:599:18)
+    at eval (components\shared\DataTable.tsx:82:39)
+    at Array.map (<anonymous>)
+    at renderRow (components\shared\DataTable.tsx:75:18)
+    at eval (components\shared\DataTable.tsx:145:38)
+    at Array.map (<anonymous>)
+    at DataTable (components\shared\DataTable.tsx:145:18)
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:709:7)
+  597 |               <Button size="sm" onClick={() => void openWorkspace(row)}>
+  598 |                 <ClipboardCheck className="h-4 w-4" />
+> 599 |                 {t("process")}
+      |                  ^
+  600 |               </Button>
+  601 |             </HasPermission>
+  602 |           ) : ( (app\[locale]\admins\withdraw\page.tsx:599:18)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.process` in messages for locale `zh-CN`.
+    at Object.render (app\[locale]\admins\withdraw\page.tsx:599:18)
+    at eval (components\shared\DataTable.tsx:82:39)
+    at Array.map (<anonymous>)
+    at renderRow (components\shared\DataTable.tsx:75:18)
+    at eval (components\shared\DataTable.tsx:145:38)
+    at Array.map (<anonymous>)
+    at DataTable (components\shared\DataTable.tsx:145:18)
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:709:7)
+  597 |               <Button size="sm" onClick={() => void openWorkspace(row)}>
+  598 |                 <ClipboardCheck className="h-4 w-4" />
+> 599 |                 {t("process")}
+      |                  ^
+  600 |               </Button>
+  601 |             </HasPermission>
+  602 |           ) : ( (app\[locale]\admins\withdraw\page.tsx:599:18)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.process` in messages for locale `zh-CN`.
+    at Object.render (app\[locale]\admins\withdraw\page.tsx:599:18)
+    at eval (components\shared\DataTable.tsx:82:39)
+    at Array.map (<anonymous>)
+    at renderRow (components\shared\DataTable.tsx:75:18)
+    at eval (components\shared\DataTable.tsx:145:38)
+    at Array.map (<anonymous>)
+    at DataTable (components\shared\DataTable.tsx:145:18)
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:709:7)
+  597 |               <Button size="sm" onClick={() => void openWorkspace(row)}>
+  598 |                 <ClipboardCheck className="h-4 w-4" />
+> 599 |                 {t("process")}
+      |                  ^
+  600 |               </Button>
+  601 |             </HasPermission>
+  602 |           ) : ( (app\[locale]\admins\withdraw\page.tsx:599:18)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.amountCheck` in messages for locale `zh-CN`.
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:568:14)
+  566 |     {
+  567 |       key: "applyAmount",
+> 568 |       title: t("amountCheck"),
+      |              ^
+  569 |       className: "min-w-[190px]",
+  570 |       render: (row) => (
+  571 |         <div className="space-y-1.5"> (app\[locale]\admins\withdraw\page.tsx:568:14)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.reviewStatus` in messages for locale `zh-CN`.
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:585:14)
+  583 |     {
+  584 |       key: "status",
+> 585 |       title: t("reviewStatus"),
+      |              ^
+  586 |       className: "w-[120px]",
+  587 |       render: (row) => <StatusBadge status={row.status} />,
+  588 |     }, (app\[locale]\admins\withdraw\page.tsx:585:14)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.amountCheck` in messages for locale `zh-CN`.
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:568:14)
+  566 |     {
+  567 |       key: "applyAmount",
+> 568 |       title: t("amountCheck"),
+      |              ^
+  569 |       className: "min-w-[190px]",
+  570 |       render: (row) => (
+  571 |         <div className="space-y-1.5"> (app\[locale]\admins\withdraw\page.tsx:568:14)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.reviewStatus` in messages for locale `zh-CN`.
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:585:14)
+  583 |     {
+  584 |       key: "status",
+> 585 |       title: t("reviewStatus"),
+      |              ^
+  586 |       className: "w-[120px]",
+  587 |       render: (row) => <StatusBadge status={row.status} />,
+  588 |     }, (app\[locale]\admins\withdraw\page.tsx:585:14)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.process` in messages for locale `zh-CN`.
+    at Object.render (app\[locale]\admins\withdraw\page.tsx:599:18)
+    at eval (components\shared\DataTable.tsx:82:39)
+    at Array.map (<anonymous>)
+    at renderRow (components\shared\DataTable.tsx:75:18)
+    at eval (components\shared\DataTable.tsx:145:38)
+    at Array.map (<anonymous>)
+    at DataTable (components\shared\DataTable.tsx:145:18)
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:709:7)
+  597 |               <Button size="sm" onClick={() => void openWorkspace(row)}>
+  598 |                 <ClipboardCheck className="h-4 w-4" />
+> 599 |                 {t("process")}
+      |                  ^
+  600 |               </Button>
+  601 |             </HasPermission>
+  602 |           ) : ( (app\[locale]\admins\withdraw\page.tsx:599:18)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.process` in messages for locale `zh-CN`.
+    at Object.render (app\[locale]\admins\withdraw\page.tsx:599:18)
+    at eval (components\shared\DataTable.tsx:82:39)
+    at Array.map (<anonymous>)
+    at renderRow (components\shared\DataTable.tsx:75:18)
+    at eval (components\shared\DataTable.tsx:145:38)
+    at Array.map (<anonymous>)
+    at DataTable (components\shared\DataTable.tsx:145:18)
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:709:7)
+  597 |               <Button size="sm" onClick={() => void openWorkspace(row)}>
+  598 |                 <ClipboardCheck className="h-4 w-4" />
+> 599 |                 {t("process")}
+      |                  ^
+  600 |               </Button>
+  601 |             </HasPermission>
+  602 |           ) : ( (app\[locale]\admins\withdraw\page.tsx:599:18)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.process` in messages for locale `zh-CN`.
+    at Object.render (app\[locale]\admins\withdraw\page.tsx:599:18)
+    at eval (components\shared\DataTable.tsx:82:39)
+    at Array.map (<anonymous>)
+    at renderRow (components\shared\DataTable.tsx:75:18)
+    at eval (components\shared\DataTable.tsx:145:38)
+    at Array.map (<anonymous>)
+    at DataTable (components\shared\DataTable.tsx:145:18)
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:709:7)
+  597 |               <Button size="sm" onClick={() => void openWorkspace(row)}>
+  598 |                 <ClipboardCheck className="h-4 w-4" />
+> 599 |                 {t("process")}
+      |                  ^
+  600 |               </Button>
+  601 |             </HasPermission>
+  602 |           ) : ( (app\[locale]\admins\withdraw\page.tsx:599:18)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.process` in messages for locale `zh-CN`.
+    at Object.render (app\[locale]\admins\withdraw\page.tsx:599:18)
+    at eval (components\shared\DataTable.tsx:82:39)
+    at Array.map (<anonymous>)
+    at renderRow (components\shared\DataTable.tsx:75:18)
+    at eval (components\shared\DataTable.tsx:145:38)
+    at Array.map (<anonymous>)
+    at DataTable (components\shared\DataTable.tsx:145:18)
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:709:7)
+  597 |               <Button size="sm" onClick={() => void openWorkspace(row)}>
+  598 |                 <ClipboardCheck className="h-4 w-4" />
+> 599 |                 {t("process")}
+      |                  ^
+  600 |               </Button>
+  601 |             </HasPermission>
+  602 |           ) : ( (app\[locale]\admins\withdraw\page.tsx:599:18)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.process` in messages for locale `zh-CN`.
+    at Object.render (app\[locale]\admins\withdraw\page.tsx:599:18)
+    at eval (components\shared\DataTable.tsx:82:39)
+    at Array.map (<anonymous>)
+    at renderRow (components\shared\DataTable.tsx:75:18)
+    at eval (components\shared\DataTable.tsx:145:38)
+    at Array.map (<anonymous>)
+    at DataTable (components\shared\DataTable.tsx:145:18)
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:709:7)
+  597 |               <Button size="sm" onClick={() => void openWorkspace(row)}>
+  598 |                 <ClipboardCheck className="h-4 w-4" />
+> 599 |                 {t("process")}
+      |                  ^
+  600 |               </Button>
+  601 |             </HasPermission>
+  602 |           ) : ( (app\[locale]\admins\withdraw\page.tsx:599:18)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.process` in messages for locale `zh-CN`.
+    at Object.render (app\[locale]\admins\withdraw\page.tsx:599:18)
+    at eval (components\shared\DataTable.tsx:82:39)
+    at Array.map (<anonymous>)
+    at renderRow (components\shared\DataTable.tsx:75:18)
+    at eval (components\shared\DataTable.tsx:145:38)
+    at Array.map (<anonymous>)
+    at DataTable (components\shared\DataTable.tsx:145:18)
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:709:7)
+  597 |               <Button size="sm" onClick={() => void openWorkspace(row)}>
+  598 |                 <ClipboardCheck className="h-4 w-4" />
+> 599 |                 {t("process")}
+      |                  ^
+  600 |               </Button>
+  601 |             </HasPermission>
+  602 |           ) : ( (app\[locale]\admins\withdraw\page.tsx:599:18)
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[browser] Uncaught ReferenceError: Search is not defined
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:666:18)
+  664 |             <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+  665 |               <div className="relative w-full sm:w-[240px]">
+> 666 |                 <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 tex...
+      |                  ^
+  667 |                 <Input
+  668 |                   value={filters.keyword}
+  669 |                   onChange={(event) => {
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[browser] Uncaught ReferenceError: Search is not defined
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:645:18)
+  643 |             <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+  644 |               <div className="relative w-full sm:w-[240px]">
+> 645 |                 <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 tex...
+      |                  ^
+  646 |                 <Input
+  647 |                   value={filters.keyword}
+  648 |                   onChange={(event) => {
+[browser] ⨯ unhandledRejection: SyntaxError: Unexpected token '}'
+    at (app-pages-browser)/./node_modules/react-remove-scroll/dist/es2015/handleScroll.js (.next\dev\static\chunks\app\[locale]\admins\withdraw\page.js:2051:26)
+    at (app-pages-browser)/./node_modules/react-remove-scroll/dist/es2015/SideEffect.js (.next\dev\static\chunks\app\[locale]\admins\withdraw\page.js:2018:1)
+    at (app-pages-browser)/./node_modules/react-remove-scroll/dist/es2015/sidecar.js (file://E:/业务开发/qianduan/.next/dev/static/chunks/app/%5Blocale%5D/page.js:5732:1)
+    at (app-pages-browser)/./node_modules/react-remove-scroll/dist/es2015/Combination.js (.next\dev\static\chunks\app\[locale]\admins\withdraw\page.js:2007:1)
+    at (app-pages-browser)/./node_modules/@radix-ui/react-menu/dist/index.mjs (.next\dev\static\chunks\app\[locale]\admins\layout.js:491:1)
+    at (app-pages-browser)/./node_modules/@radix-ui/react-dropdown-menu/dist/index.mjs (.next\dev\static\chunks\app\[locale]\admins\layout.js:447:1)
+    at eval (webpack-internal:///(app-pages-browser)/./components/ui/dropdown-menu.tsx:22:87)
+    at (app-pages-browser)/./components/ui/dropdown-menu.tsx (.next\dev\static\chunks\app\[locale]\admins\layout.js:128:1)
+    at eval (webpack-internal:///(app-pages-browser)/./components/admin/header.tsx:19:86)
+    at (app-pages-browser)/./components/admin/header.tsx (.next\dev\static\chunks\app\[locale]\admins\layout.js:84:1)
+    at eval (webpack-internal:///(app-pages-browser)/./app/[locale]/admins/layout.tsx:9:82)
+    at (app-pages-browser)/./app/[locale]/admins/layout.tsx (.next\dev\static\chunks\app\[locale]\admins\layout.js:40:1)
+[browser] Uncaught SyntaxError: Unexpected token '}'
+    at (app-pages-browser)/./node_modules/react-remove-scroll/dist/es2015/handleScroll.js (.next\dev\static\chunks\app\[locale]\admins\withdraw\page.js:2051:26)
+    at (app-pages-browser)/./node_modules/react-remove-scroll/dist/es2015/SideEffect.js (.next\dev\static\chunks\app\[locale]\admins\withdraw\page.js:2018:1)
+    at (app-pages-browser)/./node_modules/react-remove-scroll/dist/es2015/sidecar.js (file://E:/业务开发/qianduan/.next/dev/static/chunks/app/%5Blocale%5D/page.js:5732:1)
+    at (app-pages-browser)/./node_modules/react-remove-scroll/dist/es2015/Combination.js (.next\dev\static\chunks\app\[locale]\admins\withdraw\page.js:2007:1)
+    at (app-pages-browser)/./node_modules/@radix-ui/react-menu/dist/index.mjs (.next\dev\static\chunks\app\[locale]\admins\layout.js:491:1)
+    at (app-pages-browser)/./node_modules/@radix-ui/react-dropdown-menu/dist/index.mjs (.next\dev\static\chunks\app\[locale]\admins\layout.js:447:1)
+    at eval (webpack-internal:///(app-pages-browser)/./components/ui/dropdown-menu.tsx:22:87)
+    at (app-pages-browser)/./components/ui/dropdown-menu.tsx (.next\dev\static\chunks\app\[locale]\admins\layout.js:128:1)
+    at eval (webpack-internal:///(app-pages-browser)/./components/admin/header.tsx:19:86)
+    at (app-pages-browser)/./components/admin/header.tsx (.next\dev\static\chunks\app\[locale]\admins\layout.js:84:1)
+    at eval (webpack-internal:///(app-pages-browser)/./app/[locale]/admins/layout.tsx:9:82)
+    at (app-pages-browser)/./app/[locale]/admins/layout.tsx (.next\dev\static\chunks\app\[locale]\admins\layout.js:40:1)
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[browser] ⨯ unhandledRejection: SyntaxError: Unexpected token '}'
+    at (app-pages-browser)/./node_modules/react-remove-scroll/dist/es2015/handleScroll.js (.next\dev\static\chunks\app\[locale]\admins\withdraw\page.js:2051:26)
+    at (app-pages-browser)/./node_modules/react-remove-scroll/dist/es2015/SideEffect.js (.next\dev\static\chunks\app\[locale]\admins\withdraw\page.js:2018:1)
+    at (app-pages-browser)/./node_modules/react-remove-scroll/dist/es2015/sidecar.js (file://E:/业务开发/qianduan/.next/dev/static/chunks/app/%5Blocale%5D/page.js:5732:1)
+    at (app-pages-browser)/./node_modules/react-remove-scroll/dist/es2015/Combination.js (.next\dev\static\chunks\app\[locale]\admins\withdraw\page.js:2007:1)
+    at (app-pages-browser)/./node_modules/@radix-ui/react-dialog/dist/index.mjs (file://E:/业务开发/qianduan/.next/dev/static/chunks/app/%5Blocale%5D/page.js:634:1)
+    at eval (webpack-internal:///(app-pages-browser)/./components/ui/sheet.tsx:17:80)
+    at (app-pages-browser)/./components/ui/sheet.tsx (file://E:/业务开发/qianduan/.next/dev/static/chunks/app/%5Blocale%5D/page.js:381:1)
+    at eval (webpack-internal:///(app-pages-browser)/./components/marketing/MobileMarketingNav.tsx:25:78)
+    at (app-pages-browser)/./components/marketing/MobileMarketingNav.tsx (file://E:/业务开发/qianduan/.next/dev/static/chunks/app/%5Blocale%5D/page.js:227:1)
+    at eval (webpack-internal:///(app-pages-browser)/./components/marketing/Header.tsx:18:77)
+    at (app-pages-browser)/./components/marketing/Header.tsx (file://E:/业务开发/qianduan/.next/dev/static/chunks/app/%5Blocale%5D/page.js:161:1)
+[browser] ⨯ unhandledRejection: SyntaxError: Unexpected token '}'
+    at (app-pages-browser)/./node_modules/react-remove-scroll/dist/es2015/handleScroll.js (.next\dev\static\chunks\app\[locale]\admins\withdraw\page.js:2051:26)
+    at (app-pages-browser)/./node_modules/react-remove-scroll/dist/es2015/SideEffect.js (.next\dev\static\chunks\app\[locale]\admins\withdraw\page.js:2018:1)
+    at (app-pages-browser)/./node_modules/react-remove-scroll/dist/es2015/sidecar.js (file://E:/业务开发/qianduan/.next/dev/static/chunks/app/%5Blocale%5D/page.js:5732:1)
+    at (app-pages-browser)/./node_modules/react-remove-scroll/dist/es2015/Combination.js (.next\dev\static\chunks\app\[locale]\admins\withdraw\page.js:2007:1)
+    at (app-pages-browser)/./node_modules/@radix-ui/react-select/dist/index.mjs (.next\dev\static\chunks\app\[locale]\admins\withdraw\page.js:689:1)
+    at eval (webpack-internal:///(app-pages-browser)/./components/ui/select.tsx:17:80)
+    at (app-pages-browser)/./components/ui/select.tsx (.next\dev\static\chunks\app\[locale]\admins\withdraw\page.js:216:1)
+    at eval (webpack-internal:///(app-pages-browser)/./app/[locale]/admins/withdraw/page.tsx:27:80)
+    at (app-pages-browser)/./app/[locale]/admins/withdraw/page.tsx (.next\dev\static\chunks\app\[locale]\admins\withdraw\page.js:40:1)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.searchEmailOrUsername` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:230:28)
+  228 |             <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-mu...
+  229 |             <Input
+> 230 |               placeholder={t("searchEmailOrUsername")}
+      |                            ^
+  231 |               value={filters.keyword}
+  232 |               onChange={(event) => {
+  233 |                 const nextFilters = { ...filters, keyword: event.target.value }; (app\[locale]\admins\profits\page.tsx:230:28)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.searchEmailOrUsername` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:230:28)
+  228 |             <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-mu...
+  229 |             <Input
+> 230 |               placeholder={t("searchEmailOrUsername")}
+      |                            ^
+  231 |               value={filters.keyword}
+  232 |               onChange={(event) => {
+  233 |                 const nextFilters = { ...filters, keyword: event.target.value }; (app\[locale]\admins\profits\page.tsx:230:28)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.searchEmailOrUsername` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:230:28)
+  228 |             <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-mu...
+  229 |             <Input
+> 230 |               placeholder={t("searchEmailOrUsername")}
+      |                            ^
+  231 |               value={filters.keyword}
+  232 |               onChange={(event) => {
+  233 |                 const nextFilters = { ...filters, keyword: event.target.value }; (app\[locale]\admins\profits\page.tsx:230:28)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.searchEmailOrUsername` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:230:28)
+  228 |             <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-mu...
+  229 |             <Input
+> 230 |               placeholder={t("searchEmailOrUsername")}
+      |                            ^
+  231 |               value={filters.keyword}
+  232 |               onChange={(event) => {
+  233 |                 const nextFilters = { ...filters, keyword: event.target.value }; (app\[locale]\admins\profits\page.tsx:230:28)
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.searchEmailOrUsername` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:230:28)
+  228 |             <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-mu...
+  229 |             <Input
+> 230 |               placeholder={t("searchEmailOrUsername")}
+      |                            ^
+  231 |               value={filters.keyword}
+  232 |               onChange={(event) => {
+  233 |                 const nextFilters = { ...filters, keyword: event.target.value }; (app\[locale]\admins\profits\page.tsx:230:28)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.profits.searchEmailOrUsername` in messages for locale `zh-CN`.
+    at AdminProfitsPage (app\[locale]\admins\profits\page.tsx:230:28)
+  228 |             <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-mu...
+  229 |             <Input
+> 230 |               placeholder={t("searchEmailOrUsername")}
+      |                            ^
+  231 |               value={filters.keyword}
+  232 |               onChange={(event) => {
+  233 |                 const nextFilters = { ...filters, keyword: event.target.value }; (app\[locale]\admins\profits\page.tsx:230:28)
+Failed to proxy http://127.0.0.1:8080/api/wallet/me Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Failed to proxy http://127.0.0.1:8080/api/wallet/transactions?pageNo=1&pageSize=12 Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Watchpack Error (initial scan): Error: EINVAL: invalid argument, lstat 'E:\System Volume Information'
+Watchpack Error (initial scan): Error: EINVAL: invalid argument, lstat 'E:\System Volume Information'
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[browser] Uncaught TypeError: Cannot read properties of undefined (reading 'trim')
+    at AdminWithdrawPage.useCallback[buildQuery] (app\[locale]\admins\withdraw\page.tsx:256:36)
+    at AdminWithdrawPage.useMemo[filteredSampleRecords] (app\[locale]\admins\withdraw\page.tsx:292:19)
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:291:40)
+  254 |       pageNo: 1,
+  255 |       pageSize: page.pageSize,
+> 256 |       keyword: nextFilters.keyword.trim() || undefined,
+      |                                    ^
+  257 |       status: nextFilters.status === ALL_STATUS ? undefined : nextFilters.status || undef...
+  258 |       startTime,
+  259 |     };
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[browser] Uncaught ReferenceError: sampleWithdrawOrders is not defined
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:92:79)
+  90 | ...State<WithdrawFilters>(initialFilters);
+  91 | ...ampleData] = useState(true);
+> 92 | ...cords] = useState<WithdrawOrderResponse[]>(sampleWithdrawOrders);
+     |                                               ^
+  93 | ...Order] = useState<WithdrawOrderResponse | null>(null);
+  94 | ...edLoading] = useState(false);
+  95 | ...ecision] = useState<ReviewDecision>("approve");
+[browser] Uncaught ReferenceError: sampleWithdrawOrders is not defined
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:92:79)
+  90 | ...State<WithdrawFilters>(initialFilters);
+  91 | ...ampleData] = useState(true);
+> 92 | ...cords] = useState<WithdrawOrderResponse[]>(sampleWithdrawOrders);
+     |                                               ^
+  93 | ...Order] = useState<WithdrawOrderResponse | null>(null);
+  94 | ...edLoading] = useState(false);
+  95 | ...ecision] = useState<ReviewDecision>("approve");
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[browser] Uncaught ReferenceError: usingSampleData is not defined
+    at AdminWithdrawPage (webpack-internal:///(app-pages-browser)/./app/[locale]/admins/withdraw/page.tsx:590:30)
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[browser] Uncaught ReferenceError: usingSampleData is not defined
+    at AdminWithdrawPage (webpack-internal:///(app-pages-browser)/./app/[locale]/admins/withdraw/page.tsx:541:30)
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.searchEmailOrUsername` in messages for locale `zh-CN`.
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:402:28)
+  400 |             <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-mu...
+  401 |             <Input
+> 402 |               placeholder={t("searchEmailOrUsername")}
+      |                            ^
+  403 |               value={filters.keyword}
+  404 |               onChange={(event) => handleKeywordChange(event.target.value)}
+  405 |               className="h-10 pl-9 border-border bg-card text-xs font-medium focus-visibl... (app\[locale]\admins\withdraw\page.tsx:402:28)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.searchEmailOrUsername` in messages for locale `zh-CN`.
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:402:28)
+  400 |             <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-mu...
+  401 |             <Input
+> 402 |               placeholder={t("searchEmailOrUsername")}
+      |                            ^
+  403 |               value={filters.keyword}
+  404 |               onChange={(event) => handleKeywordChange(event.target.value)}
+  405 |               className="h-10 pl-9 border-border bg-card text-xs font-medium focus-visibl... (app\[locale]\admins\withdraw\page.tsx:402:28)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.searchEmailOrUsername` in messages for locale `zh-CN`.
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:402:28)
+  400 |             <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-mu...
+  401 |             <Input
+> 402 |               placeholder={t("searchEmailOrUsername")}
+      |                            ^
+  403 |               value={filters.keyword}
+  404 |               onChange={(event) => handleKeywordChange(event.target.value)}
+  405 |               className="h-10 pl-9 border-border bg-card text-xs font-medium focus-visibl... (app\[locale]\admins\withdraw\page.tsx:402:28)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.searchEmailOrUsername` in messages for locale `zh-CN`.
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:402:28)
+  400 |             <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-mu...
+  401 |             <Input
+> 402 |               placeholder={t("searchEmailOrUsername")}
+      |                            ^
+  403 |               value={filters.keyword}
+  404 |               onChange={(event) => handleKeywordChange(event.target.value)}
+  405 |               className="h-10 pl-9 border-border bg-card text-xs font-medium focus-visibl... (app\[locale]\admins\withdraw\page.tsx:402:28)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.searchEmailOrUsername` in messages for locale `zh-CN`.
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:402:28)
+  400 |             <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-mu...
+  401 |             <Input
+> 402 |               placeholder={t("searchEmailOrUsername")}
+      |                            ^
+  403 |               value={filters.keyword}
+  404 |               onChange={(event) => handleKeywordChange(event.target.value)}
+  405 |               className="h-10 pl-9 border-border bg-card text-xs font-medium focus-visibl... (app\[locale]\admins\withdraw\page.tsx:402:28)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.searchEmailOrUsername` in messages for locale `zh-CN`.
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:402:28)
+  400 |             <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-mu...
+  401 |             <Input
+> 402 |               placeholder={t("searchEmailOrUsername")}
+      |                            ^
+  403 |               value={filters.keyword}
+  404 |               onChange={(event) => handleKeywordChange(event.target.value)}
+  405 |               className="h-10 pl-9 border-border bg-card text-xs font-medium focus-visibl... (app\[locale]\admins\withdraw\page.tsx:402:28)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.headerEyebrow` in messages for locale `zh-CN`.
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:361:18)
+  359 |     <div className="space-y-6 pb-12">
+  360 |       <PageHeader
+> 361 |         eyebrow={t("headerEyebrow")}
+      |                  ^
+  362 |         title={t("withdrawalReview")}
+  363 |         description={t("reviewWithdrawalRequestsVerifyReceivingInformationAndRecordPaymen...
+  364 |       /> (app\[locale]\admins\withdraw\page.tsx:361:18)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.searchEmailOrUsername` in messages for locale `zh-CN`.
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:402:28)
+  400 |             <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-mu...
+  401 |             <Input
+> 402 |               placeholder={t("searchEmailOrUsername")}
+      |                            ^
+  403 |               value={filters.keyword}
+  404 |               onChange={(event) => handleKeywordChange(event.target.value)}
+  405 |               className="h-10 pl-9 border-border bg-card text-xs font-medium focus-visibl... (app\[locale]\admins\withdraw\page.tsx:402:28)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.headerEyebrow` in messages for locale `zh-CN`.
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:361:18)
+  359 |     <div className="space-y-6 pb-12">
+  360 |       <PageHeader
+> 361 |         eyebrow={t("headerEyebrow")}
+      |                  ^
+  362 |         title={t("withdrawalReview")}
+  363 |         description={t("reviewWithdrawalRequestsVerifyReceivingInformationAndRecordPaymen...
+  364 |       /> (app\[locale]\admins\withdraw\page.tsx:361:18)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.withdraw.searchEmailOrUsername` in messages for locale `zh-CN`.
+    at AdminWithdrawPage (app\[locale]\admins\withdraw\page.tsx:402:28)
+  400 |             <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-mu...
+  401 |             <Input
+> 402 |               placeholder={t("searchEmailOrUsername")}
+      |                            ^
+  403 |               value={filters.keyword}
+  404 |               onChange={(event) => handleKeywordChange(event.target.value)}
+  405 |               className="h-10 pl-9 border-border bg-card text-xs font-medium focus-visibl... (app\[locale]\admins\withdraw\page.tsx:402:28)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.wallets.email` in messages for locale `zh-CN`.
+    at AdminWalletsPage (app\[locale]\admins\wallets\page.tsx:110:28)
+  108 |     { key: "walletNo", title: t("walletNo"), render: (row) => formatEmpty(row.walletNo) },
+  109 |     { key: "userName", title: t("userName"), render: (row) => formatEmpty(row.userName) },
+> 110 |     { key: "email", title: t("email"), render: (row) => formatEmpty(row.email) },
+      |                            ^
+  111 |     { key: "availableBalance", title: t("availableBalance"), render: (row) => <MoneyText ...
+  112 |     { key: "frozenBalance", title: t("frozenAmount"), render: (row) => <MoneyText value={...
+  113 |     { key: "totalRecharge", title: t("totalTopUps"), render: (row) => <MoneyText value={r... (app\[locale]\admins\wallets\page.tsx:110:28)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.wallets.email` in messages for locale `zh-CN`.
+    at AdminWalletsPage (app\[locale]\admins\wallets\page.tsx:142:18)
+  140 |         { label: t("walletNo"), render: (detail) => detail.walletNo },
+  141 |         { label: t("userName"), render: (detail) => detail.userName },
+> 142 |         { label: t("email"), render: (detail) => formatEmpty(detail.email) },
+      |                  ^
+  143 |         { label: t("status"), render: (detail) => <StatusBadge status={detail.status} /> },
+  144 |         { label: t("currency"), render: (detail) => detail.currency },
+  145 |       ], (app\[locale]\admins\wallets\page.tsx:142:18)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.wallets.email` in messages for locale `zh-CN`.
+    at AdminWalletsPage (app\[locale]\admins\wallets\page.tsx:110:28)
+  108 |     { key: "walletNo", title: t("walletNo"), render: (row) => formatEmpty(row.walletNo) },
+  109 |     { key: "userName", title: t("userName"), render: (row) => formatEmpty(row.userName) },
+> 110 |     { key: "email", title: t("email"), render: (row) => formatEmpty(row.email) },
+      |                            ^
+  111 |     { key: "availableBalance", title: t("availableBalance"), render: (row) => <MoneyText ...
+  112 |     { key: "frozenBalance", title: t("frozenAmount"), render: (row) => <MoneyText value={...
+  113 |     { key: "totalRecharge", title: t("totalTopUps"), render: (row) => <MoneyText value={r... (app\[locale]\admins\wallets\page.tsx:110:28)
+[browser] Error: MISSING_MESSAGE: Could not resolve `AdminPages.wallets.email` in messages for locale `zh-CN`.
+    at AdminWalletsPage (app\[locale]\admins\wallets\page.tsx:142:18)
+  140 |         { label: t("walletNo"), render: (detail) => detail.walletNo },
+  141 |         { label: t("userName"), render: (detail) => detail.userName },
+> 142 |         { label: t("email"), render: (detail) => formatEmpty(detail.email) },
+      |                  ^
+  143 |         { label: t("status"), render: (detail) => <StatusBadge status={detail.status} /> },
+  144 |         { label: t("currency"), render: (detail) => detail.currency },
+  145 |       ], (app\[locale]\admins\wallets\page.tsx:142:18)
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] Image with src "/images/retool-blocks-login-door.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[browser] Image with src "/images/retool-blocks-login-door.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[browser] Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+[browser] Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+Failed to proxy http://127.0.0.1:8080/api/admin/wallets?pageNo=1&pageSize=10 Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Failed to proxy http://127.0.0.1:8080/api/admin/wallet-transactions?pageNo=1&pageSize=10 Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+[browser] Image with src "/images/retool-blocks-login-door.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] Image with src "/images/retool-blocks-login-door.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+[browser] Image with src "/images/retool-blocks-login-door.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[browser] Image with src "/images/retool-blocks-login-door.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] Image with src "/images/retool-blocks-login-door.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[browser] Image with src "/images/retool-blocks-login-door.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] Image with src "/images/retool-blocks-login-door.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.
+[browser] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(0) or use aspect(undefined) to control the
+       height and width.

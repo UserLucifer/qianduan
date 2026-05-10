@@ -111,6 +111,72 @@ type AiModelFormValues = z.infer<ReturnType<typeof createAiModelSchema>>;
 type GpuModelFormValues = z.infer<ReturnType<typeof createGpuModelSchema>>;
 type RegionFormValues = z.infer<ReturnType<typeof createRegionSchema>>;
 type CycleRuleFormValues = z.infer<ReturnType<typeof createCycleRuleSchema>>;
+type ProductFormInitialData = ProductResponse & {
+  regionId?: number | null;
+  gpuModelId?: number | null;
+};
+
+const productFormDefaults = (rentableUntil: string): ProductFormValues => ({
+  productCode: "",
+  productName: "",
+  machineCode: "",
+  machineAlias: "",
+  regionId: 0,
+  gpuModelId: 0,
+  gpuMemoryGb: 24,
+  gpuPowerTops: 0,
+  rentPrice: 0,
+  totalStock: 1,
+  availableStock: 1,
+  rentedStock: 0,
+  cpuModel: "",
+  cpuCores: 8,
+  memoryGb: 32,
+  systemDiskGb: 50,
+  dataDiskGb: 100,
+  maxExpandDiskGb: 0,
+  driverVersion: "535.104.05",
+  cudaVersion: "12.2",
+  hasCacheOptimization: false,
+  status: 1,
+  rentableUntil,
+  tokenOutputPerMinute: 0,
+  tokenOutputPerDay: 0,
+});
+
+function toProductFormValues(initialData: ProductResponse | null | undefined, rentableUntil: string): ProductFormValues {
+  const defaults = productFormDefaults(rentableUntil);
+  if (!initialData) return defaults;
+  const product = initialData as ProductFormInitialData;
+
+  return {
+    productCode: product.productCode ?? defaults.productCode,
+    productName: product.productName ?? defaults.productName,
+    machineCode: product.machineCode ?? defaults.machineCode,
+    machineAlias: product.machineAlias ?? defaults.machineAlias,
+    regionId: product.regionId ?? defaults.regionId,
+    gpuModelId: product.gpuModelId ?? defaults.gpuModelId,
+    gpuMemoryGb: product.gpuMemoryGb ?? defaults.gpuMemoryGb,
+    gpuPowerTops: product.gpuPowerTops ?? defaults.gpuPowerTops,
+    rentPrice: product.rentPrice ?? defaults.rentPrice,
+    totalStock: product.totalStock ?? defaults.totalStock,
+    availableStock: product.availableStock ?? defaults.availableStock,
+    rentedStock: product.rentedStock ?? defaults.rentedStock,
+    cpuModel: product.cpuModel ?? defaults.cpuModel,
+    cpuCores: product.cpuCores ?? defaults.cpuCores,
+    memoryGb: product.memoryGb ?? defaults.memoryGb,
+    systemDiskGb: product.systemDiskGb ?? defaults.systemDiskGb,
+    dataDiskGb: product.dataDiskGb ?? defaults.dataDiskGb,
+    maxExpandDiskGb: product.maxExpandDiskGb ?? defaults.maxExpandDiskGb,
+    driverVersion: product.driverVersion ?? defaults.driverVersion,
+    cudaVersion: product.cudaVersion ?? defaults.cudaVersion,
+    hasCacheOptimization: product.hasCacheOptimization === 1,
+    status: product.status ?? defaults.status,
+    rentableUntil: product.rentableUntil ?? defaults.rentableUntil,
+    tokenOutputPerMinute: product.tokenOutputPerMinute ?? defaults.tokenOutputPerMinute,
+    tokenOutputPerDay: product.tokenOutputPerDay ?? defaults.tokenOutputPerDay,
+  };
+}
 
 interface ProductFormProps extends BaseFormProps<ProductResponse> {
   regions: RegionResponse[];
@@ -126,36 +192,7 @@ export function ProductForm({ initialData, regions, gpuModels, onSuccess, onCanc
 
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
-    defaultValues: initialData ? {
-      ...initialData,
-      hasCacheOptimization: initialData.hasCacheOptimization === 1
-    } : {
-      productCode: "",
-      productName: "",
-      machineCode: "",
-      machineAlias: "",
-      regionId: 0,
-      gpuModelId: 0,
-      gpuMemoryGb: 24,
-      gpuPowerTops: 0,
-      rentPrice: 0,
-      totalStock: 1,
-      availableStock: 1,
-      rentedStock: 0,
-      cpuModel: "",
-      cpuCores: 8,
-      memoryGb: 32,
-      systemDiskGb: 50,
-      dataDiskGb: 100,
-      maxExpandDiskGb: 0,
-      driverVersion: "535.104.05",
-      cudaVersion: "12.2",
-      hasCacheOptimization: false,
-      status: 1,
-      rentableUntil: defaultRentableUntil,
-      tokenOutputPerMinute: 0,
-      tokenOutputPerDay: 0,
-    },
+    defaultValues: toProductFormValues(initialData, defaultRentableUntil),
   });
 
   const onSubmit = async (values: ProductFormValues) => {

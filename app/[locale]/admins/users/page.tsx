@@ -1,14 +1,12 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { Eye, Lock, Unlock } from "lucide-react";
+import { Eye, Lock, Search, Unlock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { PageHeader } from "@/components/shared/PageHeader";
-import { SearchPanel } from "@/components/shared/SearchPanel";
 import { DataTable, type DataTableColumn } from "@/components/shared/DataTable";
 import { DetailDrawer, type DetailSectionDef } from "@/components/shared/DetailDrawer";
 import { StatusBadge } from "@/components/shared/StatusBadge";
@@ -30,22 +28,55 @@ import { CommonStatus } from "@/types/enums";
 import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 interface UserFilters {
-  userId: string;
-  email: string;
+  keyword: string;
   status: string;
-  startTime: string;
-  endTime: string;
+  dateRange: string;
+  specificDate: string;
 }
 
 const initialFilters: UserFilters = {
-  userId: "",
-  email: "",
-  status: "",
-  startTime: "",
-  endTime: "",
+  keyword: "",
+  status: "ALL",
+  dateRange: "ALL",
+  specificDate: "",
 };
 
 const initialQuery: AdminUserQuery = { pageNo: 1, pageSize: 10 };
+
+const getStatusQueryValue = (status: string) => {
+  if (status === "ALL") return undefined;
+
+  const value = Number(status);
+  return Number.isFinite(value) ? value : undefined;
+};
+
+const formatLocalDate = (date: Date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
+const getStartTimeByDateRange = (dateRange: string) => {
+  if (dateRange === "ALL") return undefined;
+
+  const days = Number(dateRange);
+  if (!Number.isFinite(days)) return undefined;
+
+  const d = new Date();
+  d.setDate(d.getDate() - days);
+  return `${formatLocalDate(d)} 00:00:00`;
+};
+
+const getStartTimeBySpecificDate = (date: string) => {
+  if (!date) return undefined;
+  return `${date} 00:00:00`;
+};
+
+const getEndTimeBySpecificDate = (date: string) => {
+  if (!date) return undefined;
+  return `${date} 23:59:59`;
+};
 
 export default function CustomersPage() {
   const t = useTranslations("AdminPages.users");
@@ -54,6 +85,7 @@ export default function CustomersPage() {
   const [detailOpen, setDetailOpen] = useState(false);
   const [detailLoading, setDetailLoading] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
+  const queryTimer = useRef<number | null>(null);
 
   const loader = useCallback(async (params: AdminUserQuery) => {
     const res = await getAdminUsers(params);
@@ -61,15 +93,39 @@ export default function CustomersPage() {
   }, []);
   const { page, loading, error, updateParams, changePage, reload } = usePaginatedResource(loader, initialQuery);
 
-  const buildQuery = (nextFilters: UserFilters, pageNo = 1): AdminUserQuery => ({
+  const buildQuery = useCallback((nextFilters: UserFilters, pageNo = 1): AdminUserQuery => ({
     pageNo,
     pageSize: page.pageSize,
-    user_id: nextFilters.userId || undefined,
-    email: nextFilters.email || undefined,
-    status: nextFilters.status ? Number(nextFilters.status) : undefined,
-    start_time: nextFilters.startTime || undefined,
-    end_time: nextFilters.endTime || undefined,
-  });
+    keyword: nextFilters.keyword.trim() || undefined,
+    status: getStatusQueryValue(nextFilters.status),
+    start_time: getStartTimeBySpecificDate(nextFilters.specificDate) ?? getStartTimeByDateRange(nextFilters.dateRange),
+    end_time: getEndTimeBySpecificDate(nextFilters.specificDate),
+  }), [page.pageSize]);
+
+  const applyFilters = useCallback((nextFilters: UserFilters, delay = 0) => {
+    if (queryTimer.current) {
+      window.clearTimeout(queryTimer.current);
+      queryTimer.current = null;
+    }
+
+    if (delay <= 0) {
+      updateParams(buildQuery(nextFilters));
+      return;
+    }
+
+    queryTimer.current = window.setTimeout(() => {
+      updateParams(buildQuery(nextFilters));
+      queryTimer.current = null;
+    }, delay);
+  }, [buildQuery, updateParams]);
+
+  useEffect(() => {
+    return () => {
+      if (queryTimer.current) {
+        window.clearTimeout(queryTimer.current);
+      }
+    };
+  }, []);
 
   const showDetail = async (row: AdminUserRow) => {
     const id = resolveUserId(row);
@@ -199,43 +255,73 @@ export default function CustomersPage() {
 
       <ErrorAlert message={actionError ?? error} />
 
-      <SearchPanel
-        onSearch={() => updateParams(buildQuery(filters))}
-        onReset={() => {
-          setFilters(initialFilters);
-          updateParams(initialQuery);
-        }}
-      >
-        <div className="space-y-2">
-          <Label htmlFor="userId">{t("userID")}</Label>
-          <Input id="userId" placeholder={t("enterID")} value={filters.userId} onChange={(event) => setFilters((current) => ({ ...current, userId: event.target.value }))} className="h-9 w-[100px] bg-background text-foreground" />
+      <div className="flex flex-col gap-4 border-b border-border pb-4 lg:flex-row lg:items-center lg:justify-between">
+        <div className="relative w-full sm:w-[240px]">
+          <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            id="userKeyword"
+            placeholder={t("searchEmailOrUsername")}
+            value={filters.keyword}
+            onChange={(event) => {
+              const nextFilters = { ...filters, keyword: event.target.value };
+              setFilters(nextFilters);
+              applyFilters(nextFilters, 300);
+            }}
+            className="h-10 pl-9 border-border bg-card text-xs font-medium focus-visible:ring-1 focus-visible:ring-primary"
+          />
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="email">{t("email")}</Label>
-          <Input id="email" placeholder={t("enterEmail")} value={filters.email} onChange={(event) => setFilters((current) => ({ ...current, email: event.target.value }))} className="h-9 w-[180px] bg-background text-foreground" />
-        </div>
-        <div className="space-y-2">
-          <Label>{t("enabledStatus")}</Label>
-          <Select value={filters.status} onValueChange={(val) => setFilters((current) => ({ ...current, status: val }))}>
-            <SelectTrigger className="h-9 w-[180px] bg-background text-foreground">
+
+        <div className="flex flex-wrap items-center gap-2">
+          <Select
+            value={filters.status}
+            onValueChange={(val) => {
+              const nextFilters = { ...filters, status: val };
+              setFilters(nextFilters);
+              applyFilters(nextFilters);
+            }}
+          >
+            <SelectTrigger className="h-10 w-[120px] bg-card border-border text-xs font-medium">
               <SelectValue placeholder={t("allStatuses")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value=" ">{t("allStatuses")}</SelectItem>
+              <SelectItem value="ALL">{t("allStatuses")}</SelectItem>
               <SelectItem value={CommonStatus.ENABLED.toString()}>{t("enabled")}</SelectItem>
               <SelectItem value={CommonStatus.DISABLED.toString()}>{t("disabled2")}</SelectItem>
             </SelectContent>
           </Select>
+
+          <Select
+            value={filters.dateRange}
+            onValueChange={(val) => {
+              const nextFilters = { ...filters, dateRange: val, specificDate: "" };
+              setFilters(nextFilters);
+              applyFilters(nextFilters);
+            }}
+          >
+            <SelectTrigger className="h-10 w-[120px] bg-card border-border text-xs font-medium">
+              <SelectValue placeholder={t("allTime")} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ALL">{t("allTime")}</SelectItem>
+              <SelectItem value="3">{t("last3Days")}</SelectItem>
+              <SelectItem value="7">{t("last7Days")}</SelectItem>
+              <SelectItem value="30">{t("last30Days")}</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Input
+            type="date"
+            value={filters.specificDate}
+            onChange={(event) => {
+              const nextFilters = { ...filters, specificDate: event.target.value, dateRange: "ALL" };
+              setFilters(nextFilters);
+              applyFilters(nextFilters);
+            }}
+            className="h-10 w-full border-border bg-card text-xs font-medium focus-visible:ring-1 focus-visible:ring-primary sm:w-[150px]"
+            aria-label={t("registeredAt")}
+          />
         </div>
-        <div className="space-y-2">
-          <Label>{t("registrationStart")}</Label>
-          <Input type="date" value={filters.startTime} onChange={(event) => setFilters((current) => ({ ...current, startTime: event.target.value }))} className="h-9 w-[150px] bg-background text-foreground" />
-        </div>
-        <div className="space-y-2">
-          <Label>{t("registrationEnd")}</Label>
-          <Input type="date" value={filters.endTime} onChange={(event) => setFilters((current) => ({ ...current, endTime: event.target.value }))} className="h-9 w-[150px] bg-background text-foreground" />
-        </div>
-      </SearchPanel>
+      </div>
 
       <DataTable
         columns={columns}

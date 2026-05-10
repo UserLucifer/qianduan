@@ -315,6 +315,9 @@ export interface WalletMeResponse {
 
 export interface WalletTransactionResponse {
   txNo: string;
+  idempotencyKey?: string;
+  userName?: string;
+  currency?: string;
   txType: string;
   amount: number;
   beforeAvailableBalance: number;
@@ -359,6 +362,7 @@ export interface RechargeOrderResponse {
   rechargeNo: string;
   userId?: number;
   userName?: string;
+  email?: string;
   channelId: number;
   currency: string;
   channelName: string;
@@ -380,6 +384,7 @@ export interface RechargeOrderResponse {
 }
 
 export interface RechargeOrderQueryRequest extends PageQuery {
+  keyword?: string;
   status?: string;
   startTime?: string;
   endTime?: string;
@@ -396,6 +401,7 @@ export interface WithdrawOrderResponse {
   withdrawNo: string;
   userId?: number;
   userName?: string;
+  email?: string;
   currency: string;
   withdrawMethod: string;
   network: string;
@@ -417,6 +423,7 @@ export interface WithdrawOrderResponse {
 }
 
 export interface WithdrawOrderQueryRequest extends PageQuery {
+  keyword?: string;
   status?: string;
   startTime?: string;
   endTime?: string;
@@ -463,7 +470,6 @@ export interface CommissionSummaryResponse {
   currentMonthCommission: number;
   level1Commission: number;
   level2Commission: number;
-  level3Commission: number;
 }
 
 export interface CommissionRecordResponse {
@@ -493,8 +499,6 @@ export interface TeamSummaryResponse {
   totalTeamCount: number;
   directTeamCount: number;
   level2TeamCount: number;
-  level3TeamCount: number;
-  deeperTeamCount: number;
 }
 
 export interface TeamMemberResponse {
@@ -658,6 +662,7 @@ export interface SysAdminQuery extends PageQuery {
 }
 
 export interface AdminUserQuery extends PageQuery {
+  keyword?: string;
   email?: string;
   user_id?: string;
   status?: number;
@@ -666,6 +671,7 @@ export interface AdminUserQuery extends PageQuery {
 }
 
 export interface AdminWalletQuery extends PageQuery {
+  keyword?: string;
   user_id?: number;
   wallet_no?: string;
 }
@@ -675,6 +681,7 @@ export interface UserWallet {
   walletNo: string;
   userId: number;
   userName?: string;
+  email?: string;
   currency: string;
   availableBalance: number;
   frozenBalance: number;
@@ -689,6 +696,7 @@ export interface UserWallet {
 }
 
 export interface AdminWalletTransactionQuery extends PageQuery {
+  keyword?: string;
   user_id?: number;
   wallet_no?: string;
   tx_type?: string;
@@ -751,6 +759,7 @@ export interface AdminCommissionRecordQuery extends PageQuery {
 }
 
 export interface AdminProfitRecordQuery extends PageQuery {
+  keyword?: string;
   user_id?: number;
   order_no?: string;
   status?: string;

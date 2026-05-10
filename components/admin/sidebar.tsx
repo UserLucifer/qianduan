@@ -45,7 +45,6 @@ export const ADMIN_NAV_ITEMS: NavGroup[] = [
     labelKey: "groups.operations",
     items: [
       { titleKey: "items.dashboard", icon: LayoutDashboard, href: "/admins/dashboard" },
-      { titleKey: "items.wallets", icon: Wallet, href: "/admins/wallets" },
       { titleKey: "items.logs", icon: Database, href: "/admins/logs" },
     ],
   },
@@ -59,6 +58,7 @@ export const ADMIN_NAV_ITEMS: NavGroup[] = [
   {
     labelKey: "groups.finance",
     items: [
+      { titleKey: "items.wallets", icon: Wallet, href: "/admins/wallets" },
       { titleKey: "items.recharge", icon: CircleDollarSign, href: "/admins/recharge" },
       { titleKey: "items.withdraw", icon: Wallet, href: "/admins/withdraw" },
       { titleKey: "items.profits", icon: TrendingUp, href: "/admins/profits" },

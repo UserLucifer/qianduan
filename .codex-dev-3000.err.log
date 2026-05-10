@@ -206,3 +206,160 @@ SyntaxError: Unexpected non-whitespace character after JSON at position 847 (lin
     at JSON.parse (<anonymous>)
 SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
     at JSON.parse (<anonymous>)
+⨯ SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>) {
+  page: '/zh-CN/dashboard/wallet'
+}
+⨯ SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>)
+SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>) {
+  page: '/zh-CN/dashboard/wallet'
+}
+⨯ SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>)
+⨯ Failed to generate static paths for /[locale]/dashboard/wallet:
+SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>)
+SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>)
+⨯ SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>) {
+  page: '/zh-CN'
+}
+⨯ SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>) {
+  page: '/zh-CN/dashboard/wallet'
+}
+⨯ SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>)
+⨯ SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>)
+SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>) {
+  page: '/zh-CN'
+}
+SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>) {
+  page: '/zh-CN/dashboard/wallet'
+}
+⨯ SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>)
+⨯ SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>)
+SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>)
+SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>)
+⨯ SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>) {
+  page: '/zh-CN/admins/notifications'
+}
+⨯ SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>) {
+  page: '/zh-CN/admins/notifications'
+}
+⨯ SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>)
+⨯ SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>)
+SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>) {
+  page: '/zh-CN/admins/notifications'
+}
+SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>) {
+  page: '/zh-CN/admins/notifications'
+}
+⨯ SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>)
+⨯ SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>)
+SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>)
+SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>)
+⨯ SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>) {
+  page: '/zh-CN/dashboard/api'
+}
+⨯ SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>)
+SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>) {
+  page: '/zh-CN/dashboard/api'
+}
+⨯ SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>)
+SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>)
+⨯ SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>) {
+  page: '/zh-CN'
+}
+⨯ SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>)
+SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>) {
+  page: '/zh-CN'
+}
+⨯ SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>)
+SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>)
+⨯ SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>) {
+  page: '/zh-CN'
+}
+⨯ SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>)
+SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>) {
+  page: '/zh-CN'
+}
+⨯ SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>)
+SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>)
+⨯ SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>) {
+  page: '/zh-CN'
+}
+⨯ SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>)
+SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>) {
+  page: '/zh-CN'
+}
+⨯ SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>)
+SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>)
+⨯ SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>) {
+  page: '/zh-CN'
+}
+⨯ SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>)
+SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>) {
+  page: '/zh-CN'
+}
+⨯ SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>)
+SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>)
+⨯ SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>) {
+  page: '/zh-CN'
+}
+⨯ SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>)
+SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>) {
+  page: '/zh-CN'
+}
+⨯ SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>)
+SyntaxError: Unexpected non-whitespace character after JSON at position 847 (line 1 column 848)
+    at JSON.parse (<anonymous>)

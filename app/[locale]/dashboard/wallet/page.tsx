@@ -121,6 +121,13 @@ function normalizeDisplayKey(value: string): string {
     .toUpperCase();
 }
 
+function formatStartOfDay(date: Date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day} 00:00:00`;
+}
+
 export default function WalletPage() {
   return (
     <Suspense fallback={null}>
@@ -194,7 +201,7 @@ function WalletPageContent() {
        const d = new Date();
        const days = parseInt(dateOption);
        d.setDate(d.getDate() - days);
-       startTime = d.toISOString().split("T")[0];
+       startTime = formatStartOfDay(d);
     }
 
     transactions.updateParams({ 
@@ -430,7 +437,6 @@ function WalletPageContent() {
               <SelectItem value="EARLY_PENALTY">{t("bizTypes.EARLY_PENALTY")}</SelectItem>
               <SelectItem value="REFUND">{t("bizTypes.REFUND")}</SelectItem>
               <SelectItem value="ADJUST">{t("bizTypes.ADJUST")}</SelectItem>
-              <SelectItem value="ACTIVATE_TIMEOUT_REFUND">{t("bizTypes.ACTIVATE_TIMEOUT_REFUND")}</SelectItem>
             </SelectContent>
           </Select>
 

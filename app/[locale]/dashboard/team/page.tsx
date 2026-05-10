@@ -114,12 +114,10 @@ export default function TeamPage() {
       </div>
 
       {/* Stats Area */}
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <StatsCard title={t("stats.total")} value={summary.data?.totalTeamCount ?? 0} description={t("stats.totalDesc")} icon={Users} loading={summary.loading} />
         <StatsCard title={t("stats.direct")} value={summary.data?.directTeamCount ?? 0} description={t("stats.directDesc")} icon={Users} loading={summary.loading} />
         <StatsCard title={t("stats.level2")} value={summary.data?.level2TeamCount ?? 0} description={t("stats.level2Desc")} icon={Users} loading={summary.loading} />
-        <StatsCard title={t("stats.level3")} value={summary.data?.level3TeamCount ?? 0} description={t("stats.level3Desc")} icon={Users} loading={summary.loading} />
-        <StatsCard title={t("stats.deeper")} value={summary.data?.deeperTeamCount ?? 0} description={t("stats.deeperDesc")} icon={Users} loading={summary.loading} />
       </div>
 
       <div className="space-y-4">
@@ -131,7 +129,6 @@ export default function TeamPage() {
                 { value: "ALL", label: t("filters.allLevels") },
                 { value: "1", label: t("filters.level1") },
                 { value: "2", label: t("filters.level2") },
-                { value: "3", label: t("filters.level3") },
               ].map((tab) => (
                 <TabsTrigger 
                   key={tab.value} 

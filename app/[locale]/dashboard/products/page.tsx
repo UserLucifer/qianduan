@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
+import Link from "next/link";
 import {
   Cpu,
   Loader2,
@@ -13,7 +14,10 @@ import {
   X,
   CheckCircle2,
   ArrowLeft,
-  AlertCircle
+  AlertCircle,
+  ReceiptText,
+  Wallet,
+  ArrowUpRight
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
@@ -24,21 +28,284 @@ import { PageHeader } from "@/components/shared/PageHeader";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import { getAiModels, getGpuModels, getProducts, getRegions, getRentalCycleRules } from "@/api/product";
 import { createRentalOrder, estimateRental, payRentalOrder } from "@/api/rental";
+import { getWalletInfo } from "@/api/wallet";
 import type {
   AiModelResponse,
   GpuModelResponse,
   ProductResponse,
   RegionResponse,
   RentalCycleRuleResponse,
-  RentalEstimateResponse
+  RentalEstimateResponse,
+  WalletMeResponse
 } from "@/api/types";
-import { toErrorMessage } from "@/lib/format";
+import { formatNumber, toErrorMessage } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { ErrorAlert } from "@/components/shared/ErrorAlert";
 import { normalizeLocale } from "@/i18n/locales";
 
 const PAGE_SIZE = 12;
-const ESTIMATED_ROW_HEIGHT = 420;
+const ESTIMATED_ROW_HEIGHT = 500;
+
+type ProductCardLabels = {
+  available: string;
+  outOfStock: string;
+  lowStock: string;
+  currentPrice: string;
+  startRent: string;
+  specs: {
+    vram: string;
+    compute: string;
+    cpu: string;
+    memory: string;
+    disk: string;
+    cuda: string;
+    driver: string;
+    cacheOptimized: string;
+    cacheStandard: string;
+  };
+};
+
+function getProductCardLabels(locale: string): ProductCardLabels {
+  const isZh = locale === "zh-CN";
+
+  return {
+    available: isZh ? "可租" : "Available",
+    outOfStock: isZh ? "已租完" : "Sold out",
+    lowStock: isZh ? "紧张" : "Limited",
+    currentPrice: isZh ? "当前租赁价格" : "Current rental price",
+    startRent: isZh ? "开始租赁" : "Start rental",
+    specs: {
+      vram: isZh ? "显存" : "VRAM",
+      compute: isZh ? "算力" : "Compute",
+      cpu: "CPU",
+      memory: isZh ? "内存" : "Memory",
+      disk: isZh ? "磁盘" : "Disk",
+      cuda: "CUDA",
+      driver: "Driver",
+      cacheOptimized: isZh ? "已启用缓存优化" : "Cache optimized",
+      cacheStandard: isZh ? "标准缓存" : "Standard cache",
+    },
+  };
+}
+
+function formatGpuCores(count: number, locale: string) {
+  return locale === "zh-CN" ? `${formatNumber(count, locale)} 核` : `${formatNumber(count, locale)} cores`;
+}
+
+function getMachineLabel(product: ProductResponse) {
+  return product.machineAlias || product.machineCode || product.productCode;
+}
+
+function buildTechLine(productId: number) {
+  const points = Array.from({ length: 16 }, (_, index) => {
+    const x = index * (320 / 15);
+    const wave = Math.sin((productId + 5) * (index + 1) * 0.31) * 15;
+    const step = Math.cos((productId + index) * 0.53) * 8;
+    const y = Math.max(16, Math.min(70, 43 + wave + step));
+    return { x: Number(x.toFixed(1)), y: Number(y.toFixed(1)) };
+  });
+  const line = points.map((point, index) => `${index === 0 ? "M" : "L"}${point.x} ${point.y}`).join(" ");
+  const area = `${line} L320 92 L0 92 Z`;
+  const markerIndexes = [3, 8, 12];
+
+  return { points, line, area, markerIndexes };
+}
+
+function ProductTechLine({
+  productId,
+  signalBars,
+}: {
+  productId: number;
+  signalBars: number;
+}) {
+  const { points, line, area, markerIndexes } = buildTechLine(productId);
+
+  return (
+    <div className="relative h-[104px] overflow-hidden rounded-xl border border-border bg-[linear-gradient(to_right,hsl(var(--ui-border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--ui-border))_1px,transparent_1px),linear-gradient(180deg,hsl(var(--ui-background))_0%,hsl(var(--ui-muted))_100%)] bg-[size:34px_100%,100%_26px,100%_100%] text-foreground">
+      <svg
+        className="absolute inset-0 h-full w-full"
+        viewBox="0 0 320 92"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        <path d={area} fill="currentColor" opacity="0.055" />
+        <path d={line} fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+        {markerIndexes.map((index) => {
+          const point = points[index];
+          return point ? <circle key={index} cx={point.x} cy={point.y} r="3" fill="currentColor" /> : null;
+        })}
+      </svg>
+      <div className="absolute right-3 top-3 flex items-center gap-1.5">
+        {Array.from({ length: signalBars }).map((_, index) => (
+          <span key={index} className="h-1 w-5 rounded-full bg-foreground/80" />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function CacheOptimizationMark({
+  enabled,
+  label,
+}: {
+  enabled: boolean;
+  label: string;
+}) {
+  return (
+    <div
+      role="img"
+      title={label}
+      aria-label={label}
+      className={cn(
+        "flex h-[104px] w-20 shrink-0 items-center justify-center rounded-xl border transition-colors",
+        enabled
+          ? "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-400/20 dark:bg-emerald-400/10 dark:text-emerald-300"
+          : "border-border bg-background text-muted-foreground"
+      )}
+    >
+      <svg viewBox="0 0 56 34" className="h-12 w-16" role="img" aria-hidden="true">
+        <rect x="6" y="8" width="14" height="18" rx="3" fill="currentColor" opacity={enabled ? "0.18" : "0.11"} />
+        <rect x="36" y="8" width="14" height="18" rx="3" fill="currentColor" opacity={enabled ? "0.18" : "0.11"} />
+        <rect x="22" y="4" width="12" height="26" rx="3" fill="currentColor" opacity={enabled ? "0.28" : "0.16"} />
+        <path
+          d={enabled ? "M12 17 C20 8 29 26 44 12" : "M12 18 C22 18 32 18 44 18"}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.4"
+          strokeLinecap="round"
+        />
+        {enabled ? (
+          <>
+            <circle cx="12" cy="17" r="2.4" fill="currentColor" />
+            <circle cx="44" cy="12" r="2.4" fill="currentColor" />
+          </>
+        ) : null}
+      </svg>
+    </div>
+  );
+}
+
+function DashboardProductCard({
+  product,
+  labels,
+  locale,
+  onStartRent,
+}: {
+  product: ProductResponse;
+  labels: ProductCardLabels;
+  locale: string;
+  onStartRent: (product: ProductResponse) => void;
+}) {
+  const isSoldOut = (product.availableStock ?? 0) <= 0;
+  const isLowStock =
+    !isSoldOut && product.totalStock > 0 && product.availableStock <= Math.max(2, Math.ceil(product.totalStock * 0.35));
+  const statusLabel = isSoldOut ? labels.outOfStock : isLowStock ? labels.lowStock : labels.available;
+  const machineLabel = getMachineLabel(product);
+  const totalDiskGb = (product.systemDiskGb ?? 0) + (product.dataDiskGb ?? 0);
+  const signalBars = isSoldOut ? 1 : isLowStock ? 2 : 3;
+  const hasCacheOptimization = Number(product.hasCacheOptimization) === 1;
+  const mainSpecs = [
+    { label: labels.specs.vram, value: `${formatNumber(product.gpuMemoryGb, locale)}GB` },
+    { label: labels.specs.compute, value: `${formatNumber(product.gpuPowerTops, locale)} TOPS` },
+    { label: labels.specs.cpu, value: formatGpuCores(product.cpuCores, locale) },
+    { label: labels.specs.memory, value: `${formatNumber(product.memoryGb, locale)}GB` },
+    { label: labels.specs.disk, value: `${formatNumber(totalDiskGb, locale)}GB` },
+  ];
+  const runtimeSpecs = [
+    `${labels.specs.cuda} ${product.cudaVersion || "-"}`,
+    `${labels.specs.driver} ${product.driverVersion || "-"}`,
+  ];
+
+  return (
+    <BentoCard
+      className="group relative transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+      contentClassName="relative overflow-hidden p-0"
+    >
+      <div className="pointer-events-none absolute inset-0 opacity-20">
+        <div className="absolute right-4 top-4 h-9 w-14 border-r border-t border-foreground" />
+        <div className="absolute bottom-4 left-4 h-7 w-12 border-b border-l border-foreground" />
+      </div>
+
+      <div className="relative p-5 sm:p-6">
+        <div className="flex items-start justify-between gap-4">
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="rounded-md border border-foreground bg-foreground px-2 py-1 text-[11px] font-bold leading-none text-background">
+                {product.regionName}
+              </span>
+              <span className="max-w-[150px] truncate rounded-md border border-border bg-background px-2 py-1 text-[11px] font-semibold leading-none text-muted-foreground">
+                {machineLabel}
+              </span>
+              <StatusBadge
+                status={isSoldOut ? "DISABLED" : "ACTIVE"}
+                label={statusLabel}
+                className={cn(
+                  isSoldOut
+                    ? "border-border bg-muted text-muted-foreground"
+                    : isLowStock
+                      ? "border-amber-300/40 bg-amber-50 text-amber-700 dark:border-amber-400/20 dark:bg-amber-400/10 dark:text-amber-300"
+                      : "border-emerald-300/40 bg-emerald-50 text-emerald-700 dark:border-emerald-400/20 dark:bg-emerald-400/10 dark:text-emerald-300"
+                )}
+              />
+            </div>
+            <h3 className="mt-4 truncate text-2xl font-black leading-none tracking-tight text-foreground">
+              {product.gpuModelName}
+            </h3>
+            <p className="mt-2 truncate text-sm text-muted-foreground">{product.productName}</p>
+            <p className="mt-1 truncate font-mono text-[11px] text-muted-foreground/60">{product.productCode}</p>
+          </div>
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border bg-background text-foreground transition-colors group-hover:border-foreground/30">
+            <Server className="h-5 w-5" />
+          </div>
+        </div>
+
+        <div className="mt-5 flex items-stretch gap-3">
+          <div className="min-w-0 flex-1">
+            <ProductTechLine productId={product.id} signalBars={signalBars} />
+          </div>
+          <CacheOptimizationMark
+            enabled={hasCacheOptimization}
+            label={hasCacheOptimization ? labels.specs.cacheOptimized : labels.specs.cacheStandard}
+          />
+        </div>
+
+        <div className="mt-4 rounded-xl border border-border bg-muted/25 p-3.5">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+            {mainSpecs.map((spec) => (
+              <div key={spec.label} className="min-w-[86px]">
+                <span className="whitespace-nowrap text-sm font-black tabular-nums text-foreground">{spec.value}</span>
+                <span className="ml-1 text-[11px] font-semibold text-muted-foreground">{spec.label}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-border/70 pt-3 text-[11px] font-semibold text-muted-foreground">
+            {runtimeSpecs.map((spec) => (
+              <span key={spec} className="whitespace-nowrap">{spec}</span>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-5 flex flex-col gap-4 border-t border-border/70 pt-5 sm:flex-row sm:items-end sm:justify-between">
+          <div className="space-y-1">
+            <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70">
+              {labels.currentPrice}
+            </div>
+            <MoneyText value={product.rentPrice} className="text-2xl font-black text-foreground" />
+          </div>
+          <Button
+            onClick={() => onStartRent(product)}
+            disabled={isSoldOut}
+            className="h-11 rounded-xl px-6 text-xs font-bold transition-all hover:shadow-lg hover:shadow-primary/30 sm:min-w-[120px]"
+          >
+            {labels.startRent}
+            <ArrowUpRight className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+    </BentoCard>
+  );
+}
 
 export default function UserProductsPage() {
   const t = useTranslations("DashboardProducts");
@@ -80,11 +347,13 @@ export default function UserProductsPage() {
   const [cycleRuleId, setCycleRuleId] = useState<number | null>(null);
 
   const [estimate, setEstimate] = useState<RentalEstimateResponse | null>(null);
+  const [wallet, setWallet] = useState<WalletMeResponse | null>(null);
   // Granular loading states — filter panel is NEVER hidden
   const [initLoading, setInitLoading] = useState(true);      // first page load only
   const [gpuLoading, setGpuLoading] = useState(false);       // GPU matrix row only
   const [productsLoading, setProductsLoading] = useState(false); // product grid only
   const [isFetchingMore, setIsFetchingMore] = useState(false);
+  const [walletLoading, setWalletLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
@@ -107,6 +376,7 @@ export default function UserProductsPage() {
     scrollMargin: containerRef.current?.offsetTop ?? 0,
   });
   const virtualItems = virtualizer.getVirtualItems();
+  const productCardLabels = useMemo(() => getProductCardLabels(locale), [locale]);
 
   /* ─── Effect 1: Init — load regions + static data (runs once) ─── */
   useEffect(() => {
@@ -230,6 +500,23 @@ export default function UserProductsPage() {
     setEstimate(null);
     setError(null);
   };
+
+  const loadWallet = useCallback(async () => {
+    setWalletLoading(true);
+    try {
+      const res = await getWalletInfo();
+      setWallet(res.data);
+    } catch (err) {
+      setError(toErrorMessage(err));
+    } finally {
+      setWalletLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (step !== 1 || configStep !== 2) return;
+    void loadWallet();
+  }, [step, configStep, loadWallet]);
 
   const handleCancelConfig = () => {
     setStep(0);
@@ -364,7 +651,7 @@ export default function UserProductsPage() {
         // Skeleton grid — same column layout as real cards, no flicker
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
           {Array.from({ length: columns * 2 }).map((_, i) => (
-            <div key={i} className="h-[250px] w-full animate-pulse rounded-2xl border border-border bg-muted" />
+            <div key={i} className="h-[420px] w-full animate-pulse rounded-2xl border border-border bg-muted" />
           ))}
         </div>
       ) : (
@@ -394,48 +681,13 @@ export default function UserProductsPage() {
                   ) : (
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
                       {rowItems.map((p) => (
-                        <BentoCard key={p.productCode} className="group relative transition-all duration-300 hover:-translate-y-1 hover:shadow-xl" contentClassName="p-7">
-                          <div className="flex items-start justify-between">
-                            <div>
-                              <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
-                                <MapPin className="h-3.5 w-3.5" />
-                                {p.regionName}
-                              </div>
-                              <h3 className="mt-2.5 text-2xl font-bold tracking-tight text-foreground">{p.gpuModelName}</h3>
-                              <p className="mt-1 text-[11px] font-mono text-muted-foreground/60">{p.productCode}</p>
-                            </div>
-                            <StatusBadge
-                              status={(p.availableStock ?? 0) > 0 ? "ACTIVE" : "DISABLED"}
-                              label={(p.availableStock ?? 0) > 0 ? t("card.available") : t("card.outOfStock")}
-                            />
-                          </div>
-
-                          <div className="mt-8 grid grid-cols-2 gap-5">
-                            <div className="space-y-1.5">
-                              <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">
-                                <Cpu className="h-3.5 w-3.5" /> {t("card.memory")}</div>
-                              <div className="text-base font-bold">{p.gpuMemoryGb} GB</div>
-                            </div>
-                            <div className="space-y-1.5">
-                              <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">
-                                <Zap className="h-3.5 w-3.5" /> {t("card.power")}</div>
-                              <div className="text-base font-bold">{p.gpuPowerTops} TOPS</div>
-                            </div>
-                          </div>
-
-                          <div className="mt-9 flex items-end justify-between border-t border-border/50 pt-5">
-                            <div className="space-y-1">
-                              <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70">{t("card.startingPrice")}</div>
-                              <MoneyText value={p.rentPrice} className="text-xl font-black text-primary" />
-                            </div>
-                            <Button
-                              onClick={() => handleStartRent(p)}
-                              disabled={(p.availableStock ?? 0) <= 0}
-                              className="h-11 rounded-xl px-6 text-xs font-bold transition-all hover:shadow-lg hover:shadow-primary/30"
-                            >
-                              {t("card.startRent")}</Button>
-                          </div>
-                        </BentoCard>
+                        <DashboardProductCard
+                          key={p.productCode}
+                          product={p}
+                          labels={productCardLabels}
+                          locale={locale}
+                          onStartRent={handleStartRent}
+                        />
                       ))}
                     </div>
                   )}
@@ -458,6 +710,8 @@ export default function UserProductsPage() {
   /* ─── Render Config ─── */
   const renderConfig = () => {
     if (!selectedProduct) return null;
+    const rentalCost = estimate?.rentPrice ?? selectedProduct.rentPrice;
+    const hasInsufficientBalance = wallet ? wallet.availableBalance < rentalCost : false;
 
     return (
       <motion.div
@@ -600,6 +854,7 @@ export default function UserProductsPage() {
                       ))}
                     </div>
                   </div>
+
                   <div className="flex min-h-[140px] flex-col items-center justify-center rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-8 text-center">
                     {estimate ? (
                       <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="space-y-2">
@@ -613,11 +868,35 @@ export default function UserProductsPage() {
                       <div className="flex flex-col items-center gap-3 text-muted-foreground"><AlertCircle className="h-8 w-8 opacity-20" /><p className="text-sm">{t("config.chooseCycleHint")}</p></div>
                     )}
                   </div>
-                  <div className="flex items-center justify-between pt-2">
+                  <div className="flex flex-col gap-4 pt-2 sm:flex-row sm:items-center sm:justify-between">
                     <Button variant="ghost" onClick={() => setConfigStep(1)} className="text-muted-foreground"><ChevronLeft className="mr-2 h-4 w-4" /> {t("config.previous")}</Button>
-                    <Button onClick={() => void handleFinalSubmit()} disabled={!cycleRuleId || submitting} className="group h-12 px-10 shadow-lg shadow-primary/20">
-                      {submitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <CheckCircle2 className="mr-2 h-4 w-4" />}
-                      {t("config.submit")}</Button>
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                      <div className="flex flex-col gap-2 rounded-xl border border-border bg-muted/25 p-3 text-xs sm:flex-row sm:items-center">
+                        <div className="flex items-center gap-2">
+                          <Wallet className="h-4 w-4 text-muted-foreground" />
+                          <span className="text-muted-foreground">{t("config.walletBalance")}</span>
+                          {walletLoading ? (
+                            <Loader2 className="h-3.5 w-3.5 animate-spin text-muted-foreground" />
+                          ) : (
+                            <MoneyText value={wallet?.availableBalance ?? 0} currency="$" className={cn("font-bold", hasInsufficientBalance && "text-destructive")} />
+                          )}
+                        </div>
+                        <div className="hidden h-4 w-px bg-border sm:block" />
+                        <div className="flex items-center gap-2">
+                          <ReceiptText className="h-4 w-4 text-muted-foreground" />
+                          <span className="text-muted-foreground">{t("config.rentalCost")}</span>
+                          <MoneyText value={rentalCost} currency="$" className="font-bold text-foreground" />
+                        </div>
+                        {hasInsufficientBalance && (
+                          <Button asChild variant="outline" size="sm" className="h-8 px-3 text-xs">
+                            <Link href={`/${locale}/dashboard/recharge`}>{t("config.recharge")}</Link>
+                          </Button>
+                        )}
+                      </div>
+                      <Button onClick={() => void handleFinalSubmit()} disabled={!cycleRuleId || submitting} className="group h-12 px-10 shadow-lg shadow-primary/20">
+                        {submitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <CheckCircle2 className="mr-2 h-4 w-4" />}
+                        {t("config.submit")}</Button>
+                    </div>
                   </div>
                 </motion.div>
               )}

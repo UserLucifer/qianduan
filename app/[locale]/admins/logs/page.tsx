@@ -1,14 +1,12 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { Eye } from "lucide-react";
+import { Eye, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { PageHeader } from "@/components/shared/PageHeader";
-import { SearchPanel } from "@/components/shared/SearchPanel";
 import { DataTable, type DataTableColumn } from "@/components/shared/DataTable";
 import { DetailDrawer, type DetailSectionDef } from "@/components/shared/DetailDrawer";
 import { DateTimeText } from "@/components/shared/DateTimeText";
@@ -22,11 +20,10 @@ interface LogFilters {
   adminId: string;
   action: string;
   bizType: string;
-  startTime: string;
-  endTime: string;
+  dateRange: string;
 }
 
-const initialFilters: LogFilters = { adminId: "", action: "", bizType: "", startTime: "", endTime: "" };
+const initialFilters: LogFilters = { adminId: "", action: "ALL", bizType: "ALL", dateRange: "ALL" };
 const initialQuery: AdminLogQuery = { pageNo: 1, pageSize: 10 };
 
 const ACTION_MAP: Record<string, string> = {
@@ -78,6 +75,16 @@ const translateBizType = (type: string, t: (key: string) => string) => {
   const key = BIZ_TYPE_MAP[type?.toLowerCase()];
   return key ? t(key) : type;
 };
+const getStartTimeByDateRange = (dateRange: string) => {
+  if (dateRange === "ALL") return undefined;
+
+  const days = Number(dateRange);
+  if (!Number.isFinite(days)) return undefined;
+
+  const d = new Date();
+  d.setDate(d.getDate() - days);
+  return `${d.toISOString().split("T")[0]} 00:00:00`;
+};
 
 export default function AdminLogsPage() {
   const t = useTranslations("AdminPages.logs");
@@ -85,6 +92,7 @@ export default function AdminLogsPage() {
   const [detail, setDetail] = useState<SysAdminLog | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
+  const filtersInitialized = useRef(false);
 
   const loader = useCallback(async (params: AdminLogQuery) => (await getAdminLogs(params)).data, []);
   const { page, loading, error, updateParams, changePage } = usePaginatedResource(loader, initialQuery);
@@ -93,11 +101,23 @@ export default function AdminLogsPage() {
     pageNo: 1,
     pageSize: page.pageSize,
     admin_id: nextFilters.adminId ? Number(nextFilters.adminId) : undefined,
-    action: nextFilters.action || undefined,
-    biz_type: nextFilters.bizType || undefined,
-    start_time: nextFilters.startTime || undefined,
-    end_time: nextFilters.endTime || undefined,
+    action: nextFilters.action === "ALL" ? undefined : nextFilters.action,
+    biz_type: nextFilters.bizType === "ALL" ? undefined : nextFilters.bizType,
+    start_time: getStartTimeByDateRange(nextFilters.dateRange),
   });
+
+  useEffect(() => {
+    if (!filtersInitialized.current) {
+      filtersInitialized.current = true;
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      updateParams(buildQuery(filters));
+    }, 300);
+
+    return () => window.clearTimeout(timer);
+  }, [filters, page.pageSize]);
 
   const openDetail = async (id: number) => {
     setActionError(null);
@@ -161,46 +181,60 @@ export default function AdminLogsPage() {
     <div className="space-y-6">
       <PageHeader eyebrow="AUDIT LOG" title={t("adminOperationLogs")} description={t("auditKeyAdminOperationsTargetObjectsAndChangeDetails")} />
       <ErrorAlert message={actionError ?? error} />
-      <SearchPanel
-        onSearch={() => updateParams(buildQuery(filters))}
-        onReset={() => {
-          setFilters(initialFilters);
-          updateParams(initialQuery);
-        }}
-      >
-        <div className="space-y-2">
-          <Label htmlFor="adminId">{t("adminID")}</Label>
-          <Input id="adminId" placeholder={t("enterID")} value={filters.adminId} onChange={(event) => setFilters((current) => ({ ...current, adminId: event.target.value }))} className="h-9 w-[120px] bg-background text-foreground" />
+      <div className="flex flex-col gap-4 border-b border-border pb-4 lg:flex-row lg:items-center lg:justify-between">
+        <div className="relative w-full sm:w-[180px]">
+          <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            id="adminId"
+            placeholder={t("searchAdminId")}
+            value={filters.adminId}
+            onChange={(event) => setFilters((current) => ({ ...current, adminId: event.target.value }))}
+            className="h-10 pl-9 border-border bg-card text-xs font-medium focus-visible:ring-1 focus-visible:ring-primary"
+          />
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="action">{t("action2")}</Label>
-          <Select value={filters.action || "ALL"} onValueChange={(value) => setFilters((current) => ({ ...current, action: value === "ALL" ? "" : value }))}>
-            <SelectTrigger id="action" className="h-9 w-[150px] bg-background text-foreground">
+
+        <div className="flex flex-wrap items-center gap-2">
+          <Select value={filters.action} onValueChange={(value) => setFilters((current) => ({ ...current, action: value }))}>
+            <SelectTrigger className="h-10 w-[150px] bg-card border-border text-xs font-medium">
               <SelectValue placeholder={t("allActions")} />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="ALL">{t("allActions")}</SelectItem>
               {Object.entries(ACTION_MAP).map(([key, label]) => (
                 <SelectItem key={key} value={key}>
-                  {label}
+                  {t(label)}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
+
+          <Select value={filters.bizType} onValueChange={(value) => setFilters((current) => ({ ...current, bizType: value }))}>
+            <SelectTrigger className="h-10 w-[170px] bg-card border-border text-xs font-medium">
+              <SelectValue placeholder={t("allBusinessTypes")} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ALL">{t("allBusinessTypes")}</SelectItem>
+              {Object.entries(BIZ_TYPE_MAP).map(([key, label]) => (
+                <SelectItem key={key} value={key}>
+                  {t(label)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Select value={filters.dateRange} onValueChange={(value) => setFilters((current) => ({ ...current, dateRange: value }))}>
+            <SelectTrigger className="h-10 w-[120px] bg-card border-border text-xs font-medium">
+              <SelectValue placeholder={t("allTime")} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ALL">{t("allTime")}</SelectItem>
+              <SelectItem value="3">{t("last3Days")}</SelectItem>
+              <SelectItem value="7">{t("last7Days")}</SelectItem>
+              <SelectItem value="30">{t("last30Days")}</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="bizType">{t("businessType")}</Label>
-          <Input id="bizType" placeholder={t("enterTableName")} value={filters.bizType} onChange={(event) => setFilters((current) => ({ ...current, bizType: event.target.value }))} className="h-9 w-[150px] bg-background text-foreground" />
-        </div>
-        <div className="space-y-2">
-          <Label>{t("startDate")}</Label>
-          <Input type="date" value={filters.startTime} onChange={(event) => setFilters((current) => ({ ...current, startTime: event.target.value }))} className="h-9 w-[150px] bg-background text-foreground" />
-        </div>
-        <div className="space-y-2">
-          <Label>{t("endDate")}</Label>
-          <Input type="date" value={filters.endTime} onChange={(event) => setFilters((current) => ({ ...current, endTime: event.target.value }))} className="h-9 w-[150px] bg-background text-foreground" />
-        </div>
-      </SearchPanel>
+      </div>
       <DataTable columns={columns} data={page.records} rowKey={(row) => row.id} loading={loading} emptyText={t("noSYet")} pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />
       <DetailDrawer data={detail} open={detailOpen} title={t("operationLogDetails")} subtitle={(data) => data ? `#${data.id}` : undefined} sections={detailSections} onClose={() => setDetailOpen(false)} />
     </div>
