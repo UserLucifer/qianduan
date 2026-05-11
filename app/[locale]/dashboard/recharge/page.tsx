@@ -1,14 +1,14 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
 import { toast } from "sonner";
 import { CheckCircle2, Copy, Eye, Loader2, ShieldCheck, Wallet, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { ConfirmActionButton } from "@/components/shared/ConfirmActionButton";
 import { CopyableSecret } from "@/components/shared/CopyableSecret";
 import { DataTable, type DataTableColumn } from "@/components/shared/DataTable";
@@ -35,9 +35,7 @@ function buildRechargeOrderQuery(filters: RechargeOrderQueryRequest): RechargeOr
     pageNo: 1,
     pageSize: filters.pageSize ?? initialParams.pageSize,
     status: filters.status || undefined,
-    keyword: filters.keyword?.trim() || undefined,
     startTime: filters.startTime ? `${filters.startTime} 00:00:00` : undefined,
-    endTime: filters.endTime ? `${filters.endTime} 23:59:59` : undefined,
   };
 }
 
@@ -61,6 +59,7 @@ export default function RechargePage() {
   const [amount, setAmount] = useState("");
   const [externalTxNo, setExternalTxNo] = useState("");
   const [paymentProofUrl, setPaymentProofUrl] = useState("");
+  const [userRemark, setUserRemark] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [successState, setSuccessState] = useState(false);
   const [detail, setDetail] = useState<RechargeOrderResponse | null>(null);
@@ -93,8 +92,19 @@ export default function RechargePage() {
     setAmount("");
     setExternalTxNo("");
     setPaymentProofUrl("");
+    setUserRemark("");
     setSuccessState(false);
     requestIdRef.current = null;
+  };
+
+  const scrollToRecords = () => {
+    setSuccessState(false);
+    requestAnimationFrame(() => {
+      document.getElementById("recharge-records")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    });
   };
 
   const submitRecharge = async () => {
@@ -102,11 +112,19 @@ export default function RechargePage() {
     try {
       if (!selectedChannel) throw new Error(t("errors.chooseChannel"));
       if (!Number.isFinite(parsedAmount) || parsedAmount <= 0) throw new Error(t("errors.invalidAmount"));
+      if (!externalTxNo.trim()) {
+        throw new Error(t.has("errors.txRequired") ? t("errors.txRequired") : "请输入交易哈希。");
+      }
+      const pendingRes = await getRechargeOrders({ pageNo: 1, pageSize: 1, status: "SUBMITTED" });
+      if (pendingRes.data.records.length > 0) {
+        throw new Error(t.has("errors.pendingReview") ? t("errors.pendingReview") : "已有待审核充值，请等待处理或取消后重试。");
+      }
       const requestKey = JSON.stringify([
         selectedChannel.channelId,
         parsedAmount,
         externalTxNo.trim(),
         paymentProofUrl.trim(),
+        userRemark.trim(),
       ]);
       const clientRequestId =
         requestIdRef.current?.key === requestKey
@@ -116,8 +134,9 @@ export default function RechargePage() {
       await createRechargeOrder({
         channelId: selectedChannel.channelId,
         applyAmount: parsedAmount,
-        externalTxNo: externalTxNo.trim() || undefined,
+        externalTxNo: externalTxNo.trim(),
         paymentProofUrl: paymentProofUrl.trim() || undefined,
+        userRemark: userRemark.trim() || undefined,
         clientRequestId,
       });
       requestIdRef.current = null;
@@ -264,8 +283,8 @@ export default function RechargePage() {
           <p className="mt-2 max-w-md text-center text-sm leading-relaxed text-muted-foreground">
             {t("success.description")}</p>
           <div className="mt-8 flex items-center gap-3">
-            <Button asChild>
-              <Link href="/dashboard/recharge/history">{t("success.history")}</Link>
+            <Button type="button" onClick={scrollToRecords}>
+              {t("success.history")}
             </Button>
             <Button variant="outline" onClick={resetForm}>
               {t("success.continue")}</Button>
@@ -393,7 +412,7 @@ export default function RechargePage() {
                 </div>
                 {selectedChannel && (
                   <div className="mt-4 rounded-lg bg-muted px-3 py-2 text-xs text-muted-foreground">
-                    {t("form.channel")}{selectedChannel.channelName} · {selectedChannel.network}
+                    {t("form.channel")}{selectedChannel.channelName} · {selectedChannel.network} · {selectedChannel.accountNo}
                   </div>
                 )}
               </div>
@@ -402,14 +421,20 @@ export default function RechargePage() {
                 <h2 className="text-sm font-semibold text-foreground">{t("form.proofTitle")}</h2>
                 <p className="mt-1 text-xs text-muted-foreground">{t("form.proofDescription")}</p>
                 <div className="mt-3 space-y-3">
-                  <Input value={externalTxNo} onChange={(e) => setExternalTxNo(e.target.value)} placeholder={t("form.txPlaceholder")} className="h-9 bg-background text-foreground" />
+                  <Input value={externalTxNo} onChange={(e) => setExternalTxNo(e.target.value)} placeholder={t("form.txPlaceholder")} required aria-required="true" className="h-9 bg-background text-foreground" />
                   <Input value={paymentProofUrl} onChange={(e) => setPaymentProofUrl(e.target.value)} placeholder={t("form.proofPlaceholder")} className="h-9 bg-background text-foreground" />
+                  <Textarea
+                    value={userRemark}
+                    onChange={(e) => setUserRemark(e.target.value)}
+                    placeholder={t.has("form.remarkPlaceholder") ? t("form.remarkPlaceholder") : "备注"}
+                    className="min-h-20 resize-none bg-background text-foreground"
+                  />
                 </div>
               </div>
 
               <Button
                 onClick={() => void submitRecharge()}
-                disabled={submitting || !selectedChannel || validAmount <= 0}
+                disabled={submitting || !selectedChannel || validAmount <= 0 || !externalTxNo.trim()}
                 className="h-12 w-full text-base font-semibold shadow-md disabled:opacity-50"
               >
                 {submitting ? (<><Loader2 className="mr-2 h-4 w-4 animate-spin" />{t("form.submitting")}</>) : t("form.submit")}
@@ -420,7 +445,7 @@ export default function RechargePage() {
       )}
 
       {/* Top-up records */}
-      <div className="space-y-4">
+      <div id="recharge-records" className="scroll-mt-20 space-y-4">
         <h2 className="text-lg font-semibold text-foreground">{t("records.title")}</h2>
         <SearchPanel
           onSearch={() => updateParams(buildRechargeOrderQuery(filters))}
@@ -442,10 +467,6 @@ export default function RechargePage() {
           <div className="space-y-2">
             <Label>{t("records.startDate")}</Label>
             <Input type="date" value={filters.startTime ?? ""} onChange={(event) => setFilters((current) => ({ ...current, startTime: event.target.value || undefined }))} className="h-9 w-[160px] bg-background text-foreground" />
-          </div>
-          <div className="space-y-2">
-            <Label>{t("records.endDate")}</Label>
-            <Input type="date" value={filters.endTime ?? ""} onChange={(event) => setFilters((current) => ({ ...current, endTime: event.target.value || undefined }))} className="h-9 w-[160px] bg-background text-foreground" />
           </div>
         </SearchPanel>
         <DataTable columns={columns} data={page.records} rowKey={(row) => row.rechargeNo} loading={loading} emptyText={t("records.empty")} pageNo={page.pageNo} pageSize={page.pageSize} total={page.total} onPageChange={changePage} />

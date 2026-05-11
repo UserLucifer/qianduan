@@ -389,11 +389,42 @@ export interface RechargeOrderQueryRequest extends PageQuery {
   endTime?: string;
 }
 
-export interface CreateWithdrawOrderRequest {
+export interface WithdrawAddressResponse {
+  addressId: number;
+  network: string;
+  accountName: string;
+  accountNo: string;
+  label: string;
+  defaultAddress: boolean;
+  status: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateWithdrawAddressRequest {
   network: string;
   accountName?: string;
   accountNo: string;
+  label?: string;
+  defaultAddress?: boolean;
+}
+
+export interface UpdateWithdrawAddressRequest {
+  network: string;
+  accountName?: string;
+  accountNo: string;
+  label?: string;
+  defaultAddress?: boolean;
+}
+
+export interface CreateWithdrawOrderRequest {
+  withdrawAddressId?: number;
+  network?: string;
+  accountName?: string;
+  accountNo?: string;
   applyAmount: number;
+  emailCode?: string;
+  googleCode?: string;
   clientRequestId: string;
 }
 

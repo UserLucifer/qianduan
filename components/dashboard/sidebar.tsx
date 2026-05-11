@@ -17,6 +17,7 @@ import {
   CircleDollarSign,
   ClipboardList,
   Bell,
+  BookMarked,
   Settings,
   type LucideIcon,
 } from "lucide-react";
@@ -76,6 +77,7 @@ export const USER_NAV_ITEMS: NavGroup[] = [
     labelKey: "groups.account",
     items: [
       { titleKey: "items.notifications", icon: Bell, href: "/dashboard/notifications" },
+      { titleKey: "items.addresses", icon: BookMarked, href: "/dashboard/settings/addresses" },
       { titleKey: "items.settings", icon: Settings, href: "/dashboard/settings" },
     ],
   },
