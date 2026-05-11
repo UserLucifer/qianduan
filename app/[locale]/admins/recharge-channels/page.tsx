@@ -64,9 +64,6 @@ export default function RechargeChannelsPage() {
         displayUrl: row.displayUrl,
         accountName: row.accountName,
         accountNo: row.accountNo,
-        minAmount: row.minAmount,
-        maxAmount: row.maxAmount,
-        feeRate: row.feeRate,
         sortNo: row.sortNo,
         status: enabled ? 1 : 0,
       };
@@ -92,7 +89,6 @@ export default function RechargeChannelsPage() {
     { key: "channelName", title: t("channelName"), render: (row) => formatEmpty(row.channelName) },
     { key: "network", title: t("network"), render: (row) => formatEmpty(row.network) },
     { key: "accountNo", title: t("receivingAccountAddress"), render: (row) => <div className="max-w-[200px] truncate font-mono text-xs">{formatEmpty(row.accountNo)}</div> },
-    { key: "feeRate", title: t("feeRate"), render: (row) => `${(row.feeRate * 100).toFixed(2)}%` },
     { key: "sortNo", title: t("sort"), render: (row) => row.sortNo },
     { key: "status", title: t("status"), render: (row) => <StatusBadge status={row.status} /> },
     { key: "updatedAt", title: t("updatedAt"), render: (row) => <DateTimeText value={row.updatedAt} /> },

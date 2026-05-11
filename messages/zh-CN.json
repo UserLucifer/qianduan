@@ -1846,7 +1846,7 @@
     }
   },
   "DashboardNav": {
-    "brand": "GPU 控制台",
+    "brand": "WebCal控制台",
     "groups": {
       "overview": "概览",
       "compute": "算力资源",
@@ -1875,9 +1875,24 @@
   "DashboardHeader": {
     "pageFallback": "控制台",
     "quickSearch": "快速搜索...",
+    "searchResults": "搜索结果",
+    "searchLoading": "正在搜索...",
+    "searchEmpty": "没有找到匹配结果",
+    "searchFailed": "搜索失败，请稍后重试",
+    "searchTypeFallback": "结果",
+    "openDashboardNav": "打开控制台菜单",
+    "closeDashboardNav": "关闭控制台菜单",
+    "dashboardNavTitle": "控制台导航",
+    "dashboardNavDescription": "打开控制台页面菜单，切换到订单、钱包、团队和账户设置等页面。",
     "publicNav": "公共站点导航",
     "openPublicNav": "打开公共站点导航",
     "siteNav": "站点导航",
+    "language": "语言",
+    "languageDrawerDescription": "选择控制台显示语言。",
+    "cancel": "取消",
+    "currentLanguage": "当前",
+    "switchToLightTheme": "切换到明亮主题",
+    "switchToDarkTheme": "切换到暗色主题",
     "accountFallback": "账户",
     "personalCenter": "个人中心",
     "billingRecords": "账单记录",
@@ -1890,7 +1905,7 @@
     }
   },
   "AdminNav": {
-    "brand": "管理后台",
+    "brand": "WebCal控制台",
     "subtitle": "Admin Control Panel",
     "groups": {
       "operations": "运营大盘",
@@ -1903,6 +1918,7 @@
       "dashboard": "数据概览",
       "wallets": "资产管理",
       "walletAdjust": "人工调账",
+      "rechargeChannels": "充值渠道",
       "logs": "操作审计",
       "users": "客户名单",
       "team": "团队拓扑",
@@ -1939,6 +1955,7 @@
       "management": "用户管理",
       "wallets": "钱包管理",
       "walletAdjust": "人工调账",
+      "rechargeChannels": "充值渠道",
       "recharge": "充值审核",
       "withdraw": "提现审核",
       "orders": "租赁订单",
@@ -6231,6 +6248,16 @@
           "everyFiveMinutes": "每 5 分钟",
           "dailyAt0005": "每天 00:05",
           "dailyAt0010": "每天 00:10",
+          "currentConfig": "读取后端配置中",
+          "cronRaw": "Cron: {cron}",
+          "cronConfigured": "已按后端 Cron 配置执行",
+          "everyMinuteReadable": "每分钟自动执行一次",
+          "everyMinutesReadable": "每 {minutes} 分钟自动执行一次",
+          "dailyAtReadable": "每天 {hour}:{minute} 自动执行一次",
+          "pauseDelayHint": "达到暂停延迟 {delay} 后才处理",
+          "delayMinutes": "{value} 分钟",
+          "delayHours": "{value} 小时",
+          "delayDays": "{value} 天",
           "activationTimeoutCancel": "部署费超时取消",
           "cancelRentalOrdersWhoseDeploymentFeeHasBeenPendingTooLong": "自动取消长时间未支付部署费的订单。",
           "autoPause": "资产自动暂停",
@@ -7271,7 +7298,11 @@
     },
     "messages": {
       "orderCreated": "订单 {orderNo} 已成功下单。",
-      "loading": "正在准备算力资源..."
+      "loading": "正在准备算力资源...",
+      "estimateLoading": "正在计算预计收益...",
+      "estimateRequired": "请先选择租赁周期并等待收益预估完成。",
+      "walletLoading": "正在加载钱包余额，请稍后再提交。",
+      "insufficientBalance": "钱包余额不足，请先充值后再创建订单。"
     }
   },
   "DashboardProfits": {

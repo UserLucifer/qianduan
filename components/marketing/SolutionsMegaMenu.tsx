@@ -2,61 +2,9 @@
 
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import {
-  BrainCircuit,
-  CarFront,
-  Cpu,
-  FlaskConical,
-  Gamepad2,
-  GraduationCap,
-  Layers,
-  Rocket,
-  Video,
-  Zap,
-  type LucideIcon,
-} from "lucide-react";
 
 import MarketingMegaMenu from "./MarketingMegaMenu";
-
-type SolutionItem = {
-  key: string;
-  icon: LucideIcon;
-  href: string;
-};
-
-const useCaseCategories: Array<{
-  key: string;
-  items: SolutionItem[];
-}> = [
-  {
-    key: "training",
-    items: [
-      { key: "llmTraining", icon: BrainCircuit, href: "/solutions/llm-training" },
-      { key: "agents", icon: Cpu, href: "/solutions/ai-agents" },
-    ],
-  },
-  {
-    key: "inference",
-    items: [
-      { key: "highConcurrency", icon: Zap, href: "/solutions/high-concurrency-inference" },
-      { key: "aigc", icon: Video, href: "/solutions/aigc-generation" },
-    ],
-  },
-  {
-    key: "compute",
-    items: [
-      { key: "graphics", icon: Layers, href: "/solutions/graphic-rendering" },
-      { key: "scientific", icon: FlaskConical, href: "/solutions/scientific-computing" },
-    ],
-  },
-];
-
-const industryItems = [
-  { key: "startups", icon: Rocket, href: "/solutions/aigc-startups" },
-  { key: "research", icon: GraduationCap, href: "/solutions/research" },
-  { key: "auto", icon: CarFront, href: "/solutions/autonomous-driving" },
-  { key: "gaming", icon: Gamepad2, href: "/solutions/gaming" },
-];
+import { solutionIndustryItems, solutionScenarioCategories } from "./solution-menu-data";
 
 export default function SolutionsMegaMenu() {
   const t = useTranslations("MegaMenus.solutions");
@@ -70,7 +18,7 @@ export default function SolutionsMegaMenu() {
           </h3>
         </div>
         <div className="grid grid-cols-3 gap-6">
-          {useCaseCategories.map((category) => (
+          {solutionScenarioCategories.map((category) => (
             <div key={category.key} className="space-y-4">
               <h4 className="border-b border-border/50 pb-2 text-xs font-medium text-muted-foreground/80">
                 {t(`categories.${category.key}`)}
@@ -115,7 +63,7 @@ export default function SolutionsMegaMenu() {
           </h3>
         </div>
         <div className="flex flex-col gap-2">
-          {industryItems.map((item) => {
+          {solutionIndustryItems.map((item) => {
             const Icon = item.icon;
 
             return (

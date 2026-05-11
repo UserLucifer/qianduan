@@ -100,10 +100,10 @@ export default function AdminWalletAdjustPage() {
   const initialUserId = parseUserId(searchParams.get("user_id"));
   const [keyword, setKeyword] = useState("");
   const [searchResults, setSearchResults] = useState<UserWallet[]>([]);
-  const [searchTotal, setSearchTotal] = useState(0);
   const [wallet, setWallet] = useState<UserWallet | null>(null);
   const [walletLoading, setWalletLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [lookupError, setLookupError] = useState<string | null>(null);
+  const [adjustError, setAdjustError] = useState<string | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [txType, setTxType] = useState<AdminWalletAdjustTxType | null>(null);
   const [amount, setAmount] = useState("");
@@ -128,8 +128,7 @@ export default function AdminWalletAdjustPage() {
   const selectWallet = useCallback((nextWallet: UserWallet, openAfterSelect = false) => {
     setWallet(nextWallet);
     setKeyword(nextWallet.email || nextWallet.userName || "");
-    setSearchResults([]);
-    setSearchTotal(0);
+    setLookupError(null);
     setResult(null);
     setAdjustNo(generateAdjustNo());
     if (openAfterSelect) setSheetOpen(true);
@@ -138,19 +137,19 @@ export default function AdminWalletAdjustPage() {
   const loadWalletById = useCallback(async (nextUserId: string, openAfterLoad = false) => {
     const normalized = parseUserId(nextUserId);
     if (!normalized) {
-      setError(t("invalidUserId"));
+      setLookupError(t("invalidUserId"));
       setWallet(null);
       return;
     }
 
     setWalletLoading(true);
-    setError(null);
+    setLookupError(null);
     try {
       const res = await getAdminWalletByUser(Number(normalized));
       selectWallet(res.data, openAfterLoad);
     } catch (err) {
       setWallet(null);
-      setError(toErrorMessage(err));
+      setLookupError(toErrorMessage(err));
     } finally {
       setWalletLoading(false);
     }
@@ -159,22 +158,21 @@ export default function AdminWalletAdjustPage() {
   const searchWallets = useCallback(async () => {
     const query = keyword.trim();
     if (!query || /^\d+$/.test(query)) {
-      setError(t("keywordRequired"));
+      setLookupError(t("keywordRequired"));
       setSearchResults([]);
-      setSearchTotal(0);
+      setWallet(null);
       return;
     }
 
     setWalletLoading(true);
-    setError(null);
+    setLookupError(null);
     try {
       const res = await getAdminWallets({ pageNo: 1, pageSize: 10, keyword: query });
       setSearchResults(res.data.records);
-      setSearchTotal(res.data.total);
+      setWallet(null);
     } catch (err) {
       setSearchResults([]);
-      setSearchTotal(0);
-      setError(toErrorMessage(err));
+      setLookupError(toErrorMessage(err));
     } finally {
       setWalletLoading(false);
     }
@@ -192,6 +190,12 @@ export default function AdminWalletAdjustPage() {
     setReason("");
     setAdjustNo(generateAdjustNo());
     setResult(null);
+    setAdjustError(null);
+  };
+
+  const handleSheetOpenChange = (open: boolean) => {
+    setSheetOpen(open);
+    if (!open) setAdjustError(null);
   };
 
   const refreshWallet = async () => {
@@ -203,7 +207,7 @@ export default function AdminWalletAdjustPage() {
     if (!wallet || !txType || !amountValue || formInvalid) return;
 
     setSubmitting(true);
-    setError(null);
+    setAdjustError(null);
     try {
       const res = await adjustAdminWallet(wallet.userId, {
         txType,
@@ -217,7 +221,7 @@ export default function AdminWalletAdjustPage() {
       setWallet(walletRes.data);
       setResult(adjustResult);
     } catch (err) {
-      setError(toErrorMessage(err));
+      setAdjustError(toErrorMessage(err));
     } finally {
       setSubmitting(false);
       setConfirmOpen(false);
@@ -251,87 +255,76 @@ export default function AdminWalletAdjustPage() {
         description={t("description")}
       />
 
-      <ErrorAlert message={error} />
-
-      <div className="grid gap-6 2xl:grid-cols-[minmax(0,1fr)_340px]">
-        <Card className="border bg-card shadow-sm">
-          <CardHeader className="border-b border-border">
-            <CardTitle className="text-base">{t("lookupTitle")}</CardTitle>
-            <p className="text-sm text-muted-foreground">{t("lookupDescription")}</p>
-          </CardHeader>
-          <CardContent className="space-y-5 p-5">
-            <div className="flex flex-col gap-3 sm:flex-row">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <Input
-                  value={keyword}
-                  placeholder={t("keywordPlaceholder")}
-                  onChange={(event) => setKeyword(event.target.value)}
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter") void searchWallets();
-                  }}
-                  className="h-10 pl-9"
-                />
-              </div>
-              <Button onClick={() => void searchWallets()} disabled={walletLoading}>
-                {walletLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
-                {t("lookupWallet")}
-              </Button>
-            </div>
-
-            {searchResults.length > 0 ? (
-              <div className="space-y-3">
-                <div className="text-xs text-muted-foreground">
-                  {t("searchResultSummary", { total: searchTotal })}
-                </div>
-                <div className="grid gap-3">
-                  {searchResults.map((item) => (
-                    <WalletSearchResult
-                      key={item.walletNo}
-                      wallet={item}
-                      selected={wallet?.walletNo === item.walletNo}
-                      onSelect={() => selectWallet(item)}
-                      onAdjust={() => {
-                        selectWallet(item);
-                        resetForm();
-                        setSheetOpen(true);
-                      }}
-                    />
-                  ))}
-                </div>
-              </div>
-            ) : null}
-
-            {wallet ? (
-              <WalletReviewCard
-                wallet={wallet}
-                onRefresh={() => void refreshWallet()}
-                onAdjust={() => {
-                  resetForm();
-                  setSheetOpen(true);
+      <Card className="border bg-card shadow-sm">
+        <CardHeader className="border-b border-border">
+          <CardTitle className="text-base">{t("lookupTitle")}</CardTitle>
+          <p className="text-sm text-muted-foreground">{t("lookupDescription")}</p>
+        </CardHeader>
+        <CardContent className="space-y-5 p-5">
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                value={keyword}
+                placeholder={t("keywordPlaceholder")}
+                onChange={(event) => setKeyword(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") void searchWallets();
                 }}
+                className="h-10 pl-9"
               />
-            ) : (
-              <div className="rounded-lg border border-dashed border-border bg-muted/20 p-6 text-sm text-muted-foreground">
-                {t("emptyWalletHint")}
-              </div>
-            )}
-          </CardContent>
-        </Card>
+            </div>
+            <Button onClick={() => void searchWallets()} disabled={walletLoading}>
+              {walletLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
+              {t("lookupWallet")}
+            </Button>
+          </div>
 
-        <Card className="border bg-card shadow-sm">
-          <CardHeader className="border-b border-border">
-            <CardTitle className="text-base">{t("guardTitle")}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4 p-5 text-sm text-muted-foreground">
-            <GuardItem index="1" title={t("guardUserTitle")} description={t("guardUserDesc")} />
-            <GuardItem index="2" title={t("guardDirectionTitle")} description={t("guardDirectionDesc")} />
-            <GuardItem index="3" title={t("guardReasonTitle")} description={t("guardReasonDesc")} />
-          </CardContent>
-        </Card>
-      </div>
+          <ErrorAlert message={lookupError} />
+        </CardContent>
+      </Card>
 
-      <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+      {searchResults.length > 0 ? (
+        <div className="space-y-3">
+          {searchResults.map((item) => (
+            <WalletSearchResult
+              key={item.walletNo}
+              wallet={item}
+              onAdjust={() => {
+                selectWallet(item);
+                resetForm();
+                setSheetOpen(true);
+              }}
+            />
+          ))}
+        </div>
+      ) : wallet ? (
+        <WalletReviewCard
+          wallet={wallet}
+          onRefresh={() => void refreshWallet()}
+          onAdjust={() => {
+            resetForm();
+            setSheetOpen(true);
+          }}
+        />
+      ) : (
+        <div className="rounded-lg border border-dashed border-border bg-muted/20 p-6 text-sm text-muted-foreground">
+          {t("emptyWalletHint")}
+        </div>
+      )}
+
+      <Card className="border bg-card shadow-sm">
+        <CardHeader className="border-b border-border">
+          <CardTitle className="text-base">{t("guardTitle")}</CardTitle>
+        </CardHeader>
+        <CardContent className="grid gap-4 p-5 text-sm text-muted-foreground lg:grid-cols-3">
+          <GuardItem index="1" title={t("guardUserTitle")} description={t("guardUserDesc")} />
+          <GuardItem index="2" title={t("guardDirectionTitle")} description={t("guardDirectionDesc")} />
+          <GuardItem index="3" title={t("guardReasonTitle")} description={t("guardReasonDesc")} />
+        </CardContent>
+      </Card>
+
+      <Sheet open={sheetOpen} onOpenChange={handleSheetOpenChange}>
         <SheetContent className="flex w-full flex-col overflow-y-auto sm:w-[640px] sm:max-w-[640px]">
           <SheetHeader className="pr-8">
             <SheetTitle>{t("sheetTitle")}</SheetTitle>
@@ -341,6 +334,8 @@ export default function AdminWalletAdjustPage() {
           {wallet ? (
             <div className="mt-6 flex flex-1 flex-col gap-5">
               <WalletIdentity wallet={wallet} />
+
+              <ErrorAlert message={adjustError} />
 
               {result ? (
                 <SuccessResult
@@ -500,29 +495,17 @@ export default function AdminWalletAdjustPage() {
 
 function WalletSearchResult({
   wallet,
-  selected,
-  onSelect,
   onAdjust,
 }: {
   wallet: UserWallet;
-  selected: boolean;
-  onSelect: () => void;
   onAdjust: () => void;
 }) {
   const t = useTranslations("AdminPages.walletAdjust");
 
   return (
-    <div
-      className={cn(
-        "overflow-hidden rounded-lg border bg-background/40",
-        selected && "border-primary/50 bg-primary/10",
-      )}
-    >
+    <div className="overflow-hidden rounded-lg border bg-background/40">
       <WalletIdentityRows wallet={wallet} />
       <div className="flex flex-col gap-2 border-t border-border bg-muted/20 p-4 sm:flex-row">
-        <Button variant="outline" size="sm" onClick={onSelect}>
-          {selected ? t("selected") : t("selectWallet")}
-        </Button>
         <Button size="sm" onClick={onAdjust}>
           <WalletCards className="h-4 w-4" />
           {t("manualAdjust")}

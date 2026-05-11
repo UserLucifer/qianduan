@@ -1846,7 +1846,7 @@
     }
   },
   "DashboardNav": {
-    "brand": "GPU Console",
+    "brand": "WebCal控制台",
     "groups": {
       "overview": "Overview",
       "compute": "Compute Resources",
@@ -1875,9 +1875,24 @@
   "DashboardHeader": {
     "pageFallback": "Dashboard",
     "quickSearch": "Quick search...",
+    "searchResults": "Search results",
+    "searchLoading": "Searching...",
+    "searchEmpty": "No matching results",
+    "searchFailed": "Search failed. Please try again later.",
+    "searchTypeFallback": "Result",
+    "openDashboardNav": "Open console menu",
+    "closeDashboardNav": "Close console menu",
+    "dashboardNavTitle": "Console navigation",
+    "dashboardNavDescription": "Open the console page menu to switch between orders, wallet, team, account settings, and related pages.",
     "publicNav": "Public site navigation",
     "openPublicNav": "Open public site navigation",
     "siteNav": "Site navigation",
+    "language": "Language",
+    "languageDrawerDescription": "Choose the console display language.",
+    "cancel": "Cancel",
+    "currentLanguage": "Current",
+    "switchToLightTheme": "Switch to light theme",
+    "switchToDarkTheme": "Switch to dark theme",
     "accountFallback": "Account",
     "personalCenter": "Profile",
     "billingRecords": "Billing records",
@@ -1890,7 +1905,7 @@
     }
   },
   "AdminNav": {
-    "brand": "Admin",
+    "brand": "WebCal控制台",
     "subtitle": "Admin Control Panel",
     "groups": {
       "operations": "Operations",
@@ -1903,6 +1918,7 @@
       "dashboard": "Dashboard",
       "wallets": "Asset Management",
       "walletAdjust": "Manual Adjustment",
+      "rechargeChannels": "Recharge Channels",
       "logs": "Audit Logs",
       "users": "Customers",
       "team": "Team Topology",
@@ -1939,6 +1955,7 @@
       "management": "User Management",
       "wallets": "Wallet Management",
       "walletAdjust": "Manual Adjustment",
+      "rechargeChannels": "Recharge Channels",
       "recharge": "Recharge Review",
       "withdraw": "Withdrawal Review",
       "orders": "Rental Orders",
@@ -6231,6 +6248,16 @@
           "everyFiveMinutes": "Every 5 minutes",
           "dailyAt0005": "Daily at 00:05",
           "dailyAt0010": "Daily at 00:10",
+          "currentConfig": "Reading backend configuration",
+          "cronRaw": "Cron: {cron}",
+          "cronConfigured": "Runs according to backend Cron configuration",
+          "everyMinuteReadable": "Runs automatically every minute",
+          "everyMinutesReadable": "Runs automatically every {minutes} minutes",
+          "dailyAtReadable": "Runs automatically every day at {hour}:{minute}",
+          "pauseDelayHint": "Only processes items after pause delay {delay}",
+          "delayMinutes": "{value} minutes",
+          "delayHours": "{value} hours",
+          "delayDays": "{value} days",
           "activationTimeoutCancel": "Deployment Fee Timeout Cancellation",
           "cancelRentalOrdersWhoseDeploymentFeeHasBeenPendingTooLong": "Automatically cancel orders whose deployment fee has not been paid for too long.",
           "autoPause": "Asset Auto Pause",
@@ -7271,7 +7298,11 @@
     },
     "messages": {
       "orderCreated": "Order {orderNo} has been placed successfully.",
-      "loading": "Preparing compute resources..."
+      "loading": "Preparing compute resources...",
+      "estimateLoading": "Calculating estimated earnings...",
+      "estimateRequired": "Choose a rental cycle and wait for the estimate to finish.",
+      "walletLoading": "Wallet balance is still loading. Please try again in a moment.",
+      "insufficientBalance": "Insufficient wallet balance. Top up before creating the order."
     }
   },
   "DashboardProfits": {

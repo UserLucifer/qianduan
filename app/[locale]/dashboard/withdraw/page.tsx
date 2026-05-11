@@ -1,8 +1,8 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { Eye, Send, XCircle } from "lucide-react";
+import { Eye, Loader2, Send, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -24,6 +24,7 @@ import { useAsyncResource } from "@/hooks/useAsyncResource";
 import { usePaginatedResource } from "@/hooks/usePaginatedResource";
 import { toErrorMessage } from "@/lib/format";
 import { ErrorAlert } from "@/components/shared/ErrorAlert";
+import { createClientRequestId } from "@/lib/client-request-id";
 
 const initialParams: WithdrawOrderQueryRequest = { pageNo: 1, pageSize: 10 };
 const networks = ["TRC20", "ERC20", "BEP20"];
@@ -45,11 +46,15 @@ export default function WithdrawPage() {
   const [accountNo, setAccountNo] = useState("");
   const [accountName, setAccountName] = useState("");
   const [amount, setAmount] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
   const [detail, setDetail] = useState<WithdrawOrderResponse | null>(null);
+  const requestIdRef = useRef<{ key: string; id: string } | null>(null);
 
   const submitWithdraw = async () => {
+    if (submitting) return;
+    setSubmitting(true);
     setMessage(null);
     setActionError(null);
     try {
@@ -57,7 +62,25 @@ export default function WithdrawPage() {
       if (!Number.isFinite(applyAmount) || applyAmount <= 0) throw new Error(t("errors.invalidAmount"));
       if (wallet.data && applyAmount > wallet.data.availableBalance) throw new Error(t("errors.insufficient"));
       if (!accountNo.trim()) throw new Error(t("errors.accountRequired"));
-      await createWithdrawOrder({ network, accountName: accountName || undefined, accountNo, applyAmount });
+      const requestKey = JSON.stringify([
+        network,
+        accountName.trim(),
+        accountNo.trim(),
+        applyAmount,
+      ]);
+      const clientRequestId =
+        requestIdRef.current?.key === requestKey
+          ? requestIdRef.current.id
+          : createClientRequestId("withdraw");
+      requestIdRef.current = { key: requestKey, id: clientRequestId };
+      await createWithdrawOrder({
+        network,
+        accountName: accountName.trim() || undefined,
+        accountNo: accountNo.trim(),
+        applyAmount,
+        clientRequestId,
+      });
+      requestIdRef.current = null;
       setAmount("");
       setAccountNo("");
       setAccountName("");
@@ -65,6 +88,8 @@ export default function WithdrawPage() {
       await Promise.all([reload(), wallet.reload()]);
     } catch (err) {
       setActionError(toErrorMessage(err));
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -161,7 +186,10 @@ export default function WithdrawPage() {
           <Input value={accountNo} onChange={(event) => setAccountNo(event.target.value)} placeholder={t("form.accountNo")} className="h-9 bg-background text-foreground lg:col-span-2" />
           <Input value={amount} onChange={(event) => setAmount(event.target.value)} placeholder={t("form.amount")} className="h-9 bg-background text-foreground" />
         </div>
-        <Button onClick={() => void submitWithdraw()} className="mt-4">{t("form.submit")}</Button>
+        <Button onClick={() => void submitWithdraw()} disabled={submitting} className="mt-4">
+          {submitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+          {t("form.submit")}
+        </Button>
       </div>
 
       <SearchPanel

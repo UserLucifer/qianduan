@@ -25,6 +25,23 @@ import type { AdminProductRequest, AiModelResponse, GpuModelResponse, ProductRes
 
 // --- Schemas ---
 
+const LOCAL_LOGO_PATH_PATTERN = /^\/images\/logo\/[A-Za-z0-9@._-]+\.svg$/;
+
+function isValidLogoPath(value: string) {
+  if (!value) {
+    return true;
+  }
+  if (LOCAL_LOGO_PATH_PATTERN.test(value)) {
+    return true;
+  }
+  try {
+    const url = new URL(value);
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
 function createProductSchema(t: ReturnType<typeof useTranslations>) {
   return z.object({
   productCode: z.string().min(1, t("productCodeRequired")),
@@ -60,7 +77,7 @@ function createAiModelSchema(t: ReturnType<typeof useTranslations>) {
   modelCode: z.string().min(1, t("modelCodeRequired")),
   modelName: z.string().min(1, t("modelNameRequired")),
   vendorName: z.string().min(1, t("vendorNameRequired")),
-  logoUrl: z.string().url(t("validImageUrlRequired")).or(z.string().length(0)),
+  logoUrl: z.string().trim().refine(isValidLogoPath, t("validImageUrlRequired")),
   monthlyTokenConsumptionTrillion: z.coerce.number().min(0),
   tokenUnitPrice: z.coerce.number().min(0),
   deployTechFee: z.coerce.number().min(0),
@@ -543,7 +560,7 @@ export function AiModelForm({ initialData, onSuccess, onCancel }: BaseFormProps<
           <FormField control={form.control} name="logoUrl" render={({ field }) => (
             <FormItem className="">
               <FormLabel>Logo URL</FormLabel>
-              <FormControl><Input {...field} placeholder="https://example.com/logo.png" /></FormControl>
+              <FormControl><Input {...field} placeholder="/images/logo/openai@logotyp.us.svg" /></FormControl>
               <FormMessage />
             </FormItem>
           )} />

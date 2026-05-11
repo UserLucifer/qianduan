@@ -83,6 +83,7 @@ import type {
   RentalCycleRuleTranslationRequest,
   RentalCycleRuleTranslationResponse,
   RentalOrderDetailResponse,
+  SchedulerConfigResponse,
   SchedulerRunResult,
   SchedulerLogResponse,
   SettlementOrderResponse,
@@ -179,6 +180,7 @@ export type {
   RentalCycleRuleTranslationRequest,
   RentalCycleRuleTranslationResponse,
   RentalOrderDetailResponse as AdminRentalOrderResponse,
+  SchedulerConfigResponse,
   SchedulerRunResult,
   SettlementOrderResponse as AdminSettlementOrderResponse,
   SysAdminLog as AdminLogResponse,
@@ -607,6 +609,9 @@ export const getAdminLogs = (params: AdminLogQuery = {}) =>
 
 export const getAdminLogDetail = (id: number) =>
   adminApiGet<SysAdminLog>(`/api/admin/logs/${id}`);
+
+export const getAdminSchedulerConfig = () =>
+  adminApiGet<SchedulerConfigResponse>("/api/admin/scheduler/config");
 
 export const runScheduler = (task: string, data: Record<string, unknown> = {}) =>
   adminApiPost<SchedulerRunResult, Record<string, unknown>>(`/api/admin/scheduler/${task}/run`, data);

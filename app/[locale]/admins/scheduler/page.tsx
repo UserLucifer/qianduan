@@ -7,8 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import { DataTable, type DataTableColumn } from "@/components/shared/DataTable";
-import { runScheduler, getAdminSchedulerLogs } from "@/api/admin";
-import type { SchedulerLogResponse } from "@/api/types";
+import { getAdminSchedulerConfig, runScheduler, getAdminSchedulerLogs } from "@/api/admin";
+import type { SchedulerConfigResponse, SchedulerLogResponse } from "@/api/types";
 import { formatEmpty, formatNumber, toErrorMessage } from "@/lib/format";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -20,25 +20,29 @@ import { DateTimeText } from "@/components/shared/DateTimeText";
 import { ErrorAlert } from "@/components/shared/ErrorAlert";
 
 interface SchedulerTask {
-  key: string;
+  runKey: string;
+  logTaskName: string;
   titleKey: string;
   descriptionKey: string;
-  frequencyKey: string;
+  configKey: keyof SchedulerConfigResponse;
+  delayConfigKey?: keyof SchedulerConfigResponse;
   icon: typeof Clock3;
 }
 
 const tasks: SchedulerTask[] = [
-  { key: "activation-timeout-cancel", titleKey: "activationTimeoutCancel", descriptionKey: "cancelRentalOrdersWhoseDeploymentFeeHasBeenPendingTooLong", frequencyKey: "everyTenMinutes", icon: Clock3 },
-  { key: "auto-pause", titleKey: "autoPause", descriptionKey: "autoPauseRunningAssetsAfterDeploymentFeePaidForTwentyFourHours", frequencyKey: "everyFiveMinutes", icon: PauseCircle },
-  { key: "daily-profit", titleKey: "dailyEarnings", descriptionKey: "generateDailyEarningsForRunningAssets", frequencyKey: "dailyAt0005", icon: CalendarClock },
-  { key: "expire-settlement", titleKey: "expirySettlement", descriptionKey: "settleExpiredRentalOrdersAutomatically", frequencyKey: "dailyAt0010", icon: CheckCircle2 },
-  { key: "commission-generate", titleKey: "commissionGeneration", descriptionKey: "generateUplineCommissionsFromSettledEarnings", frequencyKey: "everyFiveMinutes", icon: RotateCw },
+  { runKey: "deploy-fee-timeout-cancel", logTaskName: "deploy_fee_timeout_cancel", titleKey: "activationTimeoutCancel", descriptionKey: "cancelRentalOrdersWhoseDeploymentFeeHasBeenPendingTooLong", configKey: "deployFeeTimeoutCancelCron", icon: Clock3 },
+  { runKey: "auto-pause", logTaskName: "auto_pause", titleKey: "autoPause", descriptionKey: "autoPauseRunningAssetsAfterDeploymentFeePaidForTwentyFourHours", configKey: "autoPauseCron", delayConfigKey: "autoPauseDelay", icon: PauseCircle },
+  { runKey: "daily-profit", logTaskName: "daily_profit", titleKey: "dailyEarnings", descriptionKey: "generateDailyEarningsForRunningAssets", configKey: "dailyProfitCron", icon: CalendarClock },
+  { runKey: "expire-settlement", logTaskName: "expire_settlement", titleKey: "expirySettlement", descriptionKey: "settleExpiredRentalOrdersAutomatically", configKey: "orderExpireSettleCron", icon: CheckCircle2 },
+  { runKey: "commission-generate", logTaskName: "commission_generate", titleKey: "commissionGeneration", descriptionKey: "generateUplineCommissionsFromSettledEarnings", configKey: "commissionGenerateCron", icon: RotateCw },
 ];
 
 export default function AdminSchedulerPage() {
   const t = useTranslations("AdminPages.scheduler");
   const [latestLogs, setLatestLogs] = useState<Record<string, SchedulerLogResponse | null>>({});
   const [latestLoading, setLatestLoading] = useState(true);
+  const [schedulerConfig, setSchedulerConfig] = useState<SchedulerConfigResponse | null>(null);
+  const [configLoading, setConfigLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [alertData, setAlertData] = useState<{ title: string; description: string } | null>(null);
   const [logTask, setLogTask] = useState<SchedulerTask | null>(null);
@@ -51,8 +55,8 @@ export default function AdminSchedulerPage() {
     try {
       const entries = await Promise.all(
         tasks.map(async (task) => {
-          const res = await getAdminSchedulerLogs({ taskName: task.key, pageNo: 1, pageSize: 1 });
-          return [task.key, res.data.records[0] ?? null] as const;
+          const res = await getAdminSchedulerLogs({ taskName: task.logTaskName, pageNo: 1, pageSize: 1 });
+          return [task.logTaskName, res.data.records[0] ?? null] as const;
         }),
       );
       setLatestLogs(Object.fromEntries(entries));
@@ -63,16 +67,32 @@ export default function AdminSchedulerPage() {
     }
   }, []);
 
+  const loadSchedulerConfig = useCallback(async () => {
+    setConfigLoading(true);
+    try {
+      const res = await getAdminSchedulerConfig();
+      setSchedulerConfig(res.data);
+    } catch {
+      setSchedulerConfig(null);
+    } finally {
+      setConfigLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     void loadLatestLogs();
   }, [loadLatestLogs, refreshVersion]);
+
+  useEffect(() => {
+    void loadSchedulerConfig();
+  }, [loadSchedulerConfig]);
 
   const execute = async () => {
     if (!triggerTask) return;
     setError(null);
     setIsSubmitting(true);
     try {
-      const res = await runScheduler(triggerTask.key);
+      const res = await runScheduler(triggerTask.runKey);
       setAlertData({
         title: t("executionCompleted"),
         description: t("executionSuccessDetail", { title: t(triggerTask.titleKey), total: res.data.totalCount || 0, success: res.data.successCount || 0, fail: res.data.failCount || 0 }),
@@ -98,10 +118,10 @@ export default function AdminSchedulerPage() {
       <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
         {tasks.map((task) => {
           const Icon = task.icon;
-          const latestLog = latestLogs[task.key] ?? null;
+          const latestLog = latestLogs[task.logTaskName] ?? null;
           const taskTitle = t(task.titleKey);
           return (
-            <Card key={task.key} className="flex flex-col">
+            <Card key={task.logTaskName} className="flex flex-col">
               <CardHeader className="flex flex-row items-start justify-between gap-4 shrink-0">
                 <div>
                   <CardTitle className="flex items-center gap-2 text-sm font-medium">
@@ -114,7 +134,7 @@ export default function AdminSchedulerPage() {
               </CardHeader>
               <CardContent className="space-y-4 flex-1 flex flex-col justify-end">
                 <div className="space-y-2 rounded-lg border border-border bg-muted/30 p-3 text-xs">
-                  <InfoRow label={t("automaticFrequency")} value={t(task.frequencyKey)} />
+                  <InfoRow label={t("automaticFrequency")} value={formatSchedulerFrequency(task, schedulerConfig, configLoading, t)} />
                   <InfoRow
                     label={t("latestExecutionTime")}
                     value={latestLog?.startedAt ? <DateTimeText value={latestLog.startedAt} /> : formatEmpty(undefined)}
@@ -183,7 +203,7 @@ export default function AdminSchedulerPage() {
 
       {logTask && (
         <SchedulerLogsDrawer
-          key={`${logTask.key}-${refreshVersion}`}
+          key={`${logTask.logTaskName}-${refreshVersion}`}
           task={logTask}
           open={!!logTask}
           onClose={() => setLogTask(null)}
@@ -201,9 +221,74 @@ function InfoRow({ label, value }: { label: string; value: ReactNode }) {
   return (
     <div className="flex items-center justify-between gap-3">
       <span className="text-muted-foreground">{label}</span>
-      <span className="text-right font-medium text-foreground">{value}</span>
+      <span className="min-w-0 text-right font-medium text-foreground">{value}</span>
     </div>
   );
+}
+
+function formatSchedulerFrequency(
+  task: SchedulerTask,
+  config: SchedulerConfigResponse | null,
+  loading: boolean,
+  t: ReturnType<typeof useTranslations<"AdminPages.scheduler">>,
+) {
+  if (loading) return t("loading");
+  const cron = config?.[task.configKey];
+  if (!cron) return t("currentConfig");
+  const description = describeCronExpression(cron, t);
+  const delay = task.delayConfigKey ? config?.[task.delayConfigKey] : null;
+
+  return (
+    <span className="block space-y-1">
+      <span className="block">{description}</span>
+      {delay ? (
+        <span className="block text-xs font-normal text-muted-foreground">
+          {t("pauseDelayHint", { delay: formatDelay(delay, t) })}
+        </span>
+      ) : null}
+      <span className="block font-mono text-[11px] font-normal text-muted-foreground">
+        {t("cronRaw", { cron })}
+      </span>
+    </span>
+  );
+}
+
+function describeCronExpression(
+  cron: string,
+  t: ReturnType<typeof useTranslations<"AdminPages.scheduler">>,
+) {
+  const parts = cron.trim().split(/\s+/);
+  if (parts.length !== 6) return t("cronConfigured");
+
+  const [, minute, hour, dayOfMonth, month, dayOfWeek] = parts;
+  const runsEveryDay = dayOfMonth === "*" && month === "*" && dayOfWeek === "*";
+
+  if (hour === "*" && runsEveryDay) {
+    if (minute === "*") return t("everyMinuteReadable");
+    const minuteInterval = minute.match(/^\*\/(\d+)$/)?.[1];
+    if (minuteInterval) return t("everyMinutesReadable", { minutes: Number(minuteInterval) });
+  }
+
+  if (/^\d+$/.test(hour) && /^\d+$/.test(minute) && runsEveryDay) {
+    return t("dailyAtReadable", {
+      time: `${hour.padStart(2, "0")}:${minute.padStart(2, "0")}`,
+    });
+  }
+
+  return t("cronConfigured");
+}
+
+function formatDelay(
+  value: string,
+  t: ReturnType<typeof useTranslations<"AdminPages.scheduler">>,
+) {
+  const match = value.trim().match(/^(\d+)\s*([mhd])$/i);
+  if (!match) return value;
+  const amount = Number(match[1]);
+  const unit = match[2].toLowerCase();
+  if (unit === "m") return t("delayMinutes", { value: amount });
+  if (unit === "h") return t("delayHours", { value: amount });
+  return t("delayDays", { value: amount });
 }
 
 function Metric({ label, value }: { label: string; value?: number }) {
@@ -249,12 +334,12 @@ function SchedulerLogsDrawer({
   const t = useTranslations("AdminPages.scheduler");
   const loader = useCallback(
     async (params: { pageNo: number; pageSize: number; taskName?: string }) => {
-      return (await getAdminSchedulerLogs({ ...params, taskName: task.key })).data;
+      return (await getAdminSchedulerLogs({ ...params, taskName: task.logTaskName })).data;
     },
-    [task.key]
+    [task.logTaskName]
   );
 
-  const { page, loading, changePage } = usePaginatedResource(loader, { pageNo: 1, pageSize: 10, taskName: task.key });
+  const { page, loading, changePage } = usePaginatedResource(loader, { pageNo: 1, pageSize: 10, taskName: task.logTaskName });
 
   const columns: DataTableColumn<SchedulerLogResponse>[] = [
     {

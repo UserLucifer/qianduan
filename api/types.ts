@@ -191,6 +191,7 @@ export interface CreateRentalOrderRequest {
   productId: number;
   aiModelId: number;
   cycleRuleId: number;
+  clientRequestId: string;
 }
 
 export interface ApiCredentialResponse {
@@ -345,9 +346,6 @@ export interface RechargeChannelResponse extends LocaleAwareResponse {
   displayUrl: string;
   accountName: string;
   accountNo: string;
-  minAmount: number;
-  maxAmount: number;
-  feeRate: number;
 }
 
 export interface CreateRechargeOrderRequest {
@@ -356,6 +354,7 @@ export interface CreateRechargeOrderRequest {
   externalTxNo?: string;
   paymentProofUrl?: string;
   userRemark?: string;
+  clientRequestId: string;
 }
 
 export interface RechargeOrderResponse {
@@ -395,6 +394,7 @@ export interface CreateWithdrawOrderRequest {
   accountName?: string;
   accountNo: string;
   applyAmount: number;
+  clientRequestId: string;
 }
 
 export interface WithdrawOrderResponse {
@@ -513,6 +513,55 @@ export interface TeamMemberResponse {
 export interface TeamMemberQueryRequest extends PageQuery {
   levelDepth?: number;
   keyword?: string;
+}
+
+export interface UserDashboardRentalResponse {
+  runningOrderCount: number;
+  pendingPayOrderCount: number;
+  recentOrders: RentalOrderSummaryResponse[];
+}
+
+export interface UserDashboardProfitResponse {
+  summary: ProfitSummaryResponse;
+}
+
+export interface UserDashboardOverviewResponse {
+  wallet: WalletMeResponse;
+  rental: UserDashboardRentalResponse;
+  profit: UserDashboardProfitResponse;
+  team: TeamSummaryResponse;
+}
+
+export interface ProfitTrendRecordResponse {
+  profitDate: string;
+  finalProfitAmount: number;
+  recordCount: number;
+}
+
+export interface ProfitTrendResponse {
+  records: ProfitTrendRecordResponse[];
+}
+
+export interface ProfitTrendQueryRequest {
+  startDate: string;
+  endDate: string;
+  groupBy?: string;
+}
+
+export interface DashboardSearchItemResponse {
+  type: string;
+  title: string;
+  description: string;
+  href: string;
+}
+
+export interface DashboardSearchResponse {
+  records: DashboardSearchItemResponse[];
+}
+
+export interface DashboardSearchQueryRequest {
+  keyword?: string;
+  scope?: string;
 }
 
 export interface SettlementOrderResponse {
@@ -1040,6 +1089,15 @@ export interface SchedulerRunResult {
   errorMessage?: string;
 }
 
+export interface SchedulerConfigResponse {
+  dailyProfitCron?: string;
+  orderExpireSettleCron?: string;
+  autoPauseCron?: string;
+  deployFeeTimeoutCancelCron?: string;
+  commissionGenerateCron?: string;
+  autoPauseDelay?: string;
+}
+
 export interface SchedulerLogResponse {
   id: number;
   taskName: string;
@@ -1230,9 +1288,6 @@ export interface AdminRechargeChannelResponse {
   displayUrl: string;
   accountName: string;
   accountNo: string;
-  minAmount: number;
-  maxAmount: number;
-  feeRate: number;
   sortNo: number;
   status: number;
   createdAt: string;
@@ -1403,9 +1458,6 @@ export interface CreateRechargeChannelRequest {
   displayUrl?: string;
   accountName?: string;
   accountNo?: string;
-  minAmount: number;
-  maxAmount: number;
-  feeRate: number;
   sortNo: number;
   status: number;
 }

@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { toast } from "sonner";
 import { CheckCircle2, Copy, Eye, Loader2, ShieldCheck, Wallet, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,12 +23,23 @@ import type { PageResult, RechargeChannelResponse, RechargeOrderQueryRequest, Re
 import { usePaginatedResource } from "@/hooks/usePaginatedResource";
 import { toErrorMessage } from "@/lib/format";
 import { cn } from "@/lib/utils";
-import { ErrorAlert } from "@/components/shared/ErrorAlert";
 import { normalizeLocale } from "@/i18n/locales";
+import { createClientRequestId } from "@/lib/client-request-id";
 
 /* ───────── constants ───────── */
 const QUICK_AMOUNTS = [50, 100, 500, 1000];
 const initialParams: RechargeOrderQueryRequest = { pageNo: 1, pageSize: 10 };
+
+function buildRechargeOrderQuery(filters: RechargeOrderQueryRequest): RechargeOrderQueryRequest {
+  return {
+    pageNo: 1,
+    pageSize: filters.pageSize ?? initialParams.pageSize,
+    status: filters.status || undefined,
+    keyword: filters.keyword?.trim() || undefined,
+    startTime: filters.startTime ? `${filters.startTime} 00:00:00` : undefined,
+    endTime: filters.endTime ? `${filters.endTime} 23:59:59` : undefined,
+  };
+}
 
 export default function RechargePage() {
   const t = useTranslations("DashboardRecharge");
@@ -37,7 +49,7 @@ export default function RechargePage() {
     const res = await getRechargeOrders(params);
     return res.data;
   }, []);
-  const { page, loading, error, updateParams, changePage, reload } = usePaginatedResource(loader, initialParams);
+  const { page, loading, updateParams, changePage, reload } = usePaginatedResource(loader, initialParams);
 
   /* ── channels ── */
   const [channels, setChannels] = useState<RechargeChannelResponse[]>([]);
@@ -51,8 +63,8 @@ export default function RechargePage() {
   const [paymentProofUrl, setPaymentProofUrl] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [successState, setSuccessState] = useState(false);
-  const [actionError, setActionError] = useState<string | null>(null);
   const [detail, setDetail] = useState<RechargeOrderResponse | null>(null);
+  const requestIdRef = useRef<{ key: string; id: string } | null>(null);
 
   /* ── load channels ── */
   useEffect(() => {
@@ -64,7 +76,7 @@ export default function RechargePage() {
           setSelectedChannelId((c) => c ?? res.data[0].channelId);
         }
       })
-      .catch((err) => setActionError(toErrorMessage(err)))
+      .catch((err) => toast.error(toErrorMessage(err)))
       .finally(() => setChannelsLoading(false));
   }, [locale]);
 
@@ -73,9 +85,8 @@ export default function RechargePage() {
   /* ── derived: fee calculation ── */
   const parsedAmount = Number(amount);
   const validAmount = Number.isFinite(parsedAmount) && parsedAmount > 0 ? parsedAmount : 0;
-  const feeRate = selectedChannel?.feeRate ?? 0;
-  const feeAmount = useMemo(() => Math.round(validAmount * feeRate * 100) / 100, [validAmount, feeRate]);
-  const totalPay = useMemo(() => Math.round((validAmount + feeAmount) * 100) / 100, [validAmount, feeAmount]);
+  /* ── derived: fee calculation (removed as per backend changes) ── */
+  const totalPay = validAmount;
 
   /* ── handlers ── */
   const resetForm = () => {
@@ -83,49 +94,57 @@ export default function RechargePage() {
     setExternalTxNo("");
     setPaymentProofUrl("");
     setSuccessState(false);
-    setActionError(null);
+    requestIdRef.current = null;
   };
 
   const submitRecharge = async () => {
     setSubmitting(true);
-    setActionError(null);
     try {
       if (!selectedChannel) throw new Error(t("errors.chooseChannel"));
       if (!Number.isFinite(parsedAmount) || parsedAmount <= 0) throw new Error(t("errors.invalidAmount"));
-      if (parsedAmount < selectedChannel.minAmount) throw new Error(t("errors.minAmount", { amount: selectedChannel.minAmount }));
-      if (selectedChannel.maxAmount > 0 && parsedAmount > selectedChannel.maxAmount) throw new Error(t("errors.maxAmount", { amount: selectedChannel.maxAmount }));
+      const requestKey = JSON.stringify([
+        selectedChannel.channelId,
+        parsedAmount,
+        externalTxNo.trim(),
+        paymentProofUrl.trim(),
+      ]);
+      const clientRequestId =
+        requestIdRef.current?.key === requestKey
+          ? requestIdRef.current.id
+          : createClientRequestId("recharge");
+      requestIdRef.current = { key: requestKey, id: clientRequestId };
       await createRechargeOrder({
         channelId: selectedChannel.channelId,
         applyAmount: parsedAmount,
-        externalTxNo: externalTxNo || undefined,
-        paymentProofUrl: paymentProofUrl || undefined,
+        externalTxNo: externalTxNo.trim() || undefined,
+        paymentProofUrl: paymentProofUrl.trim() || undefined,
+        clientRequestId,
       });
+      requestIdRef.current = null;
       setSuccessState(true);
       await reload();
     } catch (err) {
-      setActionError(toErrorMessage(err));
+      toast.error(toErrorMessage(err));
     } finally {
       setSubmitting(false);
     }
   };
 
   const openDetail = async (rechargeNo: string) => {
-    setActionError(null);
     try {
       const res = await getRechargeOrderDetail(rechargeNo);
       setDetail(res.data);
     } catch (err) {
-      setActionError(toErrorMessage(err));
+      toast.error(toErrorMessage(err));
     }
   };
 
   const cancelOrder = async (rechargeNo: string) => {
-    setActionError(null);
     try {
       await cancelRechargeOrder(rechargeNo);
       await reload();
     } catch (err) {
-      setActionError(toErrorMessage(err));
+      toast.error(toErrorMessage(err));
     }
   };
 
@@ -334,10 +353,6 @@ export default function RechargePage() {
                             <span>·</span>
                             <span>{ch.network}</span>
                           </div>
-                          <div className="mt-2 flex items-center justify-between gap-3 text-xs opacity-80">
-                            <span>{t("form.fee")}{(ch.feeRate * 100).toFixed(2)}%</span>
-                            <span>{t("form.limit")}{ch.minAmount}–{ch.maxAmount > 0 ? ch.maxAmount : "∞"} USDT</span>
-                          </div>
                         </div>
                       </Button>
                     );
@@ -347,7 +362,13 @@ export default function RechargePage() {
               {selectedChannel && (
                 <div className="mt-4 rounded-lg border border-border bg-muted/40 p-3">
                   <div className="mb-1.5 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">{t("form.accountNo")}</div>
-                  <CopyableSecret value={selectedChannel.accountNo} canReveal={false} className="max-w-full" />
+                  <CopyableSecret
+                    value={selectedChannel.accountNo}
+                    maskedValue={selectedChannel.accountNo}
+                    canReveal={false}
+                    truncate={false}
+                    className="w-full border-none bg-transparent p-0 text-sm font-bold text-foreground"
+                  />
                 </div>
               )}
             </div>
@@ -362,10 +383,6 @@ export default function RechargePage() {
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-muted-foreground">{t("form.amount")}</span>
                     <span className="font-semibold tabular-nums text-foreground">{validAmount > 0 ? `${validAmount.toFixed(2)} USDT` : "—"}</span>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">{t("form.fee")}{feeRate > 0 ? ` (${(feeRate * 100).toFixed(2)}%)` : ""}</span>
-                    <span className="tabular-nums text-foreground">{validAmount > 0 ? `${feeAmount.toFixed(2)} USDT` : "—"}</span>
                   </div>
                   <div className="border-t border-border pt-3">
                     <div className="flex items-center justify-between">
@@ -402,14 +419,11 @@ export default function RechargePage() {
         </div>
       )}
 
-      {/* Error feedback */}
-      <ErrorAlert message={error ?? actionError} />
-
       {/* Top-up records */}
       <div className="space-y-4">
         <h2 className="text-lg font-semibold text-foreground">{t("records.title")}</h2>
         <SearchPanel
-          onSearch={() => updateParams({ ...filters, pageNo: 1 })}
+          onSearch={() => updateParams(buildRechargeOrderQuery(filters))}
           onReset={() => { setFilters(initialParams); updateParams(initialParams); }}
         >
           <div className="space-y-2">
@@ -421,7 +435,7 @@ export default function RechargePage() {
                 <SelectItem value="SUBMITTED">{t("records.submitted")}</SelectItem>
                 <SelectItem value="APPROVED">{t("records.approved")}</SelectItem>
                 <SelectItem value="REJECTED">{t("records.rejected")}</SelectItem>
-                <SelectItem value="CANCELLED">{t("records.cancelled")}</SelectItem>
+                <SelectItem value="CANCELED">{t("records.cancelled")}</SelectItem>
               </SelectContent>
             </Select>
           </div>

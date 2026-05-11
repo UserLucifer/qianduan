@@ -28,6 +28,7 @@ const breadcrumbKeys: Record<string, string> = {
   management: "breadcrumbs.management",
   wallets: "breadcrumbs.wallets",
   "wallet-adjust": "breadcrumbs.walletAdjust",
+  "recharge-channels": "breadcrumbs.rechargeChannels",
   recharge: "breadcrumbs.recharge",
   withdraw: "breadcrumbs.withdraw",
   orders: "breadcrumbs.orders",

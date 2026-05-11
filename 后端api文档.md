@@ -1,5 +1,70 @@
 # 后端 API 文档
 
+## 用户控制台
+
+### GET `/api/dashboard/overview`
+
+说明：当前用户控制台首屏聚合接口，减少钱包、订单、收益、团队信息的多次请求。
+
+鉴权：需要用户登录。
+
+响应字段：
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `wallet` | object | 当前用户钱包，字段同 `/api/wallet/me` |
+| `rental.runningOrderCount` | number | 当前用户全量 `RUNNING` 租赁订单数 |
+| `rental.pendingPayOrderCount` | number | 当前用户全量 `PENDING_PAY` 租赁订单数 |
+| `rental.recentOrders` | array | 最近 5 条租赁订单，字段同 `/api/rental/orders` 的记录字段 |
+| `profit.summary` | object | 当前用户收益汇总，字段同 `/api/profit/summary` |
+| `team` | object | 当前用户团队汇总，字段同 `/api/team/summary` |
+
+### GET `/api/profit/trend`
+
+说明：当前用户收益趋势聚合接口，按日期汇总已结算收益记录。
+
+鉴权：需要用户登录。
+
+查询参数：
+
+| 参数 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| `startDate` | string | 是 | 开始日期，格式 `yyyy-MM-dd` |
+| `endDate` | string | 是 | 结束日期，格式 `yyyy-MM-dd` |
+| `groupBy` | string | 否 | 聚合粒度，当前支持 `DAY`，默认 `DAY` |
+
+响应字段：
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `records` | array | 趋势记录；无收益日期不补 0，由前端按需要补齐 |
+| `records[].profitDate` | string | 收益日期，格式 `yyyy-MM-dd` |
+| `records[].finalProfitAmount` | number | 当日当前用户已结算收益金额合计 |
+| `records[].recordCount` | number | 当日收益记录数量 |
+
+### GET `/api/dashboard/search`
+
+说明：当前用户控制台 Header 搜索建议。空关键词返回空数组；单次最多返回 10 条。
+
+鉴权：需要用户登录。
+
+查询参数：
+
+| 参数 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| `keyword` | string | 否 | 搜索关键词。为空时返回空数组 |
+| `scope` | string | 否 | 搜索范围，默认 `dashboard`；支持 `dashboard`、`ORDER`、`WALLET_TX`、`NOTIFICATION`、`DOC` |
+
+响应字段：
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `records` | array | 搜索建议列表 |
+| `records[].type` | string | 建议类型：`ORDER`、`WALLET_TX`、`NOTIFICATION`、`DOC` |
+| `records[].title` | string | 展示标题 |
+| `records[].description` | string/null | 展示描述 |
+| `records[].href` | string | 前端跳转地址 |
+
 ## 后台客户管理
 
 ### GET `/api/admin/users`
@@ -117,6 +182,53 @@
 | `biz_type` | string | 否 | 业务类型 |
 | `start_time` | string | 否 | 开始时间，格式 `yyyy-MM-dd HH:mm:ss`；可单独传入 |
 | `end_time` | string | 否 | 结束时间，格式 `yyyy-MM-dd HH:mm:ss` |
+
+## 用户充值
+
+### GET `/api/recharge/channels`
+
+说明：查询当前可用充值渠道。
+
+鉴权：需要用户登录。
+
+查询参数：
+
+| 参数 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| `language` | string | 否 | 返回语言，如 `zh-CN`、`en-US` |
+
+响应字段：
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `channelId` | number | 充值渠道 ID |
+| `channelCode` | string | 充值渠道编码 |
+| `channelName` | string | 充值渠道名称 |
+| `network` | string | 支付网络 |
+| `displayUrl` | string | 充值展示地址 |
+| `accountName` | string | 收款账户名称 |
+| `accountNo` | string | 收款账户号 |
+| `sortNo` | number | 排序号 |
+| `locale` | string | 实际返回语言 |
+| `requestedLocale` | string | 请求语言 |
+| `localeFallback` | boolean | 是否回退到默认语言 |
+
+### POST `/api/recharge/orders`
+
+说明：提交充值订单。充值最低金额、最高金额、手续费规则不再由充值渠道返回，后端统一按后台系统参数 `recharge.min_amount`、`recharge.max_amount`、`recharge.fee_rate` 执行。
+
+鉴权：需要用户登录。
+
+请求体：
+
+| 字段 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| `channelId` | number | 是 | 充值渠道 ID |
+| `applyAmount` | number | 是 | 申请充值金额，必须满足后台系统参数配置的充值金额范围 |
+| `externalTxNo` | string | 否 | 外部交易号 |
+| `paymentProofUrl` | string | 否 | 支付凭证地址 |
+| `userRemark` | string | 否 | 用户备注 |
+| `clientRequestId` | string | 是 | 客户端请求幂等号，同一次提交失败重试必须保持一致，新一次主动创建必须重新生成 |
 
 ## 后台充值审核
 
@@ -521,6 +633,23 @@
 
 ## 后台定时任务
 
+### GET `/api/admin/scheduler/config`
+
+说明：查询当前后端运行时定时任务配置，用于后台定时任务页面展示真实 cron 频率。
+
+鉴权：需要管理员登录。
+
+响应字段：
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `dailyProfitCron` | string | 每日收益任务 cron |
+| `orderExpireSettleCron` | string | 到期结算任务 cron |
+| `autoPauseCron` | string | 自动暂停扫描任务 cron；默认每秒扫描 |
+| `deployFeeTimeoutCancelCron` | string | 部署费超时取消任务 cron |
+| `commissionGenerateCron` | string | 佣金生成任务 cron |
+| `autoPauseDelay` | string | 支付部署费后自动暂停延迟配置 |
+
 ### POST `/api/admin/scheduler/deploy-fee-timeout-cancel/run`
 
 说明：手动触发“部署费超时取消”任务。机器费已付但部署费超时未支付时，系统取消订单并退还机器费。
@@ -549,7 +678,7 @@
 
 ### POST `/api/admin/scheduler/auto-pause/run`
 
-说明：手动触发自动暂停任务。支付部署费 24 小时后，把运行中资产自动暂停。
+说明：手动触发自动暂停任务。订单达到 `autoPauseAt` 后，把运行中资产自动暂停；`autoPauseAt` 由支付部署费时间加当前 `autoPauseDelay` 配置计算得到。
 
 鉴权：需要管理员登录。
 
@@ -557,7 +686,7 @@
 
 ### POST `/api/rental/orders/{orderNo}/deploy/pay`
 
-说明：支付当前用户租赁订单的 API 部署费。
+说明：支付当前用户租赁订单的 API 部署费。必须在支付机器费后的 15 分钟内完成；达到或超过 15 分钟时，后端会取消订单、退还机器费并拒绝部署费支付。
 
 鉴权：需要用户登录。
 
@@ -565,7 +694,7 @@
 
 | 阶段 | 订单状态 | API Token 状态 | 说明 |
 | --- | --- | --- | --- |
-| 支付机器费后 | `PENDING_ACTIVATION` | `GENERATED` | API 凭证已生成，等待支付部署费 |
+| 支付机器费后 | `PENDING_ACTIVATION` | `GENERATED` | API 凭证已生成，等待支付部署费；15 分钟内未支付部署费则取消订单并退款 |
 | 支付部署费成功后 | `RUNNING` | `ACTIVE` | 资产立即运行并开始产生收益，同时写入 `profitStartAt`、`profitEndAt`、`autoPauseAt=支付时间+24小时` |
 | 支付部署费 24 小时后 | `PAUSED` | `PAUSED` | 定时任务自动暂停资产，收益状态同步为 `PAUSED` |
 | 用户重新启动后 | `RUNNING` | `ACTIVE` | 恢复收益；已有收益周期不会重新计算 |

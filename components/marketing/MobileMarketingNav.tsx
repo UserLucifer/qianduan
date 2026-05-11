@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
@@ -37,6 +38,9 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { getAvatarUrl } from "@/lib/avatars";
+import { productCategories } from "./product-menu-data";
+import { solutionIndustryItems, solutionScenarioCategories } from "./solution-menu-data";
+import { useCaseItems } from "./use-case-menu-data";
 
 type MobileMarketingNavProps = {
   user: UserMeResponse | null;
@@ -68,22 +72,12 @@ const navGroups: NavGroup[] = [
   {
     key: "useCases",
     icon: Sparkles,
-    items: [
-      { key: "textGeneration", href: "/use-cases/ai-text-generation" },
-      { key: "imageVideo", href: "/use-cases/ai-image-video-generation" },
-      { key: "agents", href: "/use-cases/ai-agents" },
-      { key: "all", href: "/use-cases" },
-    ],
+    items: [],
   },
   {
     key: "solutions",
     icon: Workflow,
-    items: [
-      { key: "llmTraining", href: "/solutions/llm-training" },
-      { key: "inference", href: "/solutions/high-concurrency-inference" },
-      { key: "startups", href: "/solutions/aigc-startups" },
-      { key: "enterprise", href: "/enterprise" },
-    ],
+    items: [],
   },
   {
     key: "hosting",
@@ -112,6 +106,145 @@ const directLinks = [
   { titleKey: "directLinks.helpCenter", href: "/help-center", icon: HelpCircle },
   { titleKey: "directLinks.enterprise", href: "/enterprise", icon: Building2 },
 ];
+
+function MobileProductMenu({ onNavigate }: { onNavigate: () => void }) {
+  const t = useTranslations("MegaMenus.product");
+
+  return (
+    <Accordion type="single" collapsible className="space-y-1">
+      {productCategories.map((category) => {
+        const Icon = category.icon;
+
+        return (
+          <AccordionItem key={category.id} value={category.id} className="border-b-0">
+            <AccordionTrigger className="min-h-12 rounded-lg px-3 py-3 text-base font-semibold text-white/80 hover:bg-white/10 hover:no-underline [&>svg]:text-white/50">
+              <span className="flex min-w-0 items-center gap-3">
+                <Icon className="h-4 w-4 shrink-0 text-white/60" />
+                <span className="truncate">{t(`categories.${category.messageKey}.name`)}</span>
+              </span>
+            </AccordionTrigger>
+            <AccordionContent className="space-y-1 pb-3 pl-7">
+              {category.subItems.map((item) => (
+                <Link
+                  key={`${category.id}-${item.key}`}
+                  href={item.href}
+                  prefetch={false}
+                  onClick={onNavigate}
+                  className="block rounded-lg px-3 py-3 transition-colors hover:bg-white/10"
+                >
+                  <span className="block text-sm font-semibold text-white">
+                    {t(`categories.${category.messageKey}.items.${item.key}`)}
+                  </span>
+                  {item.items ? (
+                    <span className="mt-2 flex flex-wrap gap-1.5">
+                      {item.items.map((label) => (
+                        <span key={label} className="rounded-md bg-white/10 px-2 py-1 text-xs text-white/60">
+                          {label}
+                        </span>
+                      ))}
+                    </span>
+                  ) : (
+                    <span className="mt-1 block text-xs leading-snug text-white/60">
+                      {t("defaultItemDescription")}
+                    </span>
+                  )}
+                </Link>
+              ))}
+            </AccordionContent>
+          </AccordionItem>
+        );
+      })}
+    </Accordion>
+  );
+}
+
+function MobileUseCaseMenu({ onNavigate }: { onNavigate: () => void }) {
+  const t = useTranslations("MegaMenus.useCases");
+
+  return (
+    <>
+      {useCaseItems.map((item) => (
+        <Link
+          key={`use-case-${item.key}`}
+          href={item.href}
+          prefetch={false}
+          onClick={onNavigate}
+          className="block rounded-lg px-3 py-3 transition-colors hover:bg-white/10"
+        >
+          <span className="block text-sm font-semibold text-white">
+            {t(`items.${item.key}.name`)}
+          </span>
+          <span className="mt-1 block text-xs leading-snug text-white/60">
+            {t(`items.${item.key}.description`)}
+          </span>
+        </Link>
+      ))}
+    </>
+  );
+}
+
+function MobileSolutionsMenu({ onNavigate }: { onNavigate: () => void }) {
+  const t = useTranslations("MegaMenus.solutions");
+  const solutionCategories = [
+    ...solutionScenarioCategories.map((category) => ({
+      ...category,
+      type: "scenario" as const,
+      title: t(`categories.${category.key}`),
+    })),
+    {
+      key: "industry",
+      type: "industry" as const,
+      title: t("byIndustry"),
+      items: solutionIndustryItems,
+    },
+  ];
+
+  return (
+    <Accordion type="single" collapsible className="space-y-1">
+      {solutionCategories.map((category) => {
+        const CategoryIcon = category.items[0]?.icon;
+
+        return (
+          <AccordionItem key={category.key} value={category.key} className="border-b-0">
+            <AccordionTrigger className="min-h-12 rounded-lg px-3 py-3 text-base font-semibold text-white/80 hover:bg-white/10 hover:no-underline [&>svg]:text-white/50">
+              <span className="flex min-w-0 items-center gap-3">
+                {CategoryIcon ? (
+                  <CategoryIcon className="h-4 w-4 shrink-0 text-white/60" />
+                ) : null}
+                <span className="truncate">{category.title}</span>
+              </span>
+            </AccordionTrigger>
+            <AccordionContent className="space-y-1 pb-3 pl-7">
+              {category.items.map((item) => {
+                const title =
+                  category.type === "industry"
+                    ? t(`industries.${item.key}`)
+                    : t(`items.${item.key}.name`);
+
+                return (
+                  <Link
+                    key={`${category.key}-${item.key}`}
+                    href={item.href}
+                    prefetch={false}
+                    onClick={onNavigate}
+                    className="block rounded-lg px-3 py-3 transition-colors hover:bg-white/10"
+                  >
+                    <span className="block text-sm font-semibold text-white">{title}</span>
+                    {category.type === "scenario" ? (
+                      <span className="mt-1 block text-xs leading-snug text-white/60">
+                        {t(`items.${item.key}.description`)}
+                      </span>
+                    ) : null}
+                  </Link>
+                );
+              })}
+            </AccordionContent>
+          </AccordionItem>
+        );
+      })}
+    </Accordion>
+  );
+}
 
 export default function MobileMarketingNav({ user, onLogout }: MobileMarketingNavProps) {
   const [open, setOpen] = useState(false);
@@ -147,8 +280,15 @@ export default function MobileMarketingNav({ user, onLogout }: MobileMarketingNa
         <SheetDescription className="sr-only">{t("description")}</SheetDescription>
 
         <div className="flex h-20 shrink-0 items-center justify-between px-8">
-          <Link href="/" onClick={closeMenu} className="text-xl font-bold text-white">
-            {common("brand")}
+          <Link href="/" onClick={closeMenu} className="inline-flex items-center transition-opacity hover:opacity-80">
+            <Image
+              src="/images/webcal_header_black_transparent.webp"
+              alt={common("brand")}
+              width={1074}
+              height={375}
+              priority
+              className="h-9 w-auto object-contain invert"
+            />
           </Link>
           <SheetClose asChild>
             <Button
@@ -197,22 +337,30 @@ export default function MobileMarketingNav({ user, onLogout }: MobileMarketingNa
                     {t(`groups.${group.key}.title`)}
                   </AccordionTrigger>
                   <AccordionContent className="space-y-1 pb-4">
-                    {group.items.map((item) => (
-                      <Link
-                        key={`${group.key}-${item.key}`}
-                        href={item.href}
-                        prefetch={false}
-                        onClick={closeMenu}
-                        className="block rounded-lg px-3 py-3 transition-colors hover:bg-white/10"
-                      >
-                        <span className="block text-sm font-semibold text-white">
-                          {t(`groups.${group.key}.items.${item.key}.name`)}
-                        </span>
-                        <span className="mt-1 block text-xs leading-snug text-white/60">
-                          {t(`groups.${group.key}.items.${item.key}.description`)}
-                        </span>
-                      </Link>
-                    ))}
+                    {group.key === "products" ? (
+                      <MobileProductMenu onNavigate={closeMenu} />
+                    ) : group.key === "useCases" ? (
+                      <MobileUseCaseMenu onNavigate={closeMenu} />
+                    ) : group.key === "solutions" ? (
+                      <MobileSolutionsMenu onNavigate={closeMenu} />
+                    ) : (
+                      group.items.map((item) => (
+                        <Link
+                          key={`${group.key}-${item.key}`}
+                          href={item.href}
+                          prefetch={false}
+                          onClick={closeMenu}
+                          className="block rounded-lg px-3 py-3 transition-colors hover:bg-white/10"
+                        >
+                          <span className="block text-sm font-semibold text-white">
+                            {t(`groups.${group.key}.items.${item.key}.name`)}
+                          </span>
+                          <span className="mt-1 block text-xs leading-snug text-white/60">
+                            {t(`groups.${group.key}.items.${item.key}.description`)}
+                          </span>
+                        </Link>
+                      ))
+                    )}
                   </AccordionContent>
                 </AccordionItem>
               );

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">Moonshot AI</title>
+  <desc id="desc">Moonshot AI placeholder logo</desc>
+  <rect width="256" height="256" rx="56" fill="#050816"/>
+  <circle cx="128" cy="128" r="76" fill="#eef2ff"/>
+  <circle cx="158" cy="96" r="74" fill="#050816"/>
+  <path d="M70 174c19 22 51 32 82 24 13-3 25-10 35-18-12 24-36 42-65 45-34 4-66-12-85-39 11 2 22-2 33-12Z" fill="#6ee7f9"/>
+  <path d="M67 68h13l19 42 19-42h13v75h-15V99l-15 34h-5L81 99v44H67V68Zm91 0h18l25 75h-16l-5-17h-26l-5 17h-16l25-75Zm9 17-9 28h18l-9-28Z" fill="#eef2ff"/>
+</svg>

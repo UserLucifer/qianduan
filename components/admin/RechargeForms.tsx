@@ -33,9 +33,6 @@ function createChannelSchema(t: ReturnType<typeof useTranslations>) {
   displayUrl: z.string().max(255).optional(),
   accountName: z.string().max(128).optional(),
   accountNo: z.string().max(255).optional(),
-  minAmount: z.coerce.number().min(0),
-  maxAmount: z.coerce.number().min(0),
-  feeRate: z.coerce.number().min(0, t("feeRateRequired")),
   sortNo: z.number().int().default(0),
   status: z.number().int().min(0).max(1).default(1),
   });
@@ -71,9 +68,6 @@ export function RechargeChannelForm({ initialData, onSuccess, onCancel }: Rechar
           displayUrl: initialData.displayUrl || "",
           accountName: initialData.accountName || "",
           accountNo: initialData.accountNo || "",
-          minAmount: initialData.minAmount,
-          maxAmount: initialData.maxAmount,
-          feeRate: initialData.feeRate,
           sortNo: initialData.sortNo,
           status: initialData.status,
         }
@@ -84,9 +78,6 @@ export function RechargeChannelForm({ initialData, onSuccess, onCancel }: Rechar
           displayUrl: "",
           accountName: "",
           accountNo: "",
-          minAmount: 0,
-          maxAmount: 0,
-          feeRate: 0,
           sortNo: 0,
           status: 1,
         },
@@ -98,9 +89,6 @@ export function RechargeChannelForm({ initialData, onSuccess, onCancel }: Rechar
     try {
       const data: CreateRechargeChannelRequest = {
         ...values,
-        minAmount: Number(values.minAmount),
-        maxAmount: Number(values.maxAmount),
-        feeRate: Number(values.feeRate),
       };
 
       if (initialData) {
@@ -179,35 +167,6 @@ export function RechargeChannelForm({ initialData, onSuccess, onCancel }: Rechar
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
-        <div className="space-y-2">
-          <Label>{t("minAmount")}</Label>
-          <Input
-            type="number"
-            step="0.01"
-            {...register("minAmount", { valueAsNumber: true })}
-            className="h-10"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label>{t("maxAmount")}</Label>
-          <Input
-            type="number"
-            step="0.01"
-            {...register("maxAmount", { valueAsNumber: true })}
-            className="h-10"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label>{t("feeRate")}</Label>
-          <Input
-            type="number"
-            step="0.0001"
-            {...register("feeRate", { valueAsNumber: true })}
-            className="h-10"
-          />
-        </div>
-      </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">

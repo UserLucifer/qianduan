@@ -4,18 +4,14 @@ import { useCallback, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import {
-  Bell,
   CreditCard,
   KeyRound,
-  LayoutDashboard,
   PackagePlus,
-  ReceiptText,
   Send,
   TrendingUp,
   Users,
   Wallet,
   Zap,
-  MoreHorizontal,
   Terminal,
   Loader2,
   Activity,
@@ -23,52 +19,32 @@ import {
   RefreshCw
 } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { BentoCard, BentoGrid } from "@/components/shared/BentoGrid";
-import { DateTimeText } from "@/components/shared/DateTimeText";
+import { ErrorAlert } from "@/components/shared/ErrorAlert";
 import { MoneyText } from "@/components/shared/MoneyText";
-import { PageHeader } from "@/components/shared/PageHeader";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import { useAsyncResource } from "@/hooks/useAsyncResource";
 import { cn } from "@/lib/utils";
-import { bizTypeLabel, txTypeLabel } from "@/lib/status";
-import { formatDate, formatMoney } from "@/lib/format";
-import { getCommissionSummary } from "@/api/commission";
-import { getProfitRecords, getProfitSummary } from "@/api/profit";
-import { getRentalOrders } from "@/api/rental";
-import { getTeamSummary } from "@/api/team";
-import { getUserNotifications } from "@/api/notification";
-import { getTransactions, getWalletInfo } from "@/api/wallet";
+import { formatDate } from "@/lib/format";
+import { getDashboardOverview } from "@/api/dashboard";
+import { getProfitTrend } from "@/api/profit";
 
 import type {
-  CommissionSummaryResponse,
-  ProfitRecordResponse,
+  ProfitTrendRecordResponse,
   ProfitSummaryResponse,
   RentalOrderSummaryResponse,
-  SysNotification,
   TeamSummaryResponse,
   WalletMeResponse,
-  WalletTransactionResponse,
 } from "@/api/types";
 
 interface DashboardData {
   wallet: WalletMeResponse;
   orders: RentalOrderSummaryResponse[];
-  transactions: WalletTransactionResponse[];
+  runningOrderCount: number;
+  pendingPayOrderCount: number;
   profitSummary: ProfitSummaryResponse;
-  profitRecords: ProfitRecordResponse[];
-  commissionSummary: CommissionSummaryResponse;
+  profitRecords: ProfitTrendRecordResponse[];
   teamSummary: TeamSummaryResponse;
-  notifications: SysNotification[];
 }
 
 interface TrendPoint {
@@ -76,15 +52,28 @@ interface TrendPoint {
   profit: number;
 }
 
-function buildProfitTrend(records: ProfitRecordResponse[]): TrendPoint[] {
+const PROFIT_TREND_DAYS = 7;
+function toDateKey(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function getRecentDateKeys(days: number): string[] {
+  return Array.from({ length: days }, (_, index) => {
+    const date = new Date();
+    date.setDate(date.getDate() - (days - index - 1));
+    return toDateKey(date);
+  });
+}
+
+function buildProfitTrend(records: ProfitTrendRecordResponse[]): TrendPoint[] {
   // Always initialize with 7 days to ensure a baseline line for new users
   const grouped = new Map<string, number>();
-  for (let i = 6; i >= 0; i--) {
-    const d = new Date();
-    d.setDate(d.getDate() - i);
-    const dateStr = d.toISOString().split("T")[0]; 
-    grouped.set(formatDate(dateStr), 0);
-  }
+  getRecentDateKeys(PROFIT_TREND_DAYS).forEach((dateKey) => {
+    grouped.set(formatDate(dateKey), 0);
+  });
 
   if (records && records.length > 0) {
     records.forEach((record) => {
@@ -104,49 +93,33 @@ export default function DashboardPage() {
   const [chartReady, setChartReady] = useState(false);
 
   const loader = useCallback(async (): Promise<DashboardData> => {
-    const [
-      wallet,
-      orders,
-      transactions,
-      profitSummary,
-      profitRecords,
-      commissionSummary,
-      teamSummary,
-      notifications,
-    ] = await Promise.all([
-      getWalletInfo(),
-      getRentalOrders({ pageNo: 1, pageSize: 5 }),
-      getTransactions({ pageNo: 1, pageSize: 5 }),
-      getProfitSummary(),
-      getProfitRecords({ pageNo: 1, pageSize: 30 }),
-      getCommissionSummary(),
-      getTeamSummary(),
-      getUserNotifications({ pageNo: 1, pageSize: 5 }),
+    const trendDates = getRecentDateKeys(PROFIT_TREND_DAYS);
+    const [overview, profitTrend] = await Promise.all([
+      getDashboardOverview(),
+      getProfitTrend({
+        startDate: trendDates[0],
+        endDate: trendDates[trendDates.length - 1],
+        groupBy: "DAY",
+      }),
     ]);
+    const dashboard = overview.data;
 
     return {
-      wallet: wallet.data,
-      orders: orders.data.records,
-      transactions: transactions.data.records,
-      profitSummary: profitSummary.data,
-      profitRecords: profitRecords.data.records,
-      commissionSummary: commissionSummary.data,
-      teamSummary: teamSummary.data,
-      notifications: notifications.data.records,
+      wallet: dashboard.wallet,
+      orders: dashboard.rental.recentOrders,
+      runningOrderCount: dashboard.rental.runningOrderCount,
+      pendingPayOrderCount: dashboard.rental.pendingPayOrderCount,
+      profitSummary: dashboard.profit.summary,
+      profitRecords: profitTrend.data.records,
+      teamSummary: dashboard.team,
     };
   }, []);
 
   const { data, loading, error, reload } = useAsyncResource(loader);
-  
-  useEffect(() => {
-    if (error) {
-      toast.error(error);
-    }
-  }, [error]);
 
   const trend = buildProfitTrend(data?.profitRecords ?? []);
-  const runningOrders = data?.orders.filter((order) => order.orderStatus === "RUNNING").length ?? 0;
-  const pendingPayOrders = data?.orders.filter((order) => order.orderStatus === "PENDING_PAY" || order.orderStatus === "PENDING_PAYMENT").length ?? 0;
+  const runningOrders = data?.runningOrderCount ?? 0;
+  const pendingPayOrders = data?.pendingPayOrderCount ?? 0;
   
   const quickActions = [
     { label: t("quickActions.rentGpu"), href: "/dashboard/products", icon: PackagePlus, color: "text-blue-500", bg: "bg-blue-500/10" },
@@ -173,6 +146,18 @@ export default function DashboardPage() {
           {t("header.refresh")}
         </Button>
       </div>
+
+      <ErrorAlert message={error}>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="h-8 border-destructive/30 bg-background px-3 text-xs text-destructive hover:bg-destructive/10 hover:text-destructive"
+          onClick={() => void reload()}
+        >
+          {t("common.retry")}
+        </Button>
+      </ErrorAlert>
 
       {/* CORE DASHBOARD - HERO SECTION */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
@@ -445,11 +430,6 @@ export default function DashboardPage() {
                   <Button variant="outline" size="sm" className="w-full text-xs h-8" asChild>
                      <Link href="/dashboard/orders">{t("orders.details")}</Link>
                   </Button>
-                  {order.orderStatus === "RUNNING" && (
-                    <Button size="sm" className="w-full text-xs h-8 bg-primary/10 text-primary hover:bg-primary/20">
-                      <Terminal className="mr-2 h-3 w-3" /> {t("orders.connect")}
-                    </Button>
-                  )}
                 </div>
               </div>
             ))}

@@ -42,9 +42,14 @@ import { formatNumber, toErrorMessage } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { ErrorAlert } from "@/components/shared/ErrorAlert";
 import { normalizeLocale } from "@/i18n/locales";
+import { createClientRequestId } from "@/lib/client-request-id";
 
 const PAGE_SIZE = 12;
 const ESTIMATED_ROW_HEIGHT = 500;
+
+function hasNextPage(pageNo: number, pageSize: number, total: number) {
+  return pageNo * pageSize < total;
+}
 
 type ProductCardLabels = {
   available: string;
@@ -354,9 +359,16 @@ export default function UserProductsPage() {
   const [productsLoading, setProductsLoading] = useState(false); // product grid only
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [walletLoading, setWalletLoading] = useState(false);
+  const [estimating, setEstimating] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [orderCompleted, setOrderCompleted] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const estimateRequestRef = useRef(0);
+  const submitLockRef = useRef(false);
+  const orderClientRequestIdRef = useRef<string | null>(null);
+  const loadMoreLockRef = useRef(false);
+  const userScrolledRef = useRef(false);
 
   /* ─── Virtualization Logic ─── */
   const rows = useMemo(() => {
@@ -377,6 +389,15 @@ export default function UserProductsPage() {
   });
   const virtualItems = virtualizer.getVirtualItems();
   const productCardLabels = useMemo(() => getProductCardLabels(locale), [locale]);
+
+  useEffect(() => {
+    const markUserScrolled = () => {
+      userScrolledRef.current = true;
+    };
+
+    window.addEventListener("scroll", markUserScrolled, { passive: true });
+    return () => window.removeEventListener("scroll", markUserScrolled);
+  }, []);
 
   /* ─── Effect 1: Init — load regions + static data (runs once) ─── */
   useEffect(() => {
@@ -410,6 +431,7 @@ export default function UserProductsPage() {
 
     // ★ Synchronous pre-reset: clear stale data BEFORE any async work.
     // This puts the product grid into skeleton mode immediately on region click.
+    userScrolledRef.current = false;
     setSelectedGpuModelId(null);
     setGpuModels([]);
     setProducts([]);
@@ -442,6 +464,7 @@ export default function UserProductsPage() {
     const gId = selectedGpuModelId;
 
     const fetchProducts = async () => {
+      userScrolledRef.current = false;
       setProductsLoading(true);
       setProducts([]);
       setPageNo(1);
@@ -455,7 +478,7 @@ export default function UserProductsPage() {
           language: locale,
         });
         setProducts(res.data.records);
-        setHasMore(res.data.records.length === PAGE_SIZE);
+        setHasMore(hasNextPage(res.data.pageNo, res.data.pageSize, res.data.total));
         setPageNo(1);
       } catch (err) {
         setError(toErrorMessage(err));
@@ -469,8 +492,9 @@ export default function UserProductsPage() {
   /* ─── Infinite scroll load-more ─── */
   const loadMore = useCallback(async () => {
     if (selectedRegionId === null || selectedGpuModelId === null) return;
-    if (!hasMore || isFetchingMore || productsLoading) return;
+    if (!hasMore || isFetchingMore || productsLoading || loadMoreLockRef.current) return;
     const nextPage = pageNo + 1;
+    loadMoreLockRef.current = true;
     setIsFetchingMore(true);
     try {
       const res = await getProducts({
@@ -481,11 +505,12 @@ export default function UserProductsPage() {
         language: locale,
       });
       setProducts(prev => [...prev, ...res.data.records]);
-      setHasMore(res.data.records.length === PAGE_SIZE);
+      setHasMore(hasNextPage(res.data.pageNo, res.data.pageSize, res.data.total));
       setPageNo(nextPage);
     } catch (err) {
       setError(toErrorMessage(err));
     } finally {
+      loadMoreLockRef.current = false;
       setIsFetchingMore(false);
     }
   }, [selectedRegionId, selectedGpuModelId, hasMore, isFetchingMore, productsLoading, pageNo, locale]);
@@ -498,6 +523,11 @@ export default function UserProductsPage() {
     setAiModelId(aiModels[0]?.id || null);
     setCycleRuleId(null);
     setEstimate(null);
+    setEstimating(false);
+    setOrderCompleted(false);
+    estimateRequestRef.current += 1;
+    orderClientRequestIdRef.current = null;
+    submitLockRef.current = false;
     setError(null);
   };
 
@@ -519,43 +549,94 @@ export default function UserProductsPage() {
   }, [step, configStep, loadWallet]);
 
   const handleCancelConfig = () => {
+    estimateRequestRef.current += 1;
+    submitLockRef.current = false;
+    orderClientRequestIdRef.current = null;
     setStep(0);
     setSelectedProduct(null);
+    setEstimating(false);
+    setSubmitting(false);
+    setOrderCompleted(false);
   };
 
   const handleEstimate = async (ruleId: number) => {
-    if (!selectedProduct || !aiModelId) return;
+    if (!selectedProduct || !aiModelId || estimating || submitting || orderCompleted) return;
+    const requestId = estimateRequestRef.current + 1;
+    estimateRequestRef.current = requestId;
+    orderClientRequestIdRef.current = null;
     setCycleRuleId(ruleId);
+    setEstimate(null);
+    setEstimating(true);
+    setError(null);
     try {
       const res = await estimateRental({
         productId: selectedProduct.id,
         aiModelId,
         cycleRuleId: ruleId
       }, { language: locale });
+      if (estimateRequestRef.current !== requestId) return;
       setEstimate(res.data);
     } catch (err) {
+      if (estimateRequestRef.current !== requestId) return;
+      setCycleRuleId(null);
+      setEstimate(null);
       setError(toErrorMessage(err));
+    } finally {
+      if (estimateRequestRef.current === requestId) {
+        setEstimating(false);
+      }
     }
   };
 
   const handleFinalSubmit = async () => {
-    if (!selectedProduct || !aiModelId || !cycleRuleId) return;
+    if (submitLockRef.current || orderCompleted) return;
+    const validEstimate =
+      selectedProduct &&
+      aiModelId &&
+      cycleRuleId &&
+      estimate &&
+      estimate.productId === selectedProduct.id &&
+      estimate.aiModelId === aiModelId &&
+      estimate.cycleRuleId === cycleRuleId
+        ? estimate
+        : null;
+    if (!selectedProduct || !aiModelId || !cycleRuleId || !validEstimate || estimating) {
+      setError(t("messages.estimateRequired"));
+      return;
+    }
+    if (walletLoading || !wallet) {
+      setError(t("messages.walletLoading"));
+      return;
+    }
+    if (wallet.availableBalance < validEstimate.rentPrice) {
+      setError(t("messages.insufficientBalance"));
+      return;
+    }
+    submitLockRef.current = true;
     setSubmitting(true);
     setError(null);
+    const clientRequestId = orderClientRequestIdRef.current ?? createClientRequestId("rental");
+    orderClientRequestIdRef.current = clientRequestId;
     try {
       const orderRes = await createRentalOrder({
         productId: selectedProduct.id,
         aiModelId,
-        cycleRuleId
+        cycleRuleId,
+        clientRequestId
       });
       await payRentalOrder(orderRes.data.orderNo);
+      setOrderCompleted(true);
       setMessage(t("messages.orderCreated", { orderNo: orderRes.data.orderNo }));
       setTimeout(() => {
         setStep(0);
         setMessage(null);
+        setOrderCompleted(false);
+        submitLockRef.current = false;
+        orderClientRequestIdRef.current = null;
       }, 3000);
     } catch (err) {
       setError(toErrorMessage(err));
+      submitLockRef.current = false;
     } finally {
       setSubmitting(false);
     }
@@ -563,12 +644,13 @@ export default function UserProductsPage() {
 
   /* ─── Scroll Loader Effect ─── */
   useEffect(() => {
+    if (step !== 0) return;
     if (virtualItems.length === 0) return;
     const last = virtualItems[virtualItems.length - 1];
-    if (last && last.index >= rows.length && hasMore && !isFetchingMore && !productsLoading) {
+    if (last && last.index >= rows.length && hasMore && userScrolledRef.current && !isFetchingMore && !productsLoading) {
       void loadMore();
     }
-  }, [virtualItems, rows.length, hasMore, isFetchingMore, productsLoading, loadMore]);
+  }, [step, virtualItems, rows.length, hasMore, isFetchingMore, productsLoading, loadMore]);
 
   /* ─── Render List ─── */
   const renderList = () => (
@@ -710,8 +792,27 @@ export default function UserProductsPage() {
   /* ─── Render Config ─── */
   const renderConfig = () => {
     if (!selectedProduct) return null;
-    const rentalCost = estimate?.rentPrice ?? selectedProduct.rentPrice;
-    const hasInsufficientBalance = wallet ? wallet.availableBalance < rentalCost : false;
+    const selectedEstimate =
+      estimate &&
+      aiModelId &&
+      cycleRuleId &&
+      estimate.productId === selectedProduct.id &&
+      estimate.aiModelId === aiModelId &&
+      estimate.cycleRuleId === cycleRuleId
+        ? estimate
+        : null;
+    const estimateMatchesSelection = selectedEstimate !== null;
+    const rentalCost = selectedEstimate?.rentPrice ?? selectedProduct.rentPrice;
+    const hasWalletLoaded = !walletLoading && wallet !== null;
+    const hasInsufficientBalance = hasWalletLoaded ? wallet.availableBalance < rentalCost : false;
+    const submitDisabled =
+      !estimateMatchesSelection ||
+      estimating ||
+      walletLoading ||
+      !wallet ||
+      hasInsufficientBalance ||
+      submitting ||
+      orderCompleted;
 
     return (
       <motion.div
@@ -811,7 +912,11 @@ export default function UserProductsPage() {
                       >
                         <div className="flex items-center gap-4">
                           <div className={cn("flex h-10 w-10 items-center justify-center rounded-lg", aiModelId === m.id ? "bg-primary-foreground/15 text-primary-foreground" : "bg-muted text-muted-foreground")}>
-                            <Cpu className="h-5 w-5" />
+                            {m.logoUrl ? (
+                              <img src={m.logoUrl} alt="" className="h-6 w-6 object-contain" />
+                            ) : (
+                              <Cpu className="h-5 w-5" />
+                            )}
                           </div>
                           <div>
                             <div className="font-bold">{m.modelName}</div>
@@ -846,6 +951,7 @@ export default function UserProductsPage() {
                           variant={cycleRuleId === rule.id ? "default" : "outline"}
                           key={rule.id}
                           onClick={() => void handleEstimate(rule.id)}
+                          disabled={estimating || submitting || orderCompleted}
                           className={cn("h-auto rounded-xl p-4 text-center transition-all", cycleRuleId !== rule.id && "bg-background hover:bg-muted/50")}
                         >
                           <div className="text-sm font-bold">{rule.cycleName}</div>
@@ -856,7 +962,12 @@ export default function UserProductsPage() {
                   </div>
 
                   <div className="flex min-h-[140px] flex-col items-center justify-center rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-8 text-center">
-                    {estimate ? (
+                    {estimating ? (
+                      <div className="flex flex-col items-center gap-3 text-muted-foreground">
+                        <Loader2 className="h-8 w-8 animate-spin text-emerald-500" />
+                        <p className="text-sm">{t("messages.estimateLoading")}</p>
+                      </div>
+                    ) : estimateMatchesSelection && estimate ? (
                       <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="space-y-2">
                         <div className="text-sm font-medium text-emerald-600/80 dark:text-emerald-400/80 uppercase tracking-widest">{t("config.estimatedTotalProfit")}</div>
                         <motion.div animate={{ y: [0, -4, 0] }} transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }} className="text-4xl font-black text-emerald-500 tabular-nums flex items-center justify-center gap-2">
@@ -893,7 +1004,7 @@ export default function UserProductsPage() {
                           </Button>
                         )}
                       </div>
-                      <Button onClick={() => void handleFinalSubmit()} disabled={!cycleRuleId || submitting} className="group h-12 px-10 shadow-lg shadow-primary/20">
+                      <Button onClick={() => void handleFinalSubmit()} disabled={submitDisabled} className="group h-12 px-10 shadow-lg shadow-primary/20">
                         {submitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <CheckCircle2 className="mr-2 h-4 w-4" />}
                         {t("config.submit")}</Button>
                     </div>

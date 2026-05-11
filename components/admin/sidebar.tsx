@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import {
@@ -9,6 +10,7 @@ import {
   Wallet,
   HandCoins,
   CircleDollarSign,
+  CreditCard,
   ClipboardList,
   TrendingUp,
   ReceiptText,
@@ -61,6 +63,7 @@ export const ADMIN_NAV_ITEMS: NavGroup[] = [
     items: [
       { titleKey: "items.wallets", icon: Wallet, href: "/admins/wallets" },
       { titleKey: "items.walletAdjust", icon: HandCoins, href: "/admins/wallet-adjust" },
+      { titleKey: "items.rechargeChannels", icon: CreditCard, href: "/admins/recharge-channels" },
       { titleKey: "items.recharge", icon: CircleDollarSign, href: "/admins/recharge" },
       { titleKey: "items.withdraw", icon: Wallet, href: "/admins/withdraw" },
       { titleKey: "items.profits", icon: TrendingUp, href: "/admins/profits" },
@@ -102,8 +105,14 @@ export function AdminSidebar() {
       <div className="flex h-full flex-col">
         <div className="flex h-16 items-center px-6">
           <Link href="/admins/dashboard" className="flex items-center gap-2.5 transition-opacity hover:opacity-80">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm">
-              <ShieldCheck className="h-5 w-5" />
+            <div className="relative h-8 w-8 shrink-0 overflow-hidden rounded-lg bg-black shadow-sm">
+              <Image
+                src="/images/webcal_console_icon.png"
+                alt=""
+                fill
+                sizes="32px"
+                className="object-cover"
+              />
             </div>
             <div className="flex min-w-0 flex-col leading-none">
               <span className="truncate text-[13px] font-bold tracking-tight">{t("brand")}</span>
@@ -125,7 +134,7 @@ export function AdminSidebar() {
                   {group.items.map((item) => {
                     const isActive =
                       pathname === item.href ||
-                      (item.href !== "/admins" && pathname.startsWith(item.href));
+                      (item.href !== "/admins" && pathname.startsWith(item.href + "/"));
                     return (
                       <Link
                         key={item.href}

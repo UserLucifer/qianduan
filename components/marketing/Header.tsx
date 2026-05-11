@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import { AnimatePresence, motion } from "framer-motion";
@@ -109,8 +110,15 @@ export default function Header() {
   return (
     <header className="site-header sticky top-0 z-[100] bg-background/95 backdrop-blur" ref={headerRef}>
       <div className="site-header__inner">
-        <Link href="/" className="site-header__brand text-foreground transition-colors hover:text-foreground/80" onClick={() => setActiveMenu(null)}>
-          {common("brand")}
+        <Link href="/" className="site-header__brand inline-flex items-center transition-opacity hover:opacity-80" onClick={() => setActiveMenu(null)}>
+          <Image
+            src="/images/webcal_header_black_transparent.webp"
+            alt={common("brand")}
+            width={1074}
+            height={375}
+            priority
+            className="h-9 w-auto object-contain dark:invert"
+          />
         </Link>
 
         <nav className="site-nav !hidden lg:!flex" aria-label={t("mainNav")}>
